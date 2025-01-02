@@ -1,0 +1,8 @@
+aws:
+  secretsmanager:
+    name: pay200
+    default-context: pay200
+cloud:
+  aws:
+    region:
+      static: ap-northeast-2
