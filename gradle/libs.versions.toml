@@ -1,0 +1,75 @@
+[versions]
+# kotlin
+kotlin = "2.1.0"
+kotlinxSerialization = "1.7.2"
+kotlinxCoroutines = "1.8.1"
+kotlinxDatetime = "0.6.1"
+# logging
+kotlinLogging = "7.0.0"
+logback = "1.5.15"
+slf4j = "2.0.16"
+# linter
+kotlinter = "5.0.1"
+# test
+kotest = "5.9.1"
+kotestExtensionsSpring = "1.3.0"
+jacoco = "0.8.12"
+# mock
+mockk = "1.13.13"
+springMockk = "4.0.2"
+# spring
+springBoot = "3.4.1"
+springDependencyManagement = "1.1.7"
+
+[libraries]
+# kotlin
+kotlinGradlePlugin = { module = "org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin", version.ref = "kotlin" }
+kotlinMetadata = { module = "org.jetbrains.kotlin:kotlin-metadata-jvm", version.ref = "kotlin" }
+kotlinReflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
+# data time
+kotlinxDatetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
+# serialization
+kotlinxSerializationBom = { module = "org.jetbrains.kotlinx:kotlinx-serialization-bom", version.ref = "kotlinxSerialization" }
+kotlinxSerializationCore = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core" }
+kotlinxSerializationJson = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json" }
+# coroutine
+kotlinxCoroutinesBom = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-bom", version.ref = "kotlinxCoroutines" }
+kotlinxCoroutinesCore = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core" }
+kotlinxCoroutinesSlf4j = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-slf4j" }
+# logging
+kotlinLogging = { module = "io.github.oshai:kotlin-logging-jvm", version.ref = "kotlinLogging" }
+slf4jApi = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
+logbackClassic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
+# linter
+kotlinterGradlePlugin = {module = "org.jmailen.kotlinter:org.jmailen.kotlinter.gradle.plugin", version.ref = "kotlinter"}
+# test
+kotestBom = { module = "io.kotest:kotest-bom", version.ref = "kotest" }
+kotestRunnerJunit5 = { module = "io.kotest:kotest-runner-junit5" }
+kotestExtensionsJunit5 = { module = "io.kotest:kotest-extensions-junit5" }
+kotestAssertionsCore = { module = "io.kotest:kotest-assertions-core" }
+kotestExtensionsSpring = { module = "io.kotest.extensions:kotest-extensions-spring", version.ref = "kotestExtensionsSpring" }
+jacocoAgent = { module = "org.jacoco:org.jacoco.agent", version.ref = "jacoco" }
+# mock
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+springMockk = { module = "com.ninja-squad:springmockk", version.ref = "springMockk" }
+# spring
+springBootWeb = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "springBoot"}
+springBootTest = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "springBoot"}
+
+[bundles]
+boms = ["kotlinxSerializationBom", "kotlinxCoroutinesBom", "kotestBom"]
+kotlin = ["kotlinMetadata", "kotlinReflect", "kotlinxDatetime"]
+kotlinxCoroutines = ["kotlinxCoroutinesCore"]
+kotlinxSerialization = ["kotlinxSerializationJson"]
+kotlinTest = ["kotestRunnerJunit5", "kotestExtensionsJunit5", "kotestAssertionsCore", "mockk"]
+kotlinTestSpring = ["kotestExtensionsSpring", "springMockk"]
+kotlinLogging = ["kotlinLogging", "slf4jApi", "logbackClassic", "kotlinxCoroutinesSlf4j"]
+springBoot = ["springBootWeb", "springBootTest"]
+
+
+[plugins]
+kotlinPluginSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+kotlinPluginSpring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
+idea = { id = "org.gradle.idea" }
+springBoot = { id = "org.springframework.boot", version.ref = "springBoot"}
+springDependencyManagement = { id = "io.spring.dependency-management", version.ref = "springDependencyManagement" }
