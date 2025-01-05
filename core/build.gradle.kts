@@ -1,7 +1,5 @@
-import org.gradle.api.tasks.testing.logging.TestLogEvent
-
 plugins {
-    id("kotlin-jvm")
+    id("KotlinJvmConventionPlugin")
     alias(libs.plugins.kotlinPluginSerialization)
 }
 
@@ -14,15 +12,4 @@ dependencies {
     compileOnly(libs.bundles.kotlinLogging)
     compileOnly(libs.bundles.kotlinxCoroutines)
     testImplementation(libs.bundles.kotlinTest)
-}
-
-tasks.withType<Test>().configureEach {
-    useJUnitPlatform()
-    testLogging {
-        events(
-            TestLogEvent.FAILED,
-            TestLogEvent.PASSED,
-            TestLogEvent.SKIPPED
-        )
-    }
 }
