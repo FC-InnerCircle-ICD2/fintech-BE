@@ -1,0 +1,14 @@
+name: "🚀CI & CD"
+on:
+  push:
+    branches:
+      - master
+jobs:
+  ci:
+    name: "🛠"
+    uses: ./.github/workflows/wc-ci.yaml
+    permissions:
+      contents: write
+      id-token: write
+      pull-requests: write
+    secrets: inherit

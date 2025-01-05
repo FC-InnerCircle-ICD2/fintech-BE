@@ -1,0 +1,11 @@
+on:
+  workflow_call:
+    inputs:
+      nothing:
+        type: boolean
+        default: true
+jobs:
+  build:
+    uses: ./.github/workflows/wc-ci-01-build.yaml
+    name: "🛠"
+    secrets: inherit
