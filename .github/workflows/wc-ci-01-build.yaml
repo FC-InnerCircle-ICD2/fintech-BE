@@ -33,17 +33,20 @@ jobs:
         run: ./gradlew clean build
 
       - name: Build with Gradle and save image
+        if: ${{ github.event_name == 'push' }}
         run: |
           ./gradlew api:bootBuildImage
           docker save api:latest > api-image.tar
 
       - name: Upload image artifact
-        uses: actions/upload-artifact@v4
+        if: ${{ github.event_name == 'push' }}
+        uses: actions/upload-artifact@v4.5.0
         with:
           name: docker-image
           path: api-image.tar
 
   image-push:
+    if: ${{ github.event_name == 'push' }}
     needs:
       - gradle-build
     name: "🐳push"
@@ -88,6 +91,13 @@ jobs:
         run: |
           docker tag api:latest $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "image-tag=$IMAGE_TAG" >> $GITHUB_ENV
+
+      - name: Upload image tag artifact
+        uses: actions/upload-artifact@v4.5.0
+        with:
+          name: image-tag
+          path: image-tag.txt
 
       - name: Logout from Amazon ECR
         run: docker logout ${{ steps.ecr-login.outputs.registry }}
