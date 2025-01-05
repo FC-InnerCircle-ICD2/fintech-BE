@@ -32,24 +32,30 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew clean build
 
+      - name: Build with Gradle and save image
+        run: |
+          ./gradlew api:bootBuildImage
+          docker save api:latest > api-image.tar
+
+      - name: Upload image artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-image
+          path: api-image.tar
+
   image-push:
     needs:
       - gradle-build
     name: "🐳push"
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout source code
-        uses: actions/checkout@v4.2.2
-
-      - name: Set up JDK 21
-        uses: actions/setup-java@v4.6.0
+      - name: Download image artifact
+        uses: actions/download-artifact@v4
         with:
-          distribution: 'corretto'
-          java-version: '21'
-          cache: 'gradle'
+          name: docker-image
 
-      - name: Build Docker image
-        run: ./gradlew api:bootBuildImage
+      - name: Load Docker image
+        run: docker load < api-image.tar
 
       - name: Checkout
         uses: actions/checkout@v4.2.2
