@@ -5,8 +5,19 @@ on:
       - master
 jobs:
   ci:
-    name: "🛠"
+    name: "🔨"
     uses: ./.github/workflows/wc-ci.yaml
+    permissions:
+      contents: write
+      id-token: write
+      pull-requests: write
+    secrets: inherit
+
+  cd:
+    needs:
+      - ci
+    name: "🚀"
+    uses: ./.github/workflows/wc-cd.yaml
     permissions:
       contents: write
       id-token: write

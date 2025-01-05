@@ -1,0 +1,9 @@
+on:
+  workflow_call:
+jobs:
+  deploy-ec2:
+    name: "🖥️deploy"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Temporary Save
+        run: echo "cd 워크플로우 작성 중"
