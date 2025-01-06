@@ -6,4 +6,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Temporary Save
-        run: echo "cd 워크플로우 작성 중"
+        env:
+          DOCKER_IMAGE_TAG: ${{ env.IMAGE_TAG }}
+        run: echo "cd 워크플로우 작성 중 $DOCKER_IMAGE_TAG"
