@@ -40,12 +40,9 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script_stop: true
           script: |
-            source ~/.bashrc
             docker stop payment_application || true
             docker rm payment_application || true
-            docker rmi ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:$(echo $CURRENT_IMAGE_TAG) || true
             docker pull ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
             docker run -d -p 8080:8080 \
             --name payment_application \
             ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
-            echo "CURRENT_IMAGE_TAG=${{ env.IMAGE_TAG }}" >> ~/.bashrc

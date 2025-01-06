@@ -98,6 +98,3 @@ jobs:
         with:
           name: image-tag
           path: image-tag.txt
-
-      - name: Logout from Amazon ECR
-        run: docker logout ${{ steps.ecr-login.outputs.registry }}
