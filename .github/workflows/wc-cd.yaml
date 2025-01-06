@@ -8,5 +8,5 @@ on:
 jobs:
   deploy:
     uses: ./.github/workflows/wc-cd-01-deploy.yaml
-    name: "🚀"
+    name: "🤖"
     secrets: inherit
