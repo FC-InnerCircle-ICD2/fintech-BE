@@ -52,6 +52,9 @@ jobs:
     name: "🐳push"
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4.2.2
+
       - name: Download image artifact
         uses: actions/download-artifact@v4
         with:
@@ -59,9 +62,6 @@ jobs:
 
       - name: Load Docker image
         run: docker load < api-image.tar
-
-      - name: Checkout
-        uses: actions/checkout@v4.2.2
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4.0.2
@@ -91,7 +91,13 @@ jobs:
         run: |
           docker tag api:latest $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
+          echo "IMAGE_TAG=$IMAGE_TAG" >> image-tag.txt
+
+      - name: Upload image tag artifact
+        uses: actions/upload-artifact@v4.5.0
+        with:
+          name: image-tag
+          path: image-tag.txt
 
       - name: Logout from Amazon ECR
         run: docker logout ${{ steps.ecr-login.outputs.registry }}

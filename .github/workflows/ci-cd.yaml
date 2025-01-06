@@ -16,7 +16,7 @@ jobs:
   cd:
     needs:
       - ci
-    name: "🚀"
+    name: "🔄"
     uses: ./.github/workflows/wc-cd.yaml
     permissions:
       contents: write
