@@ -1,7 +1,8 @@
-name: "✉️CI on PR"
+name: "🔀CI on PR"
 on:
   pull_request:
     branches:
+      - master
       - release
 jobs:
   ci:
