@@ -91,7 +91,7 @@ jobs:
         run: |
           docker tag api:latest $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "IMAGE_TAG=$IMAGE_TAG" >> image-tag.txt
+          echo "$IMAGE_TAG" >> image-tag.txt
 
       - name: Upload image tag artifact
         uses: actions/upload-artifact@v4.5.0

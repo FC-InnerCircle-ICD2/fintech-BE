@@ -14,7 +14,8 @@ jobs:
           name: image-tag
 
       - name: Load Docker image tag
-        run: source image-tag.txt
+        id: get-docker-image-tag
+        run: echo "image-tag=$(cat image-tag.txt)" >> $GITHUB_OUTPUT
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4.0.2
@@ -32,17 +33,19 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ secrets.ECR_REPO_NAME }}
+          IMAGE_TAG:  ${{ steps.get-docker-image-tag.outputs.image-tag }}
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
+          script_stop: true
           script: |
-            docker stop payment_application
-            docker rm payment_application
-            docker rmi $ECR_REGISTRY/$ECR_REPOSITORY:$(echo $CURRENT_IMAGE_TAG)
-            docker pull $ECR_REGISTRY/$ECR_REPOSITORY:$(echo $IMAGE_TAG)
+            source ~/.bashrc
+            docker stop payment_application || true
+            docker rm payment_application || true
+            docker rmi ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:$(echo $CURRENT_IMAGE_TAG) || true
+            docker pull ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
             docker run -d -p 8080:8080 \
             --name payment_application \
-            $ECR_REGISTRY/$ECR_REPOSITORY:$(echo $IMAGE_TAG)
-            export CURRENT_IMAGE_TAG=$IMAGE_TAG >> ~/.bashrc
-            source ~/.bashrc
+            ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+            echo "CURRENT_IMAGE_TAG=${{ env.IMAGE_TAG }}" >> ~/.bashrc
