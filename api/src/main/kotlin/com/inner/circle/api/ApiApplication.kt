@@ -4,7 +4,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication(
-    scanBasePackages = ["com.inner.circle.core", "com.inner.circle.infra"]
+    scanBasePackages = ["com.inner.circle.api", "com.inner.circle.core", "com.inner.circle.infra"]
 )
 class ApiApplication
 
