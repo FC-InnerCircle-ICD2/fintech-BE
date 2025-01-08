@@ -15,10 +15,11 @@ class ClaimController(
 //    val claimService : ClaimService
 ) {
     @PostMapping
-    fun createPayment(@RequestBody request: PaymentClaimRequest): ResponseEntity<PaymentResponse<Nothing>> {
+    fun createPayment(
+        @RequestBody request: PaymentClaimRequest
+    ): ResponseEntity<PaymentResponse<Nothing>> {
 //           val response = paymentService.createPayment(request)
-        val response = PaymentResponse(true, null, null);
+        val response = PaymentResponse(true, null, null)
         return ResponseEntity(response, HttpStatus.OK)
-
     }
 }
