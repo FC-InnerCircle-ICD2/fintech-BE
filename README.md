@@ -9,7 +9,7 @@
 
 # Tech Stack
 - Language: Kotlin 2.1.0
-- JDK: JDK 21
+- JDK 21
 - Spring Boot 3.4.1
 - Persistence: Spring Data JPA / QueryDSL
 - DB: PostgreSQL 17.2
