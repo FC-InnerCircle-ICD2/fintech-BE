@@ -54,4 +54,9 @@
   - 발급된 API키는 다른 사람과 중복 불가능하게 구현
   - 다음번 발급될 API키가 예측 불가능하게 구현
   - 사업자가 API 키를 발급받고 갱신할 수 있는 기능을 포함		
-		
+
+# API
+- https://www.notion.so/API-165d5beeb0c0812cabd6d577244a31e0
+
+# BE NOTION DATABASE
+- https://www.notion.so/BE-NOTION-DATABASE-9807bd08faab44c199f7337f4cfecae4
