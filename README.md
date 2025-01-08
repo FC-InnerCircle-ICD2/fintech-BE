@@ -1,6 +1,7 @@
 # 온라인 결제 게이트웨이(PG; Payment Gateway) 서비스
 ------------------------------------------------------------
 # Event Storming
+- link : https://www.figma.com/board/KsdD1z3Od0EYO8874620RK/pay200---%EA%B5%AC%EC%83%81?node-id=0-1&p=f&t=gNBMKBiK5xxnu8Hj-0
 ### SDK-PAY
 ![image](https://github.com/user-attachments/assets/119f4367-44ef-4905-b3a7-a9860cf80d06)
 
@@ -16,6 +17,7 @@
 - TEST: JUnit5
 
 # Functional Requirements
+- link : https://docs.google.com/spreadsheets/d/1OpYLTSNVemzl-xj_GcnNzitr_VbxNKT7nwokU6iSWLI/edit?gid=1999736551#gid=1999736551
 - 공통
   - 결제 실패 및 오류 처리
     - 결제 과정에서 발생할 수 있는 다양한 실패 시나리오(예: 네트워크 오류, 결제 거절 등)를 처리
