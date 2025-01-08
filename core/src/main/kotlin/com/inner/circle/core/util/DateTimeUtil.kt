@@ -11,5 +11,8 @@ object DateTimeUtil {
         Clock.System.now().toLocalDateTime(TimeZone.UTC)
 
     fun LocalDate.Companion.currentDate(): LocalDate =
-        Clock.System.now().toLocalDateTime(TimeZone.UTC).date
+        Clock.System
+            .now()
+            .toLocalDateTime(TimeZone.UTC)
+            .date
 }
