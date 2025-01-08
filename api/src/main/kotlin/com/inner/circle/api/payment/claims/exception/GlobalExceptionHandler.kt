@@ -11,31 +11,21 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 class GlobalExceptionHandler {
     @ExceptionHandler(Exception::class)
     fun handleException(ex: Exception): ResponseEntity<PaymentResponse<Nothing>> {
-        val errorResponse = PaymentResponse<Nothing>(
-            success = false,
-            data = null,
-            error = PaymentError(
-                code = HttpStatus.INTERNAL_SERVER_ERROR.toString(),
-                message = ex.message ?: "Unexpected error occurred"
-            )
+        val status = HttpStatus.INTERNAL_SERVER_ERROR
+        val errorResponse = PaymentResponse.fail(
+            PaymentError(status.toString(), "Unexpected error occurred.")
         )
-        return ResponseEntity(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR)
+        return ResponseEntity(errorResponse, status)
     }
 
     @ExceptionHandler(IllegalArgumentException::class)
     fun handleIllegalArgumentException(
         ex: IllegalArgumentException
     ): ResponseEntity<PaymentResponse<Nothing>> {
-        val errorResponse =
-            PaymentResponse<Nothing>(
-                success = false,
-                data = null,
-                error =
-                    PaymentError(
-                        code = HttpStatus.BAD_REQUEST.toString(),
-                        message = ex.message ?: "Invalid request"
-                    )
-            )
-        return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
+        val status = HttpStatus.BAD_REQUEST
+        val errorResponse = PaymentResponse.fail(
+            PaymentError(status.toString(), "Invalid request")
+        )
+        return ResponseEntity(errorResponse, status)
     }
 }
