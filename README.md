@@ -60,5 +60,10 @@
 # API
 - https://www.notion.so/API-165d5beeb0c0812cabd6d577244a31e0
 
-# BE NOTION DATABASE
+# API Detail
 - https://www.notion.so/BE-NOTION-DATABASE-9807bd08faab44c199f7337f4cfecae4
+
+# Frontend Reference
+- SDK Design : https://www.notion.so/SDK-c270cecc35764c41bd16ecbd62c18af0#9e7470955abd4c56a6138e80a1dff326
+- APP Design : https://www.notion.so/App-3bf848fc0de04765bfd215f5071e1bfc
+- API detail : https://www.notion.so/API-7f8209aaea39441791cd4acff46dc2fe
