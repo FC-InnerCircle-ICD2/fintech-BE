@@ -12,9 +12,10 @@ class GlobalExceptionHandler {
     @ExceptionHandler(Exception::class)
     fun handleException(ex: Exception): ResponseEntity<PaymentResponse<Nothing>> {
         val status = HttpStatus.INTERNAL_SERVER_ERROR
-        val errorResponse = PaymentResponse.fail(
-            PaymentError(status.toString(), "Unexpected error occurred.")
-        )
+        val errorResponse =
+            PaymentResponse.fail(
+                PaymentError(status.toString(), "Unexpected error occurred.")
+            )
         return ResponseEntity(errorResponse, status)
     }
 
@@ -23,9 +24,10 @@ class GlobalExceptionHandler {
         ex: IllegalArgumentException
     ): ResponseEntity<PaymentResponse<Nothing>> {
         val status = HttpStatus.BAD_REQUEST
-        val errorResponse = PaymentResponse.fail(
-            PaymentError(status.toString(), "Invalid request")
-        )
+        val errorResponse =
+            PaymentResponse.fail(
+                PaymentError(status.toString(), "Invalid request")
+            )
         return ResponseEntity(errorResponse, status)
     }
 }

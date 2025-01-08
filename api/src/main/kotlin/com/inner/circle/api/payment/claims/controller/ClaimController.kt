@@ -17,9 +17,9 @@ class ClaimController(
     @PostMapping
     fun createPayment(
         @RequestBody request: PaymentClaimRequest
-    ): ResponseEntity<PaymentResponse<Nothing>> {
+    ): ResponseEntity<PaymentResponse<Nothing?>> {
 //           val response = paymentService.createPayment(request)
-        val response = PaymentResponse(true, null, null)
+        val response = PaymentResponse.ok(null)
         return ResponseEntity(response, HttpStatus.OK)
     }
 }
