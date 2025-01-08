@@ -23,15 +23,19 @@ class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(IllegalArgumentException::class)
-    fun handleIllegalArgumentException(ex: IllegalArgumentException): ResponseEntity<PaymentResponse<Nothing>> {
-        val errorResponse = PaymentResponse<Nothing>(
-            success = false,
-            data = null,
-            error = PaymentError(
-                code = HttpStatus.BAD_REQUEST.toString(),
-                message = ex.message ?: "Invalid request"
+    fun handleIllegalArgumentException(
+        ex: IllegalArgumentException
+    ): ResponseEntity<PaymentResponse<Nothing>> {
+        val errorResponse =
+            PaymentResponse<Nothing>(
+                success = false,
+                data = null,
+                error =
+                    PaymentError(
+                        code = HttpStatus.BAD_REQUEST.toString(),
+                        message = ex.message ?: "Invalid request"
+                    )
             )
-        )
         return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
     }
 }
