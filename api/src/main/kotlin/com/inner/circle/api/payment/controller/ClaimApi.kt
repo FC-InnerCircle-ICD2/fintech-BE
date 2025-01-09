@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 
 interface ClaimApi {
@@ -67,7 +66,6 @@ interface ClaimApi {
             )
         ]
     )
-    @PostMapping
     fun createPayment(
         @RequestBody request: PaymentClaimRequest
     ): ResponseEntity<PaymentResponse<String>>
@@ -88,7 +86,7 @@ interface ClaimApi {
             ApiResponse(responseCode = "400", description = "Invalid input", content = [Content()])
         ]
     )
-    @PostMapping("/{order_id}/proceed")
+
     fun proceedPayment(
         @PathVariable("order_id") orderId: String
     ): ResponseEntity<PaymentResponse<String>>
@@ -109,7 +107,7 @@ interface ClaimApi {
             ApiResponse(responseCode = "400", description = "Invalid input", content = [Content()])
         ]
     )
-    @PostMapping("/{order_id}/cancel")
+
     fun cancelPayment(
         @PathVariable("order_id") orderId: String
     ): ResponseEntity<PaymentResponse<String>>
