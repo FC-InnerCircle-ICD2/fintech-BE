@@ -1,4 +1,4 @@
-package com.inner.circle.core.payment.claims.dto
+package com.inner.circle.api.structure.dto
 
 data class PaymentResponse<T> private constructor(
     val success: Boolean,
