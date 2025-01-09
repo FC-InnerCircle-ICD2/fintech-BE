@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestHeader
 
 interface ClaimApi {
     @Operation(summary = "Create a payment request")
@@ -91,8 +90,7 @@ interface ClaimApi {
     )
     @PostMapping("/{order_id}/proceed")
     fun proceedPayment(
-        @PathVariable("order_id") orderId: String,
-        @RequestHeader("Authorization") authorization: String
+        @PathVariable("order_id") orderId: String
     ): ResponseEntity<PaymentResponse<String>>
 
     @Operation(summary = "Cancel a payment")
@@ -114,6 +112,5 @@ interface ClaimApi {
     @PostMapping("/{order_id}/cancel")
     fun cancelPayment(
         @PathVariable("order_id") orderId: String,
-        @RequestHeader("Authorization") authorization: String
     ): ResponseEntity<PaymentResponse<String>>
 }
