@@ -19,10 +19,10 @@ class SwaggerConfig {
                     .title("Pay200 API Docs")
                     .version("1.0")
                     .description("PG 결제 프로젝트")
-            )
-            .addSecurityItem(SecurityRequirement().addList(securitySchemeName))
+            ).addSecurityItem(SecurityRequirement().addList(securitySchemeName))
             .components(
-                io.swagger.v3.oas.models.Components()
+                io.swagger.v3.oas.models
+                    .Components()
                     .addSecuritySchemes(
                         securitySchemeName,
                         SecurityScheme()
@@ -31,5 +31,4 @@ class SwaggerConfig {
                             .scheme("basic")
                     )
             )
-
 }

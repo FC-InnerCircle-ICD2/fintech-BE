@@ -111,6 +111,6 @@ interface ClaimApi {
     )
     @PostMapping("/{order_id}/cancel")
     fun cancelPayment(
-        @PathVariable("order_id") orderId: String,
+        @PathVariable("order_id") orderId: String
     ): ResponseEntity<PaymentResponse<String>>
 }
