@@ -1,3 +1,5 @@
+import org.springframework.boot.gradle.tasks.bundling.BootJar
+
 plugins {
     id("buildsrc.convention.kotlin-jvm")
     alias(libs.plugins.kotlinPluginSerialization)
@@ -10,10 +12,19 @@ dependencies {
     libs.bundles.boms
         .get()
         .forEach { implementation(platform(it)) }
-    implementation(projects.core)
     implementation(libs.bundles.kotlin)
     implementation(libs.bundles.springBoot)
     implementation(libs.bundles.kotlinxSerialization)
+    compileOnly(libs.bundles.kotlinLogging)
+    compileOnly(libs.bundles.kotlinxCoroutines)
     testImplementation(libs.bundles.kotlinTest)
     testImplementation(libs.bundles.kotlinTestSpring)
+}
+
+tasks.getByName<BootJar>("bootJar") {
+    enabled = false
+}
+
+tasks.getByName<Jar>("jar") {
+    enabled = true
 }
