@@ -5,7 +5,6 @@ import com.inner.circle.api.structure.dto.PaymentResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
@@ -13,11 +12,8 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/v1/payments")
-class ClaimController(
-//    val claimService : ClaimService
-) {
-    @PostMapping
-    fun createPayment(
+class ClaimController : ClaimApi {
+    override fun createPayment(
         @RequestBody request: PaymentClaimRequest
     ): ResponseEntity<PaymentResponse<String>> {
 //           val response = paymentService.createPayment(request)
@@ -25,8 +21,7 @@ class ClaimController(
         return ResponseEntity(response, HttpStatus.OK)
     }
 
-    @PostMapping("/{order_id}/proceed")
-    fun proceedPayment(
+    override fun proceedPayment(
         @PathVariable("order_id") orderId: String,
         @RequestHeader("Authorization") authorization: String
     ): ResponseEntity<PaymentResponse<String>> {
@@ -35,8 +30,7 @@ class ClaimController(
         return ResponseEntity(response, HttpStatus.CREATED)
     }
 
-    @PostMapping("/{order_id}/cancel")
-    fun cancelPayment(
+    override fun cancelPayment(
         @PathVariable("order_id") orderId: String,
         @RequestHeader("Authorization") authorization: String
     ): ResponseEntity<PaymentResponse<String>> {
