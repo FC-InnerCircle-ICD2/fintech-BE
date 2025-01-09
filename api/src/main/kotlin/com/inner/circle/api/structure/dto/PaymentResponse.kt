@@ -1,15 +1,19 @@
 package com.inner.circle.api.structure.dto
 
+import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonInclude.Include
+
+@JsonInclude(value = Include.NON_NULL)
 data class PaymentResponse<T> private constructor(
-    val success: Boolean,
+    val ok: Boolean,
     val data: T?,
     val error: PaymentError?
 ) {
     companion object {
         fun <T> ok(data: T): PaymentResponse<T> =
-            PaymentResponse(success = true, data = data, error = null)
+            PaymentResponse(ok = true, data = data, error = null)
 
         fun fail(error: PaymentError): PaymentResponse<Nothing> =
-            PaymentResponse(success = false, data = null, error = error)
+            PaymentResponse(ok = false, data = null, error = error)
     }
 }
