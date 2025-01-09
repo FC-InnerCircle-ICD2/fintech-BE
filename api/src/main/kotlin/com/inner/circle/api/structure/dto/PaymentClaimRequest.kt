@@ -1,4 +1,4 @@
-package com.inner.circle.core.payment.claims.dto.request
+package com.inner.circle.api.structure.dto
 
 import java.math.BigDecimal
 

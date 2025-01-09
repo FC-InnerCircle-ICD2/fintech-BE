@@ -1,7 +1,7 @@
-package com.inner.circle.api.payment.claims.controller
+package com.inner.circle.api.payment
 
-import com.inner.circle.core.payment.claims.dto.PaymentResponse
-import com.inner.circle.core.payment.claims.dto.request.PaymentClaimRequest
+import com.inner.circle.api.structure.dto.PaymentClaimRequest
+import com.inner.circle.api.structure.dto.PaymentResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
