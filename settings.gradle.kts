@@ -16,5 +16,8 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include(
     ":core",
     ":api",
-    ":infra"
+    ":infra",
+    ":api-backoffice",
+    ":core-backoffice",
+    ":infra-backoffice",
 )
