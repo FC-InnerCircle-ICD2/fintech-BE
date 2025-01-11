@@ -1,0 +1,34 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://54.180.56.52:5432/postgres
+    username: pay200
+    password: egVy0PNDDBcqFMz
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+logging:
+  level:
+    com:
+      zaxxer:
+        hikari: DEBUG # hikari 로그 확인
+    org:
+      hibernate:
+        SQL: DEBUG # 질의문 pretty print
+        type:
+          descriptor:
+            sql:
+              BasicBinder: DEBUG # 질의문 param 확인
+        transaction:
+          JDBCTransaction: DEBUG # 트렌젝션 로그 확인
+        jdbc:
+          ConnectionManager: DEBUG # 트렌젝션 로그 확인
+      springframework:
+        orm:
+          jpa:
+            JpaTransactionManager: DEBUG # 트렌젝션 로그 확인
