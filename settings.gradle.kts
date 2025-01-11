@@ -18,4 +18,5 @@ include(
     ":api",
     ":infra",
     ":api-backoffice",
+    ":core-backoffice",
 )
