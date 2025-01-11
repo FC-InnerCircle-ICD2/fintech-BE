@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Primary
 
 @Configuration
 class DataSourceConfig {
-
     @Bean
     @Primary
     @ConfigurationProperties(prefix = "spring.datasource")
