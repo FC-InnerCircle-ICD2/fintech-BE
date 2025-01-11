@@ -1,9 +1,15 @@
 spring:
   datasource:
-    url: jdbc:postgresql://54.180.56.52:5432/postgres
-    username: pay200
-    password: egVy0PNDDBcqFMz
-    driver-class-name: org.postgresql.Driver
+    hikari:
+      driver-class-name: org.postgresql.Driver
+      username: pay200
+      password: egVy0PNDDBcqFMz
+      jdbc-url: jdbc:postgresql://54.180.56.52:5432/postgres
+      minimum-idle: 10
+      maximum-pool-size: 30
+      idle-timeout: 30000 # 5분
+      connection-timeout: 20000 # 30초
+      max-lifetime: 1800000 # 30분
   jpa:
     hibernate:
       ddl-auto: none
