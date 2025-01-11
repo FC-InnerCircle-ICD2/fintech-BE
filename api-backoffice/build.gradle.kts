@@ -10,7 +10,7 @@ dependencies {
     libs.bundles.boms
         .get()
         .forEach { implementation(platform(it)) }
-    implementation(projects.core)
+    implementation(projects.coreBackoffice)
     implementation(libs.bundles.kotlin)
     implementation(libs.bundles.springBoot)
     implementation(libs.bundles.kotlinxSerialization)

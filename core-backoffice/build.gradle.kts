@@ -15,7 +15,7 @@ dependencies {
     implementation(libs.bundles.kotlin)
     implementation(libs.bundles.springBoot)
     implementation(libs.bundles.kotlinxSerialization)
-    implementation(projects.infra)
+    implementation(projects.infraBackoffice)
     compileOnly(libs.bundles.kotlinLogging)
     compileOnly(libs.bundles.kotlinxCoroutines)
     testImplementation(libs.bundles.kotlinTest)
