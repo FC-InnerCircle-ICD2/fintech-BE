@@ -9,10 +9,8 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping(UrlConstants.PAYMENT_V1_API_URL_PREFIX)
 class PaymentAuthenticationController {
-
     @PostMapping("{orderId}/proceed")
     fun proceedAuthentication(
-        @PathVariable(name = "orderId") orderId: String,
+        @PathVariable(name = "orderId") orderId: String
     ) {}
 }
-
