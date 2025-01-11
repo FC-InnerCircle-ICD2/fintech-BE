@@ -4,7 +4,7 @@ spring:
       driver-class-name: org.postgresql.Driver
       username: pay200
       password: egVy0PNDDBcqFMz
-      jdbc-url: jdbc:postgresql://54.180.56.52:5432/postgres
+      jdbc-url: jdbc:postgresql://54.180.56.52:5432/fintech?serverTimezone=UTC
       minimum-idle: 10
       maximum-pool-size: 30
       idle-timeout: 30000 # 5분
@@ -17,7 +17,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+    open-in-view: false
 logging:
   level:
     com:
