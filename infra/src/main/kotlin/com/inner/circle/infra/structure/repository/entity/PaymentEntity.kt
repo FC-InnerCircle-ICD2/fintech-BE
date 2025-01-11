@@ -21,4 +21,21 @@ data class PaymentEntity(
     val merchantId: String,
     @Column(name = "payment_type", nullable = false)
     val paymentType: String
-) : BaseEntity()
+) : BaseEntity() {
+    companion object {
+        fun createWithId(
+            currency: String,
+            userId: Long?,
+            merchantId: String,
+            paymentType: String,
+            id: Long
+        ): PaymentEntity =
+            PaymentEntity(
+                id = id,
+                currency = currency,
+                userId = userId,
+                merchantId = merchantId,
+                paymentType = paymentType
+            )
+    }
+}
