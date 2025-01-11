@@ -15,6 +15,7 @@ dependencies {
     implementation(libs.bundles.kotlin)
     implementation(libs.bundles.springBoot)
     implementation(libs.bundles.kotlinxSerialization)
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     compileOnly(libs.bundles.kotlinLogging)
     compileOnly(libs.bundles.kotlinxCoroutines)
     testImplementation(libs.bundles.kotlinTest)
