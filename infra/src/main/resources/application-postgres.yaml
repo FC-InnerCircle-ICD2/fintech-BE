@@ -1,0 +1,40 @@
+spring:
+  datasource:
+    hikari:
+      driver-class-name: org.postgresql.Driver
+      username: pay200
+      password: egVy0PNDDBcqFMz
+      jdbc-url: jdbc:postgresql://54.180.56.52:5432/fintech
+      minimum-idle: 10
+      maximum-pool-size: 30
+      idle-timeout: 30000 # 5분
+      connection-timeout: 20000 # 30초
+      max-lifetime: 1800000 # 30분
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    open-in-view: false
+logging:
+  level:
+    com:
+      zaxxer:
+        hikari: DEBUG # hikari 로그 확인
+    org:
+      hibernate:
+        SQL: DEBUG # 질의문 pretty print
+        type:
+          descriptor:
+            sql:
+              BasicBinder: DEBUG # 질의문 param 확인
+        transaction:
+          JDBCTransaction: DEBUG # 트렌젝션 로그 확인
+        jdbc:
+          ConnectionManager: DEBUG # 트렌젝션 로그 확인
+      springframework:
+        orm:
+          jpa:
+            JpaTransactionManager: DEBUG # 트렌젝션 로그 확인
