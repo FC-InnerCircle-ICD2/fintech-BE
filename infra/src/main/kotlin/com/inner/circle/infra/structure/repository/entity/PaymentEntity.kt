@@ -20,5 +20,5 @@ data class PaymentEntity(
     @Column(name = "merchant_id", nullable = false)
     val merchantId: String,
     @Column(name = "payment_type", nullable = false)
-    val paymentType: String,
+    val paymentType: String
 ) : BaseEntity()

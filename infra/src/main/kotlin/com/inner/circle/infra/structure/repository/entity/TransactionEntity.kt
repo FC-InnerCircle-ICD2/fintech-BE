@@ -30,5 +30,5 @@ data class TransactionEntity(
     @Column(name = "request_time", nullable = false)
     val requestTime: LocalDateTime,
     @Column(name = "completion_time")
-    val completionTime: LocalDateTime?,
+    val completionTime: LocalDateTime?
 ) : BaseEntity()
