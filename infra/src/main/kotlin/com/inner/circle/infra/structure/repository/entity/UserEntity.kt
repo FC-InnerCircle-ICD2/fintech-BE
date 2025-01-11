@@ -8,17 +8,11 @@ import jakarta.persistence.Id
 import jakarta.persistence.Table
 
 @Entity
-@Table(name = "payments")
-data class PaymentEntity(
+@Table(name = "users")
+data class UserEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
-    @Column(nullable = false)
-    val currency: String,
-    @Column(name = "user_id")
-    val userId: Long?,
-    @Column(name = "merchant_id", nullable = false)
-    val merchantId: String,
-    @Column(name = "payment_type", nullable = false)
-    val paymentType: String,
+    @Column(nullable = false, unique = true)
+    val name: String
 ) : BaseEntity()
