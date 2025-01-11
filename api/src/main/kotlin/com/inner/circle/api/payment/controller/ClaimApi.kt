@@ -86,7 +86,6 @@ interface ClaimApi {
             ApiResponse(responseCode = "400", description = "Invalid input", content = [Content()])
         ]
     )
-
     fun proceedPayment(
         @PathVariable("order_id") orderId: String
     ): ResponseEntity<PaymentResponse<String>>
@@ -107,7 +106,6 @@ interface ClaimApi {
             ApiResponse(responseCode = "400", description = "Invalid input", content = [Content()])
         ]
     )
-
     fun cancelPayment(
         @PathVariable("order_id") orderId: String
     ): ResponseEntity<PaymentResponse<String>>

@@ -19,7 +19,6 @@ class AuthCheckInterceptor : HandlerInterceptor {
         if (handler is HandlerMethod) {
             val method = handler.method
             if (method.isAnnotationPresent(RequireAuth::class.java)) {
-
                 val authHeader = request.getHeader("Authorization")
                 if (authHeader == null || !authHeader.startsWith("Basic ")) {
                     response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized")
@@ -30,7 +29,10 @@ class AuthCheckInterceptor : HandlerInterceptor {
                 val base64Credentials = authHeader.substring("Basic ".length)
                 val credentials = String(Base64.getDecoder().decode(base64Credentials)).split(":")
 
-                if (credentials.size != 2 || credentials[0] != TMP_KEY || credentials[1].isNotEmpty()) {
+                if (credentials.size != 2 ||
+                    credentials[0] != TMP_KEY ||
+                    credentials[1].isNotEmpty()
+                ) {
                     response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized")
                     return false
                 }
