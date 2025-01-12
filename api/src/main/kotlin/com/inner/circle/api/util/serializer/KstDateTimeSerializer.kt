@@ -10,7 +10,7 @@ import kotlinx.datetime.toInstant
 import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.datetime.toLocalDateTime
 
-class KstDateTimeSerializer: JsonSerializer<LocalDateTime>() {
+class KstDateTimeSerializer : JsonSerializer<LocalDateTime>() {
     private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
     private val seoulTimeZone = "Asia/Seoul"
 
@@ -20,7 +20,13 @@ class KstDateTimeSerializer: JsonSerializer<LocalDateTime>() {
         serializers: SerializerProvider
     ) {
         gen.writeString(
-            value.toInstant(TimeZone.UTC).toLocalDateTime(TimeZone.of(zoneId = seoulTimeZone)).toJavaLocalDateTime().format(formatter)
+            value
+                .toInstant(
+                    TimeZone.UTC
+                ).toLocalDateTime(
+                    TimeZone.of(zoneId = seoulTimeZone)
+                ).toJavaLocalDateTime()
+                .format(formatter)
         )
     }
 }
