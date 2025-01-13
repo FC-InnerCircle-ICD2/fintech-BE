@@ -1,3 +1,13 @@
 spring:
   application:
     name: api
+  profiles:
+    include: postgres
+
+springdoc:
+    api-docs:
+        path: /v3/api-docs
+    swagger-ui:
+        path: /swagger-ui.html
+
+

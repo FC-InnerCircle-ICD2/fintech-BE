@@ -1,38 +1,41 @@
 package com.inner.circle.infra.structure.repository.entity
 
-import java.util.UUID
-import kotlinx.datetime.Clock
-import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+import jakarta.persistence.Table
 
+@Entity
+@Table(name = "payment")
 data class PaymentEntity(
-    var userName: String,
-    val amount: Long,
-    val requestAt: LocalDateTime
-) {
-    var id: UUID? = null
-        private set
-    val createdAt: LocalDateTime =
-        Clock.System
-            .now()
-            .toLocalDateTime(TimeZone.currentSystemDefault())
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long,
+    @Column(nullable = false)
+    val currency: String,
+    @Column(name = "user_id")
+    val userId: Long?,
+    @Column(name = "merchant_id", nullable = false)
+    val merchantId: String,
+    @Column(name = "payment_type", nullable = false)
+    val paymentType: String
+) : BaseEntity() {
     companion object {
         fun createWithId(
-            userName: String,
-            amount: Long,
-            requestAt: LocalDateTime,
-            id: UUID
+            currency: String,
+            userId: Long?,
+            merchantId: String,
+            paymentType: String,
+            id: Long
         ): PaymentEntity =
-            PaymentEntity(userName, amount, requestAt).apply {
-                this.id = id
-            }
-    }
-
-    fun update(entity: PaymentEntity): PaymentEntity {
-        this.id = entity.id
-        this.userName = entity.userName
-        return this
+            PaymentEntity(
+                id = id,
+                currency = currency,
+                userId = userId,
+                merchantId = merchantId,
+                paymentType = paymentType
+            )
     }
 }
