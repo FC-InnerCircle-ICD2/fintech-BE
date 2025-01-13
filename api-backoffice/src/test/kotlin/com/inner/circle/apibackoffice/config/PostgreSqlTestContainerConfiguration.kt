@@ -12,7 +12,6 @@ import org.testcontainers.utility.DockerImageName
 @TestConfiguration
 class PostgreSqlTestContainerConfiguration :
     ApplicationContextInitializer<ConfigurableApplicationContext> {
-
     companion object {
         private const val IMAGE_TAG = "postgres:16-alpine"
         private const val CONTAINER_NAME = "reusable-postgres"
@@ -22,15 +21,16 @@ class PostgreSqlTestContainerConfiguration :
         val env = applicationContext.environment
 
         val dockerImageName = DockerImageName.parse(IMAGE_TAG)
-        val container = PostgreSQLContainer<Nothing>(dockerImageName).apply {
-            if (env.activeProfiles.contains("local")) {
-                withReuse(true)
+        val container =
+            PostgreSQLContainer<Nothing>(dockerImageName).apply {
+                if (env.activeProfiles.contains("local")) {
+                    withReuse(true)
+                }
+                withCreateContainerCmdModifier { cmd: CreateContainerCmd ->
+                    cmd.withName(CONTAINER_NAME)
+                }
+                start()
             }
-            withCreateContainerCmdModifier { cmd: CreateContainerCmd ->
-                cmd.withName(CONTAINER_NAME)
-            }
-            start()
-        }
 
         cleanUpExitedContainers()
 
@@ -44,17 +44,18 @@ class PostgreSqlTestContainerConfiguration :
     }
 
     private fun cleanUpExitedContainers() {
-        val process = ProcessBuilder(
-            "docker",
-            "ps",
-            "-a",
-            "--filter",
-            "name=${PostgreSQLContainer.NAME}",
-            "--filter",
-            "status=exited",
-            "--format",
-            "{{.ID}}"
-        ).start()
+        val process =
+            ProcessBuilder(
+                "docker",
+                "ps",
+                "-a",
+                "--filter",
+                "name=${PostgreSQLContainer.NAME}",
+                "--filter",
+                "status=exited",
+                "--format",
+                "{{.ID}}"
+            ).start()
 
         val reader = BufferedReader(InputStreamReader(process.inputStream))
         val containerId = reader.readLine()

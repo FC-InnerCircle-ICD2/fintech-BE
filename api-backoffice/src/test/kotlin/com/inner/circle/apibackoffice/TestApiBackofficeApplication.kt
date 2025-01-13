@@ -3,7 +3,6 @@ import com.inner.circle.apibackoffice.config.PostgreSqlTestContainerConfiguratio
 import org.springframework.boot.runApplication
 
 object TestApiBackofficeApplication {
-
     @JvmStatic
     fun main(args: Array<String>) {
         runApplication<ApiBackofficeApplication>(*args) {
