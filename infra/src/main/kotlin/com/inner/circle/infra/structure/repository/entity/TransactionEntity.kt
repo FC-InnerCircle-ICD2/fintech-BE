@@ -13,7 +13,7 @@ import java.math.BigDecimal
 import java.time.LocalDateTime
 
 @Entity
-@Table(name = "transactions")
+@Table(name = "transaction")
 data class TransactionEntity(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,

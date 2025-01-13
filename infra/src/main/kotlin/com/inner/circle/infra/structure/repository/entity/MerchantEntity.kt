@@ -6,7 +6,7 @@ import jakarta.persistence.Id
 import jakarta.persistence.Table
 
 @Entity
-@Table(name = "merchants")
+@Table(name = "merchant")
 data class MerchantEntity(
     @Id
     val id: String,

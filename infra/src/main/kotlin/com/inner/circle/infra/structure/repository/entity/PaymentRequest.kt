@@ -8,7 +8,7 @@ import java.math.BigDecimal
 import kotlinx.datetime.LocalDateTime
 
 @Entity
-@Table(name = "payment_requests")
+@Table(name = "payment_request")
 data class PaymentRequest(
     @Id
     val orderId: String,
