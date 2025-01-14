@@ -63,7 +63,5 @@ class PostgreSqlTestContainerConfiguration :
                 ProcessBuilder("docker", "rm", containerId).start().waitFor()
             }
         }
-
-
     }
 }
