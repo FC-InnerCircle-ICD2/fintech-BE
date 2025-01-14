@@ -14,6 +14,7 @@ dependencies {
     implementation(libs.bundles.kotlin)
     implementation(libs.bundles.springBoot)
     implementation(libs.bundles.kotlinxSerialization)
+    testImplementation(libs.bundles.testContainer)
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.1")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     testImplementation(libs.bundles.kotlinTest)
