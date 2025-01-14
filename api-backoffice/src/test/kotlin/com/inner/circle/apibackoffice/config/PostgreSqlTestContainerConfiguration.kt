@@ -20,6 +20,8 @@ class PostgreSqlTestContainerConfiguration :
     override fun initialize(applicationContext: ConfigurableApplicationContext) {
         val env = applicationContext.environment
 
+        cleanUpExitedContainers()
+
         val dockerImageName = DockerImageName.parse(IMAGE_TAG)
         val container =
             PostgreSQLContainer<Nothing>(dockerImageName).apply {
@@ -31,8 +33,6 @@ class PostgreSqlTestContainerConfiguration :
                 }
                 start()
             }
-
-        cleanUpExitedContainers()
 
         val jdbcUrl = container.jdbcUrl
         val username = container.username
@@ -50,7 +50,7 @@ class PostgreSqlTestContainerConfiguration :
                 "ps",
                 "-a",
                 "--filter",
-                "name=${PostgreSQLContainer.NAME}",
+                "name=${CONTAINER_NAME}",
                 "--filter",
                 "status=exited",
                 "--format",
