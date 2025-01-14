@@ -3,6 +3,7 @@ package com.inner.circle.api.payment.controller
 import com.inner.circle.api.payment.interceptor.RequireAuth
 import com.inner.circle.api.structure.dto.PaymentClaimRequest
 import com.inner.circle.api.structure.dto.PaymentResponse
+import com.inner.circle.core.structure.service.ClaimService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
@@ -13,14 +14,15 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/v1/payments")
-class ClaimController : ClaimApi {
+class ClaimController(
+    private val claimService: ClaimService
+) : ClaimApi {
     @RequireAuth
     @PostMapping
     override fun createPayment(
         @RequestBody request: PaymentClaimRequest
     ): ResponseEntity<PaymentResponse<String>> {
-//           val response = paymentService.createPayment(request)
-        val response = PaymentResponse.ok("payment request accepted..")
+        val response = claimService.createPayment(request)
         return ResponseEntity(response, HttpStatus.OK)
     }
 
