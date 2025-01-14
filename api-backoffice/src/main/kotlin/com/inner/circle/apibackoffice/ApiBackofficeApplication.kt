@@ -4,7 +4,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication(
-    scanBasePackages = ["com.inner.circle.apibackoffice", "com.inner.circle.corebackoffice", "com.inner.circle.infrabackoffice"]
+    scanBasePackages = [
+        "com.inner.circle.apibackoffice",
+        "com.inner.circle.corebackoffice",
+        "com.inner.circle.infrabackoffice"
+    ]
 )
 class ApiBackofficeApplication
 
