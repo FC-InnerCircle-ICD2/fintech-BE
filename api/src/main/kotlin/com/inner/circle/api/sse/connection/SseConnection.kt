@@ -1,15 +1,14 @@
 package com.inner.circle.api.sse.connection
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter
 import java.io.IOException
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter
 
 data class SseConnection(
     val uniqueKey: String,
     private val connectionPool: ConnectionPool<String, SseConnection>,
     private val objectMapper: ObjectMapper
 ) {
-
     val sseEmitter: SseEmitter = SseEmitter(600 * 1000L)
 
     init {
@@ -32,17 +31,20 @@ data class SseConnection(
             uniqueKey: String,
             connectionPool: ConnectionPool<String, SseConnection>,
             objectMapper: ObjectMapper
-        ): SseConnection {
-            return SseConnection(uniqueKey, connectionPool, objectMapper)
-        }
+        ): SseConnection = SseConnection(uniqueKey, connectionPool, objectMapper)
     }
 
-    fun sendMessage(eventName: String, data: Any) {
+    fun sendMessage(
+        eventName: String,
+        data: Any
+    ) {
         try {
             val json = objectMapper.writeValueAsString(data)
-            val event = SseEmitter.event()
-                .name(eventName)
-                .data(json)
+            val event =
+                SseEmitter
+                    .event()
+                    .name(eventName)
+                    .data(json)
 
             sseEmitter.send(event)
         } catch (e: IOException) {
@@ -53,8 +55,10 @@ data class SseConnection(
     fun sendMessage(data: Any) {
         try {
             val json = objectMapper.writeValueAsString(data)
-            val event = SseEmitter.event()
-                .data(json)
+            val event =
+                SseEmitter
+                    .event()
+                    .data(json)
 
             sseEmitter.send(event)
         } catch (e: IOException) {
