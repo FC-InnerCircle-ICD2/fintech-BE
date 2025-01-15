@@ -31,7 +31,7 @@ class PostgreSqlTestContainerConfiguration :
                 withCreateContainerCmdModifier { cmd: CreateContainerCmd ->
                     cmd.withName(CONTAINER_NAME)
                 }
-                withDatabaseName("payment")
+                withDatabaseName("backoffice")
                 withUsername("test")
                 withPassword("test")
                 start()
@@ -40,6 +40,11 @@ class PostgreSqlTestContainerConfiguration :
         val jdbcUrl = container.jdbcUrl
         val username = container.username
         val password = container.password
+
+        System.setProperty(
+            "test-container.postgres.port",
+            container.firstMappedPort.toString()
+        )
 
         System.setProperty("spring.datasource.url", jdbcUrl)
         System.setProperty("spring.datasource.username", username)
