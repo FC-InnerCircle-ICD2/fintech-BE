@@ -20,7 +20,7 @@ class PostgreSqlTestContainerConfiguration :
 
     override fun initialize(applicationContext: ConfigurableApplicationContext) {
         if (!isContainerRunning(CONTAINER_NAME)) {
-            cleanUpExitedContainers()
+            cleanUpExitedContainers(CONTAINER_NAME)
             val env = applicationContext.environment
 
             val dockerImageName = DockerImageName.parse(IMAGE_TAG)
@@ -32,6 +32,9 @@ class PostgreSqlTestContainerConfiguration :
                     withCreateContainerCmdModifier { cmd: CreateContainerCmd ->
                         cmd.withName(CONTAINER_NAME)
                     }
+                    withDatabaseName("payment")
+                    withUsername("test")
+                    withPassword("test")
                     start()
                 }
 
@@ -52,14 +55,14 @@ class PostgreSqlTestContainerConfiguration :
         }
     }
 
-    private fun cleanUpExitedContainers() {
+    private fun cleanUpExitedContainers(containerName: String) {
         val process =
             ProcessBuilder(
                 "docker",
                 "ps",
                 "-a",
                 "--filter",
-                "name=${PostgreSQLContainer.NAME}",
+                "name=${containerName}",
                 "--filter",
                 "status=exited",
                 "--format",
