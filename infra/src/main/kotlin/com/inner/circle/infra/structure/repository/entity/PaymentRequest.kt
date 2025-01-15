@@ -5,7 +5,7 @@ import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 import java.math.BigDecimal
-import kotlinx.datetime.LocalDateTime
+import java.time.LocalDateTime
 
 @Entity
 @Table(name = "payment_request")
