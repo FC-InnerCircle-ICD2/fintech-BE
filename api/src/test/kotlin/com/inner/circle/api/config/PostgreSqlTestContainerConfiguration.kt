@@ -35,7 +35,6 @@ class PostgreSqlTestContainerConfiguration :
                     start()
                 }
 
-
             val jdbcUrl = container.jdbcUrl
             val username = container.username
             val password = container.password
@@ -76,16 +75,17 @@ class PostgreSqlTestContainerConfiguration :
     }
 
     private fun isContainerRunning(containerName: String): Boolean {
-        val process = ProcessBuilder(
-            "docker",
-            "ps",
-            "--filter",
-            "name=$containerName",
-            "--filter",
-            "status=running",
-            "--format",
-            "{{.ID}}"
-        ).start()
+        val process =
+            ProcessBuilder(
+                "docker",
+                "ps",
+                "--filter",
+                "name=$containerName",
+                "--filter",
+                "status=running",
+                "--format",
+                "{{.ID}}"
+            ).start()
 
         BufferedReader(InputStreamReader(process.inputStream)).use { reader ->
             val containerId = reader.readLine()
@@ -94,11 +94,12 @@ class PostgreSqlTestContainerConfiguration :
     }
 
     private fun getContainerInfo(containerName: String): ContainerInfo? {
-        val process = ProcessBuilder(
-            "docker",
-            "inspect",
-            containerName
-        ).start()
+        val process =
+            ProcessBuilder(
+                "docker",
+                "inspect",
+                containerName
+            ).start()
 
         BufferedReader(InputStreamReader(process.inputStream)).use { reader ->
             val output = reader.readText()
@@ -118,8 +119,13 @@ class PostgreSqlTestContainerConfiguration :
                     for (i in 0 until envVars.length()) {
                         val envVar = envVars.getString(i)
                         when {
-                            envVar.startsWith("POSTGRES_USER=") -> username = envVar.substringAfter("=")
-                            envVar.startsWith("POSTGRES_PASSWORD=") -> password = envVar.substringAfter("=")
+                            envVar.startsWith("POSTGRES_USER=") ->
+                                username =
+                                    envVar.substringAfter("=")
+
+                            envVar.startsWith("POSTGRES_PASSWORD=") ->
+                                password =
+                                    envVar.substringAfter("=")
                             envVar.startsWith("POSTGRES_DB=") -> dbName = envVar.substringAfter("=")
                         }
                     }
@@ -136,6 +142,9 @@ class PostgreSqlTestContainerConfiguration :
         return null
     }
 
-    data class ContainerInfo(val jdbcUrl: String, val username: String, val password: String)
-
+    data class ContainerInfo(
+        val jdbcUrl: String,
+        val username: String,
+        val password: String
+    )
 }
