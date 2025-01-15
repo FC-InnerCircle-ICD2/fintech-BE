@@ -27,6 +27,8 @@ class PostgreSqlTestContainerConfiguration :
             PostgreSQLContainer<Nothing>(dockerImageName).apply {
                 if (env.activeProfiles.contains("local")) {
                     withReuse(true)
+                    withUsername("local")
+                    withPassword("test")
                 }
                 withCreateContainerCmdModifier { cmd: CreateContainerCmd ->
                     cmd.withName(CONTAINER_NAME)
