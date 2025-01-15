@@ -11,7 +11,7 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 @Entity
-@Table(name = "payment_transaction")
+@Table(name = "backoffice_payment_transaction")
 data class TransactionEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
