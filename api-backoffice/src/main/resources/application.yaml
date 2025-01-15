@@ -3,3 +3,4 @@ spring:
     name: api-backoffice
   profiles:
     active: local
+    include: datasource
