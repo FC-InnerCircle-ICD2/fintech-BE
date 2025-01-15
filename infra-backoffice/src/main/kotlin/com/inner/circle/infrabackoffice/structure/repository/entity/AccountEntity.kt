@@ -8,7 +8,7 @@ import jakarta.persistence.Table
 import java.util.UUID
 
 @Entity
-@Table(name = "account")
+@Table(name = "backoffice_account")
 data class AccountEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
