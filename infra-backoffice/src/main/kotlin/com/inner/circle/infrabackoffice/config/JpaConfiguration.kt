@@ -1,4 +1,4 @@
-package com.inner.circle.infrabackoffice.repository
+package com.inner.circle.infrabackoffice.config
 
 import org.springframework.boot.autoconfigure.domain.EntityScan
 import org.springframework.context.annotation.Configuration

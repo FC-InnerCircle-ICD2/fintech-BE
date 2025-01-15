@@ -1,5 +1,6 @@
 package com.inner.circle.infrabackoffice.repository
 
+import com.inner.circle.infrabackoffice.config.JpaConfiguration
 import com.inner.circle.infrabackoffice.repository.entity.TransactionEntity
 import com.inner.circle.infrabackoffice.repository.entity.TransactionStatus
 import io.kotest.core.spec.style.ExpectSpec
