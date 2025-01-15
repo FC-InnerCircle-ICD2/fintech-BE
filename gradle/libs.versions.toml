@@ -55,6 +55,9 @@ springMockk = { module = "com.ninja-squad:springmockk", version.ref = "springMoc
 # spring
 springBootWeb = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "springBoot"}
 springBootTest = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "springBoot"}
+springBootTestContainers = { module = "org.springframework.boot:spring-boot-testcontainers", version.ref = "springBoot"}
+# testContainers
+postgresqlTestContainer = { module = "org.testcontainers:postgresql", version = "1.20.0"}
 
 [bundles]
 boms = ["kotlinxSerializationBom", "kotlinxCoroutinesBom", "kotestBom"]
@@ -65,7 +68,7 @@ kotlinTest = ["kotestRunnerJunit5", "kotestExtensionsJunit5", "kotestAssertionsC
 kotlinTestSpring = ["kotestExtensionsSpring", "springMockk"]
 kotlinLogging = ["kotlinLogging", "slf4jApi", "logbackClassic", "kotlinxCoroutinesSlf4j"]
 springBoot = ["springBootWeb", "springBootTest"]
-
+testContainer = ["springBootTestContainers", "postgresqlTestContainer"]
 
 [plugins]
 kotlinPluginSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

@@ -16,4 +16,5 @@ dependencies {
     implementation(libs.bundles.kotlinxSerialization)
     testImplementation(libs.bundles.kotlinTest)
     testImplementation(libs.bundles.kotlinTestSpring)
+    testImplementation(libs.bundles.testContainer)
 }
