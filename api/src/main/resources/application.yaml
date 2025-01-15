@@ -2,7 +2,8 @@ spring:
   application:
     name: api
   profiles:
-    include: postgres
+    active: local
+    include: datasource
 
 springdoc:
     api-docs:
@@ -10,4 +11,5 @@ springdoc:
     swagger-ui:
         path: /swagger-ui.html
 
-
+server:
+  port: 10001
