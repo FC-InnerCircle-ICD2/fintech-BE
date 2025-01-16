@@ -1,13 +1,14 @@
 package com.inner.circle.api.payment.controller
 
 import com.inner.circle.api.payment.interceptor.RequireAuth
-import com.inner.circle.api.structure.dto.PaymentClaimRequest
 import com.inner.circle.api.structure.dto.PaymentResponse
 import com.inner.circle.core.structure.service.ClaimService
+import com.inner.circle.core.structure.usecase.PaymentClaimRequest
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestAttribute
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -20,7 +21,8 @@ class ClaimController(
     @RequireAuth
     @PostMapping
     override fun createPayment(
-        @RequestBody request: PaymentClaimRequest
+        @RequestBody request: PaymentClaimRequest,
+        @RequestAttribute("merchantId") merchantId: String
     ): ResponseEntity<PaymentResponse<String>> {
         val response = claimService.createPayment(request)
         return ResponseEntity(response, HttpStatus.OK)

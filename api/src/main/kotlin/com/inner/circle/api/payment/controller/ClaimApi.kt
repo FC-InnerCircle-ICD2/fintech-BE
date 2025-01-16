@@ -1,7 +1,7 @@
 package com.inner.circle.api.payment.controller
 
-import com.inner.circle.api.structure.dto.PaymentClaimRequest
 import com.inner.circle.api.structure.dto.PaymentResponse
+import com.inner.circle.core.structure.usecase.PaymentClaimRequest
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.ExampleObject
@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestAttribute
 import org.springframework.web.bind.annotation.RequestBody
 
 interface ClaimApi {
@@ -67,7 +68,8 @@ interface ClaimApi {
         ]
     )
     fun createPayment(
-        @RequestBody request: PaymentClaimRequest
+        @RequestBody request: PaymentClaimRequest,
+        @RequestAttribute("merchantId") merchantId: String
     ): ResponseEntity<PaymentResponse<String>>
 
     @Operation(summary = "Proceed a payment")

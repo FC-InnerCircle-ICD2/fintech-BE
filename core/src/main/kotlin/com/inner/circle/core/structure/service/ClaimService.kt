@@ -1,20 +1,21 @@
 package com.inner.circle.core.structure.service
 
-import com.inner.circle.core.structure.domain.Payment
-import com.inner.circle.core.structure.usecase.RequestPaymentUseCase
+import com.inner.circle.core.structure.usecase.PaymentClaimRequest
 import com.inner.circle.infra.structure.port.ClaimHandlingPort
 import org.springframework.stereotype.Service
 import org.springframework.util.MultiValueMap
 
 @Service
-internal class ClaimService(
+class ClaimService(
     private val claimHandlingPort: ClaimHandlingPort
-) : RequestPaymentUseCase {
-    fun createPayment(request: Payment): MultiValueMap<String, String> {
-        TODO("Not yet implemented")
-    }
+) {
+    fun createPayment(request: PaymentClaimRequest): MultiValueMap<String, String> {
+        // request -> PaymentRequest
+        // claimHandlingPort 를 통해 저장 처리 들어감
+        // 반환값으로 response 구성
+//        PaymentRequest
 
-    override fun payment(request: RequestPaymentUseCase.Request) {
-        TODO("Not yet implemented")
+        val generatePaymentRequest = claimHandlingPort.generatePaymentRequest()
+//        return generatePaymentRequest
     }
 }

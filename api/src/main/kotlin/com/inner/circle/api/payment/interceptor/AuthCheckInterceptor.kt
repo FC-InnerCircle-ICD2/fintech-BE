@@ -1,5 +1,6 @@
 package com.inner.circle.api.payment.interceptor
 
+import com.inner.circle.core.structure.service.ApiCredentialService
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import java.util.Base64
@@ -7,10 +8,10 @@ import org.springframework.stereotype.Component
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.HandlerInterceptor
 
-private const val TMP_KEY = "test"
-
 @Component
-class AuthCheckInterceptor : HandlerInterceptor {
+class AuthCheckInterceptor(
+    private val apiCredentialService: ApiCredentialService
+) : HandlerInterceptor {
     override fun preHandle(
         request: HttpServletRequest,
         response: HttpServletResponse,
@@ -29,13 +30,17 @@ class AuthCheckInterceptor : HandlerInterceptor {
                 val base64Credentials = authHeader.substring("Basic ".length)
                 val credentials = String(Base64.getDecoder().decode(base64Credentials)).split(":")
 
+                val requestUserApiKey = credentials[0]
                 if (credentials.size != 2 ||
-                    credentials[0] != TMP_KEY ||
+                    requestUserApiKey.isEmpty() ||
                     credentials[1].isNotEmpty()
                 ) {
                     response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized")
                     return false
                 }
+
+                val merchantId = apiCredentialService.getMerchantIdByApiKey(requestUserApiKey)
+                request.setAttribute("merchantId", merchantId)
             }
         }
         return true
