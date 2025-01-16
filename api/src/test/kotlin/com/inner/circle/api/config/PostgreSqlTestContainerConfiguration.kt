@@ -62,7 +62,7 @@ class PostgreSqlTestContainerConfiguration :
                 "ps",
                 "-a",
                 "--filter",
-                "name=${containerName}",
+                "name=$containerName",
                 "--filter",
                 "status=exited",
                 "--format",
