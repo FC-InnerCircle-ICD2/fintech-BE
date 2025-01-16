@@ -27,19 +27,24 @@ class PostgreSqlTestContainerConfiguration :
             PostgreSQLContainer<Nothing>(dockerImageName).apply {
                 if (env.activeProfiles.contains("local")) {
                     withReuse(true)
+                    withUsername("test")
+                    withPassword("test")
                 }
                 withCreateContainerCmdModifier { cmd: CreateContainerCmd ->
                     cmd.withName(CONTAINER_NAME)
                 }
-                withDatabaseName("payment")
-                withUsername("test")
-                withPassword("test")
+                withDatabaseName("backoffice")
                 start()
             }
 
         val jdbcUrl = container.jdbcUrl
         val username = container.username
         val password = container.password
+
+        System.setProperty(
+            "test-container.postgres.port",
+            container.firstMappedPort.toString()
+        )
 
         System.setProperty("spring.datasource.url", jdbcUrl)
         System.setProperty("spring.datasource.username", username)
