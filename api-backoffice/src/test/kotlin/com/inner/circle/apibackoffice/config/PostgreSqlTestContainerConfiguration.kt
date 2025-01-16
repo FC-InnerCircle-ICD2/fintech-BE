@@ -20,23 +20,31 @@ class PostgreSqlTestContainerConfiguration :
     override fun initialize(applicationContext: ConfigurableApplicationContext) {
         val env = applicationContext.environment
 
+        cleanUpExitedContainers()
+
         val dockerImageName = DockerImageName.parse(IMAGE_TAG)
         val container =
             PostgreSQLContainer<Nothing>(dockerImageName).apply {
                 if (env.activeProfiles.contains("local")) {
                     withReuse(true)
+                    withUsername("test")
+                    withPassword("test")
                 }
                 withCreateContainerCmdModifier { cmd: CreateContainerCmd ->
                     cmd.withName(CONTAINER_NAME)
                 }
+                withDatabaseName("backoffice")
                 start()
             }
-
-        cleanUpExitedContainers()
 
         val jdbcUrl = container.jdbcUrl
         val username = container.username
         val password = container.password
+
+        System.setProperty(
+            "test-container.postgres.port",
+            container.firstMappedPort.toString()
+        )
 
         System.setProperty("spring.datasource.url", jdbcUrl)
         System.setProperty("spring.datasource.username", username)
@@ -50,7 +58,7 @@ class PostgreSqlTestContainerConfiguration :
                 "ps",
                 "-a",
                 "--filter",
-                "name=${PostgreSQLContainer.NAME}",
+                "name=${CONTAINER_NAME}",
                 "--filter",
                 "status=exited",
                 "--format",

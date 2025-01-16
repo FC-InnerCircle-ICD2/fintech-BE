@@ -1,6 +1,5 @@
-package com.inner.circle.infra.structure.repository.entity
+package com.inner.circle.infrabackoffice.structure.repository.entity
 
-import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
@@ -14,6 +13,5 @@ data class AccountEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     var id: UUID? = null,
-    @Column(nullable = false, unique = true)
-    val name: String
-) : BaseEntity()
+    var name: String? = null
+)
