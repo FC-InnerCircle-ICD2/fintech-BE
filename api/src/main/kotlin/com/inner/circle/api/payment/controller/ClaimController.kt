@@ -24,8 +24,9 @@ class ClaimController(
         @RequestBody request: PaymentClaimRequest,
         @RequestAttribute("merchantId") merchantId: String
     ): ResponseEntity<PaymentResponse<String>> {
-        val response = claimService.createPayment(request)
-        return ResponseEntity(response, HttpStatus.OK)
+        val response = claimService.createPayment(request, merchantId)
+        val result = PaymentResponse.ok("test")
+        return ResponseEntity(result, HttpStatus.OK)
     }
 
     @RequireAuth

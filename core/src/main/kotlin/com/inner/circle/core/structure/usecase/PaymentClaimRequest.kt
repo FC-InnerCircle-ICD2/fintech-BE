@@ -1,10 +1,9 @@
-package com.inner.circle.api.structure.dto
+package com.inner.circle.core.structure.usecase
 
 import java.math.BigDecimal
 
 data class PaymentClaimRequest(
     val amount: BigDecimal,
-    val store: String,
     val orderId: String,
     val orderName: String,
     val successUrl: String,
