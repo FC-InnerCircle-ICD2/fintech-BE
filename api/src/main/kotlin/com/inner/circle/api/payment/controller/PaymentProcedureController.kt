@@ -16,10 +16,8 @@ class PaymentProcedureController {
     // 확인 버튼을 누르게 되면 카드 인증 절차로 넘어간다.
     @PostMapping("/{orderId}/proceed")
     @ResponseStatus(HttpStatus.CREATED)
-    fun proceedOrder(@PathVariable(name = "orderId") orderId: String) {
-
-
-
+    fun proceedOrder(
+        @PathVariable(name = "orderId") orderId: String
+    ) {
     }
 }
-
