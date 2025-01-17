@@ -11,6 +11,7 @@ dependencies {
         .get()
         .forEach { implementation(platform(it)) }
     implementation(projects.core)
+    implementation(projects.exception)
     implementation(libs.bundles.kotlin)
     implementation(libs.bundles.springBoot)
     implementation(libs.bundles.kotlinxSerialization)

@@ -20,4 +20,5 @@ include(
     ":api-backoffice",
     ":core-backoffice",
     ":infra-backoffice",
+    ":exception"
 )
