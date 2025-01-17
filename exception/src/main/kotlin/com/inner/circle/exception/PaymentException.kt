@@ -3,7 +3,7 @@ package com.inner.circle.exception
 sealed class PaymentException(
     status: HttpStatus,
     override val message: String,
-    cause: Throwable? = null
+    override val cause: Throwable? = null
 ) : AppException(status, message, cause) {
     data class OrderNotFoundException(
         val orderId: String,
