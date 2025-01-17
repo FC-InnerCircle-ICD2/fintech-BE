@@ -32,7 +32,6 @@ class TransactionRepositoryTest(
                         paymentId = paymentId,
                         amount = BigDecimal.valueOf(100.0),
                         status = TransactionStatus.APPROVED,
-                        paymentKey = "Payment key",
                         reason = "APPROVED",
                         requestedAt = LocalDateTime.now(),
                         completedAt = LocalDateTime.now()
@@ -44,7 +43,7 @@ class TransactionRepositoryTest(
                     val expectedTransaction = actual.find { it.id == savedTransaction.id }
                     assertNotNull(expectedTransaction)
                     assertEquals(0, expectedTransaction?.amount?.compareTo(transaction.amount))
-                    assertEquals(transaction.paymentKey, expectedTransaction?.paymentKey)
+                    assertEquals(transaction.paymentId, expectedTransaction?.paymentId)
                 }
 
                 expect("paymentId로 저장된 transaction이 3개가 조회되어야 한다.") {
@@ -54,7 +53,6 @@ class TransactionRepositoryTest(
                             paymentId = paymentId,
                             amount = BigDecimal.valueOf(50.0),
                             status = TransactionStatus.CANCELED,
-                            paymentKey = "Payment key",
                             reason = "CANCELED",
                             requestedAt = LocalDateTime.now(),
                             completedAt = LocalDateTime.now()
@@ -67,7 +65,6 @@ class TransactionRepositoryTest(
                             paymentId = paymentId,
                             amount = BigDecimal.valueOf(50.0),
                             status = TransactionStatus.CANCELED,
-                            paymentKey = "Payment key",
                             reason = "CANCELED",
                             requestedAt = LocalDateTime.now(),
                             completedAt = LocalDateTime.now()
@@ -80,7 +77,6 @@ class TransactionRepositoryTest(
                             paymentId = UUID.randomUUID(),
                             amount = BigDecimal.valueOf(100.0),
                             status = TransactionStatus.APPROVED,
-                            paymentKey = "Payment key",
                             reason = "APPROVED",
                             requestedAt = LocalDateTime.now(),
                             completedAt = LocalDateTime.now()

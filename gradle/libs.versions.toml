@@ -41,7 +41,7 @@ kotlinLogging = { module = "io.github.oshai:kotlin-logging-jvm", version.ref = "
 slf4jApi = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 logbackClassic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 # linter
-kotlinterGradlePlugin = {module = "org.jmailen.kotlinter:org.jmailen.kotlinter.gradle.plugin", version.ref = "kotlinter"}
+kotlinterGradlePlugin = { module = "org.jmailen.kotlinter:org.jmailen.kotlinter.gradle.plugin", version.ref = "kotlinter" }
 # test
 kotestBom = { module = "io.kotest:kotest-bom", version.ref = "kotest" }
 kotestRunnerJunit5 = { module = "io.kotest:kotest-runner-junit5" }
@@ -53,11 +53,17 @@ jacocoAgent = { module = "org.jacoco:org.jacoco.agent", version.ref = "jacoco" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 springMockk = { module = "com.ninja-squad:springmockk", version.ref = "springMockk" }
 # spring
-springBootWeb = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "springBoot"}
-springBootTest = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "springBoot"}
-springBootTestContainers = { module = "org.springframework.boot:spring-boot-testcontainers", version.ref = "springBoot"}
+springBootWeb = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "springBoot" }
+springBootTest = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "springBoot" }
+springBootTestContainers = { module = "org.springframework.boot:spring-boot-testcontainers", version.ref = "springBoot" }
+springBootDataJpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa", version.ref = "springBoot" }
 # testContainers
-postgresqlTestContainer = { module = "org.testcontainers:postgresql", version = "1.20.0"}
+postgresqlTestContainer = { module = "org.testcontainers:postgresql", version = "1.20.0" }
+# swagger
+swagger = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version = "2.8.3" }
+# database
+h2 = { module = "com.h2database:h2", version = "2.3.232" }
+postgresql = { module = "org.postgresql:postgresql", version = "42.7.4" }
 
 [bundles]
 boms = ["kotlinxSerializationBom", "kotlinxCoroutinesBom", "kotestBom"]
@@ -74,5 +80,5 @@ testContainer = ["springBootTestContainers", "postgresqlTestContainer"]
 kotlinPluginSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kotlinPluginSpring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
 idea = { id = "org.gradle.idea" }
-springBoot = { id = "org.springframework.boot", version.ref = "springBoot"}
+springBoot = { id = "org.springframework.boot", version.ref = "springBoot" }
 springDependencyManagement = { id = "io.spring.dependency-management", version.ref = "springDependencyManagement" }
