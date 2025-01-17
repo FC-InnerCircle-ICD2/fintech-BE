@@ -16,13 +16,13 @@ dependencies {
     implementation(libs.bundles.kotlin)
     implementation(libs.bundles.springBoot)
     implementation(libs.bundles.kotlinxSerialization)
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    runtimeOnly("org.postgresql:postgresql")
+    implementation(libs.springBootDataJpa)
+    runtimeOnly(libs.postgresql)
     compileOnly(libs.bundles.kotlinLogging)
     compileOnly(libs.bundles.kotlinxCoroutines)
     testImplementation(libs.bundles.kotlinTest)
     testImplementation(libs.bundles.kotlinTestSpring)
-    testImplementation("com.h2database:h2")
+    testImplementation(libs.h2)
 }
 
 noArg {
