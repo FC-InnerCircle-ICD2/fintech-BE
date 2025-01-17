@@ -11,12 +11,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 
 @RestControllerAdvice
 class GlobalExceptionHandler {
-
     @ExceptionHandler(AppException::class)
     fun handleAppException(exception: AppException): ResponseEntity<AppExceptionResponse> =
         ResponseEntity(
             AppExceptionResponse.of(exception),
-            HttpStatus.valueOf(exception.status.code),
+            HttpStatus.valueOf(exception.status.code)
         )
 
     @ExceptionHandler(Exception::class)

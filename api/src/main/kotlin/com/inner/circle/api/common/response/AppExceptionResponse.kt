@@ -5,13 +5,13 @@ import org.springframework.http.HttpStatus
 
 data class AppExceptionResponse(
     val code: HttpStatus,
-    val message: String,
+    val message: String
 ) {
     companion object {
         fun of(exception: AppException): AppExceptionResponse =
             AppExceptionResponse(
                 code = HttpStatus.valueOf(exception.status.code),
-                message = exception.message,
+                message = exception.message
             )
     }
 }

@@ -1,7 +1,9 @@
 package com.inner.circle.exception
 
-enum class HttpStatus(val code: Int, val description: String) {
-
+enum class HttpStatus(
+    val code: Int,
+    val description: String
+) {
     // 1xx Informational Responses
     CONTINUE(code = 100, description = "Continue"),
     SWITCHING_PROTOCOLS(code = 101, description = "Switching Protocols"),
