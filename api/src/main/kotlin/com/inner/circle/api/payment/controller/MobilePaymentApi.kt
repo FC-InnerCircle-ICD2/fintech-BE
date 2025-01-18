@@ -70,7 +70,6 @@ interface MobilePaymentApi {
             ApiResponse(responseCode = "400", description = "Invalid input", content = [Content()])
         ]
     )
-
     fun cancelMobilePayment(
         @PathVariable("order_id") orderId: String
     ): ResponseEntity<PaymentResponse<String>>
