@@ -13,6 +13,6 @@ import org.springframework.context.annotation.Profile
 class DataSourceConfig {
     @Bean
     @Primary
-    @ConfigurationProperties(prefix = "spring.datasource")
+    @ConfigurationProperties(prefix = "spring.datasource.hikari")
     fun dataSource(): DataSource = DataSourceBuilder.create().build()
 }
