@@ -1,6 +1,6 @@
-package com.inner.circle.infrabackoffice.structure.repository
+package com.inner.circle.infrabackoffice.repository
 
-import com.inner.circle.infrabackoffice.structure.repository.entity.MerchantEntity
+import com.inner.circle.infrabackoffice.repository.entity.MerchantEntity
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository
 

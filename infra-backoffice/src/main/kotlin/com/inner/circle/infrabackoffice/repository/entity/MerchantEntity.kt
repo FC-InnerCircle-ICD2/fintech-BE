@@ -1,4 +1,4 @@
-package com.inner.circle.infrabackoffice.structure.repository.entity
+package com.inner.circle.infrabackoffice.repository.entity
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
