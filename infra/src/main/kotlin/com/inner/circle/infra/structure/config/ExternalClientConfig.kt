@@ -8,10 +8,10 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 @Configuration
-class ExternalClientConfig (
+class ExternalClientConfig(
     @Value("\${external.mock-server.base-url}")
-    private val mockServerBaseUrl: String,
-){
+    private val mockServerBaseUrl: String
+) {
     @Bean
     fun mockServerClient(): Retrofit =
         Retrofit
