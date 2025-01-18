@@ -25,7 +25,7 @@ class ClaimController : ClaimApi {
     }
 
     @RequireAuth
-    @PostMapping("/{order_id}/proceed")
+    @PostMapping("/{order_id}/proceed/example")
     override fun proceedPayment(
         @PathVariable("order_id") orderId: String
     ): ResponseEntity<PaymentResponse<String>> {
@@ -35,7 +35,7 @@ class ClaimController : ClaimApi {
     }
 
     @RequireAuth
-    @PostMapping("/{order_id}/cancel")
+    @PostMapping("/{order_id}/cancel/example")
     override fun cancelPayment(
         @PathVariable("order_id") orderId: String
     ): ResponseEntity<PaymentResponse<String>> {
