@@ -40,7 +40,7 @@ spring:
 spring:
   config:
     activate:
-      on-profile: dev
+      on-profile: local
   datasource:
       url: ${DATASOURCE_URL}
       username: ${DATASOURCE_USER_NAME}
@@ -52,9 +52,10 @@ spring:
         idle-timeout: 30000 # 5분
         connection-timeout: 20000 # 30초
         max-lifetime: 1800000 # 30분
+        connection-test-query: SELECT 1
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     open-in-view: false
     properties:
       hibernate:
