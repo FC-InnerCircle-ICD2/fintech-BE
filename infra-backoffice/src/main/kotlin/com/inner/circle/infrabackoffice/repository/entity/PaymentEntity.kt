@@ -8,26 +8,22 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
-import java.math.BigDecimal
-import java.time.LocalDateTime
 import java.util.UUID
 
 @Entity
-@Table(name = "payment_transaction")
-data class TransactionEntity(
+@Table(name = "payment")
+data class PaymentEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     val id: UUID?,
-    @Column(nullable = false)
-    val paymentId: UUID,
-    @Column(nullable = false)
-    val amount: BigDecimal,
+    @Column(nullable = false, unique = true)
+    val paymentKey: String,
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    val status: TransactionStatus,
-    val reason: String?,
+    val currency: Currency,
+    val userId: UUID?,
+    val merchantId: UUID?,
     @Column(nullable = false)
-    val requestedAt: LocalDateTime,
-    @Column(nullable = false)
-    val completedAt: LocalDateTime
+    @Enumerated(EnumType.STRING)
+    val paymentType: PaymentType
 ) : BaseEntity()
