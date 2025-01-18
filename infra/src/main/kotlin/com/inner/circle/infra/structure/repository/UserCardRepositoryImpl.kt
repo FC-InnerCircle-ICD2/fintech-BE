@@ -1,6 +1,5 @@
 package com.inner.circle.infra.structure.repository
 
-import com.inner.circle.infra.structure.repository.entity.PaymentRequestEntity
 import com.inner.circle.infra.structure.repository.entity.UserCardEntity
 import org.springframework.stereotype.Repository
 
