@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.test.context.ContextConfiguration
 
-
 @ContextConfiguration(classes = [PaymentClaimJpaRepositoryAdapter::class, JpaConfiguration::class])
 class ClaimAdaptorDataJpaTest : AbstractJpaTestWithLocalTestContainer() {
     @Autowired

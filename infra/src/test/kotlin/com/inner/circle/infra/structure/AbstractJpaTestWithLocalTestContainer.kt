@@ -10,6 +10,4 @@ import org.springframework.context.annotation.Import
 @DataJpaTest(showSql = true)
 @ComponentScan(basePackages = ["com.inner.circle.infra"])
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-abstract class AbstractJpaTestWithLocalTestContainer {
-
-}
+abstract class AbstractJpaTestWithLocalTestContainer

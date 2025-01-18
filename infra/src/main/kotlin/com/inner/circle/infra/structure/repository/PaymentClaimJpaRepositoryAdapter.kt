@@ -10,5 +10,6 @@ internal class PaymentClaimJpaRepositoryAdapter(
 ) : PaymentClaimRepository {
     override fun save(entity: PaymentRequestEntity): PaymentRequestEntity = repository.save(entity)
 
-    fun findById(orderId: String): PaymentRequestEntity? = repository.findByIdOrNull(orderId)
+    override fun findByOrderId(orderId: String): PaymentRequestEntity? =
+        repository.findByIdOrNull(orderId)
 }
