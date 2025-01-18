@@ -9,6 +9,4 @@ internal class PaymentRequestRepositoryImpl(
 ) : PaymentRequestRepository {
     override fun findByOrderId(orderId: String): PaymentRequestEntity? =
         paymentRequestJpaRepository.findByOrderId(orderId)
-    override fun save(paymentRequestEntity: PaymentRequestEntity): PaymentRequestEntity? =
-        paymentRequestJpaRepository.save(paymentRequestEntity)
 }

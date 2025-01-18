@@ -1,5 +1,6 @@
 package com.inner.circle.infra.structure.repository
 
+import com.inner.circle.infra.structure.repository.entity.PaymentRequestEntity
 import com.inner.circle.infra.structure.repository.entity.UserCardEntity
 import org.springframework.stereotype.Repository
 
@@ -9,6 +10,4 @@ internal class UserCardRepositoryImpl(
 ) : UserCardRepository {
     override fun findByUserId(userId: Long?): UserCardEntity? =
         userCardJpaRepository.findByUserId(userId)
-    override fun save(userCardEntity: UserCardEntity): UserCardEntity? =
-        userCardJpaRepository.save(userCardEntity)
 }

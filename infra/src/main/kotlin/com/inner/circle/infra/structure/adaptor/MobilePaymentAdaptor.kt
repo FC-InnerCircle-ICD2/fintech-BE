@@ -11,28 +11,23 @@ internal class MobilePaymentAdaptor(
     private val paymentRequestRepository: PaymentRequestRepository,
     private val userCardRepository: UserCardRepository
 ) : MobilePaymentPort {
-    override fun getCardNoAndPayInfo(request: MobilePaymentPort.Request): MobilePaymentInfraDto {
+    override fun getCardNoAndAmount(
+        request: MobilePaymentPort.Request
+    ): MobilePaymentInfraDto {
         val paymentRequest =
             paymentRequestRepository.findByOrderId(request.orderId)
                 ?: throw IllegalArgumentException(
-                    "Payment not found - order_id: ${request.orderId}"
-                )
+                    "Payment not found - order_id: ${request.orderId}")
         return userCardRepository
             .findByUserId(paymentRequest.userId)
             ?.let {
                 MobilePaymentInfraDto(
                     paymentRequest.orderId,
-                    paymentRequest.orderName,
-                    paymentRequest.orderStatus,
-                    paymentRequest.userId,
-                    paymentRequest.merchantId,
-                    paymentRequest.paymentKey,
-                    paymentRequest.amount,
-                    paymentRequest.requestTime,
                     it.cardNumber,
+                    paymentRequest.amount
                 )
             } ?: throw IllegalArgumentException(
-            "Payment not found - order_id: ${paymentRequest.orderId}"
-        )
+            "Payment not found - user_id: ${paymentRequest.userId}"
+            )
     }
 }

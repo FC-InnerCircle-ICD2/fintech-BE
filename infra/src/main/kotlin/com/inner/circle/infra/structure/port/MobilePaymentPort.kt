@@ -7,5 +7,5 @@ fun interface MobilePaymentPort {
         val orderId: String
     )
 
-    fun getCardNoAndPayInfo(request: Request): MobilePaymentInfraDto
+    fun getCardNoAndAmount(request: Request): MobilePaymentInfraDto
 }

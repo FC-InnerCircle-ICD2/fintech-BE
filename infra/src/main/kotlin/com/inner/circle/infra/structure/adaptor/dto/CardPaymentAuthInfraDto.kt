@@ -4,3 +4,4 @@ data class CardPaymentAuthInfraDto(
     val cardNumber: String,
     val isValid: Boolean
 )
+

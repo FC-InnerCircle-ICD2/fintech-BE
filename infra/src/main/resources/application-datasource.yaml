@@ -1,48 +1,49 @@
 spring:
-  config:
-    activate:
-      on-profile: local
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    hikari:
-      minimum-idle: 10
-      maximum-pool-size: 30
-      idle-timeout: 30000 # 5분
-      connection-timeout: 20000 # 30초
-      max-lifetime: 1800000 # 30분
+    config:
+        activate:
+            on-profile: local
+    datasource:
+        driver-class-name: org.postgresql.Driver
+        hikari:
+            minimum-idle: 10
+            maximum-pool-size: 30
+            idle-timeout: 30000 # 5분
+            connection-timeout: 20000 # 30초
+            max-lifetime: 1800000 # 30분
 
-  jpa:
-    hibernate:
-      ddl-auto: update
-    open-in-view: false
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        show_sql: true
-        format_sql: true
+    jpa:
+        hibernate:
+            ddl-auto: update
+        open-in-view: false
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.PostgreSQLDialect
+                show_sql: true
+                format_sql: true
 
 ---
 spring:
-  config:
-    activate:
-      on-profile: dev # local로 변경 가능
-  datasource:
-    url: ${DATASOURCE_URL}
-    username: ${DATASOURCE_USER_NAME}
-    password: ${DATASOURCE_USER_PASSWORD}
-    driver-class-name: org.postgresql.Driver
-    hikari:
-      minimum-idle: 10
-      maximum-pool-size: 30
-      idle-timeout: 30000 # 5분
-      connection-timeout: 20000 # 30초
-      max-lifetime: 1800000 # 30분
-  jpa:
-    hibernate:
-      ddl-auto: update
-    open-in-view: false
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        show_sql: true
-        format_sql: true
+    config:
+        activate:
+            on-profile: local
+    datasource:
+        url: jdbc:postgresql://13.124.73.85:5432/pay200
+        username: pay200
+        password: egVy0PNDDBcqFMz
+        driver-class-name: org.postgresql.Driver
+        hikari:
+            minimum-idle: 10
+            maximum-pool-size: 30
+            idle-timeout: 30000 # 5분
+            connection-timeout: 20000 # 30초
+            max-lifetime: 1800000 # 30분
+            connection-test-query: SELECT 1
+    jpa:
+        hibernate:
+            ddl-auto: create
+        open-in-view: false
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.PostgreSQLDialect
+                show_sql: true
+                format_sql: true
