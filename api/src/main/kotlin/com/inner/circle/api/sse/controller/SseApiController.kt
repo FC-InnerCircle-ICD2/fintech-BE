@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.http.MediaType
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter
@@ -26,7 +27,8 @@ class SseApiController(
     fun connect(
         @Parameter(hidden = true)
         // 세션 객체로 변경 예정
-        @AuthenticationPrincipal session: String
+        //@AuthenticationPrincipal 스프링security 삭제
+        @RequestBody session: String
     ): ResponseBodyEmitter {
         log.info("login user {}", session)
 
@@ -46,7 +48,8 @@ class SseApiController(
     fun pushEvent(
         @Parameter(hidden = true)
         // 세션 객체로 변경 예정
-        @AuthenticationPrincipal session: String
+        //@AuthenticationPrincipal 스프링security 삭제
+        @RequestBody session: String
     ) {
         val sseConnection = sseConnectionPool.getSession(session)
 
