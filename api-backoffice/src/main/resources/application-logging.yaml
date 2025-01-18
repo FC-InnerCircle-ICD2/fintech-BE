@@ -1,0 +1,10 @@
+spring:
+  config:
+    activate:
+      on-profile: "local | dev"
+
+logging:
+  level:
+    root: INFO
+    org.springframework.orm.jpa: DEBUG
+    org.hibernate.SQL: DEBUG

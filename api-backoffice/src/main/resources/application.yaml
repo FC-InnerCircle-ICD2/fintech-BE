@@ -3,7 +3,7 @@ spring:
     name: api-backoffice
   profiles:
     active: local
-    include: datasource
+    include: datasource, openapi, logging
 
 server:
   port: 10002

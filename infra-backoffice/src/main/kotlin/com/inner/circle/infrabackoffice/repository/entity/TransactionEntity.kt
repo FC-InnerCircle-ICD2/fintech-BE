@@ -22,8 +22,6 @@ data class TransactionEntity(
     val amount: BigDecimal,
     @Column(nullable = false)
     val status: TransactionStatus,
-    @Column(nullable = false)
-    val paymentKey: String,
     val reason: String?,
     @Column(nullable = false)
     val requestedAt: LocalDateTime,
