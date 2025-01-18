@@ -12,9 +12,6 @@ data class PaymentClaimResponse(
             tokenExpiredAt: LocalDateTime
         ): PaymentClaimResponse = PaymentClaimResponse(intpuToken, tokenExpiredAt)
 
-        fun testOne(
-            intpuToken: String,
-            tokenExpiredAt: LocalDateTime
-        ): PaymentClaimResponse = PaymentClaimResponse("test", LocalDateTime.now())
+        fun testOne(): PaymentClaimResponse = PaymentClaimResponse("test", LocalDateTime.now())
     }
 }

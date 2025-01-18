@@ -15,7 +15,7 @@ data class PaymentRequestEntity(
     @Column(name = "order_name")
     val orderName: String?,
     @Column(name = "order_status")
-    val orderStatus: String?,
+    val orderStatus: String,
     @Column(name = "user_id")
     val userId: Long?,
     @Column(name = "merchant_id", nullable = false)

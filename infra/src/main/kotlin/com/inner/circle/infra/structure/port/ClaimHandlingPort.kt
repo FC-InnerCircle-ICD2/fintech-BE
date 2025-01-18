@@ -1,7 +1,7 @@
 package com.inner.circle.infra.structure.port
 
-import com.inner.circle.infra.structure.repository.entity.PaymentRequestEntity
+import com.inner.circle.infra.structure.adaptor.dto.PaymentRequestDto
 
 fun interface ClaimHandlingPort {
-    fun generatePaymentRequest(paymentRequest: PaymentRequestEntity): PaymentRequestEntity
+    fun generatePaymentRequest(paymentRequest: PaymentRequestDto): PaymentRequestDto
 }
