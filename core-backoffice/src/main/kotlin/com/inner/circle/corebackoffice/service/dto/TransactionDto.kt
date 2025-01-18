@@ -18,17 +18,17 @@ data class TransactionDto(
     val updatedAt: LocalDateTime
 ) {
     companion object {
-        fun from(transaction: PaymentTransaction): TransactionDto =
+        fun of(transaction: PaymentTransaction): TransactionDto =
             TransactionDto(
-                transaction.id,
-                transaction.paymentId,
-                transaction.amount,
-                transaction.status,
-                transaction.reason,
-                transaction.requestedAt,
-                transaction.completedAt,
-                transaction.createdAt,
-                transaction.updatedAt
+                id = transaction.id,
+                paymentId = transaction.paymentId,
+                amount = transaction.amount,
+                status = transaction.status,
+                reason = transaction.reason,
+                requestedAt = transaction.requestedAt,
+                completedAt = transaction.completedAt,
+                createdAt = transaction.createdAt,
+                updatedAt = transaction.updatedAt
             )
     }
 }
