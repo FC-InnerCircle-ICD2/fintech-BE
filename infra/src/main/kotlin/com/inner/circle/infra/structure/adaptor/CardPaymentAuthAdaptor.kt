@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 
 @Component
 internal class CardPaymentAuthAdaptor(
-    private val cardAuthClient: CardAuthClient,
+    private val cardAuthClient: CardAuthClient
 ) : CardPaymentAuthPort {
     private val logger = LoggerFactory.getLogger(this::class.java)
 
@@ -17,16 +17,19 @@ internal class CardPaymentAuthAdaptor(
             val defaultCardAuthResponse =
                 CardPaymentAuthInfraDto(
                     cardNumber = request.cardNumber,
-                    isValid = false,
+                    isValid = false
                 )
 
-            cardAuthClient.validateCardPayment(
-                request = defaultCardAuthResponse,
-            ).execute().takeIf { it.isSuccessful && (it.body() != null) }?.let {
-                defaultCardAuthResponse.copy(
-                    isValid = true,
-                )
-            } ?: defaultCardAuthResponse
+            cardAuthClient
+                .validateCardPayment(
+                    request = defaultCardAuthResponse
+                ).execute()
+                .takeIf { it.isSuccessful && (it.body() != null) }
+                ?.let {
+                    defaultCardAuthResponse.copy(
+                        isValid = true
+                    )
+                } ?: defaultCardAuthResponse
         }.onFailure {
             logger.error("Payment Auth Request 중 에러가 발생 ${it.message}")
         }.getOrThrow()

@@ -8,7 +8,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 @Configuration
 class ExternalClientConfig {
-
     @Bean
     fun mockServerClient(): Retrofit =
         Retrofit
