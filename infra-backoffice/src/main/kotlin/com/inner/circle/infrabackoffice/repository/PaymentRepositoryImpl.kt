@@ -1,7 +1,6 @@
 package com.inner.circle.infrabackoffice.repository
 
 import com.inner.circle.infrabackoffice.repository.entity.PaymentEntity
-import java.util.Optional
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -11,6 +10,6 @@ internal class PaymentRepositoryImpl(
     // TODO: Payment쪽에 있어야할 로직이지만, 당분간 테스트를 위해 여기에 둠
     override fun save(payment: PaymentEntity): PaymentEntity = paymentJpaRepository.save(payment)
 
-    override fun findByPaymentKey(paymentKey: String): Optional<PaymentEntity> =
+    override fun findByPaymentKey(paymentKey: String): PaymentEntity? =
         paymentJpaRepository.findByPaymentKey(paymentKey)
 }
