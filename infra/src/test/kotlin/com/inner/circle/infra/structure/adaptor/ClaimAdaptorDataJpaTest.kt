@@ -1,5 +1,6 @@
 package com.inner.circle.infra.structure.adaptor
 
+import com.inner.circle.infra.structure.AbstractJpaTestWithLocalTestContainer
 import com.inner.circle.infra.structure.adaptor.dto.PaymentRequestDto
 import com.inner.circle.infra.structure.repository.JpaConfiguration
 import com.inner.circle.infra.structure.repository.PaymentClaimJpaRepository
@@ -9,19 +10,12 @@ import java.time.LocalDateTime
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
-import org.springframework.context.annotation.ComponentScan
 import org.springframework.data.repository.findByIdOrNull
-import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
 
-@ActiveProfiles("local")
-@DataJpaTest
+
 @ContextConfiguration(classes = [PaymentClaimJpaRepositoryAdapter::class, JpaConfiguration::class])
-@ComponentScan(basePackages = ["com.inner.circle.infra"])
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class ClaimAdaptorDataJpaTest {
+class ClaimAdaptorDataJpaTest : AbstractJpaTestWithLocalTestContainer() {
     @Autowired
     private lateinit var repository: PaymentClaimJpaRepository
 
