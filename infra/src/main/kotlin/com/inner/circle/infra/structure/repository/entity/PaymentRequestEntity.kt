@@ -9,7 +9,7 @@ import java.time.LocalDateTime
 
 @Entity
 @Table(name = "payment_request")
-data class PaymentRequest(
+data class PaymentRequestEntity(
     @Id
     val orderId: String,
     @Column(name = "order_name")
@@ -25,5 +25,5 @@ data class PaymentRequest(
     @Column(nullable = false)
     val amount: BigDecimal,
     @Column(name = "request_time")
-    val requestTime: LocalDateTime?
+    val requestTime: LocalDateTime
 )
