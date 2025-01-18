@@ -9,4 +9,6 @@ internal class UserCardRepositoryImpl(
 ) : UserCardRepository {
     override fun findByUserId(userId: Long?): UserCardEntity? =
         userCardJpaRepository.findByUserId(userId)
+    override fun save(userCardEntity: UserCardEntity): UserCardEntity? =
+        userCardJpaRepository.save(userCardEntity)
 }
