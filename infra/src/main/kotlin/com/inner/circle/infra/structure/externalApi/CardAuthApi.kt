@@ -7,5 +7,7 @@ import retrofit2.http.POST
 
 interface CardAuthApi {
     @POST("mock/card/validate")
-    fun validateCardPayment(@Body request: CardPaymentAuthInfraDto): Call<CardPaymentAuthInfraDto>
+    fun validateCardPayment(
+        @Body request: CardPaymentAuthInfraDto
+    ): Call<CardPaymentAuthInfraDto>
 }

@@ -5,27 +5,29 @@ import com.inner.circle.infra.structure.externalApi.CardAuthApi
 import com.inner.circle.infra.structure.port.CardPaymentAuthPort
 import org.springframework.stereotype.Component
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.Response
 
 @Component
 internal class CardPaymentAuthAdaptor : CardPaymentAuthPort {
-
     // Retrofit 인스턴스 생성
-    private val retrofit: Retrofit = Retrofit.Builder()
-        .baseUrl("http://localhost:8080/")  // API의 기본 URL
-        .addConverterFactory(GsonConverterFactory.create())  // Gson 컨버터 사용
-        .build()
+    private val retrofit: Retrofit =
+        Retrofit
+            .Builder()
+            .baseUrl("http://localhost:8082/") // API의 기본 URL
+            .addConverterFactory(GsonConverterFactory.create()) // Gson 컨버터 사용
+            .build()
 
     // API 서비스 인스턴스 생성
     private val apiService: CardAuthApi = retrofit.create(CardAuthApi::class.java)
 
     override fun doPaymentAuth(request: CardPaymentAuthPort.Request): CardPaymentAuthInfraDto {
-        val requestDto = CardPaymentAuthInfraDto(
-            cardNumber = request.cardNumber,
-            isValid = false
-        )
+        val requestDto =
+            CardPaymentAuthInfraDto(
+                cardNumber = request.cardNumber,
+                isValid = false
+            )
 
         // API 호출
         val call: Call<CardPaymentAuthInfraDto> = apiService.validateCardPayment(requestDto)
