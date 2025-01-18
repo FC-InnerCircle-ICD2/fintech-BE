@@ -40,22 +40,21 @@ spring:
 spring:
   config:
     activate:
-      on-profile: local
+      on-profile: dev
   datasource:
-      url: ${DATASOURCE_URL}
-      username: ${DATASOURCE_USER_NAME}
-      password: ${DATASOURCE_USER_PASSWORD}
-      driver-class-name: org.postgresql.Driver
-      hikari:
-        minimum-idle: 10
-        maximum-pool-size: 30
-        idle-timeout: 30000 # 5분
-        connection-timeout: 20000 # 30초
-        max-lifetime: 1800000 # 30분
-        connection-test-query: SELECT 1
+    url: ${DATASOURCE_URL}
+    username: ${DATASOURCE_USER_NAME}
+    password: ${DATASOURCE_USER_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      minimum-idle: 10
+      maximum-pool-size: 30
+      idle-timeout: 30000 # 5분
+      connection-timeout: 20000 # 30초
+      max-lifetime: 1800000 # 30분
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     open-in-view: false
     properties:
       hibernate:
