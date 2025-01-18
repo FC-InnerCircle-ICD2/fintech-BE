@@ -40,7 +40,7 @@ spring:
 spring:
   config:
     activate:
-      on-profile: dev
+      on-profile: dev # local로 변경 가능
   datasource:
     url: ${DATASOURCE_URL}
     username: ${DATASOURCE_USER_NAME}
