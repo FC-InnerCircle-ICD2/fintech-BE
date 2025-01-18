@@ -2,36 +2,36 @@ package com.inner.circle.api.payment.controller
 
 import com.inner.circle.api.payment.interceptor.RequireAuth
 import com.inner.circle.api.structure.dto.PaymentResponse
-import com.inner.circle.core.structure.service.ClaimService
-import com.inner.circle.core.structure.usecase.PaymentClaimRequest
+import com.inner.circle.core.structure.dto.PaymentClaimResponse
+import com.inner.circle.core.structure.usecase.PaymentClaimUseCase
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestAttribute
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/v1/payments")
+@RequestMapping("/api/payments/v1")
 class ClaimController(
-    private val claimService: ClaimService
-) : ClaimApi {
+    private val claimUseCase: PaymentClaimUseCase
+) {
     @RequireAuth
     @PostMapping
-    override fun createPayment(
-        @RequestBody request: PaymentClaimRequest,
-        @RequestAttribute("merchantId") merchantId: String
-    ): ResponseEntity<PaymentResponse<String>> {
-        val response = claimService.createPayment(request, merchantId)
-        val result = PaymentResponse.ok("test")
+    fun createPayment(
+        @RequestBody request: PaymentClaimUseCase.PaymentClaimRequest,
+        @RequestParam(value = "merchantId") merchantId: String
+    ): ResponseEntity<PaymentResponse<PaymentClaimResponse>> {
+        val response = claimUseCase.createPayment(request, merchantId)
+        val result = PaymentResponse.ok(response)
         return ResponseEntity(result, HttpStatus.OK)
     }
 
     @RequireAuth
     @PostMapping("/{order_id}/proceed")
-    override fun proceedPayment(
+    fun proceedPayment(
         @PathVariable("order_id") orderId: String
     ): ResponseEntity<PaymentResponse<String>> {
 //           val response = paymentService.proceedPayment(orderId, authorization)
@@ -41,7 +41,7 @@ class ClaimController(
 
     @RequireAuth
     @PostMapping("/{order_id}/cancel")
-    override fun cancelPayment(
+    fun cancelPayment(
         @PathVariable("order_id") orderId: String
     ): ResponseEntity<PaymentResponse<String>> {
 //            val response = paymentService.cancelPayment(orderId, authorization)

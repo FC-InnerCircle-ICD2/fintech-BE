@@ -26,7 +26,6 @@ class AuthCheckInterceptor(
                     return false
                 }
 
-                // TODO: 키 체계에 맞춰서 체크 로직 구성
                 val base64Credentials = authHeader.substring("Basic ".length)
                 val credentials = String(Base64.getDecoder().decode(base64Credentials)).split(":")
 

@@ -1,7 +1,7 @@
 package com.inner.circle.core.structure.domain
 
 import com.inner.circle.core.structure.domain.enum.PaymentProcessStatus
-import com.inner.circle.core.structure.usecase.PaymentClaimRequest
+import com.inner.circle.core.structure.usecase.PaymentClaimUseCase
 import java.math.BigDecimal
 import java.time.LocalDateTime
 
@@ -16,7 +16,7 @@ data class PaymentRequest(
 ) {
     companion object {
         fun fromClaim(
-            paymentClaimRequest: PaymentClaimRequest,
+            paymentClaimRequest: PaymentClaimUseCase.PaymentClaimRequest,
             requestMerchantId: String
         ): PaymentRequest =
             PaymentRequest(

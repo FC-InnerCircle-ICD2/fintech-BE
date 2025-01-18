@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component
 internal class ClaimAdaptor(
     private val repository: PaymentRequestRepository
 ) : ClaimHandlingPort {
-    override fun generatePaymentRequest(paymentRequest: com.inner.circle.core.structure.domain.PaymentRequest): PaymentRequestEntity? =
-        repository.save(paymentRequestEntity)
+    override fun generatePaymentRequest(
+        paymentRequest: com.inner.circle.core.structure.domain.PaymentRequest
+    ): PaymentRequestEntity? = repository.save(paymentRequestEntity)
 }
