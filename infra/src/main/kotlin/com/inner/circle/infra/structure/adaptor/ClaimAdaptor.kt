@@ -10,6 +10,6 @@ internal class ClaimAdaptor(
     private val repository: PaymentRequestRepository
 ) : ClaimHandlingPort {
     override fun generatePaymentRequest(
-        paymentRequest: com.inner.circle.core.structure.domain.PaymentRequest
-    ): PaymentRequestEntity? = repository.save(paymentRequestEntity)
+        paymentRequest: PaymentRequestEntity
+    ): PaymentRequestEntity = repository.save(paymentRequest)
 }
