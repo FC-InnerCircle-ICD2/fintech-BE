@@ -14,7 +14,7 @@ data class PaymentRequestEntity(
     val orderId: String,
     @Column(name = "order_name")
     val orderName: String?,
-    @Column(name = "order_status")
+    @Column(name = "order_status", nullable = false)
     val orderStatus: String,
     @Column(name = "user_id")
     val userId: Long?,
@@ -24,6 +24,10 @@ data class PaymentRequestEntity(
     val paymentKey: String?,
     @Column(nullable = false)
     val amount: BigDecimal,
-    @Column(name = "request_time")
+    @Column(name = "success_url", nullable = false)
+    val successUrl: String,
+    @Column(name = "fail_url", nullable = false)
+    val failUrl: String,
+    @Column(name = "request_time", nullable = false)
     val requestTime: LocalDateTime
 )

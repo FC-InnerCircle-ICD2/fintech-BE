@@ -12,7 +12,9 @@ class PaymentRequestDto(
     val merchantId: String,
     val paymentKey: String?,
     val amount: BigDecimal,
-    val requestTime: LocalDateTime
+    val requestTime: LocalDateTime,
+    val successUrl: String,
+    val failUrl: String
 ) {
     fun toEntity(): PaymentRequestEntity =
         PaymentRequestEntity(
@@ -23,29 +25,12 @@ class PaymentRequestDto(
             merchantId = merchantId,
             paymentKey = paymentKey,
             amount = amount,
+            successUrl = successUrl,
+            failUrl = failUrl,
             requestTime = requestTime
         )
 
     companion object {
-        fun of(
-            orderId: String,
-            orderName: String,
-            status: String,
-            merchantId: String,
-            paymentKey: String?,
-            amount: BigDecimal,
-            requestTime: LocalDateTime
-        ): PaymentRequestDto =
-            PaymentRequestDto(
-                orderId = orderId,
-                orderName = orderName,
-                orderStatus = PaymentProcessStatus.valueOf(status),
-                merchantId = merchantId,
-                paymentKey = paymentKey,
-                amount = amount,
-                requestTime = requestTime
-            )
-
         fun fromEntity(paymentRequestEntity: PaymentRequestEntity): PaymentRequestDto =
             PaymentRequestDto(
                 orderId = paymentRequestEntity.orderId,
@@ -54,7 +39,9 @@ class PaymentRequestDto(
                 merchantId = paymentRequestEntity.merchantId,
                 paymentKey = paymentRequestEntity.paymentKey,
                 amount = paymentRequestEntity.amount,
-                requestTime = paymentRequestEntity.requestTime
+                requestTime = paymentRequestEntity.requestTime,
+                successUrl = paymentRequestEntity.successUrl,
+                failUrl = paymentRequestEntity.failUrl
             )
     }
 }
