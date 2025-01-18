@@ -6,7 +6,7 @@ import com.inner.circle.infra.structure.repository.PaymentClaimRepository
 import org.springframework.stereotype.Component
 
 @Component
-internal class ClaimAdaptor(
+class ClaimAdaptor(
     private val repository: PaymentClaimRepository
 ) : ClaimHandlingPort {
     override fun generatePaymentRequest(paymentRequestData: PaymentRequestDto): PaymentRequestDto {
