@@ -1,4 +1,4 @@
-package com.inner.circle.infrabackoffice.adaptor.dto.transaction
+package com.inner.circle.infrabackoffice.adaptor.dto
 
 import com.inner.circle.infrabackoffice.repository.entity.TransactionStatus
 import java.math.BigDecimal

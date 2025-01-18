@@ -1,4 +1,4 @@
-package com.inner.circle.apibackoffice.transaction.controller.dto
+package com.inner.circle.apibackoffice.controller.dto
 
 enum class TransactionStatus {
     APPROVED,
