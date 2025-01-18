@@ -52,8 +52,6 @@ class SseApiController(
     ) {
         val sseConnection = sseConnectionPool.getSession(session)
 
-        sseConnection?.let {
-            it.sendMessage("hello world")
-        }
+        sseConnection.sendMessage("hello world")
     }
 }
