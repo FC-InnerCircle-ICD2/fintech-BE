@@ -1,11 +1,11 @@
 package com.inner.circle.corebackoffice.usecase
 
-import com.inner.circle.corebackoffice.service.dto.RefreshKeyDto
+import com.inner.circle.corebackoffice.service.dto.CreateOrUpdateKeyDto
 
 fun interface ManagementsUseCase {
-    data class RefreshKeyRequest(
+    data class CreateOrUpdateKeyRequest(
         val id: String
     )
 
-    fun refreshKey(request: RefreshKeyRequest): RefreshKeyDto
+    fun createOrUpdateKey(request: CreateOrUpdateKeyRequest): CreateOrUpdateKeyDto
 }

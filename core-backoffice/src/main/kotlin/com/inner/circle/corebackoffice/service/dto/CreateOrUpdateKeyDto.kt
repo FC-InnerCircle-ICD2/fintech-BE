@@ -2,12 +2,12 @@ package com.inner.circle.corebackoffice.service.dto
 
 import com.inner.circle.infrabackoffice.repository.entity.MerchantEntity
 
-class RefreshKeyDto(
+class CreateOrUpdateKeyDto(
     val key: String
 )
 
-fun MerchantEntity.toRefreshKeyDto(): RefreshKeyDto {
-    return RefreshKeyDto(
+fun MerchantEntity.toCreateOrUpdateKeyDto(): CreateOrUpdateKeyDto {
+    return CreateOrUpdateKeyDto(
         key = this.token
     )
 }

@@ -1,7 +1,7 @@
 package com.inner.circle.corebackoffice.service
 
-import com.inner.circle.corebackoffice.service.dto.RefreshKeyDto
-import com.inner.circle.corebackoffice.service.dto.toRefreshKeyDto
+import com.inner.circle.corebackoffice.service.dto.CreateOrUpdateKeyDto
+import com.inner.circle.corebackoffice.service.dto.toCreateOrUpdateKeyDto
 import com.inner.circle.corebackoffice.usecase.ManagementsUseCase
 import com.inner.circle.corebackoffice.util.ClientCredentialsGenerator
 import com.inner.circle.infrabackoffice.port.FindMerchantPort
@@ -13,7 +13,7 @@ internal class ManagementsService(
     private val findMerchantPort: FindMerchantPort,
     private val updateMerchantPort: UpdateMerchantPort
 ) : ManagementsUseCase {
-    override fun refreshKey(request: ManagementsUseCase.RefreshKeyRequest): RefreshKeyDto {
+    override fun createOrUpdateKey(request: ManagementsUseCase.CreateOrUpdateKeyRequest): CreateOrUpdateKeyDto {
         val merchant = findMerchantPort.findById(
             FindMerchantPort.Request(id = request.id)
         )
@@ -22,6 +22,6 @@ internal class ManagementsService(
 
         return updateMerchantPort.updateMerchant(
             UpdateMerchantPort.Request(merchant = merchant)
-        ).toRefreshKeyDto()
+        ).toCreateOrUpdateKeyDto()
     }
 }
