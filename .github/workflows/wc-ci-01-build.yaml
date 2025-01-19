@@ -37,7 +37,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Build with Gradle
-        run: ./gradlew clean build
+        run: ./gradlew ${{ inputs.app }}:clean ${{ inputs.app }}:build
 
       - name: Build with Gradle and save image
         if: ${{ github.event_name == 'push' }}
