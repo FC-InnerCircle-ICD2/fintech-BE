@@ -54,7 +54,7 @@ jobs:
             fi
             docker pull ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}/${{ inputs.app }}:${{ env.IMAGE_TAG }}
             docker run -d -p ${{ inputs.app == 'api' && '10001:10001' || '10002:10002' }}  \
-            -e JAVA_TOOL_OPTIONS="-XX:MaxDirectMemorySize=5M -XX:MaxMetaspaceSize=16M -XX:ReservedCodeCacheSize=140M -Xss512K" \
+            -e JAVA_TOOL_OPTIONS="-XX:MaxDirectMemorySize=5M -XX:ReservedCodeCacheSize=64M -Xss512K" \
             -e SPRING_PROFILES_ACTIVE=dev \
             --name ${{ inputs.app == 'api' && 'payment_application' || 'backoffice_application' }} \
             ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}/${{ inputs.app }}:${{ env.IMAGE_TAG }}
