@@ -4,5 +4,6 @@ import com.inner.circle.infra.structure.repository.entity.UserCardEntity
 
 interface UserCardRepository {
     fun findByUserId(userId: Long?): UserCardEntity?
+
     fun save(userCardEntity: UserCardEntity): UserCardEntity?
 }
