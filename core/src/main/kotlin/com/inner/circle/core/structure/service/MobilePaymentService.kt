@@ -2,6 +2,7 @@ package com.inner.circle.core.structure.service
 
 import com.inner.circle.core.structure.service.dto.MobilePaymentCoreDto
 import com.inner.circle.core.structure.usecase.MobilePaymentUseCase
+import com.inner.circle.exception.AuthenticateException
 import com.inner.circle.exception.PaymentException
 import com.inner.circle.infra.structure.port.CardPaymentAuthPort
 import com.inner.circle.infra.structure.port.MobilePaymentPort
@@ -21,12 +22,7 @@ internal class MobilePaymentService(
                 MobilePaymentPort.Request(orderId = request.orderId)
             )
 
-        val cardNumber: String
-        if (request.cardNumber != null) {
-            cardNumber = request.cardNumber
-        } else {
-            cardNumber = paymentInfo.cardNumber
-        }
+        val cardNumber: String = request.cardNumber ?: paymentInfo.cardNumber
 
         val paymentAuth =
             cardPaymentAuthPort.doPaymentAuth(
@@ -63,9 +59,7 @@ internal class MobilePaymentService(
             )
         } else {
             val paymentException =
-                PaymentException.CardAuthFailException(
-                    orderId = paymentInfo.orderId
-                )
+                AuthenticateException.CardAuthFailException()
             result =
                 MobilePaymentCoreDto(
                     paymentKey = null,

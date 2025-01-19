@@ -31,12 +31,12 @@ class MobilePaymentController(
                 MobilePaymentDto.of(
                     mobilePaymentUseCase.confirmPayment(
                         MobilePaymentUseCase.Request(
-                            orderId,
-                            null,
-                            null,
-                            null,
-                            null,
-                            null
+                            orderId = orderId,
+                            userId = null,
+                            representativeYn = null,
+                            cardNumber = null,
+                            expirationPeriod = null,
+                            cvc = null
                         )
                     )
                 )
@@ -55,12 +55,12 @@ class MobilePaymentController(
                 MobilePaymentDto.of(
                     mobilePaymentUseCase.confirmPayment(
                         MobilePaymentUseCase.Request(
-                            orderId,
-                            userCardDto.userId,
-                            userCardDto.representativeYn,
-                            userCardDto.cardNumber,
-                            userCardDto.expirationPeriod,
-                            userCardDto.cvc
+                            orderId = orderId,
+                            userId = userCardDto.userId,
+                            representativeYn = userCardDto.representativeYn,
+                            cardNumber = userCardDto.cardNumber,
+                            expirationPeriod = userCardDto.expirationPeriod,
+                            cvc = userCardDto.cvc
                         )
                     )
                 )
