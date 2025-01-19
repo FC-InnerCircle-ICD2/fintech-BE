@@ -41,9 +41,9 @@ spring:
     activate:
       on-profile: dev
   datasource:
-    url: ${DATASOURCE_URL}
-    username: ${DATASOURCE_USER_NAME}
-    password: ${DATASOURCE_USER_PASSWORD}
+    url: jdbc:postgresql://${POSTGRESQL_URL}/backoffice
+    username: ${POSTGRESQL_USERNAME}
+    password: ${POSTGRESQL_PW}
     driver-class-name: org.postgresql.Driver
     hikari:
       minimum-idle: 10
