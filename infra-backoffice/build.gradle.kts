@@ -18,6 +18,7 @@ dependencies {
     implementation(libs.bundles.springBoot)
     implementation(libs.bundles.kotlinxSerialization)
     implementation(libs.springBootDataJpa)
+    implementation(libs.awsSecretsManagerConfig)
     implementation(libs.h2)
     runtimeOnly(libs.postgresql)
     compileOnly(libs.bundles.kotlinLogging)

@@ -49,9 +49,9 @@ spring:
     activate:
       on-profile: dev # local로 변경 가능
   datasource:
-    url: ${DATASOURCE_URL}
-    username: ${DATASOURCE_USER_NAME}
-    password: ${DATASOURCE_USER_PASSWORD}
+    url: jdbc:postgresql://${POSTGRESQL_URL}/payment
+    username: ${POSTGRESQL_USERNAME}
+    password: ${POSTGRESQL_PW}
     driver-class-name: org.postgresql.Driver
     hikari:
       minimum-idle: 10

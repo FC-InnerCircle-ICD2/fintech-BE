@@ -1,15 +1,22 @@
 spring:
-    application:
-        name: api
-    profiles:
-        active: local
-        include: infra
+  application:
+    name: api
+  profiles:
+    active: local
+    include: infra
 
 springdoc:
-    api-docs:
-        path: /v3/api-docs
-    swagger-ui:
-        path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
 
 server:
   port: 10001
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+    import: aws-secretsmanager:/secret/pay200
