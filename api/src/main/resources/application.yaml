@@ -3,7 +3,7 @@ spring:
         name: api
     profiles:
         active: local
-        include: datasource
+        include: infra
 
 springdoc:
     api-docs:

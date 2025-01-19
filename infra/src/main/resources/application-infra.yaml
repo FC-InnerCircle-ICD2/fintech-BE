@@ -21,6 +21,10 @@ spring:
         show_sql: true
         format_sql: true
 
+external:
+  mock-server:
+    base-url: http://localhost:8082/
+
 ---
 spring:
   config:
@@ -46,3 +50,7 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         show_sql: true
         format_sql: true
+
+external:
+  mock-server:
+    base-url: http://localhost:8082/
