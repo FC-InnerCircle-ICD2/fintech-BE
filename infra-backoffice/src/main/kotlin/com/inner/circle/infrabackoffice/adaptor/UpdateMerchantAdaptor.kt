@@ -8,5 +8,6 @@ import org.springframework.stereotype.Component
 internal class UpdateMerchantAdaptor(
     private val repository: MerchantRepository
 ) : UpdateMerchantPort {
-    override fun updateMerchant(request: UpdateMerchantPort.Request) = repository.save(request.merchant)
+    override fun updateMerchant(request: UpdateMerchantPort.Request) =
+        repository.save(request.merchant)
 }

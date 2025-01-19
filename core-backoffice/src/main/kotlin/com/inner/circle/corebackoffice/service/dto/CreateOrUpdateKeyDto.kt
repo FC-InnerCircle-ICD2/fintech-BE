@@ -6,8 +6,7 @@ class CreateOrUpdateKeyDto(
     val key: String
 )
 
-fun MerchantEntity.toCreateOrUpdateKeyDto(): CreateOrUpdateKeyDto {
-    return CreateOrUpdateKeyDto(
+fun MerchantEntity.toCreateOrUpdateKeyDto(): CreateOrUpdateKeyDto =
+    CreateOrUpdateKeyDto(
         key = this.token
     )
-}

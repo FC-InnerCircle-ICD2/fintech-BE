@@ -13,15 +13,19 @@ internal class ManagementsService(
     private val findMerchantPort: FindMerchantPort,
     private val updateMerchantPort: UpdateMerchantPort
 ) : ManagementsUseCase {
-    override fun createOrUpdateKey(request: ManagementsUseCase.CreateOrUpdateKeyRequest): CreateOrUpdateKeyDto {
-        val merchant = findMerchantPort.findById(
-            FindMerchantPort.Request(id = request.id)
-        )
+    override fun createOrUpdateKey(
+        request: ManagementsUseCase.CreateOrUpdateKeyRequest
+    ): CreateOrUpdateKeyDto {
+        val merchant =
+            findMerchantPort.findById(
+                FindMerchantPort.Request(id = request.id)
+            )
 
         merchant.token = ClientCredentialsGenerator.generateClientSecret()
 
-        return updateMerchantPort.updateMerchant(
-            UpdateMerchantPort.Request(merchant = merchant)
-        ).toCreateOrUpdateKeyDto()
+        return updateMerchantPort
+            .updateMerchant(
+                UpdateMerchantPort.Request(merchant = merchant)
+            ).toCreateOrUpdateKeyDto()
     }
 }
