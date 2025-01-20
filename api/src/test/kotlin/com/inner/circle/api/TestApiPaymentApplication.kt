@@ -1,5 +1,6 @@
 package com.inner.circle.api
 
+import com.inner.circle.api.config.EmbeddedRedisConfiguration
 import com.inner.circle.api.config.PostgreSqlTestContainerConfiguration
 import org.springframework.boot.runApplication
 
@@ -8,6 +9,7 @@ object TestApiPaymentApplication {
     fun main(args: Array<String>) {
         runApplication<ApiApplication>(*args) {
             addInitializers(PostgreSqlTestContainerConfiguration())
+            addInitializers(EmbeddedRedisConfiguration())
         }
     }
 }

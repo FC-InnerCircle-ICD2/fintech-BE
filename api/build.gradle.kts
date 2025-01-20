@@ -19,6 +19,10 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.springframework.boot:spring-boot-starter-security")
     testImplementation(libs.bundles.testContainer)
+    testImplementation("com.github.codemonstur:embedded-redis:1.4.3") {
+        exclude(group = "org.slf4j", module = "slf4j-simple")
+    }
+    testRuntimeOnly(libs.bundles.testContainer)
     testImplementation(libs.bundles.kotlinTest)
     testImplementation(libs.bundles.kotlinTestSpring)
 }
