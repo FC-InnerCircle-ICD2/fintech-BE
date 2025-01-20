@@ -24,6 +24,7 @@ class ClaimAdaptorDataJpaTest : AbstractJpaTestWithLocalTestContainer() {
         val orderId = "12345"
         val paymentRequestDto =
             PaymentRequestDto(
+                paymentRequestId = null,
                 orderId = orderId,
                 orderName = "Test Order",
                 orderStatus = PaymentProcessStatus.READY,
@@ -32,9 +33,10 @@ class ClaimAdaptorDataJpaTest : AbstractJpaTestWithLocalTestContainer() {
                 amount = BigDecimal(100.00),
                 requestTime = LocalDateTime.now(),
                 successUrl = "https://www.test.com/success",
-                failUrl = "https://www.test.com/fail"
+                failUrl = "https://www.test.com/fail",
+                paymentToken = null
             )
-        val paymentRequestEntity = paymentRequestDto.toEntity()
+        val paymentRequestEntity = paymentRequestDto.toInitGenerate()
 
         // When
         val requestEntity = repository.save(paymentRequestEntity)

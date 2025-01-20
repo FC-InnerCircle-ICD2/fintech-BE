@@ -10,7 +10,7 @@ class ClaimAdaptor(
     private val repository: PaymentClaimRepository
 ) : ClaimHandlingPort {
     override fun generatePaymentRequest(paymentRequestData: PaymentRequestDto): PaymentRequestDto {
-        val paymentRequest = paymentRequestData.toEntity()
+        val paymentRequest = paymentRequestData.toInitGenerate()
         repository.save(paymentRequest)
         return PaymentRequestDto.fromEntity(paymentRequest)
     }

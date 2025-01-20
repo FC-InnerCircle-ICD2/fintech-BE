@@ -11,6 +11,9 @@ import java.time.LocalDateTime
 @Table(name = "payment_request")
 data class PaymentRequestEntity(
     @Id
+    @Column(name = "id", nullable = false)
+    val id: String,
+    @Column(name = "order_id", nullable = false)
     val orderId: String,
     @Column(name = "order_name")
     val orderName: String?,
@@ -28,6 +31,8 @@ data class PaymentRequestEntity(
     val successUrl: String,
     @Column(name = "fail_url", nullable = false)
     val failUrl: String,
+    @Column(name = "payment_token")
+    val paymentToken: String?,
     @Column(name = "request_time", nullable = false)
     val requestTime: LocalDateTime
 )

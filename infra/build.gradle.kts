@@ -20,6 +20,7 @@ dependencies {
     implementation(libs.springBootDataJpa)
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("de.huxhorn.sulky:de.huxhorn.sulky.ulid:8.3.0")
     runtimeOnly(libs.postgresql)
     compileOnly(libs.bundles.kotlinLogging)
     compileOnly(libs.bundles.kotlinxCoroutines)

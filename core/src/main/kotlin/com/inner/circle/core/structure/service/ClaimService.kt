@@ -20,6 +20,7 @@ class ClaimService(
 
         val requestDto =
             PaymentRequestDto(
+                paymentRequestId = null,
                 orderId = orderId,
                 orderName = orderName,
                 orderStatus = PaymentProcessStatus.READY,
@@ -28,7 +29,8 @@ class ClaimService(
                 amount = amount,
                 requestTime = LocalDateTime.now(),
                 successUrl = successUrl,
-                failUrl = failUrl
+                failUrl = failUrl,
+                paymentToken = null
             )
 
         val generatePaymentRequest = claimHandlingPort.generatePaymentRequest(requestDto)
