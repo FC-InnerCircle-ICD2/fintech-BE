@@ -5,7 +5,6 @@ import com.inner.circle.core.structure.usecase.RequestPaymentUseCase
 import com.inner.circle.infra.structure.port.SavePaymentPort
 import org.springframework.stereotype.Service
 
-@Service
 internal class PaymentService(
     private val savePaymentPort: SavePaymentPort
 ) : RequestPaymentUseCase {

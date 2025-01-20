@@ -7,8 +7,6 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 
-@Entity
-@Table(name = "payment")
 data class PaymentEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

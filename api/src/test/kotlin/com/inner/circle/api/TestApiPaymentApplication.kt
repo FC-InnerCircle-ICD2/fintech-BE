@@ -8,7 +8,6 @@ object TestApiPaymentApplication {
     fun main(args: Array<String>) {
         runApplication<ApiApplication>(*args) {
             addInitializers(PostgreSqlTestContainerConfiguration())
-            setDefaultProperties(mapOf("server.port" to "8088"))
         }
     }
 }
