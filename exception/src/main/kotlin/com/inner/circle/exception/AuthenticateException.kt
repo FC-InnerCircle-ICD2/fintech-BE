@@ -1,6 +1,6 @@
 package com.inner.circle.exception
 
-sealed class AuthenticateException (
+sealed class AuthenticateException(
     status: HttpStatus,
     override val message: String,
     override val cause: Throwable? = null

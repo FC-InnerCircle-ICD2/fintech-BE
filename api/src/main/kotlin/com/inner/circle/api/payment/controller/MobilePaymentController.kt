@@ -17,15 +17,16 @@ import org.springframework.web.bind.annotation.RestController
 
 @Tag(name = "MobilePayment", description = "MobilePayment API")
 @RestController
-@RequestMapping("/api/v1/payments")
+@PaymentV1Api
 class MobilePaymentController(
     private val mobilePaymentUseCase: MobilePaymentUseCase
-) : MobilePaymentApi {
-    @Operation(summary = "모바일 결제 요청")
-    @PostMapping("/{order_id}/proceed/simple")
-    override fun proceedMobilePayment(
+) {
+
+    @Operation(summary = "모바일 간편 결제 요청")
+    @PostMapping("/proceed/simple/{order_id}")
+    fun proceedMobilePayment(
         @PathVariable("order_id") orderId: String
-    ): ResponseEntity<PaymentResponse<MobilePaymentDto>> {
+    ): PaymentResponse<MobilePaymentDto> {
         val response =
             PaymentResponse.ok(
                 MobilePaymentDto.of(
@@ -41,15 +42,15 @@ class MobilePaymentController(
                     )
                 )
             )
-        return ResponseEntity(response, HttpStatus.CREATED)
+        return response
     }
 
     @Operation(summary = "모바일 결제 요청")
-    @PostMapping("/{order_id}/proceed")
-    override fun proceedMobilePayment(
+    @PostMapping("/proceed/{order_id}")
+    fun proceedMobilePayment(
         @PathVariable("order_id") orderId: String,
         @RequestBody userCardDto: UserCardDto
-    ): ResponseEntity<PaymentResponse<MobilePaymentDto>> {
+    ): PaymentResponse<MobilePaymentDto> {
         val response =
             PaymentResponse.ok(
                 MobilePaymentDto.of(
@@ -65,15 +66,15 @@ class MobilePaymentController(
                     )
                 )
             )
-        return ResponseEntity(response, HttpStatus.CREATED)
+        return response
     }
 
     @Operation(summary = "모바일 결제 취소")
-    @GetMapping("/{order_id}/cancel")
-    override fun cancelMobilePayment(
+    @GetMapping("/cancel/{order_id}")
+    fun cancelMobilePayment(
         @PathVariable("order_id") orderId: String
-    ): ResponseEntity<PaymentResponse<String>> {
+    ): PaymentResponse<String> {
         val response = PaymentResponse.ok("결제가 취소되었습니다.")
-        return ResponseEntity(response, HttpStatus.CREATED)
+        return response
     }
 }

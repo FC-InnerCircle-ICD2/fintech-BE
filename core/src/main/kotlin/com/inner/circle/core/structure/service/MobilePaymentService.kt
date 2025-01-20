@@ -3,7 +3,6 @@ package com.inner.circle.core.structure.service
 import com.inner.circle.core.structure.service.dto.MobilePaymentCoreDto
 import com.inner.circle.core.structure.usecase.MobilePaymentUseCase
 import com.inner.circle.exception.AuthenticateException
-import com.inner.circle.exception.PaymentException
 import com.inner.circle.infra.structure.port.CardPaymentAuthPort
 import com.inner.circle.infra.structure.port.MobilePaymentPort
 import com.inner.circle.infra.structure.port.SavePaymentRequestPort
