@@ -1,4 +1,4 @@
-package com.inner.circle.api.payment.controller.dto
+package com.inner.circle.api.controller.dto
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonInclude.Include

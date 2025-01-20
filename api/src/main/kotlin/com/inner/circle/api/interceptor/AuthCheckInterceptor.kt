@@ -1,4 +1,4 @@
-package com.inner.circle.api.payment.interceptor
+package com.inner.circle.api.interceptor
 
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse

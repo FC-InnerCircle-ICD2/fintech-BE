@@ -1,4 +1,4 @@
-package com.inner.circle.api.payment.interceptor
+package com.inner.circle.api.interceptor
 
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)

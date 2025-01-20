@@ -1,4 +1,4 @@
-package com.inner.circle.api.payment.controller.dto
+package com.inner.circle.api.controller.dto
 
 data class PaymentError(
     val code: String,

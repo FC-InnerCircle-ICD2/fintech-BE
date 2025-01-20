@@ -1,4 +1,4 @@
-package com.inner.circle.api.payment.exception
+package com.inner.circle.api.exception
 
 import com.inner.circle.api.common.response.AppExceptionResponse
 import com.inner.circle.api.structure.dto.PaymentError
