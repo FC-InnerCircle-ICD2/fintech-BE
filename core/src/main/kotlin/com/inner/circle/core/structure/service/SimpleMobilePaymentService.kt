@@ -1,7 +1,7 @@
 package com.inner.circle.core.structure.service
 
 import com.inner.circle.core.structure.service.dto.MobilePaymentCoreDto
-import com.inner.circle.core.structure.usecase.MobilePaymentUseCase
+import com.inner.circle.core.structure.usecase.SimpleMobilePaymentUseCase
 import com.inner.circle.exception.AuthenticateException
 import com.inner.circle.infra.structure.port.CardPaymentAuthPort
 import com.inner.circle.infra.structure.port.MobilePaymentPort
@@ -10,12 +10,12 @@ import java.util.UUID
 import org.springframework.stereotype.Service
 
 @Service
-internal class MobilePaymentService(
+internal class SimpleMobilePaymentService(
     private val mobilePaymentPort: MobilePaymentPort,
     private val cardPaymentAuthPort: CardPaymentAuthPort,
     private val savePaymentRequestPort: SavePaymentRequestPort
-) : MobilePaymentUseCase {
-    override fun confirmPayment(request: MobilePaymentUseCase.Request): MobilePaymentCoreDto {
+) : SimpleMobilePaymentUseCase {
+    override fun confirmPayment(request: SimpleMobilePaymentUseCase.Request): MobilePaymentCoreDto {
         val paymentInfo =
             mobilePaymentPort.getCardNoAndPayInfo(
                 MobilePaymentPort.Request(orderId = request.orderId)
@@ -23,7 +23,7 @@ internal class MobilePaymentService(
 
         val paymentAuth =
             cardPaymentAuthPort.doPaymentAuth(
-                CardPaymentAuthPort.Request(cardNumber = request.cardNumber)
+                CardPaymentAuthPort.Request(cardNumber = paymentInfo.cardNumber)
             )
 
         if (!paymentAuth.isValid) {

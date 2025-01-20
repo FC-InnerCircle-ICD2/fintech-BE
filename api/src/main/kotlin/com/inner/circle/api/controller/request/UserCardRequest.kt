@@ -1,6 +1,6 @@
-package com.inner.circle.api.payment.controller.dto
+package com.inner.circle.api.controller.request
 
-data class UserCardDto(
+data class UserCardRequest(
     val userId: Long?,
     val representativeYn: Boolean?,
     val cardNumber: String?,

@@ -1,8 +1,8 @@
-package com.inner.circle.api.payment.controller
+package com.inner.circle.api.controller
 
-import com.inner.circle.api.payment.controller.dto.MobilePaymentDto
-import com.inner.circle.api.payment.controller.dto.PaymentResponse
-import com.inner.circle.api.payment.controller.dto.UserCardDto
+import com.inner.circle.api.controller.dto.MobilePaymentDto
+import com.inner.circle.api.controller.dto.PaymentResponse
+import com.inner.circle.api.controller.request.UserCardRequest
 import com.inner.circle.core.structure.usecase.MobilePaymentUseCase
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -45,7 +45,7 @@ class MobilePaymentController(
     @PostMapping("/proceed/{order_id}")
     fun proceedMobilePayment(
         @PathVariable("order_id") orderId: String,
-        @RequestBody userCardDto: UserCardDto
+        @RequestBody userCardRequest: UserCardRequest
     ): PaymentResponse<MobilePaymentDto> {
         val response =
             PaymentResponse.ok(
@@ -53,11 +53,11 @@ class MobilePaymentController(
                     mobilePaymentUseCase.confirmPayment(
                         MobilePaymentUseCase.Request(
                             orderId = orderId,
-                            userId = userCardDto.userId,
-                            representativeYn = userCardDto.representativeYn,
-                            cardNumber = userCardDto.cardNumber,
-                            expirationPeriod = userCardDto.expirationPeriod,
-                            cvc = userCardDto.cvc
+                            userId = userCardRequest.userId,
+                            representativeYn = userCardRequest.representativeYn,
+                            cardNumber = userCardRequest.cardNumber,
+                            expirationPeriod = userCardRequest.expirationPeriod,
+                            cvc = userCardRequest.cvc
                         )
                     )
                 )
