@@ -1,6 +1,6 @@
-package com.inner.circle.api.payment.controller
+package com.inner.circle.api.controller
 
-import com.inner.circle.api.payment.interceptor.RequireAuth
+import com.inner.circle.api.interceptor.RequireAuth
 import com.inner.circle.api.structure.dto.PaymentClaimRequest
 import com.inner.circle.api.structure.dto.PaymentResponse
 import org.springframework.http.HttpStatus
@@ -25,7 +25,7 @@ class ClaimController : ClaimApi {
     }
 
     @RequireAuth
-    @PostMapping("/{order_id}/proceed")
+    @PostMapping("/{order_id}/proceed/example")
     override fun proceedPayment(
         @PathVariable("order_id") orderId: String
     ): ResponseEntity<PaymentResponse<String>> {
@@ -35,7 +35,7 @@ class ClaimController : ClaimApi {
     }
 
     @RequireAuth
-    @PostMapping("/{order_id}/cancel")
+    @PostMapping("/{order_id}/cancel/example")
     override fun cancelPayment(
         @PathVariable("order_id") orderId: String
     ): ResponseEntity<PaymentResponse<String>> {

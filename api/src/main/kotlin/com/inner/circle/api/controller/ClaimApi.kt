@@ -1,4 +1,4 @@
-package com.inner.circle.api.payment.controller
+package com.inner.circle.api.controller
 
 import com.inner.circle.api.structure.dto.PaymentClaimRequest
 import com.inner.circle.api.structure.dto.PaymentResponse
