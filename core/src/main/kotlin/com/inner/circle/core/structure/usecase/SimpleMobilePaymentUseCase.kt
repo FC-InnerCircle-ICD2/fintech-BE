@@ -9,4 +9,3 @@ interface SimpleMobilePaymentUseCase {
 
     fun confirmPayment(request: Request): MobilePaymentCoreDto
 }
-

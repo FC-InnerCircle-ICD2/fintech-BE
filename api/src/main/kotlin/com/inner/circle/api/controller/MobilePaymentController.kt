@@ -4,6 +4,7 @@ import com.inner.circle.api.controller.dto.MobilePaymentDto
 import com.inner.circle.api.controller.dto.PaymentResponse
 import com.inner.circle.api.controller.request.UserCardRequest
 import com.inner.circle.core.structure.usecase.MobilePaymentUseCase
+import com.inner.circle.core.structure.usecase.SimpleMobilePaymentUseCase
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.GetMapping
@@ -16,7 +17,8 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @PaymentV1Api
 class MobilePaymentController(
-    private val mobilePaymentUseCase: MobilePaymentUseCase
+    private val mobilePaymentUseCase: MobilePaymentUseCase,
+    private val simpleMobilePaymentUseCase: SimpleMobilePaymentUseCase
 ) {
     @Operation(summary = "모바일 간편 결제 요청")
     @PostMapping("/proceed/simple/{order_id}")
@@ -26,14 +28,9 @@ class MobilePaymentController(
         val response =
             PaymentResponse.ok(
                 MobilePaymentDto.of(
-                    mobilePaymentUseCase.confirmPayment(
-                        MobilePaymentUseCase.Request(
-                            orderId = orderId,
-                            userId = null,
-                            representativeYn = null,
-                            cardNumber = null,
-                            expirationPeriod = null,
-                            cvc = null
+                    simpleMobilePaymentUseCase.confirmPayment(
+                        SimpleMobilePaymentUseCase.Request(
+                            orderId = orderId
                         )
                     )
                 )
