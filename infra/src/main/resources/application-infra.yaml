@@ -28,11 +28,30 @@ external:
 spring:
   config:
     activate:
+      on-profile: test
+  datasource:
+    url: jdbc:h2:mem:payment
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+
+external:
+  mock-server:
+    base-url: http://localhost:8082/
+
+---
+spring:
+  config:
+    activate:
       on-profile: dev # local로 변경 가능
   datasource:
-    url: ${DATASOURCE_URL}
-    username: ${DATASOURCE_USER_NAME}
-    password: ${DATASOURCE_USER_PASSWORD}
+    url: jdbc:postgresql://${POSTGRESQL_URL}/payment
+    username: ${POSTGRESQL_USERNAME}
+    password: ${POSTGRESQL_PW}
     driver-class-name: org.postgresql.Driver
     hikari:
       minimum-idle: 10
