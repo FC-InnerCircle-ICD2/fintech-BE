@@ -10,4 +10,10 @@ sealed class PaymentException(
         override val message: String = "Order with ID $orderId not found",
         override val cause: Throwable? = null
     ) : PaymentException(HttpStatus.NOT_FOUND, message, cause)
+
+    data class PaymentNotFoundException(
+        val paymentId: String,
+        override val message: String = "Payment with ID $paymentId not found",
+        override val cause: Throwable? = null
+    ) : PaymentException(HttpStatus.NOT_FOUND, message, cause)
 }
