@@ -1,18 +1,22 @@
 package com.inner.circle.infra.structure.config
 
 import com.inner.circle.infra.structure.externalapi.CardAuthClient
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 @Configuration
-class ExternalClientConfig {
+class ExternalClientConfig(
+    @Value("\${external.mock-server.base-url}")
+    private val mockServerBaseUrl: String
+) {
     @Bean
     fun mockServerClient(): Retrofit =
         Retrofit
             .Builder()
-            .baseUrl("http://localhost:8082/")
+            .baseUrl(mockServerBaseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
