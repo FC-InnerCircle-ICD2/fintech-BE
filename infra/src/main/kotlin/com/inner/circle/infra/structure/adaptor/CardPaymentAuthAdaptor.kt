@@ -1,0 +1,35 @@
+package com.inner.circle.infra.structure.adaptor
+
+import com.inner.circle.infra.structure.adaptor.dto.CardPaymentAuthInfraDto
+import com.inner.circle.infra.structure.externalapi.CardAuthClient
+import com.inner.circle.infra.structure.port.CardPaymentAuthPort
+import org.slf4j.LoggerFactory
+import org.springframework.stereotype.Component
+
+internal class CardPaymentAuthAdaptor(
+    private val cardAuthClient: CardAuthClient
+) : CardPaymentAuthPort {
+    private val logger = LoggerFactory.getLogger(this::class.java)
+
+    override fun doPaymentAuth(request: CardPaymentAuthPort.Request): CardPaymentAuthInfraDto =
+        runCatching {
+            val defaultCardAuthResponse =
+                CardPaymentAuthInfraDto(
+                    cardNumber = request.cardNumber,
+                    isValid = false
+                )
+
+            cardAuthClient
+                .validateCardPayment(
+                    request = defaultCardAuthResponse
+                ).execute()
+                .takeIf { it.isSuccessful && (it.body() != null) }
+                ?.let {
+                    defaultCardAuthResponse.copy(
+                        isValid = true
+                    )
+                } ?: defaultCardAuthResponse
+        }.onFailure {
+            logger.error("Payment Auth Request 중 에러가 발생 ${it.message}")
+        }.getOrThrow()
+}
