@@ -18,14 +18,15 @@ dependencies {
     implementation(libs.bundles.springBoot)
     implementation(libs.bundles.kotlinxSerialization)
     implementation(libs.springBootDataJpa)
+    implementation(libs.awsSecretsManagerConfig)
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation(libs.h2)
     runtimeOnly(libs.postgresql)
     compileOnly(libs.bundles.kotlinLogging)
     compileOnly(libs.bundles.kotlinxCoroutines)
     testImplementation(libs.bundles.kotlinTest)
     testImplementation(libs.bundles.kotlinTestSpring)
-    testImplementation(libs.h2)
 }
 
 noArg {
