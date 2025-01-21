@@ -29,7 +29,9 @@ internal class MobilePaymentAdaptor(
                     paymentRequest.paymentKey,
                     paymentRequest.amount,
                     paymentRequest.requestTime,
-                    it.cardNumber
+                    it.cardNumber,
+                    it.expirationPeriod,
+                    it.cvc
                 )
             } ?: throw IllegalArgumentException(
             "Payment not found - order_id: ${paymentRequest.orderId}"

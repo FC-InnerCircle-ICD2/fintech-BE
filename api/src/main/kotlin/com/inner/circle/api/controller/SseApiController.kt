@@ -1,13 +1,13 @@
-package com.inner.circle.api.sse.controller
+package com.inner.circle.api.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.inner.circle.api.sse.connection.SseConnection
-import com.inner.circle.api.sse.connection.SseConnectionPool
+import com.inner.circle.core.structure.sse.SseConnection
+import com.inner.circle.core.structure.sse.SseConnectionPool
 import io.swagger.v3.oas.annotations.Parameter
 import org.slf4j.LoggerFactory
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter
@@ -22,18 +22,16 @@ class SseApiController(
         private val log = LoggerFactory.getLogger(SseApiController::class.java)
     }
 
-    @GetMapping(path = ["/connect"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
+    @GetMapping(path = ["/connect/{order_id}"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
     fun connect(
         @Parameter(hidden = true)
-        // 세션 객체로 변경 예정
-        // @AuthenticationPrincipal 스프링security 삭제
-        @RequestBody session: String
+        @PathVariable("order_id") orderId: String
     ): ResponseBodyEmitter {
-        log.info("login user {}", session)
+        log.info("login user {}", orderId)
 
         val sseConnection =
             SseConnection.connect(
-                session,
+                orderId,
                 sseConnectionPool,
                 objectMapper
             )
@@ -43,14 +41,12 @@ class SseApiController(
         return sseConnection.sseEmitter
     }
 
-    @GetMapping("/push-event")
+    @GetMapping("/push-event/{order_id}")
     fun pushEvent(
-        @Parameter(hidden = true)
-        // 세션 객체로 변경 예정
-        // @AuthenticationPrincipal 스프링security 삭제
-        @RequestBody session: String
+        @Parameter(hidden = false)
+        @PathVariable("order_id") orderId: String
     ) {
-        val sseConnection = sseConnectionPool.getSession(session)
+        val sseConnection = sseConnectionPool.getSession(orderId)
 
         sseConnection.sendMessage("hello world")
     }

@@ -17,8 +17,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @PaymentV1Api
 class MobilePaymentController(
-    private val mobilePaymentUseCase: MobilePaymentUseCase,
-    private val simpleMobilePaymentUseCase: SimpleMobilePaymentUseCase
+    private val mobilePaymentUseCase: MobilePaymentUseCase
 ) {
     @Operation(summary = "모바일 간편 결제 요청")
     @PostMapping("/proceed/simple/{order_id}")
@@ -28,7 +27,7 @@ class MobilePaymentController(
         val response =
             PaymentResponse.ok(
                 MobilePaymentDto.of(
-                    simpleMobilePaymentUseCase.confirmPayment(
+                    mobilePaymentUseCase.confirmPayment(
                         SimpleMobilePaymentUseCase.Request(
                             orderId = orderId
                         )
@@ -50,8 +49,6 @@ class MobilePaymentController(
                     mobilePaymentUseCase.confirmPayment(
                         MobilePaymentUseCase.Request(
                             orderId = orderId,
-                            userId = userCardRequest.userId,
-                            representativeYn = userCardRequest.representativeYn,
                             cardNumber = userCardRequest.cardNumber,
                             expirationPeriod = userCardRequest.expirationPeriod,
                             cvc = userCardRequest.cvc

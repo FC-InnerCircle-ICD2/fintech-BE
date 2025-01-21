@@ -1,9 +1,9 @@
-package com.inner.circle.infra.structure.adaptor.dto
+package com.inner.circle.core.structure.domain
 
 import java.math.BigDecimal
 import java.time.LocalDateTime
 
-data class MobilePaymentInfraDto(
+data class PaymentInfo(
     val orderId: String,
     val orderName: String?,
     val orderStatus: String?,
