@@ -57,6 +57,7 @@ springBootWeb = { module = "org.springframework.boot:spring-boot-starter-web", v
 springBootTest = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "springBoot" }
 springBootTestContainers = { module = "org.springframework.boot:spring-boot-testcontainers", version.ref = "springBoot" }
 springBootDataJpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa", version.ref = "springBoot" }
+springBootDataRedis = { module = "org.springframework.boot:spring-boot-starter-data-redis", version.ref = "springBoot" }
 # testContainers
 postgresqlTestContainer = { module = "org.testcontainers:postgresql", version = "1.20.0" }
 # swagger
