@@ -10,8 +10,12 @@ import org.testcontainers.containers.GenericContainer
 import org.testcontainers.utility.DockerImageName
 
 @TestConfiguration
-class RedisTestContainerConfiguration : ApplicationContextInitializer<ConfigurableApplicationContext> {
-    private val logger: Logger = LoggerFactory.getLogger(RedisTestContainerConfiguration::class.java)
+class RedisTestContainerConfiguration :
+    ApplicationContextInitializer<ConfigurableApplicationContext> {
+    private val logger: Logger =
+        LoggerFactory.getLogger(
+            RedisTestContainerConfiguration::class.java
+        )
 
     companion object {
         private const val IMAGE_TAG = "redis:6.2.6"
@@ -23,15 +27,16 @@ class RedisTestContainerConfiguration : ApplicationContextInitializer<Configurab
         val containerName = "test-payment-redis"
 
         val dockerImageName = DockerImageName.parse(IMAGE_TAG).asCompatibleSubstituteFor("redis")
-        val container = GenericContainer<Nothing>(dockerImageName).apply {
-            if (env.activeProfiles.contains("local")) {
-                withReuse(true)
+        val container =
+            GenericContainer<Nothing>(dockerImageName).apply {
+                if (env.activeProfiles.contains("local")) {
+                    withReuse(true)
+                }
+                withCreateContainerCmdModifier { cmd: CreateContainerCmd ->
+                    cmd.withName(containerName)
+                }
+                withExposedPorts(PAYMENT_REDIS_PORT)
             }
-            withCreateContainerCmdModifier { cmd: CreateContainerCmd ->
-                cmd.withName(containerName)
-            }
-            withExposedPorts(PAYMENT_REDIS_PORT)
-        }
 
         try {
             container.start()
