@@ -1,4 +1,4 @@
-package com.inner.circle.api.sse.connection
+package com.inner.circle.core.structure.sse
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import java.io.IOException

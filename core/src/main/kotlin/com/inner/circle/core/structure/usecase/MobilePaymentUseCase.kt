@@ -2,11 +2,9 @@ package com.inner.circle.core.structure.usecase
 
 import com.inner.circle.core.structure.service.dto.MobilePaymentCoreDto
 
-interface MobilePaymentUseCase {
+interface MobilePaymentUseCase : SimpleMobilePaymentUseCase {
     data class Request(
         val orderId: String,
-        val userId: Long,
-        val representativeYn: Boolean,
         val cardNumber: String,
         val expirationPeriod: String,
         val cvc: String

@@ -1,4 +1,4 @@
-package com.inner.circle.api.sse.connection
+package com.inner.circle.core.structure.sse
 
 interface ConnectionPool<T, R> {
     fun addSession(
