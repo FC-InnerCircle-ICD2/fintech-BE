@@ -8,7 +8,6 @@ import java.time.LocalDateTime
 import java.util.function.IntSupplier
 import java.util.random.RandomGenerator
 
-
 class PaymentClaimDto(
     val paymentRequestId: Long?,
     val orderId: String,
@@ -58,9 +57,11 @@ class PaymentClaimDto(
     private fun generateToken(): String? {
         // use a random function that returns an int value
         val random = RandomGenerator.getDefault()
-        val factory = TSID.Factory.builder()
-            .withRandomFunction(IntSupplier { random.nextInt() })
-            .build()
+        val factory =
+            TSID.Factory
+                .builder()
+                .withRandomFunction(IntSupplier { random.nextInt() })
+                .build()
 
         return factory.generate().toString()
     }
