@@ -24,7 +24,7 @@ class RedisTestContainerConfiguration :
 
     override fun initialize(applicationContext: ConfigurableApplicationContext) {
         val env = applicationContext.environment
-        val containerName = "test-payment-redis"
+        val containerName = "reusable-redis"
 
         val dockerImageName = DockerImageName.parse(IMAGE_TAG).asCompatibleSubstituteFor("redis")
         val container =
@@ -47,11 +47,11 @@ class RedisTestContainerConfiguration :
             throw e
         }
 
-        val hosts = container.host
-        val ports = container.getMappedPort(PAYMENT_REDIS_PORT).toString()
-        System.setProperty("spring.redis.host", hosts)
-        System.setProperty("spring.redis.port", ports)
-        logger.info("Redis host: {}", hosts)
-        logger.info("Redis port: {}", ports)
+        val host = container.host
+        val port = container.getMappedPort(PAYMENT_REDIS_PORT).toString()
+        System.setProperty("spring.redis.host", host)
+        System.setProperty("spring.redis.port", port)
+        logger.info("Redis host: {}", host)
+        logger.info("Redis port: {}", port)
     }
 }
