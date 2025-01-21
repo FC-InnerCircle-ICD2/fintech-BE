@@ -3,13 +3,16 @@ spring:
     name: api
   profiles:
     active: local
-    include: infra
+    include: infra, openapi
 
-springdoc:
-  api-docs:
-    path: /v3/api-docs
-  swagger-ui:
-    path: /swagger-ui.html
+server:
+  port: 8080
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
 
 server:
   port: 10001

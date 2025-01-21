@@ -39,10 +39,10 @@ jobs:
         uses: appleboy/ssh-action@v1.2.0
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: pay200
+          ECR_REPOSITORY: ${{ secrets.ECR_REPO_NAME }}
           IMAGE_TAG:  ${{ steps.get-docker-image-tag.outputs.image-tag }}
         with:
-          host: ${{ secrets.EC2_HOST }}
+          host: ${{ inputs.app == 'api' && secrets.EC2_PAYMENT_HOST || secrets.EC2_BACKOFFICE_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script_stop: true
@@ -52,9 +52,10 @@ jobs:
               docker stop $CONTAINER_NAME
               docker rm $CONTAINER_NAME
             fi
+            aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${{ env.ECR_REGISTRY }}
             docker pull ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}/${{ inputs.app }}:${{ env.IMAGE_TAG }}
-            docker run -d -p ${{ inputs.app == 'api' && '10001:10001' || '10002:10002' }}  \
-            -e JAVA_TOOL_OPTIONS="-XX:MaxDirectMemorySize=5M -XX:ReservedCodeCacheSize=64M -Xss512K" \
+            docker run -d -p 8080:8080  \
+            -e JAVA_TOOL_OPTIONS="-XX:MaxDirectMemorySize=5M -XX:ReservedCodeCacheSize=140M -Xss512K" \
             -e SPRING_PROFILES_ACTIVE=dev \
-            --name ${{ inputs.app == 'api' && 'payment_application' || 'backoffice_application' }} \
+            --name $CONTAINER_NAME \
             ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}/${{ inputs.app }}:${{ env.IMAGE_TAG }}
