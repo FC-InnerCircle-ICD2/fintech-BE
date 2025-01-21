@@ -1,4 +1,4 @@
-package com.inner.circle.infra.structure.repository
+package com.inner.circle.infra.structure.repository.entity
 
 import io.hypersistence.utils.hibernate.id.Tsid
 import jakarta.persistence.Column
@@ -8,8 +8,8 @@ import jakarta.persistence.Table
 import java.math.BigDecimal
 import java.time.LocalDateTime
 
-@Entity
 @Table(name = "payment_request_claim")
+@Entity
 data class PaymentClaimEntity(
     @Id
     @Tsid

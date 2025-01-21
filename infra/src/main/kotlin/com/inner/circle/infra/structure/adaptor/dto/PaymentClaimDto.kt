@@ -1,7 +1,7 @@
 package com.inner.circle.infra.structure.adaptor.dto
 
 import com.inner.circle.infra.structure.adaptor.enum.PaymentProcessStatus
-import com.inner.circle.infra.structure.repository.PaymentClaimEntity
+import com.inner.circle.infra.structure.repository.entity.PaymentClaimEntity
 import io.hypersistence.tsid.TSID
 import java.math.BigDecimal
 import java.time.LocalDateTime
