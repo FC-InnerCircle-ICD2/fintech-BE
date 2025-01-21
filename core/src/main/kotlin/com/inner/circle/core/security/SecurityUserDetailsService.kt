@@ -1,5 +1,7 @@
 package com.inner.circle.core.security
 
+import com.inner.circle.exception.AppException
+import com.inner.circle.exception.HttpStatus
 import com.inner.circle.infra.structure.repository.MerchantRepository
 import org.springframework.core.env.Environment
 import org.springframework.security.core.userdetails.User
@@ -22,7 +24,7 @@ class SecurityUserDetailsService(
         }
 
         val validMerchant =
-            repository.findByToken(token) ?: throw IllegalArgumentException("잘못된 접근입니다.")
+            repository.findByToken(token) ?: throw AppException(status = HttpStatus.UNAUTHORIZED, message = HttpStatus.UNAUTHORIZED.description)
 
         return User
             .withUsername(token)

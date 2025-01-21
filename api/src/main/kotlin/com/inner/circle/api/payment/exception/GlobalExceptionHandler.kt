@@ -4,7 +4,9 @@ import com.inner.circle.api.common.response.AppExceptionResponse
 import com.inner.circle.api.structure.dto.PaymentError
 import com.inner.circle.api.structure.dto.PaymentResponse
 import com.inner.circle.exception.AppException
+import javax.security.sasl.AuthenticationException
 import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
@@ -16,6 +18,12 @@ class GlobalExceptionHandler {
         ResponseEntity(
             AppExceptionResponse.of(exception),
             HttpStatus.valueOf(exception.status.code)
+        )
+    @ExceptionHandler(AuthenticationException::class)
+    fun handleAuthorizationException(exception: AuthenticationException): ResponseEntity<AppExceptionResponse> =
+        ResponseEntity(
+            AppExceptionResponse(code = HttpStatus.UNAUTHORIZED, message = HttpStatus.UNAUTHORIZED.toString()),
+            HttpStatusCode.valueOf(401)
         )
 
     @ExceptionHandler(Exception::class)
