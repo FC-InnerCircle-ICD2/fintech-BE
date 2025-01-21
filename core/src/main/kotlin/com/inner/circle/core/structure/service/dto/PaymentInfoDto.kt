@@ -1,6 +1,5 @@
 package com.inner.circle.core.structure.service.dto
 
-import com.inner.circle.core.structure.domain.MobilePayment
 import com.inner.circle.core.structure.domain.PaymentInfo
 import java.math.BigDecimal
 import java.time.LocalDateTime
@@ -25,15 +24,13 @@ data class PaymentInfoDto(
                 orderName = paymentInfo.orderName,
                 orderStatus = paymentInfo.orderStatus,
                 userId = paymentInfo.userId,
-                merchantId = paymentInfo.merchantId ,
+                merchantId = paymentInfo.merchantId,
                 paymentKey = paymentInfo.paymentKey,
-                amount = paymentInfo.amount ,
-                requestTime = paymentInfo.requestTime ,
-                cardNumber = paymentInfo.cardNumber ,
+                amount = paymentInfo.amount,
+                requestTime = paymentInfo.requestTime,
+                cardNumber = paymentInfo.cardNumber,
                 expirationPeriod = paymentInfo.expirationPeriod,
                 cvc = paymentInfo.cvc
             )
     }
 }
-
-

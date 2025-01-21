@@ -3,7 +3,7 @@ package com.inner.circle.core.structure.domain
 import java.math.BigDecimal
 import java.time.LocalDateTime
 
-data class PaymentInfo (
+data class PaymentInfo(
     val orderId: String,
     val orderName: String?,
     val orderStatus: String?,
