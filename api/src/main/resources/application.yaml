@@ -13,8 +13,3 @@ springdoc:
 
 server:
   port: 10001
-
-card:
-  url:
-    baseUrl: http://localhost:8082
-    approveEndPoint: /mock/card/approve

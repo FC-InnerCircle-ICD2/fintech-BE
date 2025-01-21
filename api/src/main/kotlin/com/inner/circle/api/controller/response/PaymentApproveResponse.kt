@@ -1,4 +1,4 @@
-package com.inner.circle.api.response
+package com.inner.circle.api.controller.response
 
 import java.math.BigDecimal
 

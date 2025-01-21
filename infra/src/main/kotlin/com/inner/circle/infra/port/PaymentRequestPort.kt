@@ -4,7 +4,8 @@ import com.inner.circle.infra.repository.entity.PaymentRequestEntity
 
 fun interface PaymentRequestPort {
     data class Request(
-        val paymentKey: String
+        val paymentKey: String,
+        val orderId: String
     )
 
     fun findByPaymentKey(request: Request): PaymentRequestEntity

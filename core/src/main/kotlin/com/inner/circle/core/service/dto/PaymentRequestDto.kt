@@ -11,5 +11,7 @@ data class PaymentRequestDto(
     val merchantId: String,
     val paymentKey: String,
     val amount: BigDecimal,
+    val paymentType: String,
+
     val requestTime: java.time.LocalDateTime
 )

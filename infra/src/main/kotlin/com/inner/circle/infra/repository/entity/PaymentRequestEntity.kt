@@ -11,6 +11,11 @@ import java.time.LocalDateTime
 @Table(name = "payment_request")
 data class PaymentRequestEntity(
     @Id
+    @Column(name = "payment_key")
+    val paymentKey: String,
+    @Column(name = "payment_type")
+    val paymentType: String,
+    @Column(name = "payment_key")
     val orderId: String,
     @Column(name = "order_name")
     val orderName: String,
@@ -22,8 +27,6 @@ data class PaymentRequestEntity(
     val userId: String,
     @Column(name = "merchant_id", nullable = false)
     val merchantId: String,
-    @Column(name = "payment_key")
-    val paymentKey: String,
     @Column(nullable = false)
     val amount: BigDecimal,
     @Column(name = "request_time")

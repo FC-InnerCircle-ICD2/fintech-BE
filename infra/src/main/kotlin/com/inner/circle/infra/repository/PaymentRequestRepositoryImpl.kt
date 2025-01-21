@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository
 internal class PaymentRequestRepositoryImpl(
     private val paymentRequestJpaRepository: PaymentRequestJpaRepository
 ) : PaymentRequestRepository {
-    override fun findByPaymentKey(paymenytKey: String): PaymentRequestEntity =
-        paymentRequestJpaRepository.findByPaymentKey(paymenytKey)
+    override fun findByPaymentKeyAndOrderId(paymentKey: String, orderId: String): PaymentRequestEntity =
+        paymentRequestJpaRepository.findByPaymentKeyAndOrderId(paymentKey, orderId)
 }

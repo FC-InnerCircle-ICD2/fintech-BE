@@ -2,8 +2,6 @@ package com.inner.circle.infra.repository.entity
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 
@@ -11,7 +9,7 @@ import jakarta.persistence.Table
 @Table(name = "payment")
 data class PaymentEntity(
     @Id
-    @Column(nullable = false)
+    @Column(name = "payment_key", nullable = false)
     val paymentKey: String,
     @Column(nullable = false)
     val currency: String,

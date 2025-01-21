@@ -1,0 +1,17 @@
+package com.inner.circle.infra.port
+
+import com.inner.circle.infra.repository.entity.PaymentEntity
+import com.inner.circle.infra.repository.entity.TransactionEntity
+import java.math.BigDecimal
+
+fun interface TransactionPort {
+    data class Request(
+        val paymentKey: String,
+        val payment: PaymentEntity,
+        val amount: BigDecimal,
+        val status: String,
+        val reason: String?
+    )
+
+    fun save(request: Request): TransactionEntity
+}
