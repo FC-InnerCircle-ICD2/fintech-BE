@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 
-
 @ContextConfiguration(classes = [PaymentClaimRepositoryHandler::class, JpaConfiguration::class])
 class ClaimAdaptorTest : AbstractJpaTestWithLocalTestContainer() {
     @Autowired
