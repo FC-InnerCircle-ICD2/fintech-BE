@@ -2,7 +2,7 @@ name: "🚀CI & CD"
 on:
   push:
     branches:
-      - main
+      - feat/deploy-test.1
 
 concurrency:
   group: ${{ github.workflow }}

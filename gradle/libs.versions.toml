@@ -85,3 +85,4 @@ kotlinPluginSpring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = 
 idea = { id = "org.gradle.idea" }
 springBoot = { id = "org.springframework.boot", version.ref = "springBoot" }
 springDependencyManagement = { id = "io.spring.dependency-management", version.ref = "springDependencyManagement" }
+
