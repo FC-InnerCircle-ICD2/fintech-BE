@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component
 @Component
 class SecurityAuthenticationProvider(
     private val userDetailsService: UserDetailsService
-//    private val repository: MerchantRepository
 ) : AuthenticationProvider {
     override fun authenticate(authentication: Authentication): Authentication {
         val username = authentication.name
@@ -22,8 +21,6 @@ class SecurityAuthenticationProvider(
         )
     }
 
-    override fun supports(authentication: Class<*>?): Boolean {
-        return UsernamePasswordAuthenticationToken::class.java.isAssignableFrom(authentication)
-    }
-
+    override fun supports(authentication: Class<*>?): Boolean =
+        UsernamePasswordAuthenticationToken::class.java.isAssignableFrom(authentication)
 }

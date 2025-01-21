@@ -1,6 +1,5 @@
 package com.inner.circle.api.security
 
-import com.inner.circle.core.security.SecurityAuthenticationProvider
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.Customizer.withDefaults
@@ -9,28 +8,19 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
 
-
 @Configuration
 @EnableWebSecurity
-class SecurityConfig(
-    private val securityAuthenticationProvider: SecurityAuthenticationProvider
-) {
-//    @Bean
-//    fun authenticationManager(auth: AuthenticationManagerBuilder): AuthenticationManager {
-//        auth.authenticationProvider(securityAuthenticationProvider)
-//        return auth.build()
-//    }
-
+class SecurityConfig {
     @Bean
     fun apiSecurityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
-            .authorizeHttpRequests{authorizeRequests ->
+            .authorizeHttpRequests { authorizeRequests ->
                 authorizeRequests
-                    .requestMatchers("/api/v1/**").authenticated()
-            }
-            .sessionManagement { session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
-            .httpBasic(withDefaults()) // basic authentication 활성화
+                    .requestMatchers("/api/**")
+                    .authenticated()
+            }.sessionManagement { session ->
+                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            }.httpBasic(withDefaults())
         return http.build()
     }
-
 }

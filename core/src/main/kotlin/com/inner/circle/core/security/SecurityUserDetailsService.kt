@@ -13,21 +13,21 @@ class SecurityUserDetailsService(
     private val environment: Environment
 ) : UserDetailsService {
     override fun loadUserByUsername(token: String): UserDetails {
-
         if (environment.activeProfiles.contains("local") && "pay200".equals(token)) {
-            return User.withUsername(token)
+            return User
+                .withUsername(token)
                 .password("{noop}pay200")
                 .authorities("ROLE_PAY200")
                 .build()
         }
 
-        val validMerchant = repository.findByToken(token) ?: throw IllegalArgumentException("잘못된 접근입니다.")
+        val validMerchant =
+            repository.findByToken(token) ?: throw IllegalArgumentException("잘못된 접근입니다.")
 
-        return User.withUsername(token)
+        return User
+            .withUsername(token)
             .password(validMerchant.password)
             .authorities(validMerchant.authorities)
             .build()
     }
-
-
 }

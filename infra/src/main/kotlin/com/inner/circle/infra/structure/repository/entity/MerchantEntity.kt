@@ -19,16 +19,12 @@ data class MerchantEntity(
     val token: String,
     @Column(nullable = false)
     val name: String
-) : BaseEntity(), UserDetails {
-    override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
-        return mutableListOf(SimpleGrantedAuthority("ROLE_MERCHANT"))
-    }
+) : BaseEntity(),
+    UserDetails {
+    override fun getAuthorities(): MutableCollection<out GrantedAuthority> =
+        mutableListOf(SimpleGrantedAuthority("ROLE_MERCHANT"))
 
-    override fun getPassword(): String {
-        return mid
-    }
+    override fun getPassword(): String = mid
 
-    override fun getUsername(): String {
-        return token
-    }
+    override fun getUsername(): String = token
 }
