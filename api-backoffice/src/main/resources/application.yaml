@@ -6,6 +6,15 @@ spring:
     include: datasource, openapi, logging
 
 server:
+  port: 8080
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+
+server:
   port: 10002
 
 ---
