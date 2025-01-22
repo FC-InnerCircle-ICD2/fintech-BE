@@ -16,4 +16,10 @@ sealed class PaymentException(
         override val message: String = "Payment with ID $paymentId not found",
         override val cause: Throwable? = null
     ) : PaymentException(HttpStatus.NOT_FOUND, message, cause)
+
+    data class UserNotFoundException(
+        val userId: Long?,
+        override val message: String = "UserId with ID $userId not found",
+        override val cause: Throwable? = null
+    ) : PaymentException(HttpStatus.NOT_FOUND, message, cause)
 }
