@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestParam
 
 @Tag(name = "Claims", description = "Claim (결제 요청) API")
 @PaymentV1Api
@@ -19,9 +18,9 @@ class ClaimController(
     @RequireAuth
     @PostMapping
     fun createPayment(
-        @RequestBody request: PaymentClaimUseCase.PaymentClaimRequest,
-        @RequestParam(value = "merchantId") merchantId: String
+        @RequestBody request: PaymentClaimUseCase.PaymentClaimRequest
     ): PaymentResponse<PaymentClaimResponse> {
+        val merchantId = "tempMerchantId" // @AuthenticationPrincipal
         val response = claimUseCase.createPayment(request, merchantId)
         return PaymentResponse.ok(response)
     }
