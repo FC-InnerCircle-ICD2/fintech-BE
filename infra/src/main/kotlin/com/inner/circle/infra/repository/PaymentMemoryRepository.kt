@@ -6,9 +6,9 @@ import org.springframework.stereotype.Repository
 
 @Repository
 internal class PaymentMemoryRepository : PaymentRepository {
-    private val storage: MutableMap<UUID, com.inner.circle.infra.repository.entity.PaymentEntity> = mutableMapOf()
+    private val storage: MutableMap<UUID, PaymentEntity> = mutableMapOf()
 
-    override fun save(entity: com.inner.circle.infra.repository.entity.PaymentEntity): com.inner.circle.infra.repository.entity.PaymentEntity? {
+    override fun save(entity: PaymentEntity): PaymentEntity? {
 //        val savedEntity: PaymentEntity =
 //            when (val id: UUID? = entity.id) {
 //                null ->
