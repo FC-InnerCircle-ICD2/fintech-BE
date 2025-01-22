@@ -3,12 +3,13 @@ package com.inner.circle.core.structure.service
 import com.inner.circle.core.structure.dto.PaymentClaimResponse
 import com.inner.circle.core.structure.usecase.PaymentClaimUseCase
 import com.inner.circle.infra.structure.adaptor.dto.PaymentClaimDto
+import com.inner.circle.infra.structure.adaptor.dto.PaymentTokenDto
 import com.inner.circle.infra.structure.adaptor.enum.PaymentProcessStatus
 import com.inner.circle.infra.structure.port.ClaimHandlingPort
 import java.time.LocalDateTime
 import org.springframework.stereotype.Service
 
-private const val TTL_MINUTES = 5L
+private const val TTL_MINUTES = 3L
 
 @Service
 class ClaimService(
@@ -20,7 +21,6 @@ class ClaimService(
         requestMerchantId: String
     ): PaymentClaimResponse {
         val (amount, orderId, orderName, successUrl, failUrl) = request
-        val generatedToken = paymentTokenGenerator.generateToken(orderId, TTL_MINUTES)
         val requestDto =
             PaymentClaimDto(
                 paymentRequestId = null,
@@ -33,10 +33,23 @@ class ClaimService(
                 requestTime = LocalDateTime.now(),
                 successUrl = successUrl,
                 failUrl = failUrl,
-                paymentToken = generatedToken.token
+                paymentToken = null
             )
 
-        val generatePaymentRequest = claimHandlingPort.generatePaymentRequest(requestDto)
+        val (token, expiresAt) = paymentTokenGenerator.generateToken(orderId, TTL_MINUTES)
+
+        val paymentTokenDto =
+            PaymentTokenDto(
+                orderId = orderId,
+                generatedToken = token,
+                expiresAt = expiresAt
+            )
+
+        val generatePaymentRequest =
+            claimHandlingPort.generatePaymentRequest(
+                requestDto,
+                paymentTokenDto
+            )
 
         return PaymentClaimResponse.testOne()
     }
