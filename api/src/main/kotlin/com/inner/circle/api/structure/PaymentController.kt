@@ -1,7 +1,7 @@
 package com.inner.circle.api.structure
 
 import com.inner.circle.api.structure.dto.PaymentRequest
-import com.inner.circle.core.structure.usecase.RequestPaymentUseCase
+import com.inner.circle.core.usecase.RequestPaymentUseCase
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
