@@ -5,7 +5,7 @@ import java.util.UUID
 import org.springframework.stereotype.Repository
 
 @Repository
-internal class moryRepository : PaymentRepository {
+internal class PaymentMemoryRepository : PaymentRepository {
     private val storage: MutableMap<UUID, PaymentEntity> = mutableMapOf()
 
     override fun save(entity: PaymentEntity): PaymentEntity? {
