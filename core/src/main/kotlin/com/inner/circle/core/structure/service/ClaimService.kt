@@ -40,7 +40,8 @@ class ClaimService(
 
         val paymentTokenDto =
             PaymentTokenDto(
-                orderId = orderId,
+                merchantId = requestDto.merchantId,
+                orderId = requestDto.orderId,
                 generatedToken = token,
                 expiresAt = expiresAt
             )
