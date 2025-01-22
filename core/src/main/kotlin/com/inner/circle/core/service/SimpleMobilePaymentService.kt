@@ -52,7 +52,7 @@ internal class SimpleMobilePaymentService(
                 amount = paymentInfo.amount,
                 requestTime = paymentInfo.requestTime,
                 cardNumber = paymentInfo.cardNumber,
-                paymentType = "test",
+                paymentType = "test"
             )
         )
 

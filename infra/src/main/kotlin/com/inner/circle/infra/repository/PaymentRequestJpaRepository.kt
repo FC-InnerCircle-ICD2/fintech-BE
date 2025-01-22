@@ -9,5 +9,5 @@ interface PaymentRequestJpaRepository : JpaRepository<PaymentRequestEntity, Stri
         orderId: String
     ): PaymentRequestEntity?
 
-    fun findByOrderId(orderId: String):PaymentRequestEntity?
+    fun findByOrderId(orderId: String): PaymentRequestEntity?
 }

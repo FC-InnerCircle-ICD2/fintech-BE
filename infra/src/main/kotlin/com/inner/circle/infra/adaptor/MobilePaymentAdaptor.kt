@@ -23,11 +23,11 @@ internal class MobilePaymentAdaptor(
                 MobilePaymentInfraDto(
                     orderId = paymentRequest.orderId,
                     orderName = paymentRequest.orderName,
-                    orderStatus =  paymentRequest.orderStatus,
+                    orderStatus = paymentRequest.orderStatus,
                     userId = paymentRequest.userId,
                     merchantId = paymentRequest.merchantId,
-                    paymentKey =  paymentRequest.paymentKey,
-                    amount =  paymentRequest.amount,
+                    paymentKey = paymentRequest.paymentKey,
+                    amount = paymentRequest.amount,
                     requestTime = paymentRequest.requestTime,
                     cardNumber = it.cardNumber
                 )

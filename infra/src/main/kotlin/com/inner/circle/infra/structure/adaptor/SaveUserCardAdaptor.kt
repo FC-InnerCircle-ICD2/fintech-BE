@@ -1,8 +1,8 @@
 package com.inner.circle.infra.structure.adaptor
 
-import com.inner.circle.infra.structure.port.SaveUserCardPort
 import com.inner.circle.infra.repository.UserCardRepository
 import com.inner.circle.infra.repository.entity.UserCardEntity
+import com.inner.circle.infra.structure.port.SaveUserCardPort
 
 internal class SaveUserCardAdaptor(
     private val userCardRepository: UserCardRepository

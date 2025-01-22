@@ -11,5 +11,4 @@ interface PaymentRequestRepository {
     fun findByOrderId(orderId: String): PaymentRequestEntity?
 
     fun save(paymentRequestEntity: PaymentRequestEntity): PaymentRequestEntity?
-
 }
