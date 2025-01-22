@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @Tag(name = "ConfirmPayment", description = "ConfirmPayment API")
-@RestController
 @PaymentV1Api
 class ConfirmPaymentController(
     private val confirmPaymentUseCase: ConfirmPaymentUseCase

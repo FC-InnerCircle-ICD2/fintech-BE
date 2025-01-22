@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter
 
-@RestController
 @PaymentV1Api
 class SseApiController(
     private val sseConnectionPool: SseConnectionPool,
