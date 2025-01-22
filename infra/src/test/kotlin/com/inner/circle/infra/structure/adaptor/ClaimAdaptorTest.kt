@@ -2,9 +2,11 @@ package com.inner.circle.infra.structure.adaptor
 
 import com.inner.circle.infra.structure.AbstractJpaTestWithLocalTestContainer
 import com.inner.circle.infra.structure.adaptor.dto.PaymentClaimDto
+import com.inner.circle.infra.structure.adaptor.dto.PaymentTokenDto
 import com.inner.circle.infra.structure.adaptor.enum.PaymentProcessStatus
 import com.inner.circle.infra.structure.repository.JpaConfiguration
 import com.inner.circle.infra.structure.repository.PaymentClaimRepositoryHandler
+import io.hypersistence.tsid.TSID
 import java.math.BigDecimal
 import java.time.LocalDateTime
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -35,6 +37,15 @@ class ClaimAdaptorTest : AbstractJpaTestWithLocalTestContainer() {
                 failUrl = "https://www.test.com/fail",
                 paymentToken = null
             )
+
+        val tokenData =
+            PaymentTokenDto(
+                merchantId = "merchant123",
+                orderId = orderId,
+                generatedToken = TSID.fast().toString(),
+                expiresAt = LocalDateTime.now().plusMinutes(3)
+            )
+
         val paymentRequestEntity = paymentClaimDto.toInitGenerate(tokenData)
 
         // When
