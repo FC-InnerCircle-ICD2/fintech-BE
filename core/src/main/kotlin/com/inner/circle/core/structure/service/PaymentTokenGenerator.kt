@@ -7,7 +7,10 @@ import java.time.LocalDateTime
 private const val EXPIRED_LIMIT = 3L
 
 class PaymentTokenGenerator {
-    fun generateToken(orderId: String, ttlMinutes: Long): PaymentToken {
+    fun generateToken(
+        orderId: String,
+        ttlMinutes: Long
+    ): PaymentToken {
         val paddedOrderId = orderId.padEnd(13, '0').take(13)
         val tsid = TSID.from(paddedOrderId)
         val token = tsid.toString()
