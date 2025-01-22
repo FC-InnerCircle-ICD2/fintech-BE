@@ -33,9 +33,9 @@ data class SseConnection(
             objectMapper: ObjectMapper
         ): SseConnection =
             SseConnection(
-                uniqueKey,
-                connectionPool,
-                objectMapper
+                uniqueKey = uniqueKey,
+                connectionPool = connectionPool,
+                objectMapper = objectMapper
             )
     }
 
