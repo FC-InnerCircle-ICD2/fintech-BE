@@ -2,11 +2,8 @@ package com.inner.circle.infra.structure.adaptor.dto
 
 import com.inner.circle.infra.structure.adaptor.enum.PaymentProcessStatus
 import com.inner.circle.infra.structure.repository.entity.PaymentClaimEntity
-import io.hypersistence.tsid.TSID
 import java.math.BigDecimal
 import java.time.LocalDateTime
-import java.util.function.IntSupplier
-import java.util.random.RandomGenerator
 
 class PaymentClaimDto(
     val paymentRequestId: Long?,
@@ -50,19 +47,7 @@ class PaymentClaimDto(
             amount = amount,
             successUrl = successUrl,
             failUrl = failUrl,
-            paymentToken = generateToken(),
+            paymentToken = paymentToken,
             requestTime = requestTime
         )
-
-    private fun generateToken(): String? {
-        // use a random function that returns an int value
-        val random = RandomGenerator.getDefault()
-        val factory =
-            TSID.Factory
-                .builder()
-                .withRandomFunction(IntSupplier { random.nextInt() })
-                .build()
-
-        return factory.generate().toString()
-    }
 }

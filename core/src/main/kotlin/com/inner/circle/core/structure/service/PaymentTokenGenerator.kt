@@ -3,18 +3,20 @@ package com.inner.circle.core.structure.service
 import com.inner.circle.core.structure.domain.PaymentToken
 import io.hypersistence.tsid.TSID
 import java.time.LocalDateTime
+import org.springframework.stereotype.Component
 
-private const val EXPIRED_LIMIT = 3L
+private const val REQUIRED_TSID_LENGTH = 13
 
+@Component
 class PaymentTokenGenerator {
     fun generateToken(
         orderId: String,
         ttlMinutes: Long
     ): PaymentToken {
-        val paddedOrderId = orderId.padEnd(13, '0').take(13)
+        val paddedOrderId = orderId.padEnd(REQUIRED_TSID_LENGTH, '0').take(REQUIRED_TSID_LENGTH)
         val tsid = TSID.from(paddedOrderId)
         val token = tsid.toString()
-        val expiredAt = LocalDateTime.now().plusMinutes(EXPIRED_LIMIT)
+        val expiredAt = LocalDateTime.now().plusMinutes(ttlMinutes)
         return PaymentToken(token, expiredAt)
     }
 }

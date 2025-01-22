@@ -8,16 +8,19 @@ import com.inner.circle.infra.structure.port.ClaimHandlingPort
 import java.time.LocalDateTime
 import org.springframework.stereotype.Service
 
+private const val TTL_MINUTES = 5L
+
 @Service
 class ClaimService(
-    private val claimHandlingPort: ClaimHandlingPort
+    private val claimHandlingPort: ClaimHandlingPort,
+    private val paymentTokenGenerator: PaymentTokenGenerator
 ) : PaymentClaimUseCase {
     override fun createPayment(
         request: PaymentClaimUseCase.PaymentClaimRequest,
         requestMerchantId: String
     ): PaymentClaimResponse {
         val (amount, orderId, orderName, successUrl, failUrl) = request
-
+        val generatedToken = paymentTokenGenerator.generateToken(orderId, TTL_MINUTES)
         val requestDto =
             PaymentClaimDto(
                 paymentRequestId = null,
@@ -30,7 +33,7 @@ class ClaimService(
                 requestTime = LocalDateTime.now(),
                 successUrl = successUrl,
                 failUrl = failUrl,
-                paymentToken = null
+                paymentToken = generatedToken.token
             )
 
         val generatePaymentRequest = claimHandlingPort.generatePaymentRequest(requestDto)
