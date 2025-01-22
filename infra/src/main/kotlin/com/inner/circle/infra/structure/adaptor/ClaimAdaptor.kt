@@ -14,7 +14,8 @@ class ClaimAdaptor(
         paymentRequestData: PaymentClaimDto,
         tokenData: PaymentTokenDto
     ): PaymentClaimDto {
-        val paymentRequest = paymentRequestData.toInitGenerate()
+        val paymentRequest = paymentRequestData.toInitGenerate(tokenData)
+        // paymentRequest
         val saved = repository.save(paymentRequest)
         return PaymentClaimDto.fromEntity(saved)
     }

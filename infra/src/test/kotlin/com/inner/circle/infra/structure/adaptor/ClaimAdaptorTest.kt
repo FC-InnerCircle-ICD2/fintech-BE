@@ -35,7 +35,7 @@ class ClaimAdaptorTest : AbstractJpaTestWithLocalTestContainer() {
                 failUrl = "https://www.test.com/fail",
                 paymentToken = null
             )
-        val paymentRequestEntity = paymentClaimDto.toInitGenerate()
+        val paymentRequestEntity = paymentClaimDto.toInitGenerate(tokenData)
 
         // When
         val requestEntity = repository.save(paymentRequestEntity)

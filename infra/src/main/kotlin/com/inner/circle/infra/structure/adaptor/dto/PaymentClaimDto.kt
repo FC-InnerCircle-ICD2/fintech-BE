@@ -35,7 +35,7 @@ class PaymentClaimDto(
             )
     }
 
-    fun toInitGenerate(): PaymentClaimEntity =
+    fun toInitGenerate(tokenData: PaymentTokenDto): PaymentClaimEntity =
         PaymentClaimEntity(
             id = null,
             orderId = orderId,
@@ -47,7 +47,7 @@ class PaymentClaimDto(
             amount = amount,
             successUrl = successUrl,
             failUrl = failUrl,
-            paymentToken = paymentToken,
+            paymentToken = tokenData.generatedToken,
             requestTime = requestTime
         )
 }
