@@ -2,6 +2,7 @@ package com.inner.circle.infra.adaptor
 
 import com.inner.circle.infra.externalapi.CardAuthClient
 import com.inner.circle.infra.port.CardPaymentAuthPort
+import com.inner.circle.infra.adaptor.dto.CardPaymentAuthInfraDto
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
@@ -11,10 +12,12 @@ internal class CardPaymentAuthAdaptor(
 ) : CardPaymentAuthPort {
     private val logger = LoggerFactory.getLogger(this::class.java)
 
-    override fun doPaymentAuth(request: CardPaymentAuthPort.Request): com.inner.circle.infra.adaptor.dto.CardPaymentAuthInfraDto =
+    override fun doPaymentAuth(
+        request: CardPaymentAuthPort.Request
+    ): CardPaymentAuthInfraDto =
         runCatching {
             val defaultCardAuthResponse =
-                com.inner.circle.infra.adaptor.dto.CardPaymentAuthInfraDto(
+                CardPaymentAuthInfraDto(
                     cardNumber = request.cardNumber,
                     isValid = false
                 )

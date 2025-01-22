@@ -5,8 +5,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
-class SseConnectionPool :
-    ConnectionPool<String, SseConnection> {
+class SseConnectionPool : ConnectionPool<String, SseConnection> {
     companion object {
         private val connectionPool: MutableMap<String, SseConnection> = ConcurrentHashMap()
         private val log = LoggerFactory.getLogger(SseConnectionPool::class.java)

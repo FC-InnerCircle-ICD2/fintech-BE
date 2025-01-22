@@ -56,15 +56,18 @@ internal class ConfirmPaymentService(
         )
 
         // sse 전송
-        val orderConnection = sseConnectionPool.getSession(
-            request.merchantId+"_"+request.orderId
-        )
+        val orderConnection =
+            sseConnectionPool.getSession(
+                request.merchantId + "_" + request.orderId
+            )
         orderConnection.sendMessage(result)
 
         return result
     }
 
-    override fun confirmPayment(request: ConfirmSimplePaymentUseCase.Request): ConfirmPaymentCoreDto {
+    override fun confirmPayment(
+        request: ConfirmSimplePaymentUseCase.Request
+    ): ConfirmPaymentCoreDto {
         val paymentInfo =
             confirmPaymentPort.getCardNoAndPayInfo(
                 ConfirmPaymentPort.Request(

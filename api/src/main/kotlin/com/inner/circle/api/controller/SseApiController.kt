@@ -26,11 +26,11 @@ class SseApiController(
         @Parameter(hidden = true)
         @RequestBody ssePaymentRequest: SsePaymentRequest
     ): ResponseBodyEmitter {
-        log.info("SSE user {}", ssePaymentRequest.merchantId+"_"+ssePaymentRequest.orderId)
+        log.info("SSE user {}", ssePaymentRequest.merchantId + "_" + ssePaymentRequest.orderId)
 
         val sseConnection =
             com.inner.circle.core.sse.SseConnection.connect(
-                ssePaymentRequest.merchantId+"_"+ssePaymentRequest.orderId,
+                ssePaymentRequest.merchantId + "_" + ssePaymentRequest.orderId,
                 sseConnectionPool,
                 objectMapper
             )
@@ -45,9 +45,10 @@ class SseApiController(
         @Parameter(hidden = false)
         @RequestBody ssePaymentRequest: SsePaymentRequest
     ) {
-        val sseConnection = sseConnectionPool.getSession(
-            ssePaymentRequest.merchantId+"_"+ssePaymentRequest.orderId
-        )
+        val sseConnection =
+            sseConnectionPool.getSession(
+                ssePaymentRequest.merchantId + "_" + ssePaymentRequest.orderId
+            )
 
         sseConnection.sendMessage("hello world")
     }

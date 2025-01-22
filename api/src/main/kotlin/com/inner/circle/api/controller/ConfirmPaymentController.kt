@@ -61,7 +61,7 @@ class ConfirmPaymentController(
         return response
     }
 
-    //Frontend 분들과 협의 필요
+    // Frontend 분들과 협의 필요
     @Operation(summary = "결제 취소")
     @GetMapping("/cancel/{order_id}")
     fun cancelPaymentConfirm(

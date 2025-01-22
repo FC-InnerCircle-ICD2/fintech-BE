@@ -4,5 +4,8 @@ import com.inner.circle.infra.repository.entity.PaymentRequestEntity
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface PaymentRequestJpaRepository : JpaRepository<PaymentRequestEntity, String> {
-    fun findByOrderIdAndMerchantId(orderId: String, merchantId: String): PaymentRequestEntity?
+    fun findByOrderIdAndMerchantId(
+        orderId: String,
+        merchantId: String
+    ): PaymentRequestEntity?
 }
