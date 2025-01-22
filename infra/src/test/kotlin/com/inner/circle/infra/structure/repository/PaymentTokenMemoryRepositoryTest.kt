@@ -16,11 +16,9 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
 import org.springframework.data.redis.core.StringRedisTemplate
 
-
 @SpringBootTest(classes = [PaymentTokenMemoryRepository::class])
 @Import(RedisTestConfiguration::class)
 class PaymentTokenMemoryRepositoryTest {
-
     @Autowired
     private lateinit var redisTemplate: StringRedisTemplate
 
@@ -89,12 +87,13 @@ class PaymentTokenMemoryRepositoryTest {
     @Test
     fun `savePaymentToken should save token`() {
         repository = PaymentTokenMemoryRepository(redisTemplate)
-        val paymentToken = PaymentTokenEntity(
-            merchantId = "merchant1",
-            orderId = "order1",
-            generatedToken = "token123",
-            expiresAt = LocalDateTime.now().plusHours(1)
-        )
+        val paymentToken =
+            PaymentTokenEntity(
+                merchantId = "merchant1",
+                orderId = "order1",
+                generatedToken = "token123",
+                expiresAt = LocalDateTime.now().plusHours(1)
+            )
         val key = "${paymentToken.merchantId}:${paymentToken.orderId}"
         val tokenString = paymentToken.toString()
         val ttl = Duration.between(LocalDateTime.now(), paymentToken.expiresAt)

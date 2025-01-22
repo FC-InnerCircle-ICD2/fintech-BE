@@ -1,9 +1,7 @@
 package com.inner.circle.infra.structure.config
 
-
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
 import org.springframework.data.redis.connection.RedisConnectionFactory
@@ -14,14 +12,17 @@ import org.testcontainers.utility.DockerImageName
 
 @TestConfiguration
 class RedisTestConfiguration {
-
     private val logger: Logger = LoggerFactory.getLogger(RedisTestConfiguration::class.java)
 
     companion object {
         private const val IMAGE_TAG = "redis:6.2.6"
         private const val REDIS_PORT = 6379
         val container: GenericContainer<Nothing> by lazy {
-            val dockerImageName = DockerImageName.parse(IMAGE_TAG).asCompatibleSubstituteFor("redis")
+            val dockerImageName =
+                DockerImageName
+                    .parse(
+                        IMAGE_TAG
+                    ).asCompatibleSubstituteFor("redis")
             GenericContainer<Nothing>(dockerImageName).apply {
                 withExposedPorts(REDIS_PORT)
                 start()
@@ -39,7 +40,6 @@ class RedisTestConfiguration {
     }
 
     @Bean
-    fun stringRedisTemplate(redisConnectionFactory: RedisConnectionFactory): StringRedisTemplate {
-        return StringRedisTemplate(redisConnectionFactory)
-    }
+    fun stringRedisTemplate(redisConnectionFactory: RedisConnectionFactory): StringRedisTemplate =
+        StringRedisTemplate(redisConnectionFactory)
 }
