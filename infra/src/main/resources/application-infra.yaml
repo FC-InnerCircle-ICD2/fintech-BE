@@ -1,8 +1,11 @@
 spring:
   config:
     activate:
-      on-profile: local
+      on-profile: local # local로 변경 가능
   datasource:
+    url: jdbc:postgresql://13.124.73.85:5432/payment_test
+    username: pay200
+    password: egVy0PNDDBcqFMz
     driver-class-name: org.postgresql.Driver
     hikari:
       minimum-idle: 10
@@ -10,10 +13,9 @@ spring:
       idle-timeout: 30000 # 5분
       connection-timeout: 20000 # 30초
       max-lifetime: 1800000 # 30분
-
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     open-in-view: false
     properties:
       hibernate:

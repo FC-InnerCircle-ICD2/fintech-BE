@@ -7,8 +7,6 @@ import jakarta.persistence.Table
 import java.math.BigDecimal
 import java.time.LocalDateTime
 
-@Entity
-@Table(name = "payment_request")
 data class PaymentRequestEntity(
     @Id
     val orderId: String,

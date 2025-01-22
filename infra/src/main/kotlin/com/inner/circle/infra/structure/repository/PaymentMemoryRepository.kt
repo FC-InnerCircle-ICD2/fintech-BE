@@ -4,7 +4,6 @@ import com.inner.circle.infra.structure.repository.entity.PaymentEntity
 import java.util.UUID
 import org.springframework.stereotype.Repository
 
-@Repository
 internal class PaymentMemoryRepository : PaymentRepository {
     private val storage: MutableMap<UUID, PaymentEntity> = mutableMapOf()
 

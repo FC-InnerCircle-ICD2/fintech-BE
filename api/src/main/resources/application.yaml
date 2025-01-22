@@ -8,6 +8,11 @@ spring:
 server:
   port: 8080
 
+card:
+  url:
+    base-url: http://localhost:8082
+    approve-end-point: /mock/card/approve
+
 ---
 spring:
   config:
@@ -17,9 +22,19 @@ spring:
 server:
   port: 10001
 
+card:
+  url:
+    base-url: http://localhost:8082
+    approve-end-point: /mock/card/approve
+
 ---
 spring:
   config:
     activate:
       on-profile: dev
     import: aws-secretsmanager:/secret/pay200
+
+card:
+  url:
+    base-url: http://localhost:8082
+    approve-end-point: /mock/card/approve

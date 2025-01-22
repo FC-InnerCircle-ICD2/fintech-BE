@@ -1,6 +1,6 @@
 package com.inner.circle.api.controller.dto
 
-import com.inner.circle.core.structure.service.dto.MobilePaymentCoreDto
+import com.inner.circle.core.service.dto.MobilePaymentCoreDto
 import java.math.BigDecimal
 
 data class MobilePaymentDto(

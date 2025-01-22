@@ -3,8 +3,8 @@ package com.inner.circle.api.controller
 import com.inner.circle.api.controller.dto.MobilePaymentDto
 import com.inner.circle.api.controller.dto.PaymentResponse
 import com.inner.circle.api.controller.request.UserCardRequest
-import com.inner.circle.core.structure.usecase.MobilePaymentUseCase
-import com.inner.circle.core.structure.usecase.SimpleMobilePaymentUseCase
+import com.inner.circle.core.usecase.MobilePaymentUseCase
+import com.inner.circle.core.usecase.SimpleMobilePaymentUseCase
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.GetMapping

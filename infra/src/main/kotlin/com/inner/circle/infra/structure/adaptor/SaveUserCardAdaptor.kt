@@ -1,11 +1,9 @@
 package com.inner.circle.infra.structure.adaptor
 
 import com.inner.circle.infra.structure.port.SaveUserCardPort
-import com.inner.circle.infra.structure.repository.UserCardRepository
-import com.inner.circle.infra.structure.repository.entity.UserCardEntity
-import org.springframework.stereotype.Component
+import com.inner.circle.infra.repository.UserCardRepository
+import com.inner.circle.infra.repository.entity.UserCardEntity
 
-@Component
 internal class SaveUserCardAdaptor(
     private val userCardRepository: UserCardRepository
 ) : SaveUserCardPort {
