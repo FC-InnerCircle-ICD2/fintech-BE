@@ -34,7 +34,7 @@ internal class ConfirmPaymentAdaptor(
                     expirationPeriod = it.expirationPeriod,
                     cvc = it.cvc
                 )
-            } ?: throw PaymentException.UserIdNotFoundException(
+            } ?: throw PaymentException.UserNotFoundException(
             paymentRequest.userId
         )
     }
