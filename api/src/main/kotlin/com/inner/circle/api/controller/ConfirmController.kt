@@ -5,13 +5,15 @@ import com.inner.circle.api.controller.dto.PaymentResponse
 import com.inner.circle.api.controller.request.PaymentApproveRequest
 import com.inner.circle.core.usecase.SavePaymentApproveUseCase
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
+@Tag(name = "PaymentApprove", description = "PaymentApprove API")
 @RestController
-@RequestMapping("/api/payment/v1")
+@PaymentV1Api
 class ConfirmController(
     private val savePaymentApproveService: SavePaymentApproveUseCase
 ) {

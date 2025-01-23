@@ -1,5 +1,6 @@
 package com.inner.circle.infra.adaptor
 
+import com.inner.circle.exception.PaymentException
 import com.inner.circle.infra.port.PaymentPort
 import com.inner.circle.infra.repository.PaymentRepository
 import com.inner.circle.infra.repository.entity.PaymentEntity
@@ -12,15 +13,15 @@ internal class PaymentAdaptor(
     override fun save(request: PaymentPort.Request): PaymentEntity =
         paymentRepository.save(
             PaymentEntity(
-                request.paymentKey,
-                request.currency,
-                request.userId,
-                request.merchantId,
-                request.paymentType,
-                request.orderId,
-                request.orderName
+                paymentKey = request.paymentKey,
+                currency = request.currency,
+                userId = request.userId,
+                merchantId = request.merchantId,
+                paymentType = request.paymentType,
+                orderId = request.orderId,
+                orderName = request.orderName
             )
-        ) ?: throw IllegalArgumentException(
-            "Payment not save"
+        ) ?: throw PaymentException.PaymentNotSaveException(
+            paymentKey = request.paymentKey
         )
 }

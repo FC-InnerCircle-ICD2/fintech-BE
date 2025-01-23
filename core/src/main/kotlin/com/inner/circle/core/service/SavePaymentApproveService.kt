@@ -44,7 +44,7 @@ internal class SavePaymentApproveService(
                     )
 
                 if (request.amount.equals(paymentRequest.amount)) {
-                    throw PaymentException.AmountValidationException(
+                    throw PaymentException.InvalidAmountException(
                         request.paymentKey
                     )
                 }
