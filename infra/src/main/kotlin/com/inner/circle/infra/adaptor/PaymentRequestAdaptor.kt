@@ -15,7 +15,6 @@ internal class PaymentRequestAdaptor(
     ): PaymentRequestEntity =
         paymentRequestRepository.findByPaymentKeyAndOrderId(request.paymentKey, request.orderId)
             ?: throw PaymentException.PaymentRequestNotFoundException(
-                paymentKey = request.paymentKey,
-                orderId = request.orderId
+                paymentKey = request.paymentKey
             )
 }

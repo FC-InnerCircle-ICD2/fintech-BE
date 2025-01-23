@@ -7,7 +7,10 @@ interface PaymentRequestRepository {
         paymentKey: String,
         orderId: String
     ): PaymentRequestEntity?
-
+	fun findByOrderIdAndMerchantId(
+        orderId: String,
+        merchantId: String
+    ): PaymentRequestEntity?
     fun findByOrderId(orderId: String): PaymentRequestEntity?
 
     fun save(paymentRequestEntity: PaymentRequestEntity): PaymentRequestEntity?

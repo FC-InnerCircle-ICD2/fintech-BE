@@ -75,7 +75,7 @@ enum class HttpStatus(
     NOT_EXTENDED(code = 510, description = "Not Extended"),
     NETWORK_AUTHENTICATION_REQUIRED(code = 511, description = "Network Authentication Required"),
 
-    // 6xx Card company or validation error
+    // 6xx Connection to the card issuer's server failed.
     CARD_NOT_APPROVED(code = 601, description = "Card Not Approve"),
     CARD_COMPANY_CONNECT_FAIL(code = 602, description = "Card Company Connect Fail") ;
 

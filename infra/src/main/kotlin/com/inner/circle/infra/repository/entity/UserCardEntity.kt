@@ -11,7 +11,7 @@ import jakarta.persistence.Table
 @Table(name = "userCard")
 data class UserCardEntity(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long?,
+    val id: Long,
     @Column(nullable = false)
     val userId: Long?,
     @Column(nullable = false)
