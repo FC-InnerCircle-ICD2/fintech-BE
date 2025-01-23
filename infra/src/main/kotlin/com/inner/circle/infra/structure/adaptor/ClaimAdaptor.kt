@@ -21,6 +21,7 @@ class ClaimAdaptor(
         val saved = repository.save(paymentRequest)
 
         val tokenEntity = tokenData.toEntity()
+        paymentTokenRepository.savePaymentToken(tokenEntity)
 
         return PaymentClaimDto.fromEntity(saved)
     }

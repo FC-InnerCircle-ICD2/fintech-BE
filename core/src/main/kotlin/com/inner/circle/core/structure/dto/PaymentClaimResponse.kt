@@ -11,7 +11,5 @@ data class PaymentClaimResponse(
             inputToken: String,
             tokenExpiredAt: LocalDateTime
         ): PaymentClaimResponse = PaymentClaimResponse(inputToken, tokenExpiredAt)
-
-        fun testOne(): PaymentClaimResponse = PaymentClaimResponse("test", LocalDateTime.now())
     }
 }

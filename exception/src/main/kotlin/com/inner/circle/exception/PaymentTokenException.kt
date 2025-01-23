@@ -6,8 +6,7 @@ sealed class PaymentTokenException(
     override val cause: Throwable? = null
 ) : AppException(status, message, cause) {
     data class TokenNotFoundException(
-        val token: String,
-        override val message: String = "Payment token with ID $token not found",
+        override val message: String = "Payment token not found",
         override val cause: Throwable? = null
     ) : PaymentTokenException(HttpStatus.NOT_FOUND, message, cause)
 

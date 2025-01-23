@@ -18,7 +18,7 @@ class PaymentTokenMemoryRepository(
         val key = "$merchantId:$orderId"
         val tokenString =
             redisTemplate.opsForValue()[key]
-                ?: throw PaymentTokenException.TokenNotFoundException(key)
+                ?: throw PaymentTokenException.TokenNotFoundException()
         return PaymentTokenEntity.fromToken(tokenString)
     }
 

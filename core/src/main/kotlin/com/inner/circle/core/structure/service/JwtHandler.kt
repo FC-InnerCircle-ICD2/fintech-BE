@@ -1,6 +1,7 @@
 package com.inner.circle.core.structure.service
 
 import com.inner.circle.exception.PaymentJwtException
+import com.inner.circle.exception.PaymentTokenException
 import com.inner.circle.infra.structure.adaptor.dto.PaymentClaimDto
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
@@ -14,21 +15,24 @@ import org.springframework.stereotype.Component
 @Component
 class JwtHandler {
     private val logger = LoggerFactory.getLogger(JwtHandler::class.java)
-    private val expirationTime = 1000 * 60 * 10 // 10분
 
     fun generateToken(
         paymentClaimDto: PaymentClaimDto,
-        paymentToken: String
+        issuedAt: Date,
+        expiresMinute: Int
     ): String {
+        val paymentToken =
+            paymentClaimDto.paymentToken ?: throw PaymentTokenException.TokenNotFoundException()
         val signature = generateSignatureWithPaymentToken(paymentToken)
+        val expirationDate = Date(issuedAt.time + 1000 * 60 * expiresMinute)
         return Jwts
             .builder()
             .subject(paymentClaimDto.orderId)
             .claim("merchantId", paymentClaimDto.merchantId)
             .claim("orderName", paymentClaimDto.orderName)
             .claim("amount", paymentClaimDto.amount)
-            .issuedAt(Date())
-            .expiration(Date(System.currentTimeMillis() + expirationTime))
+            .issuedAt(issuedAt)
+            .expiration(expirationDate)
             .signWith(signature)
             .compact()
     }
