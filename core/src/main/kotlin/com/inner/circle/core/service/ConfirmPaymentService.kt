@@ -51,6 +51,8 @@ internal class ConfirmPaymentService(
                 merchantId = request.merchantId,
                 paymentKey = paymentKeyUUID,
                 amount = request.amount,
+                cardNumber = "",
+                paymentType = "",
                 requestTime = request.requestTime
             )
         )

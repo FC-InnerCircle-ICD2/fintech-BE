@@ -12,14 +12,16 @@ internal class SavePaymentRequestAdaptor(
     override fun save(request: SavePaymentRequestPort.Request) {
         paymentRequestRepository.save(
             PaymentRequestEntity(
-                request.orderId,
-                request.orderName,
-                request.orderStatus,
-                request.userId,
-                request.merchantId,
-                request.paymentKey,
-                request.amount,
-                request.requestTime
+                orderId = request.orderId,
+                orderName = request.orderName,
+                orderStatus = request.orderStatus,
+                userId = request.userId,
+                merchantId = request.merchantId,
+                paymentKey = request.paymentKey,
+                amount = request.amount,
+                cardNumber = request.cardNumber,
+                paymentType = request.paymentType,
+                requestTime = request.requestTime
             )
         )
     }
