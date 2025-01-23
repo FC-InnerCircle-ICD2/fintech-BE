@@ -24,7 +24,11 @@ class SecurityUserDetailsService(
         }
 
         val validMerchant =
-            repository.findByToken(token) ?: throw AppException(status = HttpStatus.UNAUTHORIZED, message = HttpStatus.UNAUTHORIZED.description)
+            repository.findByToken(token)
+                ?: throw AppException(
+                    status = HttpStatus.UNAUTHORIZED,
+                    message = HttpStatus.UNAUTHORIZED.description
+                )
 
         return User
             .withUsername(token)
