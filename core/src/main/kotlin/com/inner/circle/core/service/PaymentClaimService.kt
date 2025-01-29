@@ -52,7 +52,6 @@ class PaymentClaimService(
                     ZoneId.systemDefault()
                 ).plusMinutes(JWT_EXPIRATION_MINUTES)
 
-
         val paymentTokenDto =
             PaymentTokenDto(
                 merchantId = requestDto.merchantId,
