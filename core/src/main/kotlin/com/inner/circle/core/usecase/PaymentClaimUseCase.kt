@@ -7,26 +7,26 @@ import java.time.LocalDateTime
 
 fun interface PaymentClaimUseCase {
     data class PaymentClaimRequest
-    @JsonCreator
-    constructor(
-        @JsonProperty("amount") val amount: BigDecimal,
-        @JsonProperty("orderId") val orderId: String,
-        @JsonProperty("orderName") val orderName: String
-    )
+        @JsonCreator
+        constructor(
+            @JsonProperty("amount") val amount: BigDecimal,
+            @JsonProperty("orderId") val orderId: String,
+            @JsonProperty("orderName") val orderName: String
+        )
 
     data class PaymentClaimResponse
-    @JsonCreator
-    constructor(
-        @JsonProperty("token") val token: String,
-        @JsonProperty("expiredAt") val expiredAt: LocalDateTime
-    ) {
-        companion object {
-            fun of(
-                inputToken: String,
-                tokenExpiredAt: LocalDateTime
-            ): PaymentClaimResponse = PaymentClaimResponse(inputToken, tokenExpiredAt)
+        @JsonCreator
+        constructor(
+            @JsonProperty("token") val token: String,
+            @JsonProperty("expiredAt") val expiredAt: LocalDateTime
+        ) {
+            companion object {
+                fun of(
+                    inputToken: String,
+                    tokenExpiredAt: LocalDateTime
+                ): PaymentClaimResponse = PaymentClaimResponse(inputToken, tokenExpiredAt)
+            }
         }
-    }
 
     fun createPayment(
         request: PaymentClaimRequest,
