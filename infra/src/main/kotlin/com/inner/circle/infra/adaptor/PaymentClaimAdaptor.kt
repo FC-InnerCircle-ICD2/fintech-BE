@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
 @Component
-class ClaimAdaptor(
+class PaymentClaimAdaptor(
     private val repository: PaymentClaimRepository,
     private val paymentTokenRepository: PaymentTokenRepository
 ) : PaymentClaimHandlingPort {
