@@ -60,7 +60,7 @@ class PaymentClaimService(
                 expiresAt = jwtExpiresAt
             )
 
-        paymentClaimHandlingPort.handlePaymentRequestGeneration(
+        paymentClaimHandlingPort.createAndSavePaymentRequest(
             requestDto,
             paymentTokenDto
         )
