@@ -14,7 +14,7 @@ class PaymentClaimAdaptor(
     private val paymentTokenRepository: PaymentTokenRepository
 ) : PaymentClaimHandlingPort {
     @Transactional
-    override fun generatePaymentRequest(
+    override fun handlePaymentRequestGeneration(
         paymentRequestData: PaymentClaimDto,
         tokenData: PaymentTokenDto
     ): PaymentClaimDto {
