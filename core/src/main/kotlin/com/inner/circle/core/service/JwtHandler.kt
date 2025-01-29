@@ -1,7 +1,6 @@
 package com.inner.circle.core.service
 
 import com.inner.circle.exception.PaymentJwtException
-import com.inner.circle.exception.PaymentTokenException
 import com.inner.circle.infra.adaptor.dto.PaymentClaimDto
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
@@ -22,7 +21,7 @@ class JwtHandler {
         expiresMinute: Int
     ): String {
         val paymentToken =
-            paymentClaimDto.paymentToken ?: throw PaymentTokenException.TokenNotFoundException()
+            paymentClaimDto.paymentToken ?: throw PaymentJwtException.TokenNotFoundException()
         val signature = generateSignatureWithPaymentToken(paymentToken)
         val expirationDate = Date(issuedAt.time + 1000 * 60 * expiresMinute)
         return Jwts

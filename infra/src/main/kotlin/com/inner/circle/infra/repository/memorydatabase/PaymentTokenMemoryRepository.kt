@@ -1,6 +1,6 @@
 package com.inner.circle.infra.repository.memorydatabase
 
-import com.inner.circle.exception.PaymentTokenException
+import com.inner.circle.exception.PaymentJwtException
 import com.inner.circle.infra.repository.entity.PaymentTokenEntity
 import com.inner.circle.infra.repository.entity.PaymentTokenRepository
 import java.time.Duration
@@ -19,7 +19,7 @@ class PaymentTokenMemoryRepository(
         val key = "$merchantId:$orderId"
         val tokenString =
             redisTemplate.opsForValue()[key]
-                ?: throw PaymentTokenException.TokenNotFoundException()
+                ?: throw PaymentJwtException.TokenNotFoundException()
         return PaymentTokenEntity.fromToken(tokenString)
     }
 
@@ -33,7 +33,7 @@ class PaymentTokenMemoryRepository(
                 ?: return true // 레코드가 없으면 true 반환
         val paymentToken = PaymentTokenEntity.fromToken(tokenString)
         if (paymentToken.expiresAt.isBefore(LocalDateTime.now())) {
-            throw PaymentTokenException.TokenExpiredException(paymentToken.generatedToken)
+            throw PaymentJwtException.TokenExpiredException()
         }
         return false
     }
