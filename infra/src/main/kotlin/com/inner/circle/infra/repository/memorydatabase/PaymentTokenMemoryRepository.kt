@@ -1,6 +1,8 @@
-package com.inner.circle.infra.repository.entity
+package com.inner.circle.infra.repository.memorydatabase
 
 import com.inner.circle.exception.PaymentTokenException
+import com.inner.circle.infra.repository.entity.PaymentTokenEntity
+import com.inner.circle.infra.repository.entity.PaymentTokenRepository
 import java.time.Duration
 import java.time.LocalDateTime
 import org.springframework.data.redis.core.StringRedisTemplate
