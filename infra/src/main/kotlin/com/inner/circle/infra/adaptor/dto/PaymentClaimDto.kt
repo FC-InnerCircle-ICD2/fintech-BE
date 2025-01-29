@@ -1,5 +1,6 @@
 package com.inner.circle.infra.adaptor.dto
 
+import com.inner.circle.exception.PaymentClaimException
 import com.inner.circle.infra.repository.entity.PaymentRequestEntity
 import java.math.BigDecimal
 import java.time.LocalDateTime
@@ -17,6 +18,12 @@ class PaymentClaimDto(
     val requestTime: LocalDateTime,
     val paymentToken: String?
 ) {
+    init {
+        validateRequiredOrderInformation(orderName, merchantId, orderId)
+        validateOrderStatus(orderStatus)
+        validateAmount(orderStatus, amount, orderId)
+    }
+
     companion object {
         fun fromEntity(paymentRequestEntity: PaymentRequestEntity): PaymentClaimDto =
             PaymentClaimDto(
@@ -32,6 +39,35 @@ class PaymentClaimDto(
                 requestTime = paymentRequestEntity.requestTime,
                 paymentToken = paymentRequestEntity.paymentToken
             )
+
+        private fun validateAmount(
+            orderStatus: PaymentProcessStatus,
+            amount: BigDecimal,
+            orderId: String
+        ) {
+            if (orderStatus == PaymentProcessStatus.READY && amount < BigDecimal.ZERO) {
+                throw PaymentClaimException.InvalidClaimAmountException(orderId)
+            }
+        }
+
+        private fun validateRequiredOrderInformation(
+            orderName: String?,
+            merchantId: String?,
+            orderId: String?
+        ) {
+            if (orderName.isNullOrEmpty() ||
+                merchantId.isNullOrEmpty() ||
+                orderId.isNullOrEmpty()
+            ) {
+                throw PaymentClaimException.BadPaymentClaimRequestException()
+            }
+        }
+
+        private fun validateOrderStatus(orderStatus: PaymentProcessStatus?) {
+            if (orderStatus === null || orderStatus !== PaymentProcessStatus.READY) {
+                throw PaymentClaimException.BadPaymentClaimRequestException()
+            }
+        }
     }
 
     fun toInitGenerate(tokenData: PaymentTokenDto): PaymentRequestEntity =
