@@ -5,6 +5,8 @@ import com.inner.circle.exception.PaymentClaimException
 import com.inner.circle.infra.adaptor.dto.PaymentClaimDto
 import com.inner.circle.infra.adaptor.dto.PaymentProcessStatus
 import com.inner.circle.infra.adaptor.dto.PaymentTokenDto
+import com.inner.circle.infra.repository.PaymentClaimJpaRepository
+import com.inner.circle.infra.repository.entity.PaymentClaimRepository
 import com.inner.circle.infra.repository.entity.PaymentClaimRepositoryHandler
 import java.math.BigDecimal
 import java.time.LocalDateTime
@@ -16,10 +18,12 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.transaction.annotation.Transactional
 
-@ContextConfiguration(classes = [PaymentClaimRepositoryHandler::class])
+@ContextConfiguration(
+    classes = [PaymentClaimJpaRepository::class, PaymentClaimRepositoryHandler::class]
+)
 class PaymentClaimAdaptorTest : AbstractJpaTestWithLocalTestContainer() {
     @Autowired
-    private lateinit var repository: PaymentClaimRepositoryHandler
+    private lateinit var repository: PaymentClaimRepository
 
     @DisplayName("PaymentRequest 저장 동작 테스트")
     @Test

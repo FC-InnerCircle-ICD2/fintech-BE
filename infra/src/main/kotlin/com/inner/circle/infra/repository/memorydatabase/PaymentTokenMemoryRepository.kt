@@ -30,12 +30,9 @@ class PaymentTokenMemoryRepository(
         val key = "$merchantId:$orderId"
         val tokenString =
             redisTemplate.opsForValue()[key]
-                ?: return true // 레코드가 없으면 true 반환
+                ?: return true
         val paymentToken = PaymentTokenEntity.fromToken(tokenString)
-        if (paymentToken.expiresAt.isBefore(LocalDateTime.now())) {
-            throw PaymentJwtException.TokenExpiredException()
-        }
-        return false
+        return paymentToken.expiresAt.isBefore(LocalDateTime.now())
     }
 
     override fun savePaymentToken(paymentToken: PaymentTokenEntity): PaymentTokenEntity {
