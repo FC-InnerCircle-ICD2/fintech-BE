@@ -41,7 +41,9 @@ class DataSourceConfig {
     }
 
     @Bean
-    fun transactionManager(entityManagerFactory: LocalContainerEntityManagerFactoryBean): PlatformTransactionManager {
+    fun transactionManager(
+        entityManagerFactory: LocalContainerEntityManagerFactoryBean
+    ): PlatformTransactionManager {
         val transactionManager = JpaTransactionManager()
         transactionManager.entityManagerFactory = entityManagerFactory.getObject()
         return transactionManager
