@@ -1,6 +1,5 @@
 package com.inner.circle.api.controller
 
-import com.inner.circle.api.interceptor.RequireAuth
 import com.inner.circle.api.structure.dto.PaymentResponse
 import com.inner.circle.core.usecase.PaymentClaimUseCase
 import io.swagger.v3.oas.annotations.Operation
@@ -14,7 +13,6 @@ class PaymentClaimController(
     private val claimUseCase: PaymentClaimUseCase
 ) {
     @Operation(summary = "결제 요청")
-    @RequireAuth
     @PostMapping
     fun createPayment(
         @RequestBody request: PaymentClaimUseCase.PaymentClaimRequest
