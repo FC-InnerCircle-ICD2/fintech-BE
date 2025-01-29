@@ -16,7 +16,6 @@ private const val JWT_EXPIRATION_MINUTES = 5L
 @Service
 class PaymentClaimService(
     private val paymentClaimHandlingPort: PaymentClaimHandlingPort,
-    private val paymentTokenGenerator: PaymentTokenGenerator,
     private val jwtHandler: JwtHandler
 ) : PaymentClaimUseCase {
     override fun createPayment(
@@ -39,26 +38,10 @@ class PaymentClaimService(
                 paymentToken = null
             )
 
-        val (token, expiresAt) = paymentTokenGenerator.generateToken(orderId, ORDER_EXPIRED_MINUTES)
-
-        val paymentTokenDto =
-            PaymentTokenDto(
-                merchantId = requestDto.merchantId,
-                orderId = requestDto.orderId,
-                generatedToken = token,
-                expiresAt = expiresAt
-            )
-
-        val generatePaymentRequest =
-            paymentClaimHandlingPort.generatePaymentRequest(
-                requestDto,
-                paymentTokenDto
-            )
-
         val issuedAt = Date()
         val jwtToken =
             jwtHandler.generateToken(
-                generatePaymentRequest,
+                requestDto,
                 issuedAt,
                 JWT_EXPIRATION_MINUTES.toInt()
             )
@@ -68,6 +51,20 @@ class PaymentClaimService(
                     issuedAt.toInstant(),
                     ZoneId.systemDefault()
                 ).plusMinutes(JWT_EXPIRATION_MINUTES)
+
+
+        val paymentTokenDto =
+            PaymentTokenDto(
+                merchantId = requestDto.merchantId,
+                orderId = requestDto.orderId,
+                generatedToken = jwtToken,
+                expiresAt = jwtExpiresAt
+            )
+
+        paymentClaimHandlingPort.generatePaymentRequest(
+            requestDto,
+            paymentTokenDto
+        )
 
         return PaymentClaimUseCase.PaymentClaimResponse.of(jwtToken, jwtExpiresAt)
     }
