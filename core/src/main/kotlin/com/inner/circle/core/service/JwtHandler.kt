@@ -5,9 +5,9 @@ import com.inner.circle.infra.adaptor.dto.PaymentClaimDto
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
-import io.jsonwebtoken.security.Password
 import java.math.BigDecimal
 import java.util.Date
+import javax.crypto.SecretKey
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
@@ -20,9 +20,9 @@ class JwtHandler {
         issuedAt: Date,
         expiresMinute: Int
     ): String {
-        val paymentToken =
-            paymentClaimDto.paymentToken ?: throw PaymentJwtException.TokenNotFoundException()
-        val signature = generateSignatureWithPaymentToken(paymentToken)
+        // merchantId + "_" + orderId 조합
+        val signString = paymentClaimDto.merchantId + "_" + paymentClaimDto.orderId
+        val signature = generateSignature(signString)
         val expirationDate = Date(issuedAt.time + 1000 * 60 * expiresMinute)
         return Jwts
             .builder()
@@ -38,13 +38,13 @@ class JwtHandler {
 
     fun validateToken(
         token: String,
-        paymentToken: String
+        signString: String
     ): Boolean =
         try {
             Jwts
                 .parser()
                 .verifyWith(
-                    generateSignatureWithPaymentToken(paymentToken)
+                    generateSignature(signString)
                 ).build()
                 .parseSignedContent(token)
             true
@@ -69,14 +69,14 @@ class JwtHandler {
 
     fun extractClaims(
         token: String,
-        paymentToken: String
+        signString: String
     ): Claims =
         try {
             val decrypted =
                 Jwts
                     .parser()
                     .decryptWith(
-                        generateSignatureWithPaymentToken(paymentToken)
+                        generateSignature(signString)
                     ).build()
             decrypted.parseSignedClaims(token).payload
         } catch (e: Exception) {
@@ -98,8 +98,14 @@ class JwtHandler {
             }
         }
 
-    private fun generateSignatureWithPaymentToken(paymentToken: String): Password? =
-        Keys.password(paymentToken.toCharArray())
+    private fun generateSignature(signString: String): SecretKey? {
+        val keyBytes = ByteArray(32) // 32바이트 크기의 바이트 배열 생성
+        val signStringBytes = signString.toByteArray()
+
+        System.arraycopy(signStringBytes, 0, keyBytes, 0, signStringBytes.size.coerceAtMost(32))
+
+        return Keys.hmacShaKeyFor(keyBytes)
+    }
 
     fun extractMerchantId(
         token: String,

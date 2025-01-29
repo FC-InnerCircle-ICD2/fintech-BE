@@ -41,9 +41,9 @@ class PaymentClaimService(
         val issuedAt = Date()
         val jwtToken =
             jwtHandler.generateToken(
-                requestDto,
-                issuedAt,
-                JWT_EXPIRATION_MINUTES.toInt()
+                paymentClaimDto = requestDto,
+                issuedAt = issuedAt,
+                expiresMinute = JWT_EXPIRATION_MINUTES.toInt()
             )
         val jwtExpiresAt =
             LocalDateTime

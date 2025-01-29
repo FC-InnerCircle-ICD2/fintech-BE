@@ -68,6 +68,12 @@ spring:
         show_sql: true
         format_sql: true
 
+  # dev 환경 redis 변경 필요
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
 external:
   mock-server:
     base-url: http://localhost:8082/

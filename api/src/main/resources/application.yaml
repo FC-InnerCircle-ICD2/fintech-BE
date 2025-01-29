@@ -4,6 +4,9 @@ spring:
   profiles:
     active: local
     include: infra, openapi
+  jackson:
+    deserialization:
+      use-big-decimal-for-floats: true
 
 server:
   port: 8080
