@@ -27,6 +27,9 @@ dependencies {
     implementation("io.hypersistence:hypersistence-utils-hibernate-63:3.9.0")
     implementation("io.hypersistence:hypersistence-tsid:2.1.3")
     implementation(libs.h2)
+    implementation("com.github.codemonstur:embedded-redis:1.4.3") {
+        exclude(group = "org.slf4j", module = "slf4j-simple")
+    }
     runtimeOnly(libs.postgresql)
     compileOnly(libs.bundles.kotlinLogging)
     compileOnly(libs.bundles.kotlinxCoroutines)
