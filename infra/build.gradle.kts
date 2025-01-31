@@ -22,10 +22,9 @@ dependencies {
     implementation(libs.springBootDataJpa)
     implementation(libs.awsSecretsManagerConfig)
     implementation(libs.springBootDataRedis)
+    implementation(libs.bundles.hypersistence)
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("io.hypersistence:hypersistence-utils-hibernate-63:3.9.0")
-    implementation("io.hypersistence:hypersistence-tsid:2.1.3")
     implementation(libs.h2)
     implementation("com.github.codemonstur:embedded-redis:1.4.3") {
         exclude(group = "org.slf4j", module = "slf4j-simple")
