@@ -18,6 +18,4 @@ data class MerchantEntity(
     var token: String,
     @Column(nullable = false)
     val name: String
-) : BaseEntity() {
-    constructor() : this("", "", "", "")
-}
+) : BaseEntity()
