@@ -10,8 +10,7 @@ import java.time.ZoneId
 import java.util.Date
 import org.springframework.stereotype.Service
 
-private const val ORDER_EXPIRED_MINUTES = 10L
-private const val JWT_EXPIRATION_MINUTES = 5L
+private const val PAYMENT_REQUEST_EXPIRED_MINUTES = 10L
 
 @Service
 class PaymentClaimService(
@@ -43,14 +42,14 @@ class PaymentClaimService(
             jwtHandler.generateToken(
                 paymentClaimDto = requestDto,
                 issuedAt = issuedAt,
-                expiresMinute = JWT_EXPIRATION_MINUTES.toInt()
+                expiresMinute = PAYMENT_REQUEST_EXPIRED_MINUTES.toInt()
             )
         val jwtExpiresAt =
             LocalDateTime
                 .ofInstant(
                     issuedAt.toInstant(),
                     ZoneId.systemDefault()
-                ).plusMinutes(JWT_EXPIRATION_MINUTES)
+                ).plusMinutes(PAYMENT_REQUEST_EXPIRED_MINUTES)
 
         val paymentTokenDto =
             PaymentTokenDto(
