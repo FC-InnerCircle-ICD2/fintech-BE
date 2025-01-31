@@ -13,7 +13,7 @@ class PaymentClaimController(
     private val claimUseCase: PaymentClaimUseCase
 ) {
     @Operation(summary = "결제 요청")
-    @PostMapping
+    @PostMapping("/payments")
     fun createPayment(
         @RequestBody request: PaymentClaimUseCase.PaymentClaimRequest
     ): PaymentResponse<PaymentClaimUseCase.PaymentClaimResponse> {

@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Component
 class PaymentClaimAdaptor(
-    private val repository: PaymentClaimRepository,
+    private val paymentClaimRepository: PaymentClaimRepository,
     private val paymentTokenRepository: PaymentTokenRepository
 ) : PaymentClaimHandlingPort {
     @Transactional
@@ -41,7 +41,7 @@ class PaymentClaimAdaptor(
         tokenEntity: PaymentTokenEntity
     ): PaymentClaimDto {
         // payment request entity 저장
-        val savedPaymentRequest = repository.save(paymentRequest)
+        val savedPaymentRequest = paymentClaimRepository.save(paymentRequest)
         // token entity 저장
         paymentTokenRepository.savePaymentToken(tokenEntity)
 

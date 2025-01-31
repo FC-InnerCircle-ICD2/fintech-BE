@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component
 private const val REQUIRED_TSID_LENGTH = 13
 
 @Component
-class PaymentTokenGenerator {
-    fun generateToken(
+class TsidFormatPaymentTokenGenerator {
+    fun generateTsidToken(
         orderId: String,
         ttlMinutes: Long
     ): PaymentToken {

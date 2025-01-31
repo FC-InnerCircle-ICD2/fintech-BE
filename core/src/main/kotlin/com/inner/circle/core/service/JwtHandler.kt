@@ -21,7 +21,7 @@ class JwtHandler {
         expiresMinute: Int
     ): String {
         // merchantId + "_" + orderId 조합
-        val signString = paymentClaimDto.merchantId + "_" + paymentClaimDto.orderId
+        val signString = "${paymentClaimDto.merchantId}_${paymentClaimDto.orderId}"
         val signature = generateSignature(signString)
         val expirationDate = Date(issuedAt.time + 1000 * 60 * expiresMinute)
         return Jwts
