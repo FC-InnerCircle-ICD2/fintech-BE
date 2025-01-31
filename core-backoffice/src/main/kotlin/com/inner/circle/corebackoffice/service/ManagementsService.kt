@@ -1,6 +1,6 @@
 package com.inner.circle.corebackoffice.service
 
-import com.inner.circle.corebackoffice.service.dto.CreateOrUpdateKeyDto
+import com.inner.circle.corebackoffice.service.dto.CreateOrUpdateMerchantKeyDto
 import com.inner.circle.corebackoffice.usecase.ManagementsUseCase
 import com.inner.circle.corebackoffice.util.ClientCredentialsGenerator
 import com.inner.circle.infrabackoffice.port.CreateOrUpdateMerchantKeyPort
@@ -13,7 +13,7 @@ internal class ManagementsService(
 ) : ManagementsUseCase {
     override fun createOrUpdateKey(
         request: ManagementsUseCase.CreateOrUpdateKeyRequest
-    ): CreateOrUpdateKeyDto {
+    ): CreateOrUpdateMerchantKeyDto {
         val merchant =
             createOrUpdateMerchantKeyPort
                 .createOrUpdateMerchantKey(
@@ -23,6 +23,6 @@ internal class ManagementsService(
                             token = clientCredentialsGenerator.generateClientSecret()
                         )
                 )
-        return CreateOrUpdateKeyDto(key = merchant.token)
+        return CreateOrUpdateMerchantKeyDto(key = merchant.token)
     }
 }

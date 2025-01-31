@@ -1,5 +1,5 @@
 package com.inner.circle.corebackoffice.service.dto
 
-class CreateOrUpdateKeyDto(
+class CreateOrUpdateMerchantKeyDto(
     val key: String
 )
