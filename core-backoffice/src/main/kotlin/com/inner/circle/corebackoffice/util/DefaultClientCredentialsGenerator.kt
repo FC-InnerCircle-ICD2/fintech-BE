@@ -6,7 +6,7 @@ import java.util.*
 import org.springframework.stereotype.Component
 
 @Component
-class DefaultClientCredentialsGenerator: ClientCredentialsGenerator {
+class DefaultClientCredentialsGenerator : ClientCredentialsGenerator {
     private val secureRandom = SecureRandom()
     private val base64Encoder = Base64.getUrlEncoder()
 

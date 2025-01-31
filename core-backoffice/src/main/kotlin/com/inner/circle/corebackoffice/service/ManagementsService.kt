@@ -17,10 +17,11 @@ internal class ManagementsService(
         val merchant =
             createOrUpdateMerchantKeyPort
                 .createOrUpdateMerchantKey(
-                    request = CreateOrUpdateMerchantKeyPort.Request(
-                        id = request.id,
-                        token = clientCredentialsGenerator.generateClientSecret()
-                    )
+                    request =
+                        CreateOrUpdateMerchantKeyPort.Request(
+                            id = request.id,
+                            token = clientCredentialsGenerator.generateClientSecret()
+                        )
                 )
         return CreateOrUpdateKeyDto(key = merchant.token)
     }
