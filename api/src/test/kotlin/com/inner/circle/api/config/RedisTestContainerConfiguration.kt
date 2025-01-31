@@ -32,9 +32,9 @@ class RedisTestContainerConfiguration :
                 if (env.activeProfiles.contains("local")) {
                     withReuse(true)
                 }
-                withCreateContainerCmdModifier { cmd: CreateContainerCmd ->
+                withCreateContainerCmdModifier(fun(cmd: CreateContainerCmd) {
                     cmd.withName(containerName)
-                }
+                })
                 withExposedPorts(PAYMENT_REDIS_PORT)
             }
 
@@ -49,8 +49,8 @@ class RedisTestContainerConfiguration :
 
         val host = container.host
         val port = container.getMappedPort(PAYMENT_REDIS_PORT).toString()
-        System.setProperty("spring.redis.host", host)
-        System.setProperty("spring.redis.port", port)
+        System.setProperty("spring.data.redis.host", host)
+        System.setProperty("spring.data.redis.port", port)
         logger.info("Redis host: {}", host)
         logger.info("Redis port: {}", port)
     }
