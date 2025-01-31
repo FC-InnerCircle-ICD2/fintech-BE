@@ -19,14 +19,14 @@ data class PaymentDto(
     companion object {
         fun of(payment: Payment): PaymentDto =
             PaymentDto(
-                payment.id,
-                payment.paymentKey,
-                payment.currency,
-                payment.userId,
-                payment.merchantId,
-                payment.paymentType,
-                payment.createdAt,
-                payment.updatedAt
+                id = payment.id,
+                paymentKey = payment.paymentKey,
+                currency = payment.currency,
+                userId = payment.userId,
+                merchantId = payment.merchantId,
+                paymentType = payment.paymentType,
+                createdAt = payment.createdAt,
+                updatedAt = payment.updatedAt
             )
     }
 }

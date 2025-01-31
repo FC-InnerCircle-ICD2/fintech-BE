@@ -2,7 +2,11 @@ name: "🚀CI & CD"
 on:
   push:
     branches:
-      - master
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}
+
 jobs:
   ci:
     name: "🔨"

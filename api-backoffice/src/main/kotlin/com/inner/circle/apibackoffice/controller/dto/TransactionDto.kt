@@ -21,15 +21,15 @@ data class TransactionDto(
             transaction: com.inner.circle.corebackoffice.service.dto.TransactionDto
         ): TransactionDto =
             TransactionDto(
-                transaction.id,
-                transaction.paymentId,
-                transaction.amount,
-                TransactionStatus.of(transaction.status),
-                transaction.reason,
-                transaction.requestedAt.toJavaLocalDateTime(),
-                transaction.completedAt.toJavaLocalDateTime(),
-                transaction.createdAt.toJavaLocalDateTime(),
-                transaction.updatedAt.toJavaLocalDateTime()
+                id = transaction.id,
+                paymentId = transaction.paymentId,
+                amount = transaction.amount,
+                status = TransactionStatus.of(transaction.status),
+                reason = transaction.reason,
+                requestedAt = transaction.requestedAt.toJavaLocalDateTime(),
+                completedAt = transaction.completedAt.toJavaLocalDateTime(),
+                createdAt = transaction.createdAt.toJavaLocalDateTime(),
+                updatedAt = transaction.updatedAt.toJavaLocalDateTime()
             )
     }
 }

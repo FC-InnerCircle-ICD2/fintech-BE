@@ -1,14 +1,39 @@
 spring:
-    application:
-        name: api
-    profiles:
-        active: local
-        include: datasource
+  application:
+    name: api
+  profiles:
+    active: local
+    include: infra, openapi
 
-springdoc:
-    api-docs:
-        path: /v3/api-docs
-    swagger-ui:
-        path: /swagger-ui.html
+server:
+  port: 8080
+card:
+  url:
+    base-url: http://localhost:8082
+    approve-end-point: /mock/card/approve
 
+---
+spring:
+  config:
+    activate:
+      on-profile: local
 
+server:
+  port: 10001
+
+card:
+  url:
+    base-url: http://localhost:8082
+    approve-end-point: /mock/card/approve
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+    import: aws-secretsmanager:/secret/pay200
+
+card:
+  url:
+    base-url: http://localhost:8082
+    approve-end-point: /mock/card/approve
