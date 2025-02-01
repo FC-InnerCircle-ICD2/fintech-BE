@@ -22,7 +22,8 @@ class RedisConfig {
     fun redisConnectionFactory(): RedisConnectionFactory {
         val redisConfiguration = RedisStandaloneConfiguration(host, port)
         val lettuceClientConfiguration =
-            LettuceClientConfiguration.builder()
+            LettuceClientConfiguration
+                .builder()
                 .useSsl()
                 .disablePeerVerification()
                 .build()
