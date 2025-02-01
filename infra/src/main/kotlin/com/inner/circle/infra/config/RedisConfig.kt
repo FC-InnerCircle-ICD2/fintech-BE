@@ -26,7 +26,7 @@ class RedisConfig {
             LettuceClientConfiguration
                 .builder()
 
-        if (!environment.activeProfiles.any { it in listOf("local", "test") }) {
+        if (!environment.matchesProfiles("local", "test")) {
             lettuceClientConfigurationBuilder.useSsl().disablePeerVerification()
         }
 
@@ -38,8 +38,8 @@ class RedisConfig {
     }
 
     @Bean
-    fun redisTemplate(environment: Environment): StringRedisTemplate {
-        val template = StringRedisTemplate(redisConnectionFactory(environment))
+    fun redisTemplate(redisConnectionFactory: RedisConnectionFactory): StringRedisTemplate {
+        val template = StringRedisTemplate(redisConnectionFactory)
         template.keySerializer = StringRedisSerializer()
         template.valueSerializer = GenericJackson2JsonRedisSerializer()
         return template
