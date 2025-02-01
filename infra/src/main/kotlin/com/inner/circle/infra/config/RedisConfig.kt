@@ -3,6 +3,7 @@ package com.inner.circle.infra.config
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.core.env.Environment
 import org.springframework.data.redis.connection.RedisConnectionFactory
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration
 import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration
@@ -19,21 +20,26 @@ class RedisConfig {
 
     // https://redis.github.io/lettuce/#ssl
     @Bean
-    fun redisConnectionFactory(): RedisConnectionFactory {
+    fun redisConnectionFactory(environment: Environment): RedisConnectionFactory {
         val redisConfiguration = RedisStandaloneConfiguration(host, port)
-        val lettuceClientConfiguration =
+        val lettuceClientConfigurationBuilder =
             LettuceClientConfiguration
                 .builder()
-                .useSsl()
-                .disablePeerVerification()
+
+        if (!environment.activeProfiles.any { it in listOf("local", "test") }) {
+            lettuceClientConfigurationBuilder.useSsl().disablePeerVerification()
+        }
+
+        val lettuceClientConfiguration =
+            lettuceClientConfigurationBuilder
                 .build()
 
         return LettuceConnectionFactory(redisConfiguration, lettuceClientConfiguration)
     }
 
     @Bean
-    fun redisTemplate(): StringRedisTemplate {
-        val template = StringRedisTemplate(redisConnectionFactory())
+    fun redisTemplate(environment: Environment): StringRedisTemplate {
+        val template = StringRedisTemplate(redisConnectionFactory(environment))
         template.keySerializer = StringRedisSerializer()
         template.valueSerializer = GenericJackson2JsonRedisSerializer()
         return template
