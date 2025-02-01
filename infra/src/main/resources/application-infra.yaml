@@ -61,18 +61,19 @@ spring:
       max-lifetime: 1800000 # 30분
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     open-in-view: false
     properties:
       hibernate:
         show_sql: true
         format_sql: true
 
-  # dev 환경 redis 변경 필요
   data:
     redis:
-      host: localhost
+      host: ${REDIS_HOST}
       port: 6379
+      ssl:
+        enabled: true
 
 external:
   mock-server:
