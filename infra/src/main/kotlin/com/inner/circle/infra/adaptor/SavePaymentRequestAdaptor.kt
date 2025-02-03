@@ -25,7 +25,7 @@ internal class SavePaymentRequestAdaptor(
                 orderId = request.orderId,
                 orderName = request.orderName,
                 orderStatus = request.orderStatus ?: PaymentProcessStatus.DONE.name,
-                userId = request.userId,
+                accountId = request.accountId,
                 merchantId = request.merchantId,
                 paymentKey = request.paymentKey,
                 amount = request.amount,

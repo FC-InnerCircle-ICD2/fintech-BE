@@ -13,9 +13,10 @@ internal class PaymentAdaptor(
     override fun save(request: PaymentPort.Request): PaymentEntity =
         paymentRepository.save(
             PaymentEntity(
+                id = request.id,
                 paymentKey = request.paymentKey,
                 currency = request.currency,
-                userId = request.userId,
+                accountId = request.accountId,
                 merchantId = request.merchantId,
                 paymentType = request.paymentType,
                 orderId = request.orderId,
