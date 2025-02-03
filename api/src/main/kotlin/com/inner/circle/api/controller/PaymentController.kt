@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 
-@Tag(name = "Claims", description = "Claim (결제 요청) API")
+@Tag(name = "Payments", description = "결제 관련 API")
 @PaymentV1Api
-class PaymentClaimController(
+class PaymentController(
     private val confirmPaymentUseCase: ConfirmPaymentUseCase,
     private val claimUseCase: PaymentClaimUseCase,
     private val savePaymentApproveService: SavePaymentApproveUseCase
