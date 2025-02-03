@@ -4,9 +4,17 @@ spring:
   profiles:
     active: local
     include: infra, openapi
+  jackson:
+    deserialization:
+      use-big-decimal-for-floats: true
 
 server:
   port: 8080
+card:
+  url:
+    base-url: http://localhost:8082
+    approve-end-point: /mock/card/approve
+    validate-end-point: /mock/card/validate
 
 ---
 spring:
@@ -17,9 +25,27 @@ spring:
 server:
   port: 10001
 
+card:
+  url:
+    base-url: http://localhost:8082
+    approve-end-point: /mock/card/approve
+    validate-end-point: /mock/card/validate
+
+swagger:
+  server-url: http://localhost:10001
+
 ---
 spring:
   config:
     activate:
       on-profile: dev
     import: aws-secretsmanager:/secret/pay200
+
+card:
+  url:
+    base-url: http://localhost:8082
+    approve-end-point: /mock/card/approve
+    validate-end-point: /mock/card/validate
+
+swagger:
+  server-url: https://payment.pay-200.com

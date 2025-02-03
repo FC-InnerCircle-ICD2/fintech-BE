@@ -22,4 +22,27 @@ sealed class PaymentException(
         override val message: String = "UserId with ID $userId not found",
         override val cause: Throwable? = null
     ) : PaymentException(HttpStatus.NOT_FOUND, message, cause)
+
+    data class InvalidAmountException(
+        val paymentKey: String,
+        override val message: String = "PaymentKey $paymentKey order payment amount is different.",
+        override val cause: Throwable? = null
+    ) : PaymentException(HttpStatus.NOT_FOUND, message, cause)
+
+    data class PaymentRequestNotFoundException(
+        val paymentKey: String,
+        override val message: String = "Payment Request not found : $paymentKey",
+        override val cause: Throwable? = null
+    ) : PaymentException(HttpStatus.NOT_FOUND, message, cause)
+
+    data class PaymentNotSaveException(
+        val paymentKey: String,
+        override val message: String = "Payment not save : $paymentKey",
+        override val cause: Throwable? = null
+    ) : PaymentException(HttpStatus.NOT_FOUND, message, cause)
+
+    data class PaymentKeyNotFoundException(
+        override val message: String = "PaymentKey not found.",
+        override val cause: Throwable? = null
+    ) : PaymentException(HttpStatus.NOT_FOUND, message, cause)
 }
