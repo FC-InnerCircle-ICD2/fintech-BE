@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Profile
 class SwaggerConfig(
     @Value("\${swagger.server-url}") private val serverUrl: String
 ) {
-    val securitySchemeName = "basicAuth"
+    private val securitySchemeName = "basicAuth"
 
     @Bean
     fun customOpenAPI(): OpenAPI {
