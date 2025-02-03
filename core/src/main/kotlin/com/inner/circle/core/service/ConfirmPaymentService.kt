@@ -57,7 +57,7 @@ internal class ConfirmPaymentService(
                 orderId = request.orderId,
                 orderName = request.orderName,
                 orderStatus = request.orderStatus,
-                userId = request.userId,
+                accountId = request.accountId,
                 merchantId = request.merchantId,
                 paymentKey = paymentKeyUUID,
                 amount = request.amount,
@@ -93,14 +93,14 @@ internal class ConfirmPaymentService(
                 orderId = request.orderId,
                 orderName = paymentInfo.orderName,
                 orderStatus = paymentInfo.orderStatus,
-                userId = paymentInfo.userId,
+                accountId = paymentInfo.accountId,
                 merchantId = paymentInfo.merchantId,
                 paymentKey = paymentInfo.paymentKey,
                 amount = paymentInfo.amount,
                 requestTime = paymentInfo.requestTime,
-                cardNumber = paymentInfo.cardNumber,
-                expirationPeriod = paymentInfo.expirationPeriod,
-                cvc = paymentInfo.cvc
+                cardNumber = paymentInfo.cardNumber ?: throw AuthenticateException.CardNotFoundException(),
+                expirationPeriod = paymentInfo.expirationPeriod ?: throw AuthenticateException.CardNotFoundException(),
+                cvc = paymentInfo.cvc ?: throw AuthenticateException.CardNotFoundException()
             )
         )
     }
@@ -119,7 +119,7 @@ internal class ConfirmPaymentService(
                 orderId = request.orderId,
                 orderName = paymentInfo.orderName,
                 orderStatus = paymentInfo.orderStatus,
-                userId = paymentInfo.userId,
+                accountId = paymentInfo.accountId,
                 merchantId = paymentInfo.merchantId,
                 paymentKey = paymentInfo.paymentKey,
                 amount = paymentInfo.amount,

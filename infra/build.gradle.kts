@@ -25,6 +25,7 @@ dependencies {
     implementation(libs.bundles.hypersistence)
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("org.springframework.boot:spring-boot-starter-security")
     implementation(libs.h2)
     implementation("com.github.codemonstur:embedded-redis:1.4.3") {
         exclude(group = "org.slf4j", module = "slf4j-simple")

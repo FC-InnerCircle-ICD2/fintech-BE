@@ -1,5 +1,7 @@
 package com.inner.circle.apibackoffice.exception
 
+import com.inner.circle.apibackoffice.common.response.AppExceptionResponse
+import com.inner.circle.exception.AppException
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
@@ -10,6 +12,13 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 
 @RestControllerAdvice
 class GlobalExceptionHandler {
+    @ExceptionHandler(AppException::class)
+    fun handleAppException(exception: AppException): ResponseEntity<AppExceptionResponse> =
+        ResponseEntity(
+            AppExceptionResponse.of(exception),
+            HttpStatus.valueOf(exception.status.code)
+        )
+
     @ExceptionHandler(Exception::class)
     @ApiResponse(
         responseCode = "500",

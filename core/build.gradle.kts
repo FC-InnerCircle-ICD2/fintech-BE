@@ -19,6 +19,7 @@ dependencies {
     implementation(libs.jwt)
     implementation(projects.infra)
     implementation(projects.exception)
+    implementation("org.springframework.boot:spring-boot-starter-security")
     compileOnly(libs.bundles.kotlinLogging)
     compileOnly(libs.bundles.kotlinxCoroutines)
     testImplementation(libs.bundles.kotlinTest)

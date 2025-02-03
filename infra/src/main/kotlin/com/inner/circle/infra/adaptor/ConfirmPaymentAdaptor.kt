@@ -18,24 +18,21 @@ internal class ConfirmPaymentAdaptor(
                 ?: throw PaymentException.OrderNotFoundException(
                     request.orderId
                 )
-        return userCardRepository
-            .findByUserId(paymentRequest.userId)
-            ?.let {
-                ConfirmPaymentInfraDto(
-                    orderId = paymentRequest.orderId,
-                    orderName = paymentRequest.orderName,
-                    orderStatus = paymentRequest.orderStatus,
-                    userId = paymentRequest.userId,
-                    merchantId = paymentRequest.merchantId,
-                    paymentKey = paymentRequest.paymentKey,
-                    amount = paymentRequest.amount,
-                    requestTime = paymentRequest.requestTime,
-                    cardNumber = it.cardNumber,
-                    expirationPeriod = it.expirationPeriod,
-                    cvc = it.cvc
-                )
-            } ?: throw PaymentException.UserIdNotFoundException(
-            paymentRequest.userId
+
+        val userCard = paymentRequest.accountId?.let { userCardRepository.findByAccountId(it) }
+
+        return ConfirmPaymentInfraDto(
+            orderId = paymentRequest.orderId,
+            orderName = paymentRequest.orderName,
+            orderStatus = paymentRequest.orderStatus,
+            accountId = paymentRequest.accountId,
+            merchantId = paymentRequest.merchantId,
+            paymentKey = paymentRequest.paymentKey,
+            amount = paymentRequest.amount,
+            requestTime = paymentRequest.requestTime,
+            cardNumber = userCard?.cardNumber,
+            expirationPeriod = userCard?.expirationPeriod,
+            cvc = userCard?.cvc
         )
     }
 }
