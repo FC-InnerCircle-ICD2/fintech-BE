@@ -1,15 +1,51 @@
 spring:
-    application:
-        name: api
-    profiles:
-        active: local
-        include: infra
+  application:
+    name: api
+  profiles:
+    active: local
+    include: infra, openapi
+  jackson:
+    deserialization:
+      use-big-decimal-for-floats: true
 
-springdoc:
-    api-docs:
-        path: /v3/api-docs
-    swagger-ui:
-        path: /swagger-ui.html
+server:
+  port: 8080
+card:
+  url:
+    base-url: http://localhost:8082
+    approve-end-point: /mock/card/approve
+    validate-end-point: /mock/card/validate
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
 
 server:
   port: 10001
+
+card:
+  url:
+    base-url: http://localhost:8082
+    approve-end-point: /mock/card/approve
+    validate-end-point: /mock/card/validate
+
+swagger:
+  server-url: http://localhost:10001
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+    import: aws-secretsmanager:/secret/pay200
+
+card:
+  url:
+    base-url: http://localhost:8082
+    approve-end-point: /mock/card/approve
+    validate-end-point: /mock/card/validate
+
+swagger:
+  server-url: https://payment.pay-200.com

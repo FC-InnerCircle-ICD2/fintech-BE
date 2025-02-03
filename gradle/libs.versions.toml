@@ -20,6 +20,9 @@ springMockk = "4.0.2"
 # spring
 springBoot = "3.4.1"
 springDependencyManagement = "1.1.7"
+# hypersistence
+hypersistence-utils = "3.9.0"
+hypersistence-tsid = "2.1.3"
 
 [libraries]
 # kotlin
@@ -57,6 +60,7 @@ springBootWeb = { module = "org.springframework.boot:spring-boot-starter-web", v
 springBootTest = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "springBoot" }
 springBootTestContainers = { module = "org.springframework.boot:spring-boot-testcontainers", version.ref = "springBoot" }
 springBootDataJpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa", version.ref = "springBoot" }
+springBootDataRedis = { module = "org.springframework.boot:spring-boot-starter-data-redis", version.ref = "springBoot" }
 # testContainers
 postgresqlTestContainer = { module = "org.testcontainers:postgresql", version = "1.20.0" }
 # swagger
@@ -64,6 +68,13 @@ swagger = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", versio
 # database
 h2 = { module = "com.h2database:h2", version = "2.3.232" }
 postgresql = { module = "org.postgresql:postgresql", version = "42.7.4" }
+# aws
+awsSecretsManagerConfig = { module = "io.awspring.cloud:spring-cloud-starter-aws-secrets-manager-config", version = "2.4.4" }
+# hypersistence-utils
+hypersistence-utils = { group = "io.hypersistence", name = "hypersistence-utils-hibernate-63", version.ref = "hypersistence-utils" }
+hypersistence-tsid = { group = "io.hypersistence", name = "hypersistence-tsid", version.ref = "hypersistence-tsid" }
+# jwt
+jwt = {module = "io.jsonwebtoken:jjwt", version = "0.12.6"}
 
 [bundles]
 boms = ["kotlinxSerializationBom", "kotlinxCoroutinesBom", "kotestBom"]
@@ -75,6 +86,7 @@ kotlinTestSpring = ["kotestExtensionsSpring", "springMockk"]
 kotlinLogging = ["kotlinLogging", "slf4jApi", "logbackClassic", "kotlinxCoroutinesSlf4j"]
 springBoot = ["springBootWeb", "springBootTest"]
 testContainer = ["springBootTestContainers", "postgresqlTestContainer"]
+hypersistence = ["hypersistence-utils", "hypersistence-tsid"]
 
 [plugins]
 kotlinPluginSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

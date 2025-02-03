@@ -6,7 +6,51 @@ on:
         default: true
 
 jobs:
+  determine-apps:
+    runs-on: ubuntu-latest
+    outputs:
+      apps: ${{ steps.set-apps.outputs.apps }}
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4.2.2
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 0
+
+      - name: Determine changed apps
+        id: set-apps
+        run: |
+          apps=()
+          changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
+          for file in $changed_files; do
+            echo "Changed file: $file"
+            if grep -q '^settings.gradle.kts$' <<< "${file}"; then
+              apps+=("api" "api-backoffice")
+            elif grep -qE '^gradle/|^exception/' <<< "${file}"; then
+              apps+=("api" "api-backoffice")
+            else
+              if grep -qE '^api-backoffice/|^core-backoffice/|^infra-backoffice/' <<< "${file}"; then
+                apps+=("api-backoffice")
+              elif grep -qE '^api/|^core/|^infra/' <<< "${file}"; then
+                apps+=("api")
+              fi
+            fi
+          done
+          apps=$(echo "${apps[@]}" | tr ' ' '\n' | sort | uniq | tr '\n' ',')
+          apps=${apps%,}
+          echo "apps=$(jq -nc --arg apps "$apps" '$apps | split(",")')" >> $GITHUB_OUTPUT
+      - name: Print extracted apps
+        run: |
+          echo "Extracted apps: ${{ steps.set-apps.outputs.apps }}"
+
   deploy:
+    needs: determine-apps
+    if: ${{ needs.determine-apps.outputs.apps != '[]' }}
+    strategy:
+      matrix:
+        app: ${{ fromJson(needs.determine-apps.outputs.apps) }}
     uses: ./.github/workflows/wc-cd-01-deploy.yaml
     name: "🛠️"
+    with:
+      app: ${{ matrix.app }}
     secrets: inherit

@@ -1,4 +1,4 @@
-# 온라인 결제 게이트웨이(PG; Payment Gateway) 서비스
+# 온라인 결제 게이트웨이(PG; Payment Gateway) 서비스SSE key 금지
 ------------------------------------------------------------
 # Event Storming
 - link : https://www.figma.com/board/KsdD1z3Od0EYO8874620RK/pay200---%EA%B5%AC%EC%83%81?node-id=0-1&p=f&t=gNBMKBiK5xxnu8Hj-0

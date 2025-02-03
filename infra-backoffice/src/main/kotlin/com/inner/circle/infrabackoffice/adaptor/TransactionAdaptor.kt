@@ -1,5 +1,6 @@
 package com.inner.circle.infrabackoffice.adaptor
 
+import com.inner.circle.exception.PaymentException
 import com.inner.circle.infrabackoffice.adaptor.dto.TransactionDto
 import com.inner.circle.infrabackoffice.port.GetTransactionPort
 import com.inner.circle.infrabackoffice.repository.PaymentRepository
@@ -17,14 +18,14 @@ internal class TransactionAdaptor(
     ): List<TransactionDto> {
         val payment =
             paymentRepository.findByPaymentKey(request.paymentKey)
-                ?: throw IllegalArgumentException(
-                    "Payment not found - payment_key: ${request.paymentKey}"
+                ?: throw PaymentException.PaymentNotFoundException(
+                    paymentId = request.paymentKey
                 )
         return transactionRepository
-            .findByPaymentId(payment.id!!)
+            .findByPaymentId(requireNotNull(payment.id))
             .map {
                 TransactionDto(
-                    id = it.id!!,
+                    id = requireNotNull(it.id),
                     paymentId = it.paymentId,
                     amount = it.amount,
                     status = it.status,

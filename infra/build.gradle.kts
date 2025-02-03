@@ -17,16 +17,24 @@ dependencies {
     implementation(libs.bundles.kotlin)
     implementation(libs.bundles.springBoot)
     implementation(libs.bundles.kotlinxSerialization)
+    implementation(libs.bundles.testContainer)
+    implementation(libs.awsSecretsManagerConfig)
     implementation(libs.springBootDataJpa)
+    implementation(libs.awsSecretsManagerConfig)
+    implementation(libs.springBootDataRedis)
+    implementation(libs.bundles.hypersistence)
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation(libs.h2)
+    implementation("com.github.codemonstur:embedded-redis:1.4.3") {
+        exclude(group = "org.slf4j", module = "slf4j-simple")
+    }
     runtimeOnly(libs.postgresql)
     compileOnly(libs.bundles.kotlinLogging)
     compileOnly(libs.bundles.kotlinxCoroutines)
     testImplementation(libs.bundles.kotlinTest)
     testImplementation(libs.bundles.kotlinTestSpring)
-    testImplementation(libs.h2)
 }
 
 noArg {

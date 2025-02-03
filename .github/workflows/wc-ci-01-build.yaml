@@ -1,5 +1,9 @@
 on:
   workflow_call:
+    inputs:
+      app:
+        type: string
+
 jobs:
   gradle-build:
     name: "🐘build"
@@ -8,6 +12,9 @@ jobs:
     steps:
       - name: Checkout source code
         uses: actions/checkout@v4.2.2
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 0
 
       - name: Set up JDK 21
         uses: actions/setup-java@v4.6.0
@@ -30,20 +37,20 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Build with Gradle
-        run: ./gradlew clean build
+        run: ./gradlew ${{ inputs.app }}:clean ${{ inputs.app }}:build
 
       - name: Build with Gradle and save image
         if: ${{ github.event_name == 'push' }}
         run: |
-          ./gradlew api:bootBuildImage
-          docker save api:latest > api-image.tar
+          ./gradlew ${{ inputs.app }}:bootBuildImage
+          docker save ${{ inputs.app }}:latest > ${{ inputs.app }}-image.tar
 
       - name: Upload image artifact
         if: ${{ github.event_name == 'push' }}
         uses: actions/upload-artifact@v4.5.0
         with:
-          name: docker-image
-          path: api-image.tar
+          name: docker-image-${{ inputs.app }}
+          path: ${{ inputs.app }}-image.tar
 
   image-push:
     if: ${{ github.event_name == 'push' }}
@@ -54,14 +61,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4.2.2
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 0
 
       - name: Download image artifact
         uses: actions/download-artifact@v4
         with:
-          name: docker-image
+          name: docker-image-${{ inputs.app }}
 
       - name: Load Docker image
-        run: docker load < api-image.tar
+        run: docker load < ${{ inputs.app }}-image.tar
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4.0.2
@@ -86,15 +96,15 @@ jobs:
         id: build-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{ secrets.ECR_REPO_NAME }}
+          ECR_REPOSITORY: pay200
           IMAGE_TAG: ${{ steps.get-commit-hash.outputs.commit-hash }}-${{ steps.get-timestamp.outputs.timestamp }}
         run: |
-          docker tag api:latest $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "$IMAGE_TAG" >> image-tag.txt
+          docker tag ${{ inputs.app }}:latest $ECR_REGISTRY/$ECR_REPOSITORY/${{ inputs.app }}:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY/${{ inputs.app }}:$IMAGE_TAG
+          echo "$IMAGE_TAG" >> ${{ inputs.app }}-image-tag.txt
 
       - name: Upload image tag artifact
         uses: actions/upload-artifact@v4.5.0
         with:
-          name: image-tag
-          path: image-tag.txt
+          name: ${{ inputs.app }}-image-tag
+          path: ${{ inputs.app }}-image-tag.txt

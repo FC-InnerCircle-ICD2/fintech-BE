@@ -1,15 +1,13 @@
 package com.inner.circle.api.healthcheck.controller
 
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/v1/health")
+@RequestMapping
 class HealthCheckController {
-    @GetMapping("")
-    fun check(
-        @RequestBody message: String
-    ): String = message
+    @GetMapping("/health-check")
+    fun check(): ResponseEntity<String> = ResponseEntity.ok("ok")
 }

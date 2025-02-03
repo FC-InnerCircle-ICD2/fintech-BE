@@ -1,5 +1,6 @@
 package com.inner.circle.infrabackoffice.adaptor
 
+import com.inner.circle.exception.PaymentException.PaymentNotFoundException
 import com.inner.circle.infrabackoffice.adaptor.dto.PaymentDto
 import com.inner.circle.infrabackoffice.port.GetPaymentPort
 import com.inner.circle.infrabackoffice.repository.PaymentRepository
@@ -15,16 +16,17 @@ internal class PaymentAdaptor(
             .findByPaymentKey(request.paymentKey)
             ?.let {
                 PaymentDto(
-                    it.id!!,
-                    it.paymentKey,
-                    it.currency,
-                    it.userId,
-                    it.merchantId,
-                    it.paymentType,
-                    it.createdAt.toKotlinLocalDateTime(),
-                    it.updatedAt.toKotlinLocalDateTime()
+                    id = requireNotNull(it.id),
+                    paymentKey = it.paymentKey,
+                    currency = it.currency,
+                    userId = it.userId,
+                    merchantId = it.merchantId,
+                    paymentType = it.paymentType,
+                    createdAt = it.createdAt.toKotlinLocalDateTime(),
+                    updatedAt = it.updatedAt.toKotlinLocalDateTime()
                 )
-            } ?: throw IllegalArgumentException(
-            "Payment not found - payment_key: ${request.paymentKey}"
+            } ?: throw PaymentNotFoundException(
+            paymentId = request.paymentKey,
+            message = "Payment with PaymentKey ${request.paymentKey} not found"
         )
 }

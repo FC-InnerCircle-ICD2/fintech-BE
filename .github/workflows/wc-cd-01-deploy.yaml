@@ -1,5 +1,9 @@
 on:
   workflow_call:
+    inputs:
+      app:
+        type: string
+
 jobs:
   deploy-ec2:
     name: "🚀deploy"
@@ -7,15 +11,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4.2.2
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 0
 
       - name: Download image tag artifact
         uses: actions/download-artifact@v4
         with:
-          name: image-tag
+          name: ${{ inputs.app }}-image-tag
 
       - name: Load Docker image tag
         id: get-docker-image-tag
-        run: echo "image-tag=$(cat image-tag.txt)" >> $GITHUB_OUTPUT
+        run: echo "image-tag=$(cat ${{ inputs.app }}-image-tag.txt)" >> $GITHUB_OUTPUT
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4.0.2
@@ -35,15 +42,20 @@ jobs:
           ECR_REPOSITORY: ${{ secrets.ECR_REPO_NAME }}
           IMAGE_TAG:  ${{ steps.get-docker-image-tag.outputs.image-tag }}
         with:
-          host: ${{ secrets.EC2_HOST }}
+          host: ${{ inputs.app == 'api' && secrets.EC2_PAYMENT_HOST || secrets.EC2_BACKOFFICE_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script_stop: true
           script: |
-            docker stop payment_application || true
-            docker rm payment_application || true
-            docker pull ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
-            docker run -d -p 8080:8080 \
-            -e JAVA_TOOL_OPTIONS="-XX:MaxDirectMemorySize=5M -XX:MaxMetaspaceSize=64M -XX:ReservedCodeCacheSize=140M -Xss512K" \
-            --name payment_application \
-            ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+            CONTAINER_NAME=${{ inputs.app == 'api' && 'payment_application' || 'backoffice_application' }}
+            if [ "$(docker ps -a -q -f name=$CONTAINER_NAME)" ]; then
+              docker stop $CONTAINER_NAME
+              docker rm $CONTAINER_NAME
+            fi
+            aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${{ env.ECR_REGISTRY }}
+            docker pull ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}/${{ inputs.app }}:${{ env.IMAGE_TAG }}
+            docker run -d -p 8080:8080  \
+            -e JAVA_TOOL_OPTIONS="-XX:MaxDirectMemorySize=5M -XX:ReservedCodeCacheSize=140M -Xss512K" \
+            -e SPRING_PROFILES_ACTIVE=dev \
+            --name $CONTAINER_NAME \
+            ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}/${{ inputs.app }}:${{ env.IMAGE_TAG }}

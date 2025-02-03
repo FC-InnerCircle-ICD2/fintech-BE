@@ -22,3 +22,8 @@ dependencies {
     testImplementation(libs.bundles.kotlinTest)
     testImplementation(libs.bundles.kotlinTestSpring)
 }
+
+tasks.named<Test>("test") {
+    useJUnitPlatform()
+    systemProperty("spring.profiles.active", "test")
+}
