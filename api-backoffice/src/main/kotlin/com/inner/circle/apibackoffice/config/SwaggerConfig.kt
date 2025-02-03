@@ -4,24 +4,31 @@ import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.info.Info
 import io.swagger.v3.oas.models.security.SecurityRequirement
 import io.swagger.v3.oas.models.security.SecurityScheme
+import io.swagger.v3.oas.models.servers.Server
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
 
 @Profile("local | dev")
 @Configuration
-class SwaggerConfig {
+class SwaggerConfig(
+    @Value("\${swagger.server-url}") private val serverUrl: String
+) {
     val securitySchemeName = "basicAuth"
 
     @Bean
-    fun openAPI(): OpenAPI =
-        OpenAPI()
+    fun customOpenAPI(): OpenAPI {
+        val server = Server().url(serverUrl) // 환경별 서버 URL 설정
+
+        return OpenAPI()
             .info(
                 Info()
                     .title("Pay200 API Docs")
                     .version("1.0")
                     .description("PG 백오피스 프로젝트")
-            ).addSecurityItem(SecurityRequirement().addList(securitySchemeName))
+            ).addServersItem(server)
+            .addSecurityItem(SecurityRequirement().addList(securitySchemeName))
             .components(
                 io.swagger.v3.oas.models
                     .Components()
@@ -33,4 +40,5 @@ class SwaggerConfig {
                             .scheme("basic")
                     )
             )
+    }
 }

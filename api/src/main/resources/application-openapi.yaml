@@ -1,10 +1,5 @@
-spring:
-  config:
-    activate:
-      on-profile: "local | dev"
-
 springdoc:
-  packages-to-scan: com.inner.circle.api
+  packages-to-scan: com.inner.circle.apibackoffice
   default-consumes-media-type: application/json;charset=UTF-8
   default-produces-media-type: application/json;charset=UTF-8
   api-docs:
@@ -17,3 +12,21 @@ springdoc:
     display-request-duration: true
     default-model-rendering: example
     operations-sorter: alpha
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+
+swagger:
+  server-url: http://localhost:10001
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+swagger:
+  server-url: https://payment.pay-200.com
