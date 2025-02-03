@@ -68,7 +68,7 @@ internal class SavePaymentApproveService(
                                 id = paymentRequest.id,
                                 paymentKey = paymentRequest.paymentKey
                                     ?: throw PaymentException.PaymentKeyNotFoundException(),
-                                currency = "KSW",
+                                currency = "KRW",
                                 accountId = paymentRequest.accountId,
                                 merchantId = paymentRequest.merchantId,
                                 paymentType = paymentRequest.paymentType,

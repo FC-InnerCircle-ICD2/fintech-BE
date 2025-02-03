@@ -12,7 +12,7 @@ data class ConfirmPaymentInfraDto(
     val paymentKey: String?,
     val amount: BigDecimal,
     val requestTime: LocalDateTime,
-    val cardNumber: String,
-    val expirationPeriod: String,
-    val cvc: String
+    val cardNumber: String?,
+    val expirationPeriod: String?,
+    val cvc: String?
 )

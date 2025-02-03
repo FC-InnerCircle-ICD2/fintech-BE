@@ -13,9 +13,9 @@ data class UserCardEntity(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
     @Column(nullable = false)
-    val accountId: Long?,
+    val accountId: Long,
     @Column(nullable = false)
-    val representativeYn: Boolean,
+    val isRepresentative: Boolean,
     @Column(nullable = false, unique = true)
     val cardNumber: String,
     @Column(nullable = false)
