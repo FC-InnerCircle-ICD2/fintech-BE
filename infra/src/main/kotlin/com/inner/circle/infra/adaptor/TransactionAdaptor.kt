@@ -22,6 +22,7 @@ internal class TransactionAdaptor(
 
         return transactionRepository.save(
             TransactionEntity(
+                id = request.id,
                 paymentKey = request.paymentKey,
                 payment = paymentEntity,
                 amount = request.amount,

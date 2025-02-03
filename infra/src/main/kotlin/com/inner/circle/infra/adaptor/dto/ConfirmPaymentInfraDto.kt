@@ -7,7 +7,7 @@ data class ConfirmPaymentInfraDto(
     val orderId: String,
     val orderName: String?,
     val orderStatus: String?,
-    val userId: Long?,
+    val accountId: Long?,
     val merchantId: String,
     val paymentKey: String?,
     val amount: BigDecimal,

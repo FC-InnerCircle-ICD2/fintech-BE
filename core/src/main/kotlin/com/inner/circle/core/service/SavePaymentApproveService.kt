@@ -35,7 +35,7 @@ internal class SavePaymentApproveService(
                         orderName = paymentRequest.orderName,
                         cardNumber = paymentRequest.cardNumber ?: "",
                         orderStatus = paymentRequest.orderStatus,
-                        userId = paymentRequest.userId,
+                        accountId = paymentRequest.accountId,
                         merchantId = paymentRequest.merchantId,
                         paymentKey =
                             paymentRequest.paymentKey
@@ -65,21 +65,22 @@ internal class SavePaymentApproveService(
                     paymentPort
                         .save(
                             PaymentPort.Request(
-                                paymentRequest.paymentKey
+                                id = paymentRequest.id,
+                                paymentKey = paymentRequest.paymentKey
                                     ?: throw PaymentException.PaymentKeyNotFoundException(),
-                                "KSW",
-                                paymentRequest.userId,
-                                paymentRequest.merchantId,
-                                paymentRequest.paymentType,
-                                paymentRequest.orderId,
-                                paymentRequest.orderName
+                                currency = "KSW",
+                                accountId = paymentRequest.accountId,
+                                merchantId = paymentRequest.merchantId,
+                                paymentType = paymentRequest.paymentType,
+                                orderId = paymentRequest.orderId,
+                                orderName = paymentRequest.orderName
                             )
                         ).let { payment ->
                             val paymentDto =
                                 PaymentDto(
                                     paymentKey = payment.paymentKey,
                                     currency = payment.currency,
-                                    userId = payment.userId,
+                                    accountId = payment.accountId,
                                     merchantId = payment.merchantId,
                                     paymentType = payment.paymentType,
                                     orderId = payment.orderId
@@ -87,6 +88,7 @@ internal class SavePaymentApproveService(
 
                             transactionPort.save(
                                 TransactionPort.Request(
+                                    id = paymentRequest.id,
                                     paymentKey = paymentDto.paymentKey,
                                     amount = paymentRequestDto.amount,
                                     status = "APPROVE",

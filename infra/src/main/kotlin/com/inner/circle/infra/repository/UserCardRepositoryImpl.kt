@@ -7,8 +7,8 @@ import org.springframework.stereotype.Repository
 internal class UserCardRepositoryImpl(
     private val userCardJpaRepository: UserCardJpaRepository
 ) : UserCardRepository {
-    override fun findByUserId(userId: Long?): UserCardEntity? =
-        userCardJpaRepository.findByUserId(userId)
+    override fun findByAccountId(accountId: Long?): UserCardEntity? =
+        userCardJpaRepository.findByAccountId(accountId)
 
     override fun save(userCardEntity: UserCardEntity): UserCardEntity? =
         userCardJpaRepository.save(userCardEntity)

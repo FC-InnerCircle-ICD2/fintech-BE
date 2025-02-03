@@ -19,13 +19,13 @@ internal class ConfirmPaymentAdaptor(
                     request.orderId
                 )
         return userCardRepository
-            .findByUserId(paymentRequest.userId)
+            .findByAccountId(paymentRequest.accountId)
             ?.let {
                 ConfirmPaymentInfraDto(
                     orderId = paymentRequest.orderId,
                     orderName = paymentRequest.orderName,
                     orderStatus = paymentRequest.orderStatus,
-                    userId = paymentRequest.userId,
+                    accountId = paymentRequest.accountId,
                     merchantId = paymentRequest.merchantId,
                     paymentKey = paymentRequest.paymentKey,
                     amount = paymentRequest.amount,
@@ -35,7 +35,7 @@ internal class ConfirmPaymentAdaptor(
                     cvc = it.cvc
                 )
             } ?: throw PaymentException.UserNotFoundException(
-            paymentRequest.userId
+            paymentRequest.accountId
         )
     }
 }

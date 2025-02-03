@@ -76,7 +76,7 @@ class PaymentClaimDto(
             orderId = orderId,
             orderName = orderName,
             orderStatus = orderStatus.name,
-            userId = null,
+            accountId = null,
             merchantId = merchantId,
             paymentType = paymentType ?: "CARD",
             cardNumber = cardNumber,
