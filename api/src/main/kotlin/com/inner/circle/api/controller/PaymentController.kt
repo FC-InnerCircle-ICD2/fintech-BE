@@ -34,7 +34,7 @@ class PaymentController(
         return PaymentResponse.ok(response)
     }
 
-    @Operation(summary = "결제 승인 API")
+    @Operation(summary = "결제 승인")
     @PostMapping("/payments/confirm")
     fun confirmPayment(
         @RequestBody paymentApproveRequest: PaymentApproveRequest
@@ -56,10 +56,9 @@ class PaymentController(
                 }
         )
 
-    @Operation(summary = "간편 결제 확인")
-    @PostMapping("/payments/orders/{order_id}/simple")
+    @Operation(summary = "간편 결제 인증")
+    @PostMapping("/payments/authentication/simple")
     fun proceedPaymentConfirm(
-        @PathVariable("order_id") orderId: String,
         @RequestBody confirmSimplePaymentRequest: ConfirmSimplePaymentRequest
     ): PaymentResponse<ConfirmPaymentDto> {
         val response =
@@ -67,7 +66,7 @@ class PaymentController(
                 ConfirmPaymentDto.of(
                     confirmPaymentUseCase.confirmPayment(
                         ConfirmSimplePaymentUseCase.Request(
-                            orderId = orderId,
+                            orderId = confirmSimplePaymentRequest.orderId,
                             merchantId = confirmSimplePaymentRequest.merchantId
                         )
                     )
@@ -76,10 +75,9 @@ class PaymentController(
         return response
     }
 
-    @Operation(summary = "결제 확인")
-    @PostMapping("/payments/orders/{order_id}")
+    @Operation(summary = "일반 결제 인증")
+    @PostMapping("/payments/authentication")
     fun proceedPaymentConfirm(
-        @PathVariable("order_id") orderId: String,
         @RequestBody confirmPaymentRequest: ConfirmPaymentRequest
     ): PaymentResponse<ConfirmPaymentDto> {
         val response =
@@ -87,7 +85,7 @@ class PaymentController(
                 ConfirmPaymentDto.of(
                     confirmPaymentUseCase.confirmPayment(
                         ConfirmPaymentUseCase.Request(
-                            orderId = orderId,
+                            orderId = confirmPaymentRequest.orderId,
                             merchantId = confirmPaymentRequest.merchantId,
                             cardNumber = confirmPaymentRequest.cardNumber,
                             expirationPeriod = confirmPaymentRequest.expirationPeriod,
