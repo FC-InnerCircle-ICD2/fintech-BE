@@ -31,9 +31,6 @@ card:
     approve-end-point: /mock/card/approve
     validate-end-point: /mock/card/validate
 
-swagger:
-  server-url: http://localhost:10001
-
 ---
 spring:
   config:
@@ -46,6 +43,3 @@ card:
     base-url: http://localhost:8082
     approve-end-point: /mock/card/approve
     validate-end-point: /mock/card/validate
-
-swagger:
-  server-url: https://payment.pay-200.com
