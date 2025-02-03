@@ -14,13 +14,17 @@ class SecurityConfig {
     @Bean
     fun apiSecurityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
+            .csrf { it.disable() }  // <- CSRF 보호 비활성화
             .authorizeHttpRequests { authorizeRequests ->
                 authorizeRequests
-                    .requestMatchers("/api/**")
-                    .authenticated()
-            }.sessionManagement { session ->
+                    .requestMatchers("/api/**").authenticated()
+                    .anyRequest().permitAll()
+            }
+            .sessionManagement { session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            }.httpBasic(withDefaults())
+            }
+            .httpBasic(withDefaults())
+
         return http.build()
     }
 }
