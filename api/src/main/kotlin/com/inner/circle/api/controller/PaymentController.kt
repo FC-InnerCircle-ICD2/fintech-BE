@@ -1,5 +1,8 @@
 package com.inner.circle.api.controller
 
+import com.inner.circle.api.application.PaymentStatusChangedMessageSender
+import com.inner.circle.api.application.dto.PaymentStatusChangedSsePaymentRequest
+import com.inner.circle.api.application.dto.PaymentStatusEventType
 import com.inner.circle.api.controller.dto.ConfirmPaymentDto
 import com.inner.circle.api.controller.dto.PaymentApproveDto
 import com.inner.circle.api.controller.dto.PaymentResponse
@@ -22,7 +25,8 @@ import org.springframework.web.bind.annotation.RequestBody
 class PaymentController(
     private val confirmPaymentUseCase: ConfirmPaymentUseCase,
     private val claimUseCase: PaymentClaimUseCase,
-    private val savePaymentApproveService: SavePaymentApproveUseCase
+    private val savePaymentApproveService: SavePaymentApproveUseCase,
+    private val statusChangedMessageSender: PaymentStatusChangedMessageSender
 ) {
     @Operation(summary = "결제 요청")
     @PostMapping("/payments")
@@ -31,6 +35,15 @@ class PaymentController(
     ): PaymentResponse<PaymentClaimUseCase.PaymentClaimResponse> {
         val merchantId = "tempMerchantId" // @AuthenticationPrincipal
         val response = claimUseCase.createPayment(request, merchantId)
+        val status = PaymentStatusEventType.READY
+        statusChangedMessageSender.sendProcessChangedMessage(
+            PaymentStatusChangedSsePaymentRequest(
+                eventType = status.getEventType(),
+                status = status.name,
+                orderId = request.orderId,
+                merchantId = merchantId
+            )
+        )
         return PaymentResponse.ok(response)
     }
 
