@@ -26,7 +26,7 @@ class JwtHandler {
         val expirationDate = Date(issuedAt.time + 1000 * 60 * expiresMinute)
         return Jwts
             .builder()
-            .subject(paymentClaimDto.orderId)
+            .claim("orderId", paymentClaimDto.orderId)
             .claim("merchantId", paymentClaimDto.merchantId)
             .claim("orderName", paymentClaimDto.orderName)
             .claim("amount", paymentClaimDto.amount)
