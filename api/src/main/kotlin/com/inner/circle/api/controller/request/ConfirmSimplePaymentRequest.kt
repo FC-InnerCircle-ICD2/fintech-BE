@@ -7,5 +7,5 @@ data class ConfirmSimplePaymentRequest
     @JsonCreator
     constructor(
         @JsonProperty("orderId") val orderId: String,
-        @JsonProperty("merchantId") val merchantId: String,
+        @JsonProperty("merchantId") val merchantId: String
     )
