@@ -98,8 +98,11 @@ internal class ConfirmPaymentService(
                 paymentKey = paymentInfo.paymentKey,
                 amount = paymentInfo.amount,
                 requestTime = paymentInfo.requestTime,
-                cardNumber = paymentInfo.cardNumber ?: throw AuthenticateException.CardNotFoundException(),
-                expirationPeriod = paymentInfo.expirationPeriod ?: throw AuthenticateException.CardNotFoundException(),
+                cardNumber =
+                    paymentInfo.cardNumber ?: throw AuthenticateException.CardNotFoundException(),
+                expirationPeriod =
+                    paymentInfo.expirationPeriod
+                        ?: throw AuthenticateException.CardNotFoundException(),
                 cvc = paymentInfo.cvc ?: throw AuthenticateException.CardNotFoundException()
             )
         )

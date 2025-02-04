@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class SecurityUserDetailsService(
-        private val repository: MerchantRepository,
-        private val environment: Environment
+    private val repository: MerchantRepository,
+    private val environment: Environment
 ) : UserDetailsService {
     override fun loadUserByUsername(token: String): UserDetails {
         if (environment.activeProfiles.contains("local") && "pay200".equals(token)) {
