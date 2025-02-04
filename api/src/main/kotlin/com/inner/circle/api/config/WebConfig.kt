@@ -6,10 +6,12 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 @Configuration
-class WebConfig(private var authCheckInterceptor: AuthCheckInterceptor) : WebMvcConfigurer {
-
+class WebConfig(
+    private var authCheckInterceptor: AuthCheckInterceptor
+) : WebMvcConfigurer {
     override fun addInterceptors(registry: InterceptorRegistry) {
-        registry.addInterceptor(authCheckInterceptor)
+        registry
+            .addInterceptor(authCheckInterceptor)
             .addPathPatterns("/api/payment/v1/payments/**")
             .excludePathPatterns("/swagger-ui/**", "/v3/api-docs/**")
     }
