@@ -21,7 +21,7 @@ class SseApiController(
 
     @GetMapping(path = ["/sse/connect"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
     fun connect(
-        @Parameter(hidden = false)
+        @Parameter(hidden = true)
         @RequestBody ssePaymentRequest: SsePaymentRequest
     ): ResponseBodyEmitter {
         log.info("SSE user {}", ssePaymentRequest.merchantId + "_" + ssePaymentRequest.orderId)
