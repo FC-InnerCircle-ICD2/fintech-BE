@@ -17,7 +17,8 @@ class SecurityConfig {
         http
             .authorizeHttpRequests { authorizeRequests ->
                 authorizeRequests
-                    .dispatcherTypeMatchers(DispatcherType.ERROR, DispatcherType.ASYNC) // 오류 페이지, 비동기 요청 허용
+                    // 오류 페이지, 비동기 요청 허용
+                    .dispatcherTypeMatchers(DispatcherType.ERROR, DispatcherType.ASYNC)
                     .permitAll()
                     .requestMatchers(
                         "/api-docs/**",
