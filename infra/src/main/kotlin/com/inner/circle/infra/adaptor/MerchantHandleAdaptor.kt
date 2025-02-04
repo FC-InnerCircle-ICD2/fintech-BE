@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component
 internal class MerchantHandleAdaptor(
     private val merchantRepository: MerchantRepository
 ) : MerchantHandlePort {
-    override fun findMerchantByKey(key: String): MerchantEntity {
-        return merchantRepository.findByToken(key)
-    }
+    override fun findMerchantByKey(key: String): MerchantEntity =
+        merchantRepository.findByToken(key)
 }

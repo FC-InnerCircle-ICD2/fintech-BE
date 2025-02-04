@@ -10,12 +10,14 @@ import com.inner.circle.api.controller.request.ConfirmPaymentRequest
 import com.inner.circle.api.controller.request.ConfirmSimplePaymentRequest
 import com.inner.circle.api.controller.request.PaymentApproveRequest
 import com.inner.circle.api.interceptor.RequireAuth
+import com.inner.circle.core.service.dto.MerchantDto
 import com.inner.circle.core.usecase.ConfirmPaymentUseCase
 import com.inner.circle.core.usecase.ConfirmSimplePaymentUseCase
 import com.inner.circle.core.usecase.PaymentClaimUseCase
 import com.inner.circle.core.usecase.SavePaymentApproveUseCase
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
+import jakarta.servlet.http.HttpServletRequest
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -33,9 +35,11 @@ class PaymentController(
     @Operation(summary = "결제 요청")
     @PostMapping("/payments")
     fun createPayment(
-        @RequestBody request: PaymentClaimUseCase.PaymentClaimRequest
+        @RequestBody request: PaymentClaimUseCase.PaymentClaimRequest,
+        servletRequest: HttpServletRequest
     ): PaymentResponse<PaymentClaimUseCase.PaymentClaimResponse> {
-        val merchantId = "tempMerchantId" // @AuthenticationPrincipal
+        val merchantDto = servletRequest.getAttribute("merchantUser") as MerchantDto
+        val merchantId = merchantDto.merchantId
         val response = claimUseCase.createPayment(request, merchantId)
         val status = PaymentStatusEventType.READY
         statusChangedMessageSender.sendProcessChangedMessage(

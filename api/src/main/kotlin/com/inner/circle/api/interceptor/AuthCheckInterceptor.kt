@@ -29,9 +29,7 @@ class AuthCheckInterceptor(
                 val credentialString = authHeader.substring("Basic ".length)
                 val credentials = credentialString.split(":")
 
-                if (credentials.size != 2 ||
-                    credentials[1].isNotEmpty()
-                ) {
+                if (credentials.size != 1) {
                     response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized")
                     return false
                 }

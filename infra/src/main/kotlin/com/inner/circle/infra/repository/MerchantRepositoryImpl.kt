@@ -10,5 +10,5 @@ internal class MerchantRepositoryImpl(
 ) : MerchantRepository {
     override fun findByToken(token: String): MerchantEntity =
         merchantJpaRepository.findByToken(token)
-            ?:throw UserAuthenticationException.UserNotFoundException()
+            ?: throw UserAuthenticationException.UserNotFoundException()
 }
