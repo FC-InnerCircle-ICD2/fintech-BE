@@ -14,15 +14,20 @@ class SecurityConfig {
     @Bean
     fun apiSecurityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
-            .csrf { it.disable() }  // <- CSRF 보호 비활성화
+            .csrf { it.disable() }
             .authorizeHttpRequests { authorizeRequests ->
                 authorizeRequests
-                    .requestMatchers("/api/**").authenticated()
-                    .anyRequest().permitAll()
-            }
-            .sessionManagement { session ->
+                    .requestMatchers(
+                        "/api-docs/**",
+                        "/swagger-ui/**",
+                        "/health-check",
+                        "/api/payment/v1/sse/**"
+                    ).permitAll()
+                    .requestMatchers("/api/payment/v1/payments", "/api/payment/v1/payments/**")
+                    .authenticated()
+            }.sessionManagement { session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            }
+            }.csrf { it.disable() }
             .httpBasic(withDefaults())
 
         return http.build()
