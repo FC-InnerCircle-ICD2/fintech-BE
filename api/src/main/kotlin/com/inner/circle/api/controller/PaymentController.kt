@@ -9,6 +9,7 @@ import com.inner.circle.api.controller.dto.PaymentResponse
 import com.inner.circle.api.controller.request.ConfirmPaymentRequest
 import com.inner.circle.api.controller.request.ConfirmSimplePaymentRequest
 import com.inner.circle.api.controller.request.PaymentApproveRequest
+import com.inner.circle.api.interceptor.RequireAuth
 import com.inner.circle.core.usecase.ConfirmPaymentUseCase
 import com.inner.circle.core.usecase.ConfirmSimplePaymentUseCase
 import com.inner.circle.core.usecase.PaymentClaimUseCase
@@ -28,6 +29,7 @@ class PaymentController(
     private val savePaymentApproveService: SavePaymentApproveUseCase,
     private val statusChangedMessageSender: PaymentStatusChangedMessageSender
 ) {
+    @RequireAuth
     @Operation(summary = "결제 요청")
     @PostMapping("/payments")
     fun createPayment(
@@ -47,6 +49,7 @@ class PaymentController(
         return PaymentResponse.ok(response)
     }
 
+    @RequireAuth
     @Operation(summary = "결제 승인")
     @PostMapping("/payments/confirm")
     fun confirmPayment(
@@ -69,6 +72,7 @@ class PaymentController(
                 }
         )
 
+    @RequireAuth
     @Operation(summary = "간편 결제 인증")
     @PostMapping("/payments/authentication/simple")
     fun proceedPaymentConfirm(
@@ -110,6 +114,7 @@ class PaymentController(
         return response
     }
 
+    @RequireAuth
     @Operation(summary = "결제 취소")
     @GetMapping("/payments/orders/{order_id}/cancel")
     fun cancelPaymentConfirm(
