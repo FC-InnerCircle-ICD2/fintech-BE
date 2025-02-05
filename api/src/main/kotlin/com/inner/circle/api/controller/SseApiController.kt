@@ -49,14 +49,15 @@ class SseApiController(
     fun pushEvent(
         @Parameter(hidden = false)
         @RequestParam merchantId: String,
-        @RequestParam orderId: String
+        @RequestParam orderId: String,
+        @RequestParam message: String
     ) {
         val sseConnection =
             sseConnectionPool.getSession(
                 merchantId + "_" + orderId
             )
 
-        sseConnection.sendMessage("hello world")
+        sseConnection.sendMessage(message)
     }
 
     @GetMapping("/sse/push-event/ready")
