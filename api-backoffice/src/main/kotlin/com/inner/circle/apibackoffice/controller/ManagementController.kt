@@ -18,7 +18,10 @@ class ManagementController(
     fun createOrUpdateKey(
         @RequestBody request: ManagementsUseCase.CreateOrUpdateKeyRequest
     ): BackofficeResponse<CreateOrUpdateMerchantKeyDto> {
-        val response = CreateOrUpdateMerchantKeyDto.of(managementsUseCase.createOrUpdateKey(request))
+        val response =
+            CreateOrUpdateMerchantKeyDto.of(
+                managementsUseCase.createOrUpdateKey(request)
+            )
         return BackofficeResponse.ok(response)
     }
 }

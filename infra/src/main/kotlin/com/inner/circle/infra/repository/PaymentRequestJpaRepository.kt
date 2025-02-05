@@ -8,9 +8,11 @@ interface PaymentRequestJpaRepository : JpaRepository<PaymentRequestEntity, Stri
         paymentKey: String,
         orderId: String
     ): PaymentRequestEntity?
- 	fun findByOrderIdAndMerchantId(
+
+    fun findByOrderIdAndMerchantId(
         orderId: String,
         merchantId: String
     ): PaymentRequestEntity?
+
     fun findByOrderId(orderId: String): PaymentRequestEntity?
 }
