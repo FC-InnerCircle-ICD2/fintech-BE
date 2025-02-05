@@ -1,5 +1,6 @@
 package com.inner.circle.infra.repository.entity
 
+import io.hypersistence.utils.hibernate.id.Tsid
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
@@ -15,6 +16,8 @@ import java.time.LocalDateTime
 @Table(name = "payment_transaction")
 data class TransactionEntity(
     @Id
+    @Tsid
+    val id: Long?,
     @Column(name = "payment_key")
     val paymentKey: String,
     @ManyToOne(fetch = FetchType.LAZY)

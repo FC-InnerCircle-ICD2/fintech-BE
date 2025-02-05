@@ -4,6 +4,9 @@ spring:
   profiles:
     active: local
     include: infra, openapi
+  jackson:
+    deserialization:
+      use-big-decimal-for-floats: true
 
 server:
   port: 8080
@@ -11,6 +14,7 @@ card:
   url:
     base-url: http://localhost:8082
     approve-end-point: /mock/card/approve
+    validate-end-point: /mock/card/validate
 
 ---
 spring:
@@ -25,6 +29,7 @@ card:
   url:
     base-url: http://localhost:8082
     approve-end-point: /mock/card/approve
+    validate-end-point: /mock/card/validate
 
 ---
 spring:
@@ -37,3 +42,4 @@ card:
   url:
     base-url: http://localhost:8082
     approve-end-point: /mock/card/approve
+    validate-end-point: /mock/card/validate

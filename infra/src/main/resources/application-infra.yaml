@@ -68,6 +68,13 @@ spring:
         show_sql: true
         format_sql: true
 
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: 6379
+      ssl:
+        enabled: true
+
 external:
   mock-server:
     base-url: http://localhost:8082/

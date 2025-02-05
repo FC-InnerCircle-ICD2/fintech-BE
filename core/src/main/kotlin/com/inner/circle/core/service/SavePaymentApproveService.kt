@@ -33,11 +33,13 @@ internal class SavePaymentApproveService(
                     PaymentRequestDto(
                         orderId = paymentRequest.orderId,
                         orderName = paymentRequest.orderName,
-                        cardNumber = paymentRequest.cardNumber,
+                        cardNumber = paymentRequest.cardNumber ?: "",
                         orderStatus = paymentRequest.orderStatus,
-                        userId = paymentRequest.userId,
+                        accountId = paymentRequest.accountId,
                         merchantId = paymentRequest.merchantId,
-                        paymentKey = paymentRequest.paymentKey,
+                        paymentKey =
+                            paymentRequest.paymentKey
+                                ?: throw PaymentException.PaymentKeyNotFoundException(),
                         amount = paymentRequest.amount,
                         paymentType = paymentRequest.paymentType,
                         requestTime = paymentRequest.requestTime
@@ -54,7 +56,7 @@ internal class SavePaymentApproveService(
                         baseUrl,
                         endPoint,
                         mapOf(
-                            "cardNumber" to paymentRequest.cardNumber,
+                            "cardNumber" to paymentRequest.cardNumber!!,
                             "amount" to paymentRequest.amount
                         )
                     )
@@ -63,20 +65,23 @@ internal class SavePaymentApproveService(
                     paymentPort
                         .save(
                             PaymentPort.Request(
-                                paymentRequest.paymentKey,
-                                "KSW",
-                                paymentRequest.userId,
-                                paymentRequest.merchantId,
-                                paymentRequest.paymentType,
-                                paymentRequest.orderId,
-                                paymentRequest.orderName
+                                id = paymentRequest.id,
+                                paymentKey =
+                                    paymentRequest.paymentKey
+                                        ?: throw PaymentException.PaymentKeyNotFoundException(),
+                                currency = "KRW",
+                                accountId = paymentRequest.accountId,
+                                merchantId = paymentRequest.merchantId,
+                                paymentType = paymentRequest.paymentType,
+                                orderId = paymentRequest.orderId,
+                                orderName = paymentRequest.orderName
                             )
                         ).let { payment ->
                             val paymentDto =
                                 PaymentDto(
                                     paymentKey = payment.paymentKey,
                                     currency = payment.currency,
-                                    userId = payment.userId,
+                                    accountId = payment.accountId,
                                     merchantId = payment.merchantId,
                                     paymentType = payment.paymentType,
                                     orderId = payment.orderId
@@ -84,6 +89,7 @@ internal class SavePaymentApproveService(
 
                             transactionPort.save(
                                 TransactionPort.Request(
+                                    id = paymentRequest.id,
                                     paymentKey = paymentDto.paymentKey,
                                     amount = paymentRequestDto.amount,
                                     status = "APPROVE",
@@ -94,12 +100,14 @@ internal class SavePaymentApproveService(
 
                     return PaymentApproveDto(
                         orderId = paymentRequest.orderId,
-                        paymentKey = paymentRequest.paymentKey,
+                        paymentKey =
+                            paymentRequest.paymentKey
+                                ?: throw PaymentException.PaymentKeyNotFoundException(),
                         amount = paymentRequest.amount
                     )
                 } else {
                     throw CardCompanyException.CardNotApproveException(
-                        paymentRequest.cardNumber
+                        paymentRequest.cardNumber!!
                     )
                 }
             }

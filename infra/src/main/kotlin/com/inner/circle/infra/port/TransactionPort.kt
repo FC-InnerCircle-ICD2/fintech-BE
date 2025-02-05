@@ -5,6 +5,7 @@ import java.math.BigDecimal
 
 fun interface TransactionPort {
     data class Request(
+        val id: Long?,
         val paymentKey: String,
         val amount: BigDecimal,
         val status: String,
