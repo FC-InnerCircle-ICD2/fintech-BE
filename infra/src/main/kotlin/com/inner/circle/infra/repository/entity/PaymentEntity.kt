@@ -16,7 +16,7 @@ data class PaymentEntity(
     val paymentKey: String,
     @Column(nullable = false)
     val currency: String,
-    @Column(name = "user_id")
+    @Column(name = "account_id")
     val accountId: Long?,
     @Column(name = "merchant_id", nullable = false)
     val merchantId: String,
