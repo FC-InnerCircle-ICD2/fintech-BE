@@ -35,6 +35,7 @@ class PostgreSqlTestContainerConfiguration :
                     withDatabaseName("payment")
                     withUsername("test")
                     withPassword("test")
+                    withInitScript("sql/schema.sql")
                     start()
                 }
 
