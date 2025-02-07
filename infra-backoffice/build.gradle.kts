@@ -40,3 +40,11 @@ tasks.getByName<BootJar>("bootJar") {
 tasks.getByName<Jar>("jar") {
     enabled = true
 }
+
+sourceSets {
+    test {
+        resources {
+            srcDirs("src/test/resources")
+        }
+    }
+}
