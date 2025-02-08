@@ -6,7 +6,7 @@ import java.math.BigDecimal
 import java.time.LocalDateTime
 
 fun interface PaymentClaimUseCase {
-    data class PaymentClaimRequest
+    data class ClaimRequest
         @JsonCreator
         constructor(
             @JsonProperty("amount") val amount: BigDecimal,
@@ -29,7 +29,7 @@ fun interface PaymentClaimUseCase {
         }
 
     fun createPayment(
-        request: PaymentClaimRequest,
+        request: ClaimRequest,
         merchantId: String
     ): PaymentClaimResponse
 }
