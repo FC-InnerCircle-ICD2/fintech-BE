@@ -13,23 +13,23 @@ import org.springframework.security.web.SecurityFilterChain
 class SecurityConfig {
     @Bean
     fun apiSecurityFilterChain(http: HttpSecurity): SecurityFilterChain {
-            http
-                .csrf { it.disable() }
-                .authorizeHttpRequests { authorizeRequests ->
-                    authorizeRequests
-                        .dispatcherTypeMatchers(DispatcherType.ERROR, DispatcherType.ASYNC)
-                        .permitAll()
-                        .requestMatchers(
-                            "/api-docs/**",
-                            "/swagger-ui/**",
-                            "/health-check",
-                            "/api/payment/v1/sse/**"
-                        ).permitAll()
-                        .requestMatchers("/api/payment/v1/payments", "/api/payment/v1/payments/**")
-                        .authenticated()
-                }.sessionManagement { session ->
-                    session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                }
+        http
+            .csrf { it.disable() }
+            .authorizeHttpRequests { authorizeRequests ->
+                authorizeRequests
+                    .dispatcherTypeMatchers(DispatcherType.ERROR, DispatcherType.ASYNC)
+                    .permitAll()
+                    .requestMatchers(
+                        "/api-docs/**",
+                        "/swagger-ui/**",
+                        "/health-check",
+                        "/api/payment/v1/sse/**"
+                    ).permitAll()
+                    .requestMatchers("/api/payment/v1/payments", "/api/payment/v1/payments/**")
+                    .authenticated()
+            }.sessionManagement { session ->
+                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            }
 
         return http.build()
     }

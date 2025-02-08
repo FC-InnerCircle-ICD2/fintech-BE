@@ -15,5 +15,5 @@ data class UserAccountEntity(
     @Column(nullable = false, unique = false, length = 255)
     val password: String,
     @Column(nullable = false, unique = false)
-    val status: Int,
+    val status: Int
 ) : BaseEntity()
