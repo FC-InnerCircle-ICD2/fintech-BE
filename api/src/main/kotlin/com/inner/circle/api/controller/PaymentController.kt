@@ -9,6 +9,7 @@ import com.inner.circle.api.controller.dto.PaymentResponse
 import com.inner.circle.api.controller.request.ConfirmPaymentRequest
 import com.inner.circle.api.controller.request.ConfirmSimplePaymentRequest
 import com.inner.circle.api.controller.request.PaymentApproveRequest
+import com.inner.circle.api.controller.request.PaymentClaimRequest
 import com.inner.circle.api.interceptor.RequireAuth
 import com.inner.circle.core.service.dto.MerchantDto
 import com.inner.circle.core.usecase.ConfirmPaymentUseCase
@@ -39,12 +40,20 @@ class PaymentController(
     @Operation(summary = "결제 요청")
     @PostMapping("/payments")
     fun createPayment(
-        @RequestBody request: PaymentClaimUseCase.PaymentClaimRequest,
+        @RequestBody request: PaymentClaimRequest,
         servletRequest: HttpServletRequest
     ): PaymentResponse<PaymentClaimUseCase.PaymentClaimResponse> {
         val merchantDto = servletRequest.getAttribute("merchantUser") as MerchantDto
         val merchantId = merchantDto.merchantId
-        val response = claimUseCase.createPayment(request, merchantId)
+
+        val claimRequest =
+            PaymentClaimUseCase.ClaimRequest(
+                amount = request.amount,
+                orderId = request.orderId,
+                orderName = request.orderId
+            )
+
+        val response = claimUseCase.createPayment(claimRequest, merchantId)
 
         sendStatusChangedMessage(
             status = PaymentStatusEventType.READY,
