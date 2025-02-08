@@ -26,7 +26,7 @@ internal class PaymentService(
                     accountId = it.accountId,
                     merchantId = it.merchantId,
                     paymentType = PaymentType.of(it.paymentType),
-                    orderId =  it.orderId,
+                    orderId = it.orderId,
                     orderName = it.orderName,
                     createdAt = it.createdAt,
                     updatedAt = it.updatedAt

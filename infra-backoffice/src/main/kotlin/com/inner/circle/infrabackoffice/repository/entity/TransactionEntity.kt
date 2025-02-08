@@ -22,7 +22,7 @@ data class TransactionEntity(
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     val status: TransactionStatus,
-    val reason: String?,
+    val reason: String?
 //    TODO: paymeny쪽과 협의 후 정리 필요 잠시 주석 처리
 //    @Column(name = "request_time", nullable = false)
 //    var requestTime: LocalDateTime?,

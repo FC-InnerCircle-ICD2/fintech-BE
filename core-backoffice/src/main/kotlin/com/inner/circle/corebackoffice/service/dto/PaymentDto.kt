@@ -28,7 +28,7 @@ data class PaymentDto(
                 accountId = payment.accountId,
                 merchantId = payment.merchantId,
                 paymentType = payment.paymentType,
-                orderId =  payment.orderId,
+                orderId = payment.orderId,
                 orderName = payment.orderName,
                 createdAt = payment.createdAt,
                 updatedAt = payment.updatedAt
