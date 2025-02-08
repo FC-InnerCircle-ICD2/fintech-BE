@@ -46,11 +46,12 @@ class PaymentController(
         val merchantDto = servletRequest.getAttribute("merchantUser") as MerchantDto
         val merchantId = merchantDto.merchantId
 
-        val claimRequest = PaymentClaimUseCase.ClaimRequest(
-            amount = request.amount,
-            orderId = request.orderId,
-            orderName = request.orderId
-        )
+        val claimRequest =
+            PaymentClaimUseCase.ClaimRequest(
+                amount = request.amount,
+                orderId = request.orderId,
+                orderName = request.orderId
+            )
 
         val response = claimUseCase.createPayment(claimRequest, merchantId)
 
