@@ -69,6 +69,9 @@ internal class SavePaymentApproveService(
                                 paymentKey =
                                     paymentRequest.paymentKey
                                         ?: throw PaymentException.PaymentKeyNotFoundException(),
+                                cardNumber =
+                                    paymentRequest.cardNumber
+                                        ?: throw PaymentException.CardNotFoundException(),
                                 currency = "KRW",
                                 accountId = paymentRequest.accountId,
                                 merchantId = paymentRequest.merchantId,
@@ -80,6 +83,7 @@ internal class SavePaymentApproveService(
                             val paymentDto =
                                 PaymentDto(
                                     paymentKey = payment.paymentKey,
+                                    cardNumber = payment.cardNumber,
                                     currency = payment.currency,
                                     accountId = payment.accountId,
                                     merchantId = payment.merchantId,

@@ -45,4 +45,9 @@ sealed class PaymentException(
         override val message: String = "PaymentKey not found.",
         override val cause: Throwable? = null
     ) : PaymentException(HttpStatus.NOT_FOUND, message, cause)
+
+    data class CardNotFoundException(
+        override val message: String = "Payment method (card) not found.",
+        override val cause: Throwable? = null
+    ) : PaymentException(HttpStatus.BAD_REQUEST, message, cause)
 }

@@ -15,6 +15,7 @@ internal class PaymentAdaptor(
             PaymentEntity(
                 id = request.id,
                 paymentKey = request.paymentKey,
+                cardNumber = request.cardNumber,
                 currency = request.currency,
                 accountId = request.accountId,
                 merchantId = request.merchantId,
