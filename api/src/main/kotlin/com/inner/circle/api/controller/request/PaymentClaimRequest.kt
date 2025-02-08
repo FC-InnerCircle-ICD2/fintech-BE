@@ -2,8 +2,8 @@ package com.inner.circle.api.controller.request
 
 import java.math.BigDecimal
 
-data class PaymentApproveRequest(
+data class PaymentClaimRequest(
+    val amount: BigDecimal,
     val orderId: String,
-    val paymentKey: String,
-    val amount: BigDecimal
+    val orderName: String
 )

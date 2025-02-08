@@ -3,11 +3,7 @@ package com.inner.circle.infra.repository.entity
 import io.hypersistence.utils.hibernate.id.Tsid
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
-import jakarta.persistence.FetchType
 import jakarta.persistence.Id
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.ManyToOne
-import jakarta.persistence.PrePersist
 import jakarta.persistence.Table
 import java.math.BigDecimal
 import java.time.LocalDateTime
@@ -18,11 +14,8 @@ data class TransactionEntity(
     @Id
     @Tsid
     val id: Long?,
-    @Column(name = "payment_key")
+    @Column(name = "payment_key", nullable = false)
     val paymentKey: String,
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "payment_id", nullable = false)
-    val payment: PaymentEntity,
     @Column(nullable = false)
     val amount: BigDecimal,
     @Column(nullable = false)
@@ -32,14 +25,4 @@ data class TransactionEntity(
     var requestTime: LocalDateTime?,
     @Column(name = "completion_time")
     var completionTime: LocalDateTime?
-) : BaseEntity() {
-    @PrePersist
-    fun prePersist() {
-        if (requestTime == null) {
-            requestTime = LocalDateTime.now()
-        }
-        if (completionTime == null) {
-            completionTime = LocalDateTime.now()
-        }
-    }
-}
+) : BaseEntity()

@@ -21,6 +21,7 @@ dependencies {
     testImplementation(libs.bundles.testContainer)
     testImplementation(libs.bundles.kotlinTest)
     testImplementation(libs.bundles.kotlinTestSpring)
+    testImplementation(libs.bundles.kotlinxSerialization)
 }
 
 tasks.named<Test>("test") {

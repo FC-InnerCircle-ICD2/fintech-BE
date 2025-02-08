@@ -11,7 +11,8 @@ fun interface PaymentPort {
         val merchantId: String,
         val paymentType: String,
         val orderId: String,
-        val orderName: String?
+        val orderName: String?,
+        val cardNumber: String
     )
 
     fun save(request: Request): PaymentEntity

@@ -18,7 +18,7 @@ class PaymentClaimService(
     private val jwtHandler: JwtHandler
 ) : PaymentClaimUseCase {
     override fun createPayment(
-        request: PaymentClaimUseCase.PaymentClaimRequest,
+        request: PaymentClaimUseCase.ClaimRequest,
         merchantId: String
     ): PaymentClaimUseCase.PaymentClaimResponse {
         val (amount, orderId, orderName) = request
