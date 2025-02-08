@@ -15,8 +15,6 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 
-private const val REQUIRED_TSID_LENGTH = 13
-
 @Service
 internal class ConfirmPaymentService(
     private val confirmPaymentPort: ConfirmPaymentPort,
