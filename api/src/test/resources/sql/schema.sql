@@ -1,4 +1,4 @@
-create table merchant
+create table if not exists  merchant
 (
     created_at timestamp(6) not null,
     updated_at timestamp(6) not null,
@@ -12,7 +12,7 @@ create table merchant
         unique
 );
 
-create table payment
+create table if not exists  payment
 (
     account_id   bigint,
     created_at   timestamp(6) not null,
@@ -28,7 +28,7 @@ create table payment
     payment_type varchar(255) not null
 );
 
-create table payment_request
+create table if not exists  payment_request
 (
     amount        numeric(38, 2) not null,
     account_id    bigint,
@@ -48,7 +48,7 @@ create table payment_request
 );
 
 
-create table payment_transaction
+create table if not exists  payment_transaction
 (
     amount          numeric(38, 2) not null,
     completion_time timestamp(6),
@@ -62,7 +62,7 @@ create table payment_transaction
     status          varchar(255)   not null
 );
 
-create table user_card
+create table if not exists  user_card
 (
     is_representative boolean      not null,
     account_id        bigint       not null,
