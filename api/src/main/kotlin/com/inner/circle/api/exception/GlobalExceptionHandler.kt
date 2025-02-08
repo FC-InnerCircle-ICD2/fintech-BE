@@ -1,8 +1,8 @@
 package com.inner.circle.api.exception
 
 import com.inner.circle.api.common.response.AppExceptionResponse
-import com.inner.circle.api.structure.dto.PaymentError
-import com.inner.circle.api.structure.dto.PaymentResponse
+import com.inner.circle.api.controller.dto.PaymentError
+import com.inner.circle.api.controller.dto.PaymentResponse
 import com.inner.circle.exception.AppException
 import javax.security.sasl.AuthenticationException
 import org.springframework.http.HttpStatus
