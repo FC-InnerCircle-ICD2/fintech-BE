@@ -1,7 +1,6 @@
 package com.inner.circle.infrabackoffice.repository
 
 import com.inner.circle.infrabackoffice.repository.entity.TransactionEntity
-import java.util.UUID
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -12,6 +11,6 @@ internal class TransactionRepositoryImpl(
     override fun save(transaction: TransactionEntity): TransactionEntity =
         transactionJpaRepository.save(transaction)
 
-    override fun findByPaymentId(id: UUID): List<TransactionEntity> =
-        transactionJpaRepository.findByPaymentId(id)
+    override fun findByPaymentKey(paymenyKey: String): List<TransactionEntity> =
+        transactionJpaRepository.findByPaymentKey(paymenyKey)
 }

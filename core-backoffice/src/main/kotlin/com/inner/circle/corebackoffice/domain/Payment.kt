@@ -1,15 +1,17 @@
 package com.inner.circle.corebackoffice.domain
 
-import java.util.UUID
 import kotlinx.datetime.LocalDateTime
 
 data class Payment(
-    val id: UUID,
+    val id: Long,
     val paymentKey: String,
+    val cardNumber: String,
     val currency: Currency,
-    val userId: UUID?,
-    val merchantId: UUID?,
+    val accountId: Long?,
+    val merchantId: String?,
     val paymentType: PaymentType,
+    val orderId: String,
+    val orderName: String?,
     val createdAt: LocalDateTime,
     val updatedAt: LocalDateTime
 )

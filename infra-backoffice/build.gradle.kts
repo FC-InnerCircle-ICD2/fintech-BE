@@ -20,6 +20,7 @@ dependencies {
     implementation(libs.springBootDataJpa)
     implementation(libs.awsSecretsManagerConfig)
     implementation(libs.h2)
+    implementation(libs.bundles.hypersistence)
     runtimeOnly(libs.postgresql)
     compileOnly(libs.bundles.kotlinLogging)
     compileOnly(libs.bundles.kotlinxCoroutines)
