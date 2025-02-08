@@ -7,22 +7,27 @@ import com.inner.circle.core.usecase.ConfirmPaymentUseCase
 import com.inner.circle.core.usecase.ConfirmSimplePaymentUseCase
 import com.inner.circle.exception.AuthenticateException
 import com.inner.circle.infra.http.HttpClient
-import com.inner.circle.infra.port.CardPaymentAuthPort
 import com.inner.circle.infra.port.ConfirmPaymentPort
 import com.inner.circle.infra.port.SavePaymentRequestPort
-import java.util.UUID
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
+import io.hypersistence.tsid.TSID
+
+private const val REQUIRED_TSID_LENGTH = 13
 
 @Service
 internal class ConfirmPaymentService(
     private val confirmPaymentPort: ConfirmPaymentPort,
-    private val cardPaymentAuthPort: CardPaymentAuthPort,
     private val savePaymentRequestPort: SavePaymentRequestPort,
     private val sseConnectionPool: SseConnectionPool,
     @Value("\${card.url.base-url}") private var baseUrl: String,
     @Value("\${card.url.validate-end-point}") private var endPoint: String
 ) : ConfirmPaymentUseCase {
+
+    private val logger: Logger = LoggerFactory.getLogger(ConfirmPaymentService::class.java)
+
     private fun authPayment(request: PaymentInfoDto): ConfirmPaymentCoreDto {
         val cardValidateMap: Map<String, Any> =
             HttpClient.sendPostRequest(
@@ -40,11 +45,11 @@ internal class ConfirmPaymentService(
             throw AuthenticateException.CardAuthFailException()
         }
 
-        val paymentKeyUUID = UUID.randomUUID().toString()
+        val paymentKeyTsid = TSID.fast().toString()
 
         val result =
             ConfirmPaymentCoreDto(
-                paymentKey = paymentKeyUUID,
+                paymentKey = paymentKeyTsid,
                 merchantId = request.merchantId,
                 orderId = request.orderId,
                 cardNumber = request.cardNumber,
@@ -59,20 +64,24 @@ internal class ConfirmPaymentService(
                 orderStatus = request.orderStatus,
                 accountId = request.accountId,
                 merchantId = request.merchantId,
-                paymentKey = paymentKeyUUID,
+                paymentKey = paymentKeyTsid,
                 amount = request.amount,
-                cardNumber = "",
-                paymentType = "",
+                cardNumber = request.cardNumber,
+                paymentType = "CARD",
                 requestTime = request.requestTime
             )
         )
 
-        // sse 전송
-        val orderConnection =
-            sseConnectionPool.getSession(
-                request.merchantId + "_" + request.orderId
-            )
-        orderConnection.sendMessage(result)
+        // sse 전송 일단 try catch로 구현 이후 Controller에 통합 후 삭제 예정
+        try {
+            val orderConnection =
+                sseConnectionPool.getSession(
+                    request.merchantId + "_" + request.orderId
+                )
+            orderConnection.sendMessage(result)
+        } catch (e: Exception) {
+            logger.error("SSE connection not found", e)
+        }
 
         return result
     }
