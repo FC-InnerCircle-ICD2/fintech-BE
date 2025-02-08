@@ -9,11 +9,11 @@ import com.inner.circle.exception.AuthenticateException
 import com.inner.circle.infra.http.HttpClient
 import com.inner.circle.infra.port.ConfirmPaymentPort
 import com.inner.circle.infra.port.SavePaymentRequestPort
+import io.hypersistence.tsid.TSID
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
-import io.hypersistence.tsid.TSID
 
 private const val REQUIRED_TSID_LENGTH = 13
 
@@ -25,7 +25,6 @@ internal class ConfirmPaymentService(
     @Value("\${card.url.base-url}") private var baseUrl: String,
     @Value("\${card.url.validate-end-point}") private var endPoint: String
 ) : ConfirmPaymentUseCase {
-
     private val logger: Logger = LoggerFactory.getLogger(ConfirmPaymentService::class.java)
 
     private fun authPayment(request: PaymentInfoDto): ConfirmPaymentCoreDto {
