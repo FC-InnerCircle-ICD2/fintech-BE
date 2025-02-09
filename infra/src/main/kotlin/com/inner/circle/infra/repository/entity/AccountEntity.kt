@@ -14,7 +14,7 @@ data class AccountEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 36)
     val uuid: UUID,
     @Column(nullable = false, unique = true, length = 255)
     val email: String,
