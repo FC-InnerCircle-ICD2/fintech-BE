@@ -3,7 +3,7 @@ package com.inner.circle.api.controller.merchant
 import com.inner.circle.api.application.PaymentStatusChangedMessageSender
 import com.inner.circle.api.application.dto.PaymentStatusChangedSsePaymentRequest
 import com.inner.circle.api.application.dto.PaymentStatusEventType
-import com.inner.circle.api.controller.PaymentV1Api
+import com.inner.circle.api.controller.PaymentForMerchantV1Api
 import com.inner.circle.api.controller.dto.PaymentApproveDto
 import com.inner.circle.api.controller.dto.PaymentResponse
 import com.inner.circle.api.controller.request.PaymentApproveRequest
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 
 @Tag(name = "Payments - Merchant", description = "상점 고객(SDK) 결제 관련 API")
-@PaymentV1Api
+@PaymentForMerchantV1Api
 class MerchantPaymentController(
     private val confirmPaymentUseCase: ConfirmPaymentUseCase,
     private val claimUseCase: PaymentClaimUseCase,
@@ -35,7 +35,7 @@ class MerchantPaymentController(
 
     @RequireAuth
     @Operation(summary = "결제 요청")
-    @PostMapping("/merchant/payments")
+    @PostMapping("/payments")
     fun createPayment(
         @RequestBody request: PaymentClaimRequest,
         servletRequest: HttpServletRequest
@@ -63,7 +63,7 @@ class MerchantPaymentController(
 
     @RequireAuth
     @Operation(summary = "결제 승인")
-    @PostMapping("/merchant/payments/confirm")
+    @PostMapping("/payments/confirm")
     fun confirmPayment(
         @RequestBody paymentApproveRequest: PaymentApproveRequest,
         servletRequest: HttpServletRequest
@@ -100,7 +100,7 @@ class MerchantPaymentController(
 
     @RequireAuth
     @Operation(summary = "결제 취소")
-    @GetMapping("/merchant/payments/orders/{payment_key}/cancel")
+    @GetMapping("/payments/orders/{payment_key}/cancel")
     fun cancelPaymentConfirm(
         @PathVariable("payment_key") paymentKey: String,
         servletRequest: HttpServletRequest

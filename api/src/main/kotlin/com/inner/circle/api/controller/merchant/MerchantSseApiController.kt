@@ -2,7 +2,7 @@ package com.inner.circle.api.controller.merchant
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.inner.circle.api.application.PaymentStatusChangedMessageSender
-import com.inner.circle.api.controller.PaymentV1Api
+import com.inner.circle.api.controller.PaymentForMerchantV1Api
 import com.inner.circle.core.sse.SseConnectionPool
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter
 
 @Tag(name = "SSE - Merchant", description = "상점 고객(SDK) SSE API")
-@PaymentV1Api
+@PaymentForMerchantV1Api
 class MerchantSseApiController(
     private val sseConnectionPool: SseConnectionPool,
     private val objectMapper: ObjectMapper,

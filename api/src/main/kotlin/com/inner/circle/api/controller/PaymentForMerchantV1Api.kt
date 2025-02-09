@@ -6,5 +6,5 @@ import org.springframework.web.bind.annotation.RestController
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
 @RestController
-@RequestMapping("/api/payment/v1")
-annotation class PaymentV1Api
+@RequestMapping("/api/payment/merchant/v1")
+annotation class PaymentForMerchantV1Api

@@ -3,7 +3,7 @@ package com.inner.circle.api.controller.user
 import com.inner.circle.api.application.PaymentStatusChangedMessageSender
 import com.inner.circle.api.application.dto.PaymentStatusChangedSsePaymentRequest
 import com.inner.circle.api.application.dto.PaymentStatusEventType
-import com.inner.circle.api.controller.PaymentV1Api
+import com.inner.circle.api.controller.PaymentForUserV1Api
 import com.inner.circle.api.controller.dto.ConfirmPaymentDto
 import com.inner.circle.api.controller.dto.PaymentResponse
 import com.inner.circle.api.controller.request.ConfirmPaymentRequest
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 
 @Tag(name = "Payments - User", description = "결제 고객(App) 결제 관련 API")
-@PaymentV1Api
+@PaymentForUserV1Api
 class UserPaymentController(
     private val confirmPaymentUseCase: ConfirmPaymentUseCase,
     private val savePaymentApproveService: SavePaymentApproveUseCase,
@@ -34,7 +34,7 @@ class UserPaymentController(
 
     @RequireAuth
     @Operation(summary = "간편 결제 인증")
-    @PostMapping("/user/payments/authentication/simple")
+    @PostMapping("/payments/authentication/simple")
     fun proceedPaymentConfirm(
         @RequestBody confirmSimplePaymentRequest: ConfirmSimplePaymentRequest
     ): PaymentResponse<ConfirmPaymentDto> {
@@ -68,7 +68,7 @@ class UserPaymentController(
     }
 
     @Operation(summary = "일반 결제 인증")
-    @PostMapping("/user/payments/authentication")
+    @PostMapping("/payments/authentication")
     fun proceedPaymentConfirm(
         @RequestBody confirmPaymentRequest: ConfirmPaymentRequest
     ): PaymentResponse<ConfirmPaymentDto> {
@@ -103,7 +103,7 @@ class UserPaymentController(
 
     @RequireAuth
     @Operation(summary = "결제 취소")
-    @GetMapping("/user/payments/orders/{order_id}/cancel")
+    @GetMapping("/payments/orders/{order_id}/cancel")
     fun cancelPaymentConfirm(
         @PathVariable("order_id") orderId: String,
         servletRequest: HttpServletRequest
