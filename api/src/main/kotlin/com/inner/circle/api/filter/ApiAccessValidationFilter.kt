@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpHeaders
 import org.springframework.web.filter.OncePerRequestFilter
 
-class ApiAccessValidationFilter: OncePerRequestFilter() {
+class ApiAccessValidationFilter : OncePerRequestFilter() {
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
@@ -53,4 +53,3 @@ class ApiAccessValidationFilter: OncePerRequestFilter() {
         private const val BEARER_AUTH_TOKEN_PREFIX = "Bearer "
     }
 }
-
