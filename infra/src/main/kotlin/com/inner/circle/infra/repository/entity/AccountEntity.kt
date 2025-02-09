@@ -20,6 +20,6 @@ data class AccountEntity(
     val email: String,
     @Column(nullable = false, unique = false, length = 255)
     val password: String,
-    @Column(nullable = false, unique = false, length = 1)
-    val status: Int,
+    @Column(nullable = false, unique = false)
+    val status: Int
 ) : BaseEntity()
