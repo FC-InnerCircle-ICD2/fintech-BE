@@ -13,13 +13,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 
 @RestControllerAdvice
 class GlobalExceptionHandler {
-    companion object {
-        private val logger = LoggerFactory.getLogger(GlobalExceptionHandler::class.java)
-    }
+    private val logger = LoggerFactory.getLogger(GlobalExceptionHandler::class.java)
 
     @ExceptionHandler(AppException::class)
     fun handleAppException(exception: AppException): ResponseEntity<AppExceptionResponse> {
-        logger.info("AppException (type = {})", exception::class.simpleName, exception)
+        logger.error("AppException (type = {})", exception::class.simpleName, exception)
         return ResponseEntity(
             AppExceptionResponse.of(exception),
             HttpStatus.valueOf(exception.status.code)
@@ -46,7 +44,7 @@ class GlobalExceptionHandler {
     fun handleIllegalArgumentException(
         ex: IllegalArgumentException
     ): ResponseEntity<PaymentResponse<Nothing>> {
-        logger.warn("invalid request occurred", ex)
+        logger.error("invalid request occurred", ex)
         val status = HttpStatus.BAD_REQUEST
         val errorResponse =
             PaymentResponse.fail(

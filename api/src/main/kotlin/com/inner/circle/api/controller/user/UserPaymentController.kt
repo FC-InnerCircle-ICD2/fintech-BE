@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 
-@Tag(name = "Payments - user", description = "결제 고객(App) 결제 관련 API")
+@Tag(name = "Payments - User", description = "결제 고객(App) 결제 관련 API")
 @PaymentV1Api
 class UserPaymentController(
     private val confirmPaymentUseCase: ConfirmPaymentUseCase,
