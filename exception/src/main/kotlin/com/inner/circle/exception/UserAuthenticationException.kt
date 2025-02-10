@@ -9,4 +9,9 @@ sealed class UserAuthenticationException(
         override val message: String = "Request User not found.",
         override val cause: Throwable? = null
     ) : UserAuthenticationException(HttpStatus.NOT_FOUND, message, cause)
+
+    data class UnauthorizedException(
+        override val message: String = "Unauthorized: Basic Auth required",
+        override val cause: Throwable? = null
+    ) : UserAuthenticationException(HttpStatus.UNAUTHORIZED, message, cause)
 }

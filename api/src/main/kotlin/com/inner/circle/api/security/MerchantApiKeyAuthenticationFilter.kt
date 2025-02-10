@@ -1,8 +1,7 @@
 package com.inner.circle.api.security
 
 import com.inner.circle.core.security.MerchantApiKeyProvider
-import com.inner.circle.exception.AppException
-import com.inner.circle.exception.HttpStatus
+import com.inner.circle.exception.UserAuthenticationException
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -19,6 +18,7 @@ class MerchantApiKeyAuthenticationFilter(
         filterChain: FilterChain
     ) {
         val authHeader = request.getHeader(HttpHeaders.AUTHORIZATION)
+            ?: throw UserAuthenticationException.UnauthorizedException("Missing Authorization header")
 
         val apiKey = resolveApiKey(authHeader)
 
@@ -32,8 +32,8 @@ class MerchantApiKeyAuthenticationFilter(
         authenticateWithBasicAuth(authHeader = authHeader)
 
         val authorizationInfo = authHeader.split(" ")
-        if (authorizationInfo.size != 2 || authorizationInfo[0] != "Basic") {
-            throw AppException(HttpStatus.UNAUTHORIZED, "Unauthorized: Basic Auth required")
+        if (authorizationInfo.size != 2 || authorizationInfo[0] != BASIC_AUTH_TOKEN_PREFIX) {
+            throw UserAuthenticationException.UnauthorizedException()
         }
 
         val encodedApiKey = authorizationInfo[1]
@@ -45,11 +45,11 @@ class MerchantApiKeyAuthenticationFilter(
                         .decode(encodedApiKey)
                 )
             } catch (e: IllegalArgumentException) {
-                throw AppException(HttpStatus.UNAUTHORIZED, "Unauthorized: Basic Auth required")
+                throw UserAuthenticationException.UnauthorizedException()
             }
 
         if (!decodedApiKey.contains(":")) {
-            throw AppException(HttpStatus.UNAUTHORIZED, "Unauthorized: Basic Auth required")
+            throw UserAuthenticationException.UnauthorizedException()
         }
 
         return decodedApiKey.substringBefore(":")
@@ -57,11 +57,11 @@ class MerchantApiKeyAuthenticationFilter(
 
     private fun authenticateWithBasicAuth(authHeader: String?) {
         if (authHeader == null || !authHeader.startsWith(prefix = BASIC_AUTH_TOKEN_PREFIX)) {
-            throw AppException(HttpStatus.UNAUTHORIZED, "Unauthorized: Basic Auth required")
+            throw UserAuthenticationException.UnauthorizedException()
         }
     }
 
     companion object {
-        private const val BASIC_AUTH_TOKEN_PREFIX = "Basic "
+        private const val BASIC_AUTH_TOKEN_PREFIX = "Basic"
     }
 }
