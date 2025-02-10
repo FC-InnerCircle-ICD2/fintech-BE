@@ -16,7 +16,7 @@ class SecurityConfig(
     @Bean
     fun apiSecurityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
-            .securityMatcher("/api/payment/merchant/v1/**")
+            .securityMatcher("/api/v1/p/merchant/**")
             .csrf { it.disable() }
             .httpBasic { it.disable() }
             .cors { it.disable() }
