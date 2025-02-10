@@ -22,6 +22,7 @@ external:
   mock-server:
     base-url: http://localhost:8082/
 
+
 ---
 spring:
   config:
