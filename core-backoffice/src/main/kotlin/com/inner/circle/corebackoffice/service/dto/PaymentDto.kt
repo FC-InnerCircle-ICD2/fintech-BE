@@ -11,7 +11,7 @@ data class PaymentDto(
     val cardNumber: String,
     val currency: Currency,
     val accountId: Long?,
-    val merchantId: String?,
+    val merchantId: String,
     val paymentType: PaymentType,
     val orderId: String,
     val orderName: String?,
