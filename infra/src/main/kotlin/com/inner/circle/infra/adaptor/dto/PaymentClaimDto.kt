@@ -2,6 +2,7 @@ package com.inner.circle.infra.adaptor.dto
 
 import com.inner.circle.exception.PaymentClaimException
 import com.inner.circle.infra.repository.entity.PaymentRequestEntity
+import com.inner.circle.infra.repository.entity.PaymentType
 import java.math.BigDecimal
 import java.time.LocalDateTime
 
@@ -10,7 +11,7 @@ class PaymentClaimDto(
     val orderId: String,
     val orderName: String?,
     val orderStatus: PaymentProcessStatus,
-    val paymentType: String?,
+    val paymentType: PaymentType?,
     val cardNumber: String?,
     val merchantId: String,
     val paymentKey: String?,
@@ -52,7 +53,7 @@ class PaymentClaimDto(
 
         private fun validateRequiredOrderInformation(
             orderName: String?,
-            merchantId: String?,
+            merchantId: String,
             orderId: String?
         ) {
             if (orderName.isNullOrEmpty() ||
@@ -78,7 +79,7 @@ class PaymentClaimDto(
             orderStatus = orderStatus.name,
             accountId = null,
             merchantId = merchantId,
-            paymentType = paymentType ?: "CARD",
+            paymentType = paymentType ?: PaymentType.CARD,
             cardNumber = cardNumber,
             paymentKey = paymentKey,
             amount = amount,

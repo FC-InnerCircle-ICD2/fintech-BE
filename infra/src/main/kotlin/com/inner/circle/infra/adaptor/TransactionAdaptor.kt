@@ -4,6 +4,7 @@ import com.inner.circle.infra.port.TransactionPort
 import com.inner.circle.infra.repository.PaymentRepository
 import com.inner.circle.infra.repository.TransactionRepository
 import com.inner.circle.infra.repository.entity.TransactionEntity
+import java.time.LocalDateTime
 import org.springframework.stereotype.Component
 
 @Component
@@ -19,8 +20,8 @@ internal class TransactionAdaptor(
                 amount = request.amount,
                 status = request.status,
                 reason = request.reason,
-                requestTime = null,
-                completionTime = null
+                // TODO: 추후 paymentRequest의 생성 시각을 넣어줘야함.
+                requestedAt = LocalDateTime.now()
             )
         ) ?: throw IllegalArgumentException(
             "Payment Transaction not save"
