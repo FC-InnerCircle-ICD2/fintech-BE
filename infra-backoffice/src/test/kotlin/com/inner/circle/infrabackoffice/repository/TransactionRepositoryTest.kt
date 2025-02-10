@@ -33,7 +33,7 @@ class TransactionRepositoryTest(
                         amount = BigDecimal.valueOf(100.0),
                         status = TransactionStatus.APPROVED,
                         reason = "APPROVED",
-                        requestedAt = LocalDateTime.now(),
+                        requestedAt = LocalDateTime.now()
                     )
                 val savedTransaction = transactionRepository.save(transaction)
 
@@ -53,7 +53,7 @@ class TransactionRepositoryTest(
                             amount = BigDecimal.valueOf(50.0),
                             status = TransactionStatus.CANCELED,
                             reason = "CANCELED",
-                            requestedAt = LocalDateTime.now(),
+                            requestedAt = LocalDateTime.now()
                         )
                     )
 
@@ -64,7 +64,7 @@ class TransactionRepositoryTest(
                             amount = BigDecimal.valueOf(50.0),
                             status = TransactionStatus.CANCELED,
                             reason = "CANCELED",
-                            requestedAt = LocalDateTime.now(),
+                            requestedAt = LocalDateTime.now()
                         )
                     )
 
@@ -75,7 +75,7 @@ class TransactionRepositoryTest(
                             amount = BigDecimal.valueOf(100.0),
                             status = TransactionStatus.APPROVED,
                             reason = "APPROVED",
-                            requestedAt = LocalDateTime.now(),
+                            requestedAt = LocalDateTime.now()
                         )
                     )
 
