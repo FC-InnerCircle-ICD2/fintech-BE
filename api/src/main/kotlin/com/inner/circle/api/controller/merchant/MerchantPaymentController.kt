@@ -8,7 +8,6 @@ import com.inner.circle.api.controller.dto.PaymentApproveDto
 import com.inner.circle.api.controller.dto.PaymentResponse
 import com.inner.circle.api.controller.request.PaymentApproveRequest
 import com.inner.circle.api.controller.request.PaymentClaimRequest
-import com.inner.circle.api.interceptor.RequireAuth
 import com.inner.circle.core.service.dto.MerchantDto
 import com.inner.circle.core.usecase.ConfirmPaymentUseCase
 import com.inner.circle.core.usecase.PaymentClaimUseCase
@@ -32,7 +31,6 @@ class MerchantPaymentController(
 ) {
     private val logger: Logger = LoggerFactory.getLogger(MerchantPaymentController::class.java)
 
-    @RequireAuth
     @Operation(summary = "결제 요청")
     @PostMapping
     fun createPayment(
@@ -60,7 +58,6 @@ class MerchantPaymentController(
         return PaymentResponse.ok(response)
     }
 
-    @RequireAuth
     @Operation(summary = "결제 승인")
     @PostMapping("/confirm")
     fun confirmPayment(
@@ -108,7 +105,6 @@ class MerchantPaymentController(
         return response
     }
 
-    @RequireAuth
     @Operation(summary = "결제 취소 - paymentKey")
     @PostMapping("/orders/{paymentKey}/cancel")
     fun cancelPaymentConfirmWithPaymentKey(
