@@ -12,9 +12,14 @@ class MerchantApiKeyProvider(
 ) : CustomSecurityProvider {
     override fun getAuthentication(token: String): Authentication {
         val userDetails = merchantDetailsService.loadUserByUsername(token)
-        val authentication = UsernamePasswordAuthenticationToken(userDetails, "", listOf(
-            SimpleGrantedAuthority("ROLE_MERCHANT")
-        ))
+        val authentication =
+            UsernamePasswordAuthenticationToken(
+                userDetails,
+                "",
+                listOf(
+                    SimpleGrantedAuthority("ROLE_MERCHANT")
+                )
+            )
         return authentication
     }
 }
