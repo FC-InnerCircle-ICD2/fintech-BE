@@ -1,4 +1,4 @@
-package com.inner.circle.infra.security
+package com.inner.circle.core.security
 
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
@@ -16,4 +16,8 @@ class MerchantUserDetails(
     override fun getUsername(): String = username
 
     override fun getPassword(): String = password
+
+    fun getId(): String = id
+
+    fun getName(): String = name
 }

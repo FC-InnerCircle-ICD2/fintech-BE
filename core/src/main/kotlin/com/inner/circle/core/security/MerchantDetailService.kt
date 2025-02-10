@@ -1,20 +1,17 @@
-package com.inner.circle.infra.security
+package com.inner.circle.core.security
 
-import com.inner.circle.exception.AppException
-import com.inner.circle.exception.HttpStatus
-import com.inner.circle.infra.repository.MerchantJpaRepository
+import com.inner.circle.infra.port.MerchantHandlePort
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.stereotype.Service
 
 @Service
 class MerchantDetailService(
-    private val merchantJpaRepository: MerchantJpaRepository
+    private val merchantHandlePort: MerchantHandlePort
 ) : UserDetailsService {
     override fun loadUserByUsername(token: String): UserDetails {
         val merchant =
-            merchantJpaRepository.findByToken(token)
-                ?: throw AppException(HttpStatus.UNAUTHORIZED, "권한이 없는 사용자 입니다.")
+            merchantHandlePort.findMerchantByKey(token)
 
         val userDetails =
             MerchantUserDetails(

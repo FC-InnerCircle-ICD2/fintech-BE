@@ -1,6 +1,5 @@
 package com.inner.circle.core.security
 
-import com.inner.circle.infra.security.MerchantDetailService
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.authority.SimpleGrantedAuthority
