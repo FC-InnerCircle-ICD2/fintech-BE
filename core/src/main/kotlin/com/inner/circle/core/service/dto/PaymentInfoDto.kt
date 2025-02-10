@@ -32,7 +32,7 @@ data class PaymentInfoDto(
                 requestTime = paymentInfo.requestTime,
                 cardNumber = paymentInfo.cardNumber,
                 expirationPeriod = paymentInfo.expirationPeriod,
-                cvc = paymentInfo.cvc,
+                cvc = paymentInfo.cvc
             )
     }
 }
