@@ -11,6 +11,6 @@ internal class TransactionRepositoryImpl(
     override fun save(transaction: TransactionEntity): TransactionEntity =
         transactionJpaRepository.save(transaction)
 
-    override fun findByPaymentKey(paymenyKey: String): List<TransactionEntity> =
-        transactionJpaRepository.findByPaymentKey(paymenyKey)
+    override fun findByPaymentKey(paymentKey: String): List<TransactionEntity> =
+        transactionJpaRepository.findByPaymentKey(paymentKey)
 }

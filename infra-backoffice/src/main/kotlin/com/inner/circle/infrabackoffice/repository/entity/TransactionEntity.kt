@@ -16,7 +16,7 @@ data class TransactionEntity(
     @Id
     @Tsid
     val id: Long?,
-    @Column(name = "payment_key", nullable = false, unique = true)
+    @Column(name = "payment_key", nullable = false)
     val paymentKey: String,
     @Column(nullable = false)
     val amount: BigDecimal,
