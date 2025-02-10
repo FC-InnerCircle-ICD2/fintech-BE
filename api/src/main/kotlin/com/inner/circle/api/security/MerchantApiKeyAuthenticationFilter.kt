@@ -6,7 +6,6 @@ import com.inner.circle.exception.HttpStatus
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import java.util.*
 import org.springframework.http.HttpHeaders
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.filter.OncePerRequestFilter
@@ -40,7 +39,11 @@ class MerchantApiKeyAuthenticationFilter(
         val encodedApiKey = authorizationInfo[1]
         val decodedApiKey =
             try {
-                String(Base64.getDecoder().decode(encodedApiKey))
+                String(
+                    java.util.Base64
+                        .getDecoder()
+                        .decode(encodedApiKey)
+                )
             } catch (e: IllegalArgumentException) {
                 throw AppException(HttpStatus.UNAUTHORIZED, "Unauthorized: Basic Auth required")
             }
