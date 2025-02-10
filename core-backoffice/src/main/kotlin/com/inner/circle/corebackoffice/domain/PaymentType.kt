@@ -1,9 +1,7 @@
 package com.inner.circle.corebackoffice.domain
 
 enum class PaymentType {
-    NORMAL,
-    BRAND_PAY,
-    BILLING;
+    CARD;
 
     companion object {
         fun of(
@@ -11,11 +9,7 @@ enum class PaymentType {
         ): PaymentType =
             when (paymentType) {
                 com.inner.circle.infrabackoffice.repository.entity
-                    .PaymentType.NORMAL -> NORMAL
-                com.inner.circle.infrabackoffice.repository.entity
-                    .PaymentType.BRAND_PAY -> BRAND_PAY
-                com.inner.circle.infrabackoffice.repository.entity
-                    .PaymentType.BILLING -> BILLING
+                    .PaymentType.CARD -> CARD
             }
     }
 }

@@ -18,10 +18,13 @@ internal class PaymentAdaptor(
                 PaymentDto(
                     id = requireNotNull(it.id),
                     paymentKey = it.paymentKey,
+                    cardNumber = it.cardNumber,
                     currency = it.currency,
-                    userId = it.userId,
+                    accountId = it.accountId,
                     merchantId = it.merchantId,
                     paymentType = it.paymentType,
+                    orderId = it.orderId,
+                    orderName = it.orderName,
                     createdAt = it.createdAt.toKotlinLocalDateTime(),
                     updatedAt = it.updatedAt.toKotlinLocalDateTime()
                 )
