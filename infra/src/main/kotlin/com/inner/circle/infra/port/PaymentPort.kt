@@ -1,6 +1,7 @@
 package com.inner.circle.infra.port
 
 import com.inner.circle.infra.repository.entity.PaymentEntity
+import com.inner.circle.infra.repository.entity.PaymentType
 
 fun interface PaymentPort {
     data class Request(
@@ -9,7 +10,7 @@ fun interface PaymentPort {
         val currency: String,
         val accountId: Long?,
         val merchantId: String,
-        val paymentType: String,
+        val paymentType: PaymentType,
         val orderId: String,
         val orderName: String?,
         val cardNumber: String

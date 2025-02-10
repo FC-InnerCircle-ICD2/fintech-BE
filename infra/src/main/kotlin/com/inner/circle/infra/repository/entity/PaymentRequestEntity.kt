@@ -25,7 +25,7 @@ data class PaymentRequestEntity(
     @Column(name = "card_number")
     val cardNumber: String?,
     @Column(name = "payment_type")
-    val paymentType: String = "CARD",
+    val paymentType: PaymentType = PaymentType.CARD,
     @Column(name = "merchant_id", nullable = false)
     val merchantId: String,
     @Column(name = "payment_key")

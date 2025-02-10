@@ -47,15 +47,13 @@ create table if not exists  payment_request
     payment_type  varchar(255)
 );
 
-
 create table if not exists  payment_transaction
 (
     amount          numeric(38, 2) not null,
-    completion_time timestamp(6),
     created_at      timestamp(6)   not null,
     id              bigint         not null
         primary key,
-    request_time    timestamp(6)   not null,
+    requested_at    timestamp(6)   not null,
     updated_at      timestamp(6)   not null,
     payment_key     varchar(255)   not null,
     reason          varchar(255),

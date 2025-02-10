@@ -3,6 +3,8 @@ package com.inner.circle.infra.repository.entity
 import io.hypersistence.utils.hibernate.id.Tsid
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 import java.math.BigDecimal
@@ -19,10 +21,9 @@ data class TransactionEntity(
     @Column(nullable = false)
     val amount: BigDecimal,
     @Column(nullable = false)
-    val status: String,
+    @Enumerated(EnumType.STRING)
+    val status: TransactionStatus,
     val reason: String?,
-    @Column(name = "request_time", nullable = false)
-    var requestTime: LocalDateTime?,
-    @Column(name = "completion_time")
-    var completionTime: LocalDateTime?
+    @Column(name = "requested_at", nullable = false)
+    val requestedAt: LocalDateTime
 ) : BaseEntity()
