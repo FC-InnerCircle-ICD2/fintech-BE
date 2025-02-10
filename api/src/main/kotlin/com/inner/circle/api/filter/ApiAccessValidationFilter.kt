@@ -16,11 +16,16 @@ class ApiAccessValidationFilter : OncePerRequestFilter() {
         filterChain: FilterChain
     ) {
         val requestUri =
-            request.requestURI.split(delimiters = arrayOf(URI_DELIMITER)).filterNot { it.isBlank() }.getOrNull(AUTH_TYPE_INDEX)!!
+            request.requestURI
+                .split(delimiters = arrayOf(URI_DELIMITER))
+                .filterNot {
+                    it.isBlank()
+                }.getOrNull(AUTH_TYPE_INDEX)!!
         val authHeader = request.getHeader(HttpHeaders.AUTHORIZATION)
 
         ValidationFactory(authType = AuthenticationType.of(type = requestUri))
-            .getAuthentication().validateOrThrow(authHeader = authHeader)
+            .getAuthentication()
+            .validateOrThrow(authHeader = authHeader)
     }
 
     companion object {

@@ -2,21 +2,22 @@ package com.inner.circle.api.filter.type
 
 enum class AuthenticationType(
     private val resource: String,
-    private val description: String,
+    private val description: String
 ) {
     MERCHANT(
         resource = "merchant",
-        description = "상점 API Validation (Basic 인증 방식 사용)",
+        description = "상점 API Validation (Basic 인증 방식 사용)"
     ),
     USER(
         resource = "user",
-        description = "회원 관련 API (Bearer 인증 방식 사용)",
+        description = "회원 관련 API (Bearer 인증 방식 사용)"
     ),
     SSE(
         resource = "sse",
-        description = "SSE 연결 API",
+        description = "SSE 연결 API"
     )
     ;
+
     companion object {
         fun of(type: String): AuthenticationType =
             when (type) {

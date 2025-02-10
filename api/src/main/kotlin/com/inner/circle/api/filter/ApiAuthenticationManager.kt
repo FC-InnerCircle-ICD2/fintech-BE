@@ -9,17 +9,19 @@ interface AuthenticationInterface {
 }
 
 class ValidationFactory(
-    private val authType: AuthenticationType,
+    private val authType: AuthenticationType
 ) {
     fun getAuthentication(): AuthenticationInterface =
-        when(authType) {
+        when (authType) {
             AuthenticationType.USER -> MerchantAuthentication()
             AuthenticationType.MERCHANT -> UserAuthentication()
-            AuthenticationType.SSE -> throw IllegalArgumentException("Unsupported authentication type")
+            AuthenticationType.SSE -> throw IllegalArgumentException(
+                "Unsupported authentication type"
+            )
         }
 }
 
-class MerchantAuthentication: AuthenticationInterface {
+class MerchantAuthentication : AuthenticationInterface {
     // TODO - 상점 User 인증 구현
     override fun validateOrThrow(authHeader: String?) {
         if (authHeader == null) {
@@ -28,10 +30,8 @@ class MerchantAuthentication: AuthenticationInterface {
     }
 }
 
-
-class UserAuthentication: AuthenticationInterface {
+class UserAuthentication : AuthenticationInterface {
     // TODO - User 회원 인증 구현 !
     override fun validateOrThrow(authHeader: String?) {
-
     }
 }
