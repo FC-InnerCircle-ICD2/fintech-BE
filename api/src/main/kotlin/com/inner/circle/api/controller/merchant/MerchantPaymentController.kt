@@ -31,7 +31,6 @@ class MerchantPaymentController(
 ) {
     private val logger: Logger = LoggerFactory.getLogger(MerchantPaymentController::class.java)
 
-
     @Operation(summary = "결제 요청")
     @PostMapping
     fun createPayment(
@@ -58,7 +57,6 @@ class MerchantPaymentController(
 
         return PaymentResponse.ok(response)
     }
-
 
     @Operation(summary = "결제 승인")
     @PostMapping("/confirm")
@@ -106,7 +104,6 @@ class MerchantPaymentController(
 
         return response
     }
-
 
     @Operation(summary = "결제 취소 - paymentKey")
     @PostMapping("/orders/{paymentKey}/cancel")
