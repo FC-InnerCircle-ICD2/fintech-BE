@@ -23,22 +23,13 @@ class PaymentTokenMemoryRepository(
         return PaymentTokenEntity.fromToken(tokenString)
     }
 
-    override fun isExpiredByToken(
-        merchantId: String,
-        orderId: String
-    ): Boolean {
-        val key = "$merchantId:$orderId"
-        val tokenString =
-            redisTemplate.opsForValue()[key]
-                ?: return true
-        val paymentToken = PaymentTokenEntity.fromToken(tokenString)
-        return paymentToken.expiresAt.isBefore(LocalDateTime.now())
-    }
-
-    override fun savePaymentToken(paymentToken: PaymentTokenEntity): PaymentTokenEntity {
+    override fun savePaymentToken(
+        paymentToken: PaymentTokenEntity,
+        expiresAt: LocalDateTime
+    ): PaymentTokenEntity {
         val key = "${paymentToken.merchantId}:${paymentToken.orderId}"
         val tokenString = paymentToken.toString()
-        val ttl = Duration.between(LocalDateTime.now(), paymentToken.expiresAt)
+        val ttl = Duration.between(LocalDateTime.now(), expiresAt)
         redisTemplate.opsForValue().set(key, tokenString, ttl)
         return paymentToken
     }
