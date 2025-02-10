@@ -11,7 +11,7 @@ class MerchantUserDetails(
     private val name: String
 ) : UserDetails {
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> =
-        mutableListOf(SimpleGrantedAuthority("ROLE_CLIENT"))
+        mutableListOf(SimpleGrantedAuthority("ROLE_MERCHANT"))
 
     override fun getUsername(): String = username
 
