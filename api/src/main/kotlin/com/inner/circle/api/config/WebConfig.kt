@@ -12,7 +12,7 @@ class WebConfig(
     override fun addInterceptors(registry: InterceptorRegistry) {
         registry
             .addInterceptor(authCheckInterceptor)
-            .addPathPatterns("/api/payment/v1/payments/**")
+            .addPathPatterns("/api/v1/p/user") // payment - user에서만 우선 동작하도록 수정
             .excludePathPatterns("/swagger-ui/**", "/v3/api-docs/**")
     }
 }
