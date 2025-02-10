@@ -15,7 +15,8 @@ fun interface SavePaymentRequestPort {
         val amount: BigDecimal,
         val cardNumber: String,
         val paymentType: PaymentType,
-        val requestTime: LocalDateTime
+        val requestTime: LocalDateTime,
+        val merchantName: String
     )
 
     fun save(request: Request)

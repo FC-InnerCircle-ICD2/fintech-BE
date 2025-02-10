@@ -35,5 +35,6 @@ data class PaymentRequestEntity(
     @Column(name = "payment_token")
     val paymentToken: String?,
     @Column(name = "request_time", nullable = false)
-    val requestTime: LocalDateTime
+    val requestTime: LocalDateTime,
+    val merchantName: String
 ) : BaseEntity()

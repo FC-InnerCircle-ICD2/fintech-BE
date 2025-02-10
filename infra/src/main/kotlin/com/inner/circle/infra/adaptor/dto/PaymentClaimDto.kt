@@ -17,6 +17,7 @@ class PaymentClaimDto(
     val paymentKey: String?,
     val amount: BigDecimal,
     val requestTime: LocalDateTime,
+    val merchantName: String = "testMerchant",
     val paymentToken: String?
 ) {
     init {
@@ -33,6 +34,7 @@ class PaymentClaimDto(
                 orderName = paymentRequestEntity.orderName,
                 orderStatus = PaymentProcessStatus.valueOf(paymentRequestEntity.orderStatus),
                 merchantId = paymentRequestEntity.merchantId,
+                merchantName = paymentRequestEntity.merchantName,
                 paymentType = paymentRequestEntity.paymentType,
                 cardNumber = paymentRequestEntity.cardNumber,
                 paymentKey = paymentRequestEntity.paymentKey,
@@ -79,6 +81,7 @@ class PaymentClaimDto(
             orderStatus = orderStatus.name,
             accountId = null,
             merchantId = merchantId,
+            merchantName = merchantName,
             paymentType = paymentType ?: PaymentType.CARD,
             cardNumber = cardNumber,
             paymentKey = paymentKey,

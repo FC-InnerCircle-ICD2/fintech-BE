@@ -15,7 +15,8 @@ data class PaymentInfoDto(
     val requestTime: LocalDateTime,
     val cardNumber: String,
     val expirationPeriod: String,
-    val cvc: String
+    val cvc: String,
+    val merchantName: String
 ) {
     companion object {
         fun of(paymentInfo: PaymentInfo): PaymentInfoDto =
@@ -25,12 +26,13 @@ data class PaymentInfoDto(
                 orderStatus = paymentInfo.orderStatus,
                 accountId = paymentInfo.accountId,
                 merchantId = paymentInfo.merchantId,
+                merchantName = paymentInfo.merchantName,
                 paymentKey = paymentInfo.paymentKey,
                 amount = paymentInfo.amount,
                 requestTime = paymentInfo.requestTime,
                 cardNumber = paymentInfo.cardNumber,
                 expirationPeriod = paymentInfo.expirationPeriod,
-                cvc = paymentInfo.cvc
+                cvc = paymentInfo.cvc,
             )
     }
 }

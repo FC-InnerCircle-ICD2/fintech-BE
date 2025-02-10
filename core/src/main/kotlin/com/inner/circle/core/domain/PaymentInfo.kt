@@ -14,5 +14,6 @@ data class PaymentInfo(
     val requestTime: LocalDateTime,
     val cardNumber: String,
     val expirationPeriod: String,
-    val cvc: String
+    val cvc: String,
+    val merchantName: String
 )
