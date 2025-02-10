@@ -8,6 +8,7 @@ import jakarta.persistence.Enumerated
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 import java.math.BigDecimal
+import java.time.LocalDateTime
 
 @Entity
 @Table(name = "payment_transaction")
@@ -22,10 +23,7 @@ data class TransactionEntity(
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     val status: TransactionStatus,
-    val reason: String?
-//    TODO: paymeny쪽과 협의 후 정리 필요 잠시 주석 처리
-//    @Column(name = "request_time", nullable = false)
-//    var requestTime: LocalDateTime?,
-//    @Column(name = "completion_time")
-//    var completionTime: LocalDateTime?
+    val reason: String?,
+    @Column(name = "requested_at", nullable = false)
+    val requestedAt: LocalDateTime
 ) : BaseEntity()
