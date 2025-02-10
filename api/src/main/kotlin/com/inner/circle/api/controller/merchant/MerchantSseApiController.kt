@@ -43,7 +43,7 @@ class MerchantSseApiController(
         return sseConnection.sseEmitter
     }
 
-    @GetMapping("/sse/push-event")
+    @GetMapping("/sse/pushEvent")
     fun pushEvent(
         @Parameter(hidden = false)
         @RequestParam merchantId: String,

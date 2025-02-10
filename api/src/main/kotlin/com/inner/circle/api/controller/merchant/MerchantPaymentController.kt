@@ -18,7 +18,6 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -35,7 +34,7 @@ class MerchantPaymentController(
 
     @RequireAuth
     @Operation(summary = "결제 요청")
-    @PostMapping("/payments")
+    @PostMapping
     fun createPayment(
         @RequestBody request: PaymentClaimRequest,
         servletRequest: HttpServletRequest
@@ -63,7 +62,7 @@ class MerchantPaymentController(
 
     @RequireAuth
     @Operation(summary = "결제 승인")
-    @PostMapping("/payments/confirm")
+    @PostMapping("/confirm")
     fun confirmPayment(
         @RequestBody paymentApproveRequest: PaymentApproveRequest,
         servletRequest: HttpServletRequest
@@ -98,10 +97,21 @@ class MerchantPaymentController(
         )
     }
 
+    @Operation(summary = "결제 취소 - orderId")
+    @PostMapping("/orders/{orderId}/cancel")
+    fun cancelPaymentConfirmWithOrderId(
+        @PathVariable("order_id") orderId: String,
+        servletRequest: HttpServletRequest
+    ): PaymentResponse<String> {
+        val response = PaymentResponse.ok("결제가 취소되었습니다.")
+
+        return response
+    }
+
     @RequireAuth
-    @Operation(summary = "결제 취소")
-    @GetMapping("/payments/orders/{payment_key}/cancel")
-    fun cancelPaymentConfirm(
+    @Operation(summary = "결제 취소 - paymentKey")
+    @PostMapping("/orders/{paymentKey}/cancel")
+    fun cancelPaymentConfirmWithPaymentKey(
         @PathVariable("payment_key") paymentKey: String,
         servletRequest: HttpServletRequest
     ): PaymentResponse<String> {

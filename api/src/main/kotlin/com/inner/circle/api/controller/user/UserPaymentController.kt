@@ -8,8 +8,6 @@ import com.inner.circle.api.controller.dto.ConfirmPaymentDto
 import com.inner.circle.api.controller.dto.PaymentResponse
 import com.inner.circle.api.controller.request.ConfirmPaymentRequest
 import com.inner.circle.api.controller.request.ConfirmSimplePaymentRequest
-import com.inner.circle.api.interceptor.RequireAuth
-import com.inner.circle.core.service.dto.MerchantDto
 import com.inner.circle.core.usecase.ConfirmPaymentUseCase
 import com.inner.circle.core.usecase.ConfirmSimplePaymentUseCase
 import com.inner.circle.core.usecase.SavePaymentApproveUseCase
@@ -18,7 +16,6 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -32,9 +29,8 @@ class UserPaymentController(
 ) {
     private val logger: Logger = LoggerFactory.getLogger(UserPaymentController::class.java)
 
-    @RequireAuth
     @Operation(summary = "간편 결제 인증")
-    @PostMapping("/payments/authentication/simple")
+    @PostMapping("/authentication/simple")
     fun proceedPaymentConfirm(
         @RequestBody confirmSimplePaymentRequest: ConfirmSimplePaymentRequest
     ): PaymentResponse<ConfirmPaymentDto> {
@@ -68,7 +64,7 @@ class UserPaymentController(
     }
 
     @Operation(summary = "일반 결제 인증")
-    @PostMapping("/payments/authentication")
+    @PostMapping("/authentication")
     fun proceedPaymentConfirm(
         @RequestBody confirmPaymentRequest: ConfirmPaymentRequest
     ): PaymentResponse<ConfirmPaymentDto> {
@@ -101,36 +97,13 @@ class UserPaymentController(
         return response
     }
 
-    @RequireAuth
-    @Operation(summary = "결제 취소")
-    @GetMapping("/payments/orders/{order_id}/cancel")
-    fun cancelPaymentConfirm(
-        @PathVariable("order_id") orderId: String,
+    @Operation(summary = "결제 취소 - paymentKey")
+    @PostMapping("/orders/{paymentKey}/cancel")
+    fun cancelPaymentConfirmWithOrderId(
+        @PathVariable("payment_key") paymentKey: String,
         servletRequest: HttpServletRequest
     ): PaymentResponse<String> {
-        val merchantDto = servletRequest.getAttribute("merchantUser") as MerchantDto
-        val merchantId = merchantDto.merchantId
         val response = PaymentResponse.ok("결제가 취소되었습니다.")
-
-        val status = PaymentStatusEventType.CANCELED
-        try {
-            statusChangedMessageSender.sendProcessChangedMessage(
-                PaymentStatusChangedSsePaymentRequest(
-                    eventType = status.getEventType(),
-                    status = status.name,
-                    orderId = orderId,
-                    merchantId = merchantId
-                )
-            )
-        } catch (e: Exception) {
-            logger.error("Error while send ${status.name} Status.", e)
-        }
-
-        sendStatusChangedMessage(
-            status = PaymentStatusEventType.CANCELED,
-            orderId = orderId,
-            merchantId = merchantId
-        )
 
         return response
     }
