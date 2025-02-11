@@ -5,6 +5,7 @@ import com.inner.circle.infra.adaptor.dto.PaymentProcessStatus
 import com.inner.circle.infra.port.SavePaymentRequestPort
 import com.inner.circle.infra.repository.PaymentRequestRepository
 import com.inner.circle.infra.repository.entity.PaymentRequestEntity
+import com.inner.circle.infra.repository.entity.PaymentStatusType
 import org.springframework.stereotype.Component
 
 @Component
@@ -19,12 +20,13 @@ internal class SavePaymentRequestAdaptor(
                     "Payment request not found"
                 )
 
+        val orderStatus = request.orderStatus ?: PaymentProcessStatus.DONE.name
         paymentRequestRepository.save(
             PaymentRequestEntity(
                 id = existingEntity.id,
                 orderId = request.orderId,
                 orderName = request.orderName,
-                orderStatus = request.orderStatus ?: PaymentProcessStatus.DONE.name,
+                orderStatus = PaymentStatusType.valueOf(orderStatus),
                 accountId = request.accountId,
                 cardNumber = request.cardNumber,
                 paymentType = request.paymentType,

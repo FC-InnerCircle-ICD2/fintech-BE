@@ -11,6 +11,7 @@ import com.inner.circle.infra.http.HttpClient
 import com.inner.circle.infra.port.PaymentPort
 import com.inner.circle.infra.port.PaymentRequestPort
 import com.inner.circle.infra.port.TransactionPort
+import com.inner.circle.infra.repository.entity.PaymentStatusType
 import com.inner.circle.infra.repository.entity.TransactionStatus
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
@@ -31,19 +32,20 @@ internal class SavePaymentApproveService(
                     orderId = request.orderId
                 )
             ).let { paymentRequest ->
+                val paymentType = paymentRequest.paymentType ?: PaymentStatusType.IN_PROGRESS
                 val paymentRequestDto =
                     PaymentRequestDto(
                         orderId = paymentRequest.orderId,
                         orderName = paymentRequest.orderName,
                         cardNumber = paymentRequest.cardNumber ?: "",
-                        orderStatus = paymentRequest.orderStatus,
+                        orderStatus = paymentRequest.orderStatus.name,
                         accountId = paymentRequest.accountId,
                         merchantId = paymentRequest.merchantId,
                         paymentKey =
                             paymentRequest.paymentKey
                                 ?: throw PaymentException.PaymentKeyNotFoundException(),
                         amount = paymentRequest.amount,
-                        paymentType = PaymentType.of(paymentRequest.paymentType),
+                        paymentType = PaymentType.valueOf(paymentType.name),
                         requestTime = paymentRequest.requestTime
                     )
 
@@ -77,7 +79,11 @@ internal class SavePaymentApproveService(
                                 currency = "KRW",
                                 accountId = paymentRequest.accountId,
                                 merchantId = paymentRequest.merchantId,
-                                paymentType = paymentRequest.paymentType,
+                                paymentType =
+                                    com.inner.circle.infra.repository.entity.PaymentType
+                                        .valueOf(
+                                            paymentType.name
+                                        ),
                                 orderId = paymentRequest.orderId,
                                 orderName = paymentRequest.orderName
                             )

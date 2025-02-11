@@ -2,6 +2,7 @@ package com.inner.circle.infra.adaptor.dto
 
 import com.inner.circle.exception.PaymentClaimException
 import com.inner.circle.infra.repository.entity.PaymentRequestEntity
+import com.inner.circle.infra.repository.entity.PaymentStatusType
 import com.inner.circle.infra.repository.entity.PaymentType
 import java.math.BigDecimal
 import java.time.LocalDateTime
@@ -32,7 +33,7 @@ class PaymentClaimDto(
                 paymentRequestId = paymentRequestEntity.id,
                 orderId = paymentRequestEntity.orderId,
                 orderName = paymentRequestEntity.orderName,
-                orderStatus = PaymentProcessStatus.valueOf(paymentRequestEntity.orderStatus),
+                orderStatus = PaymentProcessStatus.valueOf(paymentRequestEntity.orderStatus.name),
                 merchantId = paymentRequestEntity.merchantId,
                 merchantName = paymentRequestEntity.merchantName,
                 paymentType = paymentRequestEntity.paymentType,
@@ -78,11 +79,11 @@ class PaymentClaimDto(
             id = null,
             orderId = orderId,
             orderName = orderName,
-            orderStatus = orderStatus.name,
+            orderStatus = PaymentStatusType.valueOf(orderStatus.name),
             accountId = null,
             merchantId = merchantId,
             merchantName = merchantName,
-            paymentType = paymentType ?: PaymentType.CARD,
+            paymentType = null,
             cardNumber = cardNumber,
             paymentKey = paymentKey,
             amount = amount,

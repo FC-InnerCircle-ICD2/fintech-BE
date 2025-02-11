@@ -10,7 +10,7 @@ data class MerchantDto(
     companion object {
         fun fromEntity(merchant: MerchantEntity) =
             MerchantDto(
-                merchantId = merchant.id.orEmpty(),
+                merchantId = merchant.id.toString(),
                 username = merchant.username,
                 name = merchant.name
             )

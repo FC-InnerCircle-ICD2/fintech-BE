@@ -24,7 +24,7 @@ internal class ConfirmPaymentAdaptor(
         return ConfirmPaymentInfraDto(
             orderId = paymentRequest.orderId,
             orderName = paymentRequest.orderName,
-            orderStatus = paymentRequest.orderStatus,
+            orderStatus = paymentRequest.orderStatus.name,
             accountId = paymentRequest.accountId,
             merchantId = paymentRequest.merchantId,
             merchantName = paymentRequest.merchantName,
