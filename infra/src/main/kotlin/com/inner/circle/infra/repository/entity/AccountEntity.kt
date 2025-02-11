@@ -1,6 +1,6 @@
 package com.inner.circle.infra.repository.entity
 
-import io.hypersistence.utils.hibernate.id.Tsid
+import io.hypersistence.tsid.TSID
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
@@ -10,8 +10,7 @@ import jakarta.persistence.Table
 @Table(name = "account")
 data class AccountEntity(
     @Id
-    @Tsid
-    val id: Long?,
+    val id: Long = TSID.fast().toLong(),
     @Column(nullable = false, unique = true, length = 255)
     val email: String,
     @Column(nullable = false, unique = false, length = 255)
