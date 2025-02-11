@@ -8,6 +8,7 @@ import com.inner.circle.api.controller.dto.PaymentApproveDto
 import com.inner.circle.api.controller.dto.PaymentResponse
 import com.inner.circle.api.controller.request.PaymentApproveRequest
 import com.inner.circle.api.controller.request.PaymentClaimRequest
+import com.inner.circle.core.security.MerchantUserDetails
 import com.inner.circle.core.service.dto.MerchantDto
 import com.inner.circle.core.usecase.ConfirmPaymentUseCase
 import com.inner.circle.core.usecase.PaymentClaimUseCase
@@ -17,6 +18,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -34,11 +36,10 @@ class MerchantPaymentController(
     @Operation(summary = "결제 요청")
     @PostMapping
     fun createPayment(
-        @RequestBody request: PaymentClaimRequest,
-        servletRequest: HttpServletRequest
+        @AuthenticationPrincipal merchantUserDetails: MerchantUserDetails,
+        @RequestBody request: PaymentClaimRequest
     ): PaymentResponse<PaymentClaimUseCase.PaymentClaimResponse> {
-        val merchantDto = servletRequest.getAttribute("merchantUser") as MerchantDto
-        val merchantId = merchantDto.merchantId
+        val merchantId = merchantUserDetails.getId()
 
         val claimRequest =
             PaymentClaimUseCase.ClaimRequest(
