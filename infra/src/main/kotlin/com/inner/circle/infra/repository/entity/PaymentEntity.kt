@@ -19,13 +19,13 @@ data class PaymentEntity(
     @Column(name = "card_number")
     val cardNumber: String,
     @Column(nullable = false)
-    val currency: String,
+    @Enumerated(EnumType.STRING)
+    val currency: Currency,
     @Column(name = "account_id")
     val accountId: Long?,
     @Column(name = "merchant_id", nullable = false)
     val merchantId: String,
     @Column(name = "payment_type", nullable = false)
-    @Enumerated(EnumType.STRING)
     val paymentType: PaymentType,
     @Column(name = "order_id", nullable = false)
     val orderId: String,
