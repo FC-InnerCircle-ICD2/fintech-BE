@@ -39,7 +39,10 @@ class UserPaymentController(
 //            orderId = confirmSimplePaymentRequest.orderId,
 //            merchantId = confirmSimplePaymentRequest.merchantId
 //        )
-        val foundPaymentToken = tokenHandlingUseCase.findPaymentToken(confirmSimplePaymentRequest.token)
+        val foundPaymentToken =
+            tokenHandlingUseCase.findPaymentToken(
+                confirmSimplePaymentRequest.token
+            )
 
         val data =
             ConfirmPaymentDto.of(

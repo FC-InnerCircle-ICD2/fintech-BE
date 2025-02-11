@@ -6,5 +6,4 @@ interface TokenHandlingUseCase {
     fun findPaymentToken(token: String): PaymentTokenHandleDto {
         TODO("Not yet implemented")
     }
-
 }
