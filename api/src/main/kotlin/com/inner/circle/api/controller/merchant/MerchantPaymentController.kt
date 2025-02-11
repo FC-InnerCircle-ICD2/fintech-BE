@@ -9,13 +9,11 @@ import com.inner.circle.api.controller.dto.PaymentResponse
 import com.inner.circle.api.controller.request.PaymentApproveRequest
 import com.inner.circle.api.controller.request.PaymentClaimRequest
 import com.inner.circle.core.security.MerchantUserDetails
-import com.inner.circle.core.service.dto.MerchantDto
 import com.inner.circle.core.usecase.ConfirmPaymentUseCase
 import com.inner.circle.core.usecase.PaymentClaimUseCase
 import com.inner.circle.core.usecase.SavePaymentApproveUseCase
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
-import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -62,11 +60,10 @@ class MerchantPaymentController(
     @Operation(summary = "결제 승인")
     @PostMapping("/confirm")
     fun confirmPayment(
+        @AuthenticationPrincipal merchantUserDetails: MerchantUserDetails,
         @RequestBody paymentApproveRequest: PaymentApproveRequest,
-        servletRequest: HttpServletRequest
     ): PaymentResponse<PaymentApproveDto> {
-        val merchantDto = servletRequest.getAttribute("merchantUser") as MerchantDto
-        val merchantId = merchantDto.merchantId
+        val merchantId = merchantUserDetails.getId()
 
         val data =
             savePaymentApproveService
@@ -98,8 +95,8 @@ class MerchantPaymentController(
     @Operation(summary = "결제 취소 - orderId")
     @PostMapping("/orders/{orderId}/cancel")
     fun cancelPaymentConfirmWithOrderId(
-        @PathVariable("order_id") orderId: String,
-        servletRequest: HttpServletRequest
+        @AuthenticationPrincipal merchantUserDetails: MerchantUserDetails,
+        @PathVariable("orderId") orderId: String
     ): PaymentResponse<String> {
         val response = PaymentResponse.ok("결제가 취소되었습니다.")
 
@@ -109,8 +106,8 @@ class MerchantPaymentController(
     @Operation(summary = "결제 취소 - paymentKey")
     @PostMapping("/orders/{paymentKey}/cancel")
     fun cancelPaymentConfirmWithPaymentKey(
-        @PathVariable("payment_key") paymentKey: String,
-        servletRequest: HttpServletRequest
+        @AuthenticationPrincipal merchantUserDetails: MerchantUserDetails,
+        @PathVariable("paymentKey") paymentKey: String
     ): PaymentResponse<String> {
         val response = PaymentResponse.ok("결제가 취소되었습니다.")
 

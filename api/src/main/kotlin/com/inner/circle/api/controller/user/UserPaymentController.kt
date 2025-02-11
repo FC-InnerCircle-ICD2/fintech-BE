@@ -100,7 +100,7 @@ class UserPaymentController(
     @Operation(summary = "결제 취소 - paymentKey")
     @PostMapping("/orders/{paymentKey}/cancel")
     fun cancelPaymentConfirmWithOrderId(
-        @PathVariable("payment_key") paymentKey: String,
+        @PathVariable("paymentKey") paymentKey: String,
         servletRequest: HttpServletRequest
     ): PaymentResponse<String> {
         val response = PaymentResponse.ok("결제가 취소되었습니다.")

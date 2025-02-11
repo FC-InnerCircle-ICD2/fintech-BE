@@ -18,9 +18,9 @@ class PaymentController(
     private val getTransactionUseCase: GetTransactionUseCase
 ) {
     @Operation(summary = "Payment 조회")
-    @GetMapping("/payments/{payment_key}")
+    @GetMapping("/payments/{paymentKey}")
     fun getPayment(
-        @PathVariable("payment_key") paymentKey: String
+        @PathVariable("paymentKey") paymentKey: String
     ): BackofficeResponse<PaymentDto> {
         val request = GetPaymentUseCase.Request(paymentKey)
         return BackofficeResponse.ok(
@@ -29,9 +29,9 @@ class PaymentController(
     }
 
     @Operation(summary = "Payment Key를 이용한 Transactions 조회")
-    @GetMapping("/payments/{payment_key}/transactions")
+    @GetMapping("/payments/{paymentKey}/transactions")
     fun getTransactions(
-        @PathVariable("payment_key") paymentKey: String
+        @PathVariable("paymentKey") paymentKey: String
     ): BackofficeResponse<TransactionsDto> {
         val request = GetTransactionUseCase.Request(paymentKey)
         return BackofficeResponse.ok(
