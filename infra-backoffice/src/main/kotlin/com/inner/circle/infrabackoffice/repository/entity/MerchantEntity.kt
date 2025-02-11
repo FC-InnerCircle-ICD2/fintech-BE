@@ -12,12 +12,7 @@ import org.hibernate.annotations.Comment
 @Table(name = "merchant")
 data class MerchantEntity(
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     val id: String,
-    @Column(nullable = false)
-    val username: String,
-    @Column(nullable = false)
-    val password: String,
     @Column(nullable = false, unique = true)
     val mid: String,
     @Comment("client_secret")
