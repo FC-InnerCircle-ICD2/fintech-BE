@@ -3,7 +3,6 @@ package com.inner.circle.core.service
 import com.inner.circle.core.domain.Currency
 import com.inner.circle.core.domain.PaymentType
 import com.inner.circle.core.service.dto.PaymentApproveDto
-import com.inner.circle.core.service.dto.PaymentDto
 import com.inner.circle.core.service.dto.PaymentRequestDto
 import com.inner.circle.core.usecase.SavePaymentApproveUseCase
 import com.inner.circle.exception.CardCompanyException
@@ -95,8 +94,9 @@ internal class SavePaymentApproveService(
                             transactionPort.save(
                                 TransactionPort.Request(
                                     id = paymentRequest.id,
-                                    paymentKey = paymentRequest.paymentKey
-                                        ?: throw PaymentException.PaymentKeyNotFoundException(),
+                                    paymentKey =
+                                        paymentRequest.paymentKey
+                                            ?: throw PaymentException.PaymentKeyNotFoundException(),
                                     amount = paymentRequestDto.amount,
                                     status = TransactionStatus.APPROVED,
                                     reason = null,
@@ -112,8 +112,9 @@ internal class SavePaymentApproveService(
                                     accountId = paymentRequest.accountId,
                                     merchantId = paymentRequest.merchantId,
                                     merchantName = paymentRequest.merchantName,
-                                    paymentKey = paymentRequest.paymentKey
-                                        ?: throw PaymentException.PaymentKeyNotFoundException(),
+                                    paymentKey =
+                                        paymentRequest.paymentKey
+                                            ?: throw PaymentException.PaymentKeyNotFoundException(),
                                     amount = paymentRequest.amount,
                                     cardNumber = paymentRequest.cardNumber ?: "",
                                     paymentType = paymentRequest.paymentType,

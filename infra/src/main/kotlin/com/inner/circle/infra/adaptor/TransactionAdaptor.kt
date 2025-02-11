@@ -12,7 +12,7 @@ internal class TransactionAdaptor(
     private val transactionRepository: TransactionRepository
 ) : TransactionPort {
     @Transactional
-    override fun save(request: TransactionPort.Request){
+    override fun save(request: TransactionPort.Request) {
         transactionRepository.save(
             TransactionEntity(
                 id = request.id,

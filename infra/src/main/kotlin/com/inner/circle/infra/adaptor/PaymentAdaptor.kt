@@ -12,7 +12,7 @@ internal class PaymentAdaptor(
     private val paymentRepository: PaymentRepository
 ) : PaymentPort {
     @Transactional
-    override fun save(request: PaymentPort.Request){
+    override fun save(request: PaymentPort.Request) {
         paymentRepository.save(
             PaymentEntity(
                 id = request.id,
