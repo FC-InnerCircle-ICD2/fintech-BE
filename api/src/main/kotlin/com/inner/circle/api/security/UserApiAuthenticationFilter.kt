@@ -16,15 +16,13 @@ class UserApiAuthenticationFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-//        val token = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiIyOTM4NDc1NjIzNDI4NzQyMzkiLCJyb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTczOTI4NTc0MH0.lilzS_zfDE7ZzcuzkQouTBWlVvhAhbXpSoFtLS43KVQ"
-        val token = "eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOiIyOTM4NDc1NjIzNDI4NzQyMzkiLCJyb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTczOTI4NzQzN30.jigVOsC46oOlpheh57VVa22P6LTo8lE7SCRuspTI5KaI63QB0u7pUSrvl2GftF_t"
         val authHeader =
             request.getHeader(HttpHeaders.AUTHORIZATION)
                 ?: throw UserAuthenticationException.UnauthorizedException(
                     "Missing Authorization header"
                 )
 
-        userValidation.validateUserOrThrow(token = token)
+        userValidation.validateUserOrThrow(token = authHeader)
         filterChain.doFilter(request, response)
     }
 }
