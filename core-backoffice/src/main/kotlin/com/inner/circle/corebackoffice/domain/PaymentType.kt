@@ -6,9 +6,7 @@ enum class PaymentType {
     CARD;
 
     companion object {
-        fun of(
-            paymentType: InfraBackOfficePaymentType
-        ): PaymentType =
+        fun of(paymentType: InfraBackOfficePaymentType): PaymentType =
             when (paymentType) {
                 InfraBackOfficePaymentType.CARD -> CARD
             }
