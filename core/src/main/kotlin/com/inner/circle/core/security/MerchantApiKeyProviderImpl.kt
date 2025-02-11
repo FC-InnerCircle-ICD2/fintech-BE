@@ -13,7 +13,7 @@ class MerchantApiKeyProviderImpl(
         if (secret == "pay200") {
             val mockMerchantUserDetails =
                 MerchantUserDetails(
-                    id = "12345tsid",
+                    id = 12345L,
                     username = "test@gmail.com",
                     password = "qwer1234",
                     name = "테스트 상점"
