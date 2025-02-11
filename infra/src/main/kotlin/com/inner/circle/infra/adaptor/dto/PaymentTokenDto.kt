@@ -7,13 +7,12 @@ data class PaymentTokenDto(
     val merchantId: String,
     val orderId: String,
     val generatedToken: String,
-    val expiresAt: LocalDateTime
+    val expiredAt: LocalDateTime
 ) {
     fun toEntity(): PaymentTokenEntity =
         PaymentTokenEntity(
             merchantId = merchantId,
             orderId = orderId,
-            generatedToken = generatedToken,
-            expiresAt = expiresAt
+            generatedToken = generatedToken
         )
 }

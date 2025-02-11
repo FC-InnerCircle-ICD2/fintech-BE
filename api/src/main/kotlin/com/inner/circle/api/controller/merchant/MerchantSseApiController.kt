@@ -1,7 +1,6 @@
 package com.inner.circle.api.controller.merchant
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.inner.circle.api.application.PaymentStatusChangedMessageSender
 import com.inner.circle.api.controller.PaymentForMerchantV1Api
 import com.inner.circle.core.sse.SseConnectionPool
 import io.swagger.v3.oas.annotations.Parameter
@@ -16,8 +15,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter
 @PaymentForMerchantV1Api
 class MerchantSseApiController(
     private val sseConnectionPool: SseConnectionPool,
-    private val objectMapper: ObjectMapper,
-    private val statusChangedMessageSender: PaymentStatusChangedMessageSender
+    private val objectMapper: ObjectMapper
 ) {
     companion object {
         private val log = LoggerFactory.getLogger(MerchantSseApiController::class.java)

@@ -27,6 +27,7 @@ internal class ConfirmPaymentAdaptor(
             orderStatus = paymentRequest.orderStatus,
             accountId = paymentRequest.accountId,
             merchantId = paymentRequest.merchantId,
+            merchantName = paymentRequest.merchantName,
             paymentKey = paymentRequest.paymentKey,
             amount = paymentRequest.amount,
             requestTime = paymentRequest.requestTime,

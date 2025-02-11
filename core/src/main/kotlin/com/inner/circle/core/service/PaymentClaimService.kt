@@ -6,7 +6,6 @@ import com.inner.circle.infra.adaptor.dto.PaymentProcessStatus
 import com.inner.circle.infra.adaptor.dto.PaymentTokenDto
 import com.inner.circle.infra.port.PaymentClaimHandlingPort
 import java.time.LocalDateTime
-import java.time.ZoneId
 import java.util.Date
 import org.springframework.stereotype.Service
 
@@ -41,22 +40,16 @@ class PaymentClaimService(
         val jwtToken =
             jwtHandler.generateToken(
                 paymentClaimDto = requestDto,
-                issuedAt = issuedAt,
-                expiresMinute = PAYMENT_REQUEST_EXPIRED_MINUTES.toInt()
+                issuedAt = issuedAt
             )
-        val jwtExpiresAt =
-            LocalDateTime
-                .ofInstant(
-                    issuedAt.toInstant(),
-                    ZoneId.systemDefault()
-                ).plusMinutes(PAYMENT_REQUEST_EXPIRED_MINUTES)
 
+        val expiredAt = LocalDateTime.now().plusMinutes(PAYMENT_REQUEST_EXPIRED_MINUTES)
         val paymentTokenDto =
             PaymentTokenDto(
                 merchantId = requestDto.merchantId,
                 orderId = requestDto.orderId,
                 generatedToken = jwtToken,
-                expiresAt = jwtExpiresAt
+                expiredAt = expiredAt
             )
 
         paymentClaimHandlingPort.createAndSavePaymentRequest(
@@ -64,6 +57,6 @@ class PaymentClaimService(
             paymentTokenDto
         )
 
-        return PaymentClaimUseCase.PaymentClaimResponse.of(jwtToken, jwtExpiresAt)
+        return PaymentClaimUseCase.PaymentClaimResponse.of(jwtToken, expiredAt)
     }
 }
