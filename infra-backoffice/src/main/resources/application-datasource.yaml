@@ -14,12 +14,16 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     open-in-view: false
-    properties:
-      hibernate:
-        show_sql: true
-        format_sql: true
+    show-sql: true
+    defer-datasource-initialization: true
+
+  sql:
+    init:
+      data-locations: classpath:sql/data.sql
+      mode: always
+
 ---
 spring:
   config:
@@ -55,7 +59,5 @@ spring:
     hibernate:
       ddl-auto: update
     open-in-view: false
-    properties:
-      hibernate:
-        show_sql: true
-        format_sql: true
+    show-sql: true
+    defer-datasource-initialization: true
