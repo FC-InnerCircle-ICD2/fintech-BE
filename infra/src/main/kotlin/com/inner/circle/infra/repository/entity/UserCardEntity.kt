@@ -11,7 +11,7 @@ import jakarta.persistence.Table
 data class UserCardEntity(
     @Id
     @Tsid
-    val id: Long,
+    val id: Long?,
     @Column(nullable = false)
     val accountId: Long,
     @Column(nullable = false)
