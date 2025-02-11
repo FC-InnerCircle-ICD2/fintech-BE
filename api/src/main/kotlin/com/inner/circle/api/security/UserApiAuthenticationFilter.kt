@@ -18,9 +18,5 @@ class UserApiAuthenticationFilter : OncePerRequestFilter() {
                 ?: throw UserAuthenticationException.UnauthorizedException(
                     "Missing Authorization header"
                 )
-
-
-
-
     }
 }
