@@ -1,5 +1,6 @@
 package com.inner.circle.core.service
 
+import com.inner.circle.core.domain.Currency
 import com.inner.circle.core.domain.PaymentType
 import com.inner.circle.core.service.dto.PaymentApproveDto
 import com.inner.circle.core.service.dto.PaymentDto
@@ -74,7 +75,7 @@ internal class SavePaymentApproveService(
                                 cardNumber =
                                     paymentRequest.cardNumber
                                         ?: throw PaymentException.CardNotFoundException(),
-                                currency = "KRW",
+                                currency = Currency.toInfraCurrency(Currency.KRW),
                                 accountId = paymentRequest.accountId,
                                 merchantId = paymentRequest.merchantId,
                                 paymentType = paymentRequest.paymentType,
@@ -86,7 +87,7 @@ internal class SavePaymentApproveService(
                                 PaymentDto(
                                     paymentKey = payment.paymentKey,
                                     cardNumber = payment.cardNumber,
-                                    currency = payment.currency,
+                                    currency = Currency.of(payment.currency),
                                     accountId = payment.accountId,
                                     merchantId = payment.merchantId,
                                     paymentType = PaymentType.of(payment.paymentType),
