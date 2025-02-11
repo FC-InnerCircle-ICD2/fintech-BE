@@ -70,6 +70,7 @@ class UserPaymentController(
         return response
     }
 
+    @Deprecated("일반 결제 기능 제외 예정")
     @Operation(summary = "일반 결제 인증")
     @PostMapping("/authentication")
     fun proceedPaymentConfirm(
