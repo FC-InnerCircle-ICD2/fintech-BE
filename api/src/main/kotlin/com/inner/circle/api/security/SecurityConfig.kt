@@ -1,7 +1,7 @@
 package com.inner.circle.api.security
 
 import com.inner.circle.core.security.MerchantApiKeyProvider
-import com.inner.circle.core.service.JwtHandler
+import com.inner.circle.core.security.UserValidation
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -12,7 +12,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 class SecurityConfig(
-    private val merchantApiKeyProvider: MerchantApiKeyProvider
+    private val merchantApiKeyProvider: MerchantApiKeyProvider,
+    private val userValidation: UserValidation
 ) {
     @Bean
     fun apiSecurityFilterChain(http: HttpSecurity): SecurityFilterChain {
@@ -41,7 +42,7 @@ class SecurityConfig(
             .httpBasic { it.disable() }
             .formLogin { it.disable() }
             .addFilterBefore(
-                UserApiAuthenticationFilter(jwtHandler = JwtHandler()),
+                UserApiAuthenticationFilter(userValidation = userValidation),
                 UsernamePasswordAuthenticationFilter::class.java
             ).build()
 }
