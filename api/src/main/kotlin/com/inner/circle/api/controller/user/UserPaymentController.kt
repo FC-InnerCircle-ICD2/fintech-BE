@@ -34,22 +34,25 @@ class UserPaymentController(
     fun proceedPaymentConfirm(
         @RequestBody confirmSimplePaymentRequest: ConfirmSimplePaymentRequest
     ): PaymentResponse<ConfirmPaymentDto> {
-//        sendStatusChangedMessage(
-//            status = PaymentStatusEventType.IN_VERIFICATE,
-//            orderId = confirmSimplePaymentRequest.orderId,
-//            merchantId = confirmSimplePaymentRequest.merchantId
-//        )
         val foundPaymentToken =
             tokenHandlingUseCase.findPaymentToken(
                 confirmSimplePaymentRequest.token
             )
+        val orderId = foundPaymentToken.orderId
+        val merchantId = foundPaymentToken.merchantId
+
+        sendStatusChangedMessage(
+            status = PaymentStatusEventType.IN_VERIFICATE,
+            orderId = orderId,
+            merchantId = merchantId
+        )
 
         val data =
             ConfirmPaymentDto.of(
                 confirmPaymentUseCase.confirmPayment(
                     ConfirmSimplePaymentUseCase.Request(
-                        orderId = foundPaymentToken.orderId,
-                        merchantId = foundPaymentToken.merchantId
+                        orderId = orderId,
+                        merchantId = merchantId
                     )
                 )
             )
@@ -58,11 +61,11 @@ class UserPaymentController(
                 data
             )
 
-//        sendStatusChangedMessage(
-//            status = PaymentStatusEventType.IN_PROGRESS,
-//            orderId = confirmSimplePaymentRequest.orderId,
-//            merchantId = confirmSimplePaymentRequest.merchantId
-//        )
+        sendStatusChangedMessage(
+            status = PaymentStatusEventType.IN_PROGRESS,
+            orderId = orderId,
+            merchantId = merchantId
+        )
 
         return response
     }
