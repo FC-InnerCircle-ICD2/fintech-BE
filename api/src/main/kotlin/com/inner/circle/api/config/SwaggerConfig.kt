@@ -20,29 +20,29 @@ class SwaggerConfig(
 
     @Bean
     fun customOpenAPI(): OpenAPI {
-        val basicAuthScheme = SecurityScheme()
-            .name(basicSchemeName)
-            .type(SecurityScheme.Type.HTTP)
-            .scheme(basicSchemeName)
+        val basicAuthScheme =
+            SecurityScheme()
+                .name(basicSchemeName)
+                .type(SecurityScheme.Type.HTTP)
+                .scheme(basicSchemeName)
 
-        val bearerAuthScheme = SecurityScheme()
-            .name(bearerSchemaName)
-            .type(SecurityScheme.Type.HTTP)
-            .scheme(bearerSchemaName)
-            .bearerFormat("JWT")
+        val bearerAuthScheme =
+            SecurityScheme()
+                .name(bearerSchemaName)
+                .type(SecurityScheme.Type.HTTP)
+                .scheme(bearerSchemaName)
+                .bearerFormat("JWT")
 
         return OpenAPI()
             .info(
                 Info()
                     .title("API Documentation")
                     .version("v1")
-            )
-            .components(
+            ).components(
                 Components()
                     .addSecuritySchemes("basicAuth", basicAuthScheme)
                     .addSecuritySchemes("bearerAuth", bearerAuthScheme)
-            )
-            .addSecurityItem(SecurityRequirement().addList(basicSchemeName))
+            ).addSecurityItem(SecurityRequirement().addList(basicSchemeName))
             .addSecurityItem(SecurityRequirement().addList(bearerSchemaName))
     }
 }

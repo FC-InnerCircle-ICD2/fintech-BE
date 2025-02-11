@@ -1,6 +1,5 @@
 package com.inner.circle.api.security
 
-import com.inner.circle.api.controller.PaymentForUserV1Api
 import com.inner.circle.core.security.MerchantApiKeyProvider
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -42,7 +41,6 @@ class SecurityConfig(
             .formLogin { it.disable() }
             .addFilterBefore(
                 UserApiAuthenticationFilter(),
-                UsernamePasswordAuthenticationFilter::class.java,
-            )
-            .build()
+                UsernamePasswordAuthenticationFilter::class.java
+            ).build()
 }
