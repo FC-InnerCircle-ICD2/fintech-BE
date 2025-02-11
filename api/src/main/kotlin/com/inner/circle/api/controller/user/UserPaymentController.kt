@@ -10,7 +10,7 @@ import com.inner.circle.api.controller.request.ConfirmPaymentRequest
 import com.inner.circle.api.controller.request.ConfirmSimplePaymentRequest
 import com.inner.circle.core.usecase.ConfirmPaymentUseCase
 import com.inner.circle.core.usecase.ConfirmSimplePaymentUseCase
-import com.inner.circle.core.usecase.SavePaymentApproveUseCase
+import com.inner.circle.core.usecase.TokenHandlingUseCase
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletRequest
@@ -23,8 +23,8 @@ import org.springframework.web.bind.annotation.RequestBody
 @Tag(name = "Payments - User", description = "결제 고객(App) 결제 관련 API")
 @PaymentForUserV1Api
 class UserPaymentController(
+    private val tokenHandlingUseCase: TokenHandlingUseCase,
     private val confirmPaymentUseCase: ConfirmPaymentUseCase,
-    private val savePaymentApproveService: SavePaymentApproveUseCase,
     private val statusChangedMessageSender: PaymentStatusChangedMessageSender
 ) {
     private val logger: Logger = LoggerFactory.getLogger(UserPaymentController::class.java)
@@ -34,18 +34,19 @@ class UserPaymentController(
     fun proceedPaymentConfirm(
         @RequestBody confirmSimplePaymentRequest: ConfirmSimplePaymentRequest
     ): PaymentResponse<ConfirmPaymentDto> {
-        sendStatusChangedMessage(
-            status = PaymentStatusEventType.IN_VERIFICATE,
-            orderId = confirmSimplePaymentRequest.orderId,
-            merchantId = confirmSimplePaymentRequest.merchantId
-        )
+//        sendStatusChangedMessage(
+//            status = PaymentStatusEventType.IN_VERIFICATE,
+//            orderId = confirmSimplePaymentRequest.orderId,
+//            merchantId = confirmSimplePaymentRequest.merchantId
+//        )
+        val foundPaymentToken = tokenHandlingUseCase.findPaymentToken(confirmSimplePaymentRequest.token)
 
         val data =
             ConfirmPaymentDto.of(
                 confirmPaymentUseCase.confirmPayment(
                     ConfirmSimplePaymentUseCase.Request(
-                        orderId = confirmSimplePaymentRequest.orderId,
-                        merchantId = confirmSimplePaymentRequest.merchantId
+                        orderId = foundPaymentToken.orderId,
+                        merchantId = foundPaymentToken.merchantId
                     )
                 )
             )
@@ -54,11 +55,11 @@ class UserPaymentController(
                 data
             )
 
-        sendStatusChangedMessage(
-            status = PaymentStatusEventType.IN_PROGRESS,
-            orderId = confirmSimplePaymentRequest.orderId,
-            merchantId = confirmSimplePaymentRequest.merchantId
-        )
+//        sendStatusChangedMessage(
+//            status = PaymentStatusEventType.IN_PROGRESS,
+//            orderId = confirmSimplePaymentRequest.orderId,
+//            merchantId = confirmSimplePaymentRequest.merchantId
+//        )
 
         return response
     }
