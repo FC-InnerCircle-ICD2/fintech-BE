@@ -1,12 +1,14 @@
 package com.inner.circle.apibackoffice.controller.dto
 
+import com.inner.circle.corebackoffice.domain.PaymentType as CoreBackofficePaymentType
+
 enum class PaymentType {
     CARD;
 
     companion object {
-        fun of(paymentType: com.inner.circle.corebackoffice.domain.PaymentType): PaymentType =
+        fun of(paymentType: CoreBackofficePaymentType): PaymentType =
             when (paymentType) {
-                com.inner.circle.corebackoffice.domain.PaymentType.CARD -> CARD
+                CoreBackofficePaymentType.CARD -> CARD
             }
     }
 }
