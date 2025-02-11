@@ -17,21 +17,18 @@ class JwtHandler {
 
     fun generateToken(
         paymentClaimDto: PaymentClaimDto,
-        issuedAt: Date,
-        expiresMinute: Int
+        issuedAt: Date
     ): String {
         // merchantId + "_" + orderId 조합
         val signString = "${paymentClaimDto.merchantId}_${paymentClaimDto.orderId}"
         val signature = generateSignature(signString)
-        val expirationDate = Date(issuedAt.time + 1000 * 60 * expiresMinute)
         return Jwts
             .builder()
+            .claim("merchantName", paymentClaimDto.merchantName)
             .claim("orderId", paymentClaimDto.orderId)
-            .claim("merchantId", paymentClaimDto.merchantId)
             .claim("orderName", paymentClaimDto.orderName)
             .claim("amount", paymentClaimDto.amount)
             .issuedAt(issuedAt)
-            .expiration(expirationDate)
             .signWith(signature)
             .compact()
     }

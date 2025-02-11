@@ -8,6 +8,7 @@ import com.inner.circle.core.service.dto.PaymentRequestDto
 import com.inner.circle.core.usecase.SavePaymentApproveUseCase
 import com.inner.circle.exception.CardCompanyException
 import com.inner.circle.exception.PaymentException
+import com.inner.circle.infra.adaptor.dto.PaymentProcessStatus
 import com.inner.circle.infra.http.HttpClient
 import com.inner.circle.infra.port.PaymentPort
 import com.inner.circle.infra.port.PaymentRequestPort
@@ -37,7 +38,7 @@ internal class SavePaymentApproveService(
                         orderId = paymentRequest.orderId,
                         orderName = paymentRequest.orderName,
                         cardNumber = paymentRequest.cardNumber ?: "",
-                        orderStatus = paymentRequest.orderStatus,
+                        orderStatus = PaymentProcessStatus.valueOf(paymentRequest.orderStatus.name),
                         accountId = paymentRequest.accountId,
                         merchantId = paymentRequest.merchantId,
                         paymentKey =

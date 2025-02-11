@@ -9,7 +9,6 @@ import com.inner.circle.api.controller.dto.PaymentResponse
 import com.inner.circle.api.controller.request.PaymentApproveRequest
 import com.inner.circle.api.controller.request.PaymentClaimRequest
 import com.inner.circle.core.security.MerchantUserDetails
-import com.inner.circle.core.usecase.ConfirmPaymentUseCase
 import com.inner.circle.core.usecase.PaymentClaimUseCase
 import com.inner.circle.core.usecase.SavePaymentApproveUseCase
 import io.swagger.v3.oas.annotations.Operation
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestBody
 @Tag(name = "Payments - Merchant", description = "상점 고객(SDK) 결제 관련 API")
 @PaymentForMerchantV1Api
 class MerchantPaymentController(
-    private val confirmPaymentUseCase: ConfirmPaymentUseCase,
     private val claimUseCase: PaymentClaimUseCase,
     private val savePaymentApproveService: SavePaymentApproveUseCase,
     private val statusChangedMessageSender: PaymentStatusChangedMessageSender
@@ -38,6 +36,7 @@ class MerchantPaymentController(
         @RequestBody request: PaymentClaimRequest
     ): PaymentResponse<PaymentClaimUseCase.PaymentClaimResponse> {
         val merchantId = merchantUserDetails.getId()
+        val merchantName = merchantUserDetails.getName()
 
         val claimRequest =
             PaymentClaimUseCase.ClaimRequest(
@@ -46,7 +45,7 @@ class MerchantPaymentController(
                 orderName = request.orderId
             )
 
-        val response = claimUseCase.createPayment(claimRequest, merchantId)
+        val response = claimUseCase.createPayment(claimRequest, merchantId, merchantName)
 
         sendStatusChangedMessage(
             status = PaymentStatusEventType.READY,

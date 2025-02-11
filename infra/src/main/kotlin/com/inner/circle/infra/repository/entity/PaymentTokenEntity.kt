@@ -1,6 +1,5 @@
 package com.inner.circle.infra.repository.entity
 
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 private val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
@@ -8,8 +7,7 @@ private val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_D
 data class PaymentTokenEntity(
     val merchantId: String,
     val orderId: String,
-    val generatedToken: String,
-    val expiresAt: LocalDateTime
+    val generatedToken: String
 ) {
     companion object {
         fun fromToken(tokenString: String): PaymentTokenEntity {
@@ -17,12 +15,10 @@ data class PaymentTokenEntity(
             return PaymentTokenEntity(
                 merchantId = parts[0],
                 orderId = parts[1],
-                generatedToken = parts[2],
-                expiresAt = LocalDateTime.parse(parts[3], dateTimeFormatter)
+                generatedToken = parts[2]
             )
         }
     }
 
-    override fun toString(): String =
-        "$merchantId,$orderId,$generatedToken,${expiresAt.format(dateTimeFormatter)}"
+    override fun toString(): String = "$merchantId,$orderId,$generatedToken}"
 }

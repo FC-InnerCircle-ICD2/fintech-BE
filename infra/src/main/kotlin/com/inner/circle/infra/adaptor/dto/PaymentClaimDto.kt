@@ -2,6 +2,7 @@ package com.inner.circle.infra.adaptor.dto
 
 import com.inner.circle.exception.PaymentClaimException
 import com.inner.circle.infra.repository.entity.PaymentRequestEntity
+import com.inner.circle.infra.repository.entity.PaymentStatusType
 import com.inner.circle.infra.repository.entity.PaymentType
 import java.math.BigDecimal
 import java.time.LocalDateTime
@@ -17,6 +18,7 @@ class PaymentClaimDto(
     val paymentKey: String?,
     val amount: BigDecimal,
     val requestTime: LocalDateTime,
+    val merchantName: String = "testMerchant",
     val paymentToken: String?
 ) {
     init {
@@ -31,8 +33,9 @@ class PaymentClaimDto(
                 paymentRequestId = paymentRequestEntity.id,
                 orderId = paymentRequestEntity.orderId,
                 orderName = paymentRequestEntity.orderName,
-                orderStatus = PaymentProcessStatus.valueOf(paymentRequestEntity.orderStatus),
+                orderStatus = PaymentProcessStatus.valueOf(paymentRequestEntity.orderStatus.name),
                 merchantId = paymentRequestEntity.merchantId,
+                merchantName = paymentRequestEntity.merchantName,
                 paymentType = paymentRequestEntity.paymentType,
                 cardNumber = paymentRequestEntity.cardNumber,
                 paymentKey = paymentRequestEntity.paymentKey,
@@ -76,9 +79,10 @@ class PaymentClaimDto(
             id = null,
             orderId = orderId,
             orderName = orderName,
-            orderStatus = orderStatus.name,
+            orderStatus = PaymentStatusType.valueOf(orderStatus.name),
             accountId = null,
             merchantId = merchantId,
+            merchantName = merchantName,
             paymentType = paymentType ?: PaymentType.CARD,
             cardNumber = cardNumber,
             paymentKey = paymentKey,
