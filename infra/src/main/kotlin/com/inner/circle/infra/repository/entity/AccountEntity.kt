@@ -12,7 +12,6 @@ data class AccountEntity(
     @Id
     @Tsid
     val id: Long,
-    val uuid: UUID,
     @Column(nullable = false, unique = true, length = 255)
     val email: String,
     @Column(nullable = false, unique = false, length = 255)
