@@ -15,18 +15,21 @@ import org.springframework.stereotype.Component
 
 fun main() {
 //    val secret = "0123456789abcdef0123456789abcdef"
-    val secretKey = Keys.hmacShaKeyFor("0123456789abcdef0123456789abcdef0123456789abcdef".toByteArray())
+    val secretKey =
+        Keys.hmacShaKeyFor(
+            "0123456789abcdef0123456789abcdef0123456789abcdef".toByteArray()
+        )
     val tokenTest =
-        Jwts.builder()
-            .claim("userId", "123456")  // 사용자 ID
-            .claim("role", "ROLE_ADMIN")  // 역할 정보
+        Jwts
+            .builder()
+            .claim("userId", "123456") // 사용자 ID
+            .claim("role", "ROLE_ADMIN") // 역할 정보
             .issuedAt(Date.from(Instant.now()))
-            .signWith(SignatureAlgorithm.HS256, secretKey)  // HMAC 서명
+            .signWith(SignatureAlgorithm.HS256, secretKey) // HMAC 서명
             .compact()
 
     println(tokenTest)
 }
-
 
 @Component
 class JwtHandler {

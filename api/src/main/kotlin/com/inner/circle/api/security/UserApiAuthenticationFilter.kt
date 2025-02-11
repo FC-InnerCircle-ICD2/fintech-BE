@@ -1,7 +1,6 @@
 package com.inner.circle.api.security
 
 import com.inner.circle.core.service.JwtHandler
-import com.inner.circle.exception.PaymentJwtException
 import com.inner.circle.exception.UserAuthenticationException
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
@@ -10,8 +9,8 @@ import org.springframework.http.HttpHeaders
 import org.springframework.web.filter.OncePerRequestFilter
 
 class UserApiAuthenticationFilter(
-    private val jwtHandler: JwtHandler,
-): OncePerRequestFilter() {
+    private val jwtHandler: JwtHandler
+) : OncePerRequestFilter() {
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
