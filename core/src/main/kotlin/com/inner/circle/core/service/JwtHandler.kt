@@ -2,10 +2,8 @@ package com.inner.circle.core.service
 
 import com.inner.circle.exception.PaymentJwtException
 import com.inner.circle.infra.adaptor.dto.PaymentClaimDto
-import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
-import java.math.BigDecimal
 import java.util.Date
 import javax.crypto.SecretKey
 import org.slf4j.LoggerFactory
@@ -35,9 +33,11 @@ class JwtHandler {
 
     fun validateToken(
         token: String,
-        signString: String
+        merchantId: String,
+        orderId: String
     ): Boolean =
         try {
+            val signString = "${merchantId}_$orderId"
             Jwts
                 .parser()
                 .verifyWith(
@@ -64,37 +64,6 @@ class JwtHandler {
             }
         }
 
-    fun extractClaims(
-        token: String,
-        signString: String
-    ): Claims =
-        try {
-            val decrypted =
-                Jwts
-                    .parser()
-                    .decryptWith(
-                        generateSignature(signString)
-                    ).build()
-            decrypted.parseSignedClaims(token).payload
-        } catch (e: Exception) {
-            when (e) {
-                is io.jsonwebtoken.ExpiredJwtException -> {
-                    logger.error("Token extraction error: Token has expired", e)
-                    throw PaymentJwtException.TokenExpiredException(cause = e)
-                }
-
-                is io.jsonwebtoken.MalformedJwtException -> {
-                    logger.error("Token extraction error: Invalid token", e)
-                    throw PaymentJwtException.TokenInvalidException(cause = e)
-                }
-
-                else -> {
-                    logger.error("Token extraction error occurred.", e)
-                    throw PaymentJwtException.TokenInvalidException(cause = e)
-                }
-            }
-        }
-
     private fun generateSignature(signString: String): SecretKey? {
         val keyBytes = ByteArray(32) // 32바이트 크기의 바이트 배열 생성
         val signStringBytes = signString.toByteArray()
@@ -103,37 +72,4 @@ class JwtHandler {
 
         return Keys.hmacShaKeyFor(keyBytes)
     }
-
-    fun extractMerchantId(
-        token: String,
-        paymentToken: String
-    ): String =
-        try {
-            extractClaims(token, paymentToken)["merchantId", String::class.java]
-        } catch (e: Exception) {
-            logger.error("Error extracting merchantId from token", e)
-            throw PaymentJwtException.ClaimExtractionException("merchantId", cause = e)
-        }
-
-    fun extractOrderName(
-        token: String,
-        paymentToken: String
-    ): String? =
-        try {
-            extractClaims(token, paymentToken)["orderName", String::class.java]
-        } catch (e: Exception) {
-            logger.error("Error extracting orderName from token", e)
-            throw PaymentJwtException.ClaimExtractionException("orderName", cause = e)
-        }
-
-    fun extractAmount(
-        token: String,
-        paymentToken: String
-    ): BigDecimal =
-        try {
-            extractClaims(token, paymentToken)["amount", BigDecimal::class.java]
-        } catch (e: Exception) {
-            logger.error("Error extracting amount from token", e)
-            throw PaymentJwtException.ClaimExtractionException("amount", cause = e)
-        }
 }

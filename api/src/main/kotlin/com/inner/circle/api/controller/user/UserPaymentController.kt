@@ -10,7 +10,7 @@ import com.inner.circle.api.controller.request.ConfirmPaymentRequest
 import com.inner.circle.api.controller.request.ConfirmSimplePaymentRequest
 import com.inner.circle.core.usecase.ConfirmPaymentUseCase
 import com.inner.circle.core.usecase.ConfirmSimplePaymentUseCase
-import com.inner.circle.core.usecase.TokenHandlingUseCase
+import com.inner.circle.core.usecase.PaymentTokenHandlingUseCase
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletRequest
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody
 @Tag(name = "Payments - User", description = "결제 고객(App) 결제 관련 API")
 @PaymentForUserV1Api
 class UserPaymentController(
-    private val tokenHandlingUseCase: TokenHandlingUseCase,
+    private val paymentTokenHandlingUseCase: PaymentTokenHandlingUseCase,
     private val confirmPaymentUseCase: ConfirmPaymentUseCase,
     private val statusChangedMessageSender: PaymentStatusChangedMessageSender
 ) {
@@ -35,7 +35,7 @@ class UserPaymentController(
         @RequestBody confirmSimplePaymentRequest: ConfirmSimplePaymentRequest
     ): PaymentResponse<ConfirmPaymentDto> {
         val foundPaymentToken =
-            tokenHandlingUseCase.findPaymentToken(
+            paymentTokenHandlingUseCase.findPaymentToken(
                 confirmSimplePaymentRequest.token
             )
         val orderId = foundPaymentToken.orderId

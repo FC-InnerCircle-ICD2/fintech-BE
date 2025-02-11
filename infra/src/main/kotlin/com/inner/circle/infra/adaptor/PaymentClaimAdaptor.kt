@@ -1,5 +1,6 @@
 package com.inner.circle.infra.adaptor
 
+import com.inner.circle.exception.PaymentJwtException
 import com.inner.circle.infra.adaptor.dto.PaymentClaimDto
 import com.inner.circle.infra.adaptor.dto.PaymentTokenDto
 import com.inner.circle.infra.port.PaymentClaimHandlingPort
@@ -21,7 +22,9 @@ class PaymentClaimAdaptor(
         paymentRequestData: PaymentClaimDto,
         tokenData: PaymentTokenDto
     ): PaymentClaimDto {
-        val expiredAt = tokenData.expiredAt
+        val expiredAt =
+            tokenData.expiredAt
+                ?: throw PaymentJwtException.TokenInvalidException("token expired not set.")
 
         // 결제 요청 정보 및 토큰 entity 생성
         val (paymentRequest, tokenEntity) = createPaymentRequest(paymentRequestData, tokenData)

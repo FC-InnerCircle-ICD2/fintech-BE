@@ -12,25 +12,30 @@ import org.springframework.stereotype.Repository
 class PaymentTokenMemoryRepository(
     val redisTemplate: StringRedisTemplate
 ) : PaymentTokenRepository {
-    override fun getPaymentToken(
-        merchantId: String,
-        orderId: String
-    ): PaymentTokenEntity {
-        val key = "$merchantId:$orderId"
-        val tokenString =
-            redisTemplate.opsForValue()[key]
-                ?: throw PaymentJwtException.TokenNotFoundException()
-        return PaymentTokenEntity.fromToken(tokenString)
+    override fun getPaymentDataFromToken(token: String): PaymentTokenEntity {
+        val tokenData = redisTemplate.opsForHash<String, String>().entries(token)
+        if (tokenData.isEmpty()) {
+            throw PaymentJwtException.TokenNotFoundException()
+        }
+        return PaymentTokenEntity.fromToken(tokenData)
     }
 
     override fun savePaymentToken(
         paymentToken: PaymentTokenEntity,
         expiresAt: LocalDateTime
     ): PaymentTokenEntity {
-        val key = "${paymentToken.merchantId}:${paymentToken.orderId}"
         val tokenString = paymentToken.toString()
         val ttl = Duration.between(LocalDateTime.now(), expiresAt)
-        redisTemplate.opsForValue().set(key, tokenString, ttl)
+
+        redisTemplate.opsForHash<String, String>().put(tokenString, "token", tokenString)
+        redisTemplate.opsForHash<String, String>().put(
+            tokenString,
+            "merchantId",
+            paymentToken.merchantId
+        )
+        redisTemplate.opsForHash<String, String>().put(tokenString, "orderId", paymentToken.orderId)
+        redisTemplate.expire(tokenString, ttl)
+
         return paymentToken
     }
 }
