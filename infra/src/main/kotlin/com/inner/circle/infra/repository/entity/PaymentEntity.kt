@@ -3,6 +3,8 @@ package com.inner.circle.infra.repository.entity
 import io.hypersistence.utils.hibernate.id.Tsid
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 
@@ -23,7 +25,8 @@ data class PaymentEntity(
     @Column(name = "merchant_id", nullable = false)
     val merchantId: String,
     @Column(name = "payment_type", nullable = false)
-    val paymentType: String,
+    @Enumerated(EnumType.STRING)
+    val paymentType: PaymentType,
     @Column(name = "order_id", nullable = false)
     val orderId: String,
     @Column(name = "order_name")

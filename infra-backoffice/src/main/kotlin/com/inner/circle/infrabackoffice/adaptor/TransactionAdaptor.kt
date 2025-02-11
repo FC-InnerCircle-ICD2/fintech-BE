@@ -16,22 +16,23 @@ internal class TransactionAdaptor(
     override fun getTransactionsByPaymentKey(
         request: GetTransactionPort.Request
     ): List<TransactionDto> {
-        val payment =
-            paymentRepository.findByPaymentKey(request.paymentKey)
-                ?: throw PaymentException.PaymentNotFoundException(
-                    paymentId = request.paymentKey
-                )
-        return transactionRepository
-            .findByPaymentId(requireNotNull(payment.id))
+        val transactionEntities =
+            transactionRepository
+                .findByPaymentKey(request.paymentKey)
+                .ifEmpty {
+                    throw PaymentException.PaymentNotFoundException(
+                        paymentId = request.paymentKey,
+                        message = "Payment with PaymentKey ${request.paymentKey} not found"
+                    )
+                }
+        return transactionEntities
             .map {
                 TransactionDto(
                     id = requireNotNull(it.id),
-                    paymentId = it.paymentId,
+                    paymentKey = it.paymentKey,
                     amount = it.amount,
                     status = it.status,
                     reason = it.reason,
-                    requestedAt = it.requestedAt.toKotlinLocalDateTime(),
-                    completedAt = it.completedAt.toKotlinLocalDateTime(),
                     createdAt = it.createdAt.toKotlinLocalDateTime(),
                     updatedAt = it.updatedAt.toKotlinLocalDateTime()
                 )

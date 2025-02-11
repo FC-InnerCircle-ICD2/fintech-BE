@@ -1,5 +1,6 @@
 package com.inner.circle.core.service.dto
 
+import com.inner.circle.core.domain.PaymentType
 import java.math.BigDecimal
 
 data class PaymentRequestDto(
@@ -11,6 +12,6 @@ data class PaymentRequestDto(
     val merchantId: String,
     val paymentKey: String,
     val amount: BigDecimal,
-    val paymentType: String,
+    val paymentType: PaymentType,
     val requestTime: java.time.LocalDateTime?
 )

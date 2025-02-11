@@ -25,67 +25,63 @@ class TransactionRepositoryTest(
         {
 
             context("transaction 단 건 조회") {
-                val paymentId = UUID.randomUUID()
+                val paymentKey = UUID.randomUUID().toString()
                 val transaction =
                     TransactionEntity(
                         id = null,
-                        paymentId = paymentId,
+                        paymentKey = paymentKey,
                         amount = BigDecimal.valueOf(100.0),
                         status = TransactionStatus.APPROVED,
                         reason = "APPROVED",
-                        requestedAt = LocalDateTime.now(),
-                        completedAt = LocalDateTime.now()
+                        requestedAt = LocalDateTime.now()
                     )
                 val savedTransaction = transactionRepository.save(transaction)
 
-                expect("조회된 transaction 리스트에 paymentId로 저장된 transaction이 포함되어야 한다.") {
-                    val actual = transactionRepository.findByPaymentId(paymentId)
+                expect("조회된 transaction 리스트에 paymentKey로 저장된 transaction이 포함되어야 한다.") {
+                    val actual = transactionRepository.findByPaymentKey(paymentKey)
                     val expectedTransaction = actual.find { it.id == savedTransaction.id }
                     assertNotNull(expectedTransaction)
                     assertEquals(0, expectedTransaction?.amount?.compareTo(transaction.amount))
-                    assertEquals(transaction.paymentId, expectedTransaction?.paymentId)
+                    assertEquals(transaction.paymentKey, expectedTransaction?.paymentKey)
                 }
 
-                expect("paymentId로 저장된 transaction이 3개가 조회되어야 한다.") {
+                expect("paymentKey로 저장된 transaction이 4개가 조회되어야 한다.") {
                     transactionRepository.save(
                         TransactionEntity(
                             id = null,
-                            paymentId = paymentId,
+                            paymentKey = paymentKey,
                             amount = BigDecimal.valueOf(50.0),
                             status = TransactionStatus.CANCELED,
                             reason = "CANCELED",
-                            requestedAt = LocalDateTime.now(),
-                            completedAt = LocalDateTime.now()
+                            requestedAt = LocalDateTime.now()
                         )
                     )
 
                     transactionRepository.save(
                         TransactionEntity(
                             id = null,
-                            paymentId = paymentId,
+                            paymentKey = paymentKey,
                             amount = BigDecimal.valueOf(50.0),
                             status = TransactionStatus.CANCELED,
                             reason = "CANCELED",
-                            requestedAt = LocalDateTime.now(),
-                            completedAt = LocalDateTime.now()
+                            requestedAt = LocalDateTime.now()
                         )
                     )
 
                     transactionRepository.save(
                         TransactionEntity(
                             id = null,
-                            paymentId = UUID.randomUUID(),
+                            paymentKey = paymentKey,
                             amount = BigDecimal.valueOf(100.0),
                             status = TransactionStatus.APPROVED,
                             reason = "APPROVED",
-                            requestedAt = LocalDateTime.now(),
-                            completedAt = LocalDateTime.now()
+                            requestedAt = LocalDateTime.now()
                         )
                     )
 
-                    val actual = transactionRepository.findByPaymentId(paymentId)
-                    assertEquals(3, actual.size)
-                    actual.forEach { assertEquals(paymentId, it.paymentId) }
+                    val actual = transactionRepository.findByPaymentKey(paymentKey)
+                    assertEquals(4, actual.size)
+                    actual.forEach { assertEquals(paymentKey, it.paymentKey) }
                 }
             }
         }

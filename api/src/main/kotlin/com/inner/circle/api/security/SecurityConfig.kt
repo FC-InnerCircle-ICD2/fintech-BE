@@ -1,36 +1,33 @@
 package com.inner.circle.api.security
 
-import jakarta.servlet.DispatcherType
-import org.springframework.security.config.Customizer.withDefaults
+import com.inner.circle.core.security.MerchantApiKeyProvider
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
-import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
-// @Configuration
-// @EnableWebSecurity
-class SecurityConfig {
-//    @Bean
+@Configuration
+@EnableWebSecurity
+class SecurityConfig(
+    private val merchantApiKeyProvider: MerchantApiKeyProvider
+) {
+    @Bean
     fun apiSecurityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
+            .securityMatcher("/api/v1/p/merchant/**")
+            .csrf { it.disable() }
+            .httpBasic { it.disable() }
+            .cors { it.disable() }
             .authorizeHttpRequests { authorizeRequests ->
                 authorizeRequests
-                    // 오류 페이지, 비동기 요청 허용
-                    .dispatcherTypeMatchers(DispatcherType.ERROR, DispatcherType.ASYNC)
-                    .permitAll()
-                    .requestMatchers(
-                        "/api-docs/**",
-                        "/swagger-ui/**",
-                        "/health-check",
-                        "/api/payment/v1/sse/**"
-                    ).permitAll() // swagger, sse 연결은 permit
-                    .requestMatchers("/api/payment/v1/payments", "/api/payment/v1/payments/**")
-                    .authenticated()
-            }.sessionManagement { session ->
-                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            }.httpBasic { it.disable() }
-            .csrf { it.disable() }
-            .httpBasic(withDefaults())
-
+                    .anyRequest()
+                    .hasAuthority("ROLE_MERCHANT")
+            }.addFilterBefore(
+                MerchantApiKeyAuthenticationFilter(merchantApiKeyProvider),
+                UsernamePasswordAuthenticationFilter::class.java
+            ).formLogin { it.disable() }
         return http.build()
     }
 }

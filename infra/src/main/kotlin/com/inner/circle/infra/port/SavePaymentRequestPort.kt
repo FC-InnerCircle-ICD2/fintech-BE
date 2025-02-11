@@ -1,5 +1,6 @@
 package com.inner.circle.infra.port
 
+import com.inner.circle.infra.repository.entity.PaymentType
 import java.math.BigDecimal
 import java.time.LocalDateTime
 
@@ -13,7 +14,7 @@ fun interface SavePaymentRequestPort {
         val paymentKey: String,
         val amount: BigDecimal,
         val cardNumber: String,
-        val paymentType: String,
+        val paymentType: PaymentType,
         val requestTime: LocalDateTime
     )
 

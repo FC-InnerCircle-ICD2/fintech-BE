@@ -9,6 +9,7 @@ import com.inner.circle.exception.AuthenticateException
 import com.inner.circle.infra.http.HttpClient
 import com.inner.circle.infra.port.ConfirmPaymentPort
 import com.inner.circle.infra.port.SavePaymentRequestPort
+import com.inner.circle.infra.repository.entity.PaymentType
 import io.hypersistence.tsid.TSID
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -64,7 +65,7 @@ internal class ConfirmPaymentService(
                 paymentKey = paymentKeyTsid,
                 amount = request.amount,
                 cardNumber = request.cardNumber,
-                paymentType = "CARD",
+                paymentType = PaymentType.CARD,
                 requestTime = request.requestTime
             )
         )

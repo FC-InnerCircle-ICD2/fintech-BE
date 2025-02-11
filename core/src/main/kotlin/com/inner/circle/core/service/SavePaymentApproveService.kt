@@ -1,5 +1,6 @@
 package com.inner.circle.core.service
 
+import com.inner.circle.core.domain.PaymentType
 import com.inner.circle.core.service.dto.PaymentApproveDto
 import com.inner.circle.core.service.dto.PaymentDto
 import com.inner.circle.core.service.dto.PaymentRequestDto
@@ -10,6 +11,7 @@ import com.inner.circle.infra.http.HttpClient
 import com.inner.circle.infra.port.PaymentPort
 import com.inner.circle.infra.port.PaymentRequestPort
 import com.inner.circle.infra.port.TransactionPort
+import com.inner.circle.infra.repository.entity.TransactionStatus
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 
@@ -41,7 +43,7 @@ internal class SavePaymentApproveService(
                             paymentRequest.paymentKey
                                 ?: throw PaymentException.PaymentKeyNotFoundException(),
                         amount = paymentRequest.amount,
-                        paymentType = paymentRequest.paymentType,
+                        paymentType = PaymentType.of(paymentRequest.paymentType),
                         requestTime = paymentRequest.requestTime
                     )
 
@@ -87,7 +89,7 @@ internal class SavePaymentApproveService(
                                     currency = payment.currency,
                                     accountId = payment.accountId,
                                     merchantId = payment.merchantId,
-                                    paymentType = payment.paymentType,
+                                    paymentType = PaymentType.of(payment.paymentType),
                                     orderId = payment.orderId
                                 )
 
@@ -96,7 +98,7 @@ internal class SavePaymentApproveService(
                                     id = paymentRequest.id,
                                     paymentKey = paymentDto.paymentKey,
                                     amount = paymentRequestDto.amount,
-                                    status = "APPROVE",
+                                    status = TransactionStatus.APPROVED,
                                     reason = null
                                 )
                             )

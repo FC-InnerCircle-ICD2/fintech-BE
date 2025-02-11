@@ -21,10 +21,13 @@ internal class PaymentService(
                 PaymentDto(
                     id = it.id,
                     paymentKey = it.paymentKey,
+                    cardNumber = it.cardNumber,
                     currency = Currency.of(it.currency),
-                    userId = it.userId,
+                    accountId = it.accountId,
                     merchantId = it.merchantId,
                     paymentType = PaymentType.of(it.paymentType),
+                    orderId = it.orderId,
+                    orderName = it.orderName,
                     createdAt = it.createdAt,
                     updatedAt = it.updatedAt
                 )

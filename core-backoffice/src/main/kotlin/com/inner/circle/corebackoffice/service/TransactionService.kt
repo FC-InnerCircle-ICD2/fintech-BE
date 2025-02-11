@@ -23,12 +23,10 @@ internal class TransactionService(
                 ).map { transaction ->
                     PaymentTransaction(
                         id = transaction.id,
-                        paymentId = transaction.paymentId,
+                        paymentKey = transaction.paymentKey,
                         amount = transaction.amount,
                         status = TransactionStatus.of(transaction.status),
                         reason = transaction.reason,
-                        requestedAt = transaction.requestedAt,
-                        completedAt = transaction.completedAt,
                         createdAt = transaction.createdAt,
                         updatedAt = transaction.updatedAt
                     )
