@@ -26,6 +26,7 @@ data class PaymentEntity(
     @Column(name = "merchant_id", nullable = false)
     val merchantId: String,
     @Column(name = "payment_type", nullable = false)
+    @Enumerated(EnumType.STRING)
     val paymentType: PaymentType,
     @Column(name = "order_id", nullable = false)
     val orderId: String,
