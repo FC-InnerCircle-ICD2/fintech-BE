@@ -4,32 +4,12 @@ import com.inner.circle.exception.PaymentJwtException
 import com.inner.circle.infra.adaptor.dto.PaymentClaimDto
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
-import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.security.Keys
 import java.math.BigDecimal
-import java.time.Instant
 import java.util.Date
 import javax.crypto.SecretKey
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
-
-fun main() {
-//    val secret = "0123456789abcdef0123456789abcdef"
-    val secretKey =
-        Keys.hmacShaKeyFor(
-            "0123456789abcdef0123456789abcdef0123456789abcdef".toByteArray()
-        )
-    val tokenTest =
-        Jwts
-            .builder()
-            .claim("userId", "123456") // 사용자 ID
-            .claim("role", "ROLE_ADMIN") // 역할 정보
-            .issuedAt(Date.from(Instant.now()))
-            .signWith(SignatureAlgorithm.HS256, secretKey) // HMAC 서명
-            .compact()
-
-    println(tokenTest)
-}
 
 @Component
 class JwtHandler {
