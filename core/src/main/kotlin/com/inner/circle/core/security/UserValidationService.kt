@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service
 @Service
 class UserValidationService(
     @Value("\${jwt.secret}") private val secret: String,
-    private val userFinderPort: UserFinderPort,
+    private val userFinderPort: UserFinderPort
 ) : UserValidation {
     override fun validateUserOrThrow(token: String) {
         decodeUserAuthorizationToken(
@@ -18,7 +18,7 @@ class UserValidationService(
             secretKey = secret
         )?.let {
             userFinderPort.findByIdOrNull(
-                id = it["userId"].toString().toLong(),
+                id = it["userId"].toString().toLong()
             )
         } ?: throw RuntimeException("Invalid token")
     }

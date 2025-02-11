@@ -8,9 +8,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class UserFinderAdaptor(
-    private val userRepository: UserRepository,
-): UserFinderPort {
-    override fun findByIdOrNull(id: Long): AccountEntity? {
-        return userRepository.findByIdOrNull(id)
-    }
+    private val userRepository: UserRepository
+) : UserFinderPort {
+    override fun findByIdOrNull(id: Long): AccountEntity? = userRepository.findByIdOrNull(id)
 }
