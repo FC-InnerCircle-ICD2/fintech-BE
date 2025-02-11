@@ -1,18 +1,18 @@
 package com.inner.circle.infra.adaptor
 
 import com.inner.circle.infra.port.TransactionPort
-import com.inner.circle.infra.repository.PaymentRepository
 import com.inner.circle.infra.repository.TransactionRepository
 import com.inner.circle.infra.repository.entity.TransactionEntity
 import java.time.LocalDateTime
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
 internal class TransactionAdaptor(
-    private val transactionRepository: TransactionRepository,
-    private val paymentRepository: PaymentRepository
+    private val transactionRepository: TransactionRepository
 ) : TransactionPort {
-    override fun save(request: TransactionPort.Request): TransactionEntity =
+    @Transactional
+    override fun save(request: TransactionPort.Request){
         transactionRepository.save(
             TransactionEntity(
                 id = request.id,
@@ -26,4 +26,5 @@ internal class TransactionAdaptor(
         ) ?: throw IllegalArgumentException(
             "Payment Transaction not save"
         )
+    }
 }

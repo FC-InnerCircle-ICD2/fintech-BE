@@ -5,12 +5,14 @@ import com.inner.circle.infra.port.PaymentPort
 import com.inner.circle.infra.repository.PaymentRepository
 import com.inner.circle.infra.repository.entity.PaymentEntity
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
 internal class PaymentAdaptor(
     private val paymentRepository: PaymentRepository
 ) : PaymentPort {
-    override fun save(request: PaymentPort.Request): PaymentEntity =
+    @Transactional
+    override fun save(request: PaymentPort.Request){
         paymentRepository.save(
             PaymentEntity(
                 id = request.id,
@@ -26,4 +28,5 @@ internal class PaymentAdaptor(
         ) ?: throw PaymentException.PaymentNotSaveException(
             paymentKey = request.paymentKey
         )
+    }
 }

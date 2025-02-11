@@ -12,6 +12,7 @@ import com.inner.circle.infra.adaptor.dto.PaymentProcessStatus
 import com.inner.circle.infra.http.HttpClient
 import com.inner.circle.infra.port.PaymentPort
 import com.inner.circle.infra.port.PaymentRequestPort
+import com.inner.circle.infra.port.SavePaymentRequestPort
 import com.inner.circle.infra.port.TransactionPort
 import com.inner.circle.infra.repository.entity.TransactionStatus
 import org.springframework.beans.factory.annotation.Value
@@ -22,6 +23,7 @@ internal class SavePaymentApproveService(
     private val paymentPort: PaymentPort,
     private val paymentRequestPort: PaymentRequestPort,
     private val transactionPort: TransactionPort,
+    private val savePaymentRequestPort: SavePaymentRequestPort,
     @Value("\${card.url.base-url}") private var baseUrl: String,
     @Value("\${card.url.approve-end-point}") private var endPoint: String
 ) : SavePaymentApproveUseCase {
@@ -49,9 +51,15 @@ internal class SavePaymentApproveService(
                         requestTime = paymentRequest.requestTime
                     )
 
-                if (request.amount.equals(paymentRequest.amount)) {
+                if (request.amount == paymentRequest.amount) {
                     throw PaymentException.InvalidAmountException(
                         request.paymentKey
+                    )
+                }
+
+                if (paymentRequestDto.orderStatus != PaymentProcessStatus.IN_PROGRESS) {
+                    throw PaymentException.InvalidOrderStatusException(
+                        paymentRequestDto.orderStatus.toString()
                     )
                 }
 
@@ -83,25 +91,33 @@ internal class SavePaymentApproveService(
                                 orderId = paymentRequest.orderId,
                                 orderName = paymentRequest.orderName
                             )
-                        ).let { payment ->
-                            val paymentDto =
-                                PaymentDto(
-                                    paymentKey = payment.paymentKey,
-                                    cardNumber = payment.cardNumber,
-                                    currency = Currency.of(payment.currency),
-                                    accountId = payment.accountId,
-                                    merchantId = payment.merchantId,
-                                    paymentType = PaymentType.of(payment.paymentType),
-                                    orderId = payment.orderId
-                                )
-
+                        ).let {
                             transactionPort.save(
                                 TransactionPort.Request(
                                     id = paymentRequest.id,
-                                    paymentKey = paymentDto.paymentKey,
+                                    paymentKey = paymentRequest.paymentKey
+                                        ?: throw PaymentException.PaymentKeyNotFoundException(),
                                     amount = paymentRequestDto.amount,
                                     status = TransactionStatus.APPROVED,
-                                    reason = null
+                                    reason = null,
+                                    requestedAt = paymentRequest.requestTime
+                                )
+                            )
+
+                            savePaymentRequestPort.save(
+                                SavePaymentRequestPort.Request(
+                                    orderId = paymentRequest.orderId,
+                                    orderName = paymentRequest.orderName,
+                                    orderStatus = PaymentProcessStatus.DONE,
+                                    accountId = paymentRequest.accountId,
+                                    merchantId = paymentRequest.merchantId,
+                                    merchantName = paymentRequest.merchantName,
+                                    paymentKey = paymentRequest.paymentKey
+                                        ?: throw PaymentException.PaymentKeyNotFoundException(),
+                                    amount = paymentRequest.amount,
+                                    cardNumber = paymentRequest.cardNumber ?: "",
+                                    paymentType = paymentRequest.paymentType,
+                                    requestTime = paymentRequest.requestTime
                                 )
                             )
                         }

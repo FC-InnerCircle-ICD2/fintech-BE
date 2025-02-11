@@ -1,13 +1,12 @@
 package com.inner.circle.infra.adaptor.dto
 
-import com.inner.circle.infra.repository.entity.PaymentStatusType
 import java.math.BigDecimal
 import java.time.LocalDateTime
 
 data class ConfirmPaymentInfraDto(
     val orderId: String,
     val orderName: String?,
-    val orderStatus: PaymentStatusType,
+    val orderStatus: PaymentProcessStatus,
     val accountId: Long?,
     val merchantId: String,
     val paymentKey: String?,

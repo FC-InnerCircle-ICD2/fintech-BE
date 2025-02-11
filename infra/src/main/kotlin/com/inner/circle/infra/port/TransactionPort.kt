@@ -3,6 +3,7 @@ package com.inner.circle.infra.port
 import com.inner.circle.infra.repository.entity.TransactionEntity
 import com.inner.circle.infra.repository.entity.TransactionStatus
 import java.math.BigDecimal
+import java.time.LocalDateTime
 
 fun interface TransactionPort {
     data class Request(
@@ -10,8 +11,9 @@ fun interface TransactionPort {
         val paymentKey: String,
         val amount: BigDecimal,
         val status: TransactionStatus,
-        val reason: String?
+        val reason: String?,
+        val requestedAt: LocalDateTime
     )
 
-    fun save(request: Request): TransactionEntity
+    fun save(request: Request)
 }
