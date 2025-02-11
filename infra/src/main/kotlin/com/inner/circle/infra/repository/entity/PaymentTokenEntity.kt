@@ -8,7 +8,8 @@ private val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_D
 data class PaymentTokenEntity(
     val merchantId: String,
     val orderId: String,
-    val generatedToken: String
+    val generatedToken: String,
+    val signature: String
 ) {
     companion object {
         fun fromToken(tokenData: MutableMap<String, String>): PaymentTokenEntity {
@@ -22,6 +23,9 @@ data class PaymentTokenEntity(
                         ?: throw PaymentJwtException.TokenNotFoundException(notFoundMessage),
                 orderId =
                     tokenData["orderId"]
+                        ?: throw PaymentJwtException.TokenNotFoundException(notFoundMessage),
+                signature =
+                    tokenData["signature"]
                         ?: throw PaymentJwtException.TokenNotFoundException(notFoundMessage)
             )
         }

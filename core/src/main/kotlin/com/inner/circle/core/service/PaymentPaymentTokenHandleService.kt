@@ -17,8 +17,11 @@ class PaymentPaymentTokenHandleService(
 
         val merchantId = paymentData.merchantId
         val orderId = paymentData.orderId
-        val token = paymentData.generatedToken
-        val validateToken = jwtHandler.validateToken(token, orderId, merchantId)
+        val validateToken =
+            jwtHandler.validateToken(
+                paymentData.generatedToken,
+                paymentData.signature
+            )
 
         if (!validateToken) {
             throw PaymentJwtException.TokenInvalidException(

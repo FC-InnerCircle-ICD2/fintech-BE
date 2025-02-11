@@ -3,6 +3,8 @@ package com.inner.circle.core.service
 import com.inner.circle.exception.PaymentJwtException
 import com.inner.circle.infra.adaptor.dto.PaymentClaimDto
 import io.jsonwebtoken.Jwts
+import io.jsonwebtoken.io.Decoders
+import io.jsonwebtoken.io.Encoders
 import io.jsonwebtoken.security.Keys
 import java.util.Date
 import javax.crypto.SecretKey
@@ -15,11 +17,10 @@ class JwtHandler {
 
     fun generateToken(
         paymentClaimDto: PaymentClaimDto,
-        issuedAt: Date
+        issuedAt: Date,
+        keyString: String
     ): String {
-        // merchantId + "_" + orderId 조합
-        val signString = "${paymentClaimDto.merchantId}_${paymentClaimDto.orderId}"
-        val signature = generateSignature(signString)
+        val signatureKey = getSignature(keyString)
         return Jwts
             .builder()
             .claim("merchantName", paymentClaimDto.merchantName)
@@ -27,23 +28,21 @@ class JwtHandler {
             .claim("orderName", paymentClaimDto.orderName)
             .claim("amount", paymentClaimDto.amount)
             .issuedAt(issuedAt)
-            .signWith(signature)
+            .signWith(signatureKey, Jwts.SIG.HS384)
             .compact()
     }
 
     fun validateToken(
         token: String,
-        merchantId: String,
-        orderId: String
+        keyString: String
     ): Boolean =
         try {
-            val signString = "${merchantId}_$orderId"
-            Jwts
-                .parser()
-                .verifyWith(
-                    generateSignature(signString)
-                ).build()
-                .parseSignedContent(token)
+            val signatureKey = getSignature(keyString)
+                Jwts
+                    .parser()
+                    .verifyWith(signatureKey)
+                    .build()
+                    .parseSignedClaims(token)
             true
         } catch (e: Exception) {
             when (e) {
@@ -64,12 +63,14 @@ class JwtHandler {
             }
         }
 
-    private fun generateSignature(signString: String): SecretKey? {
-        val keyBytes = ByteArray(32) // 32바이트 크기의 바이트 배열 생성
-        val signStringBytes = signString.toByteArray()
-
-        System.arraycopy(signStringBytes, 0, keyBytes, 0, signStringBytes.size.coerceAtMost(32))
-
-        return Keys.hmacShaKeyFor(keyBytes)
+    fun generateSignatureString(): String {
+        val key =
+            Jwts.SIG.HS384
+                .key()
+                .build()
+        return Encoders.BASE64.encode(key.encoded)
     }
+
+    private fun getSignature(signString: String): SecretKey =
+        Keys.hmacShaKeyFor(Decoders.BASE64.decode(signString))
 }

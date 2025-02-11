@@ -9,4 +9,6 @@ interface PaymentTokenRepository {
         paymentToken: PaymentTokenEntity,
         expiresAt: LocalDateTime
     ): PaymentTokenEntity
+
+    fun removePaymentDataByToken(token: String)
 }

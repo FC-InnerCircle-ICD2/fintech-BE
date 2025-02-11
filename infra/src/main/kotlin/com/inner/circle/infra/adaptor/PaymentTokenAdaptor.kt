@@ -15,7 +15,12 @@ class PaymentTokenAdaptor(
             merchantId = paymentDataFromToken.merchantId,
             orderId = paymentDataFromToken.orderId,
             generatedToken = paymentDataFromToken.generatedToken,
+            signature = paymentDataFromToken.signature,
             expiredAt = null
         )
+    }
+
+    override fun deletePaymentToken(token: String) {
+        paymentTokenRepository.removePaymentDataByToken(token)
     }
 }
