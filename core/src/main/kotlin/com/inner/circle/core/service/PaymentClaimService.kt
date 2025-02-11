@@ -18,7 +18,8 @@ class PaymentClaimService(
 ) : PaymentClaimUseCase {
     override fun createPayment(
         request: PaymentClaimUseCase.ClaimRequest,
-        merchantId: String
+        merchantId: String,
+        merchantName: String
     ): PaymentClaimUseCase.PaymentClaimResponse {
         val (amount, orderId, orderName) = request
         val requestDto =
@@ -28,6 +29,7 @@ class PaymentClaimService(
                 orderName = orderName,
                 orderStatus = PaymentProcessStatus.READY,
                 merchantId = merchantId,
+                merchantName = merchantName,
                 paymentKey = null,
                 paymentType = null,
                 cardNumber = null,

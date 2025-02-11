@@ -36,6 +36,7 @@ class MerchantPaymentController(
         @RequestBody request: PaymentClaimRequest
     ): PaymentResponse<PaymentClaimUseCase.PaymentClaimResponse> {
         val merchantId = merchantUserDetails.getId()
+        val merchantName = merchantUserDetails.getName()
 
         val claimRequest =
             PaymentClaimUseCase.ClaimRequest(
@@ -44,7 +45,7 @@ class MerchantPaymentController(
                 orderName = request.orderId
             )
 
-        val response = claimUseCase.createPayment(claimRequest, merchantId)
+        val response = claimUseCase.createPayment(claimRequest, merchantId, merchantName)
 
         sendStatusChangedMessage(
             status = PaymentStatusEventType.READY,
