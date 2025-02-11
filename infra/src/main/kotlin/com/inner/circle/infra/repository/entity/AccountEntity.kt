@@ -11,7 +11,7 @@ import jakarta.persistence.Table
 data class AccountEntity(
     @Id
     @Tsid
-    val id: Long,
+    val id: Long?,
     @Column(nullable = false, unique = true, length = 255)
     val email: String,
     @Column(nullable = false, unique = false, length = 255)

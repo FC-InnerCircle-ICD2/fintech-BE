@@ -95,3 +95,5 @@ COMMENT ON COLUMN account.email IS '사용자 이메일 (로그인 ID)';
 COMMENT ON COLUMN account.password IS '사용자 비밀번호 (암호화 저장)';
 COMMENT ON COLUMN account.status IS '계정 상태 (0: 활성, 1: 비활성, 2: 정지)';
 
+INSERT INTO account (id, email, password, status, created_at, updated_at)
+VALUES (293847562342874239, 'test@test.com', '', 0, '2025-02-11 14:30:15', '2025-02-11 14:30:15');
