@@ -1,5 +1,6 @@
 package com.inner.circle.core.security
 
+import io.hypersistence.tsid.TSID
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.authority.SimpleGrantedAuthority
@@ -13,7 +14,7 @@ class MerchantApiKeyProviderImpl(
         if (secret == "pay200") {
             val mockMerchantUserDetails =
                 MerchantUserDetails(
-                    id = "12345tsid",
+                    id = TSID.fast().toLong(),
                     username = "test@gmail.com",
                     password = "qwer1234",
                     name = "테스트 상점"

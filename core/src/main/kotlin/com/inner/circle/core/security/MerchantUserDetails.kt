@@ -5,7 +5,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 
 class MerchantUserDetails(
-    private val id: String,
+    private val id: Long,
     private val username: String,
     private val password: String,
     private val name: String
@@ -17,7 +17,7 @@ class MerchantUserDetails(
 
     override fun getPassword(): String = password
 
-    fun getId(): String = id
+    fun getId(): Long = id
 
     fun getName(): String = name
 }

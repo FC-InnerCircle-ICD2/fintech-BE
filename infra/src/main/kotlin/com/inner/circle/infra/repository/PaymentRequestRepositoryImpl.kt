@@ -9,7 +9,7 @@ internal class PaymentRequestRepositoryImpl(
 ) : PaymentRequestRepository {
     override fun findByOrderIdAndMerchantId(
         orderId: String,
-        merchantId: String
+        merchantId: Long
     ): PaymentRequestEntity? =
         paymentRequestJpaRepository.findByOrderIdAndMerchantId(orderId, merchantId)
 

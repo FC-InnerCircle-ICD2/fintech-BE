@@ -30,7 +30,7 @@ data class PaymentRequestEntity(
     @Column(name = "payment_type")
     val paymentType: PaymentType = PaymentType.CARD,
     @Column(name = "merchant_id", nullable = false)
-    val merchantId: String,
+    val merchantId: Long,
     @Column(name = "payment_key")
     val paymentKey: String?,
     @Column(nullable = false)

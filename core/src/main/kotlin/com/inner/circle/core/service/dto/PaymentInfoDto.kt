@@ -10,7 +10,7 @@ data class PaymentInfoDto(
     val orderName: String?,
     val orderStatus: PaymentStatusType,
     val accountId: Long?,
-    val merchantId: String,
+    val merchantId: Long,
     val paymentKey: String?,
     val amount: BigDecimal,
     val requestTime: LocalDateTime,
