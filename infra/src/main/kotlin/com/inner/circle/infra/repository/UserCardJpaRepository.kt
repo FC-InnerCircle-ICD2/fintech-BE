@@ -5,5 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface UserCardJpaRepository : JpaRepository<UserCardEntity, String> {
     fun findByAccountId(accountId: Long): UserCardEntity?
-    fun findByAccountIdAndIsRepresentative(accountId: Long, isRepresentative: Boolean): UserCardEntity?
+
+    fun findByAccountIdAndIsRepresentative(
+        accountId: Long,
+        isRepresentative: Boolean
+    ): UserCardEntity?
 }
