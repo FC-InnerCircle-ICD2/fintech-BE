@@ -22,13 +22,15 @@ class UserValidationService(
             token = token,
             secretKey = secret
         )?.let {
-            val accountInfo = accountFinderPort.findByIdOrNull(
-                id = it["userId"].toString().toLong()
-            )?.toUserDetails() ?: throw UserAuthenticationException.UserNotFoundException()
+            val accountInfo =
+                accountFinderPort
+                    .findByIdOrNull(
+                        id = it["userId"].toString().toLong()
+                    )?.toUserDetails() ?: throw UserAuthenticationException.UserNotFoundException()
 
             UsernamePasswordAuthenticationToken(
                 accountInfo,
-            null
+                null
             )
         } ?: throw UserAuthenticationException.UnauthorizedException(message = "Invalid Token")
 
@@ -51,7 +53,7 @@ class UserValidationService(
         AccountDetails(
             id = this.id,
             userName = this.email,
-            userPassword = this.password,
+            userPassword = this.password
         )
 
     companion object {
