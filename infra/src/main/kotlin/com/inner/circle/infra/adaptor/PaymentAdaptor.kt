@@ -5,7 +5,6 @@ import com.inner.circle.infra.port.PaymentPort
 import com.inner.circle.infra.repository.PaymentRepository
 import com.inner.circle.infra.repository.entity.PaymentEntity
 import org.springframework.stereotype.Component
-import org.springframework.transaction.annotation.Transactional
 
 @Component
 internal class PaymentAdaptor(

@@ -5,7 +5,6 @@ import com.inner.circle.infra.repository.TransactionRepository
 import com.inner.circle.infra.repository.entity.TransactionEntity
 import java.time.LocalDateTime
 import org.springframework.stereotype.Component
-import org.springframework.transaction.annotation.Transactional
 
 @Component
 internal class TransactionAdaptor(
