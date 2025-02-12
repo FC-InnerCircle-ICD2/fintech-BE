@@ -6,7 +6,6 @@ import com.inner.circle.infra.adaptor.dto.PaymentProcessStatus
 import com.inner.circle.infra.adaptor.dto.PaymentTokenDto
 import com.inner.circle.infra.port.PaymentClaimHandlingPort
 import java.time.LocalDateTime
-import java.time.ZoneId
 import java.util.Date
 import org.springframework.stereotype.Service
 
@@ -19,7 +18,8 @@ class PaymentClaimService(
 ) : PaymentClaimUseCase {
     override fun createPayment(
         request: PaymentClaimUseCase.ClaimRequest,
-        merchantId: String
+        merchantId: String,
+        merchantName: String
     ): PaymentClaimUseCase.PaymentClaimResponse {
         val (amount, orderId, orderName) = request
         val requestDto =
@@ -29,6 +29,7 @@ class PaymentClaimService(
                 orderName = orderName,
                 orderStatus = PaymentProcessStatus.READY,
                 merchantId = merchantId,
+                merchantName = merchantName,
                 paymentKey = null,
                 paymentType = null,
                 cardNumber = null,
@@ -38,25 +39,22 @@ class PaymentClaimService(
             )
 
         val issuedAt = Date()
+        val signatureString = jwtHandler.generateSignatureString()
         val jwtToken =
             jwtHandler.generateToken(
                 paymentClaimDto = requestDto,
                 issuedAt = issuedAt,
-                expiresMinute = PAYMENT_REQUEST_EXPIRED_MINUTES.toInt()
+                signatureString
             )
-        val jwtExpiresAt =
-            LocalDateTime
-                .ofInstant(
-                    issuedAt.toInstant(),
-                    ZoneId.systemDefault()
-                ).plusMinutes(PAYMENT_REQUEST_EXPIRED_MINUTES)
 
+        val expiredAt = LocalDateTime.now().plusMinutes(PAYMENT_REQUEST_EXPIRED_MINUTES)
         val paymentTokenDto =
             PaymentTokenDto(
                 merchantId = requestDto.merchantId,
                 orderId = requestDto.orderId,
                 generatedToken = jwtToken,
-                expiresAt = jwtExpiresAt
+                signature = signatureString,
+                expiredAt = expiredAt
             )
 
         paymentClaimHandlingPort.createAndSavePaymentRequest(
@@ -64,6 +62,6 @@ class PaymentClaimService(
             paymentTokenDto
         )
 
-        return PaymentClaimUseCase.PaymentClaimResponse.of(jwtToken, jwtExpiresAt)
+        return PaymentClaimUseCase.PaymentClaimResponse.of(jwtToken, expiredAt)
     }
 }

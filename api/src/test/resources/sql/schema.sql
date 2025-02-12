@@ -39,6 +39,7 @@ create table if not exists  payment_request
     updated_at    timestamp(6)   not null,
     card_number   varchar(255),
     merchant_id   varchar(255)   not null,
+    merchant_name   varchar(255),
     order_id      varchar(255)   not null,
     order_name    varchar(255),
     order_status  varchar(255)   not null,
@@ -75,3 +76,23 @@ create table if not exists  user_card
 );
 
 INSERT INTO merchant (created_at, updated_at, id, name, password, token, username) VALUES ('2025-02-05 19:18:16.000000', '2025-02-05 19:18:16.000000', '1', 'pay200', 'test1234', 'cGF5MjAwOg==', 'pay200-merchant');
+
+
+CREATE TABLE IF NOT EXISTS account (
+    id BIGINT PRIMARY KEY,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    status INT NOT NULL,
+    created_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+COMMENT ON TABLE account IS '사용자 계정 정보를 저장하는 테이블';
+
+COMMENT ON COLUMN account.id IS '계정의 기본 키 (TSID)';
+COMMENT ON COLUMN account.email IS '사용자 이메일 (로그인 ID)';
+COMMENT ON COLUMN account.password IS '사용자 비밀번호 (암호화 저장)';
+COMMENT ON COLUMN account.status IS '계정 상태 (0: 활성, 1: 비활성, 2: 정지)';
+
+INSERT INTO account (id, email, password, status)
+VALUES (293847562342874239, 'test@test.com', '$2a$10$S09UPOa5ZQh4n/Yb1PdRnuoJgWJ.f.Z20', 0);

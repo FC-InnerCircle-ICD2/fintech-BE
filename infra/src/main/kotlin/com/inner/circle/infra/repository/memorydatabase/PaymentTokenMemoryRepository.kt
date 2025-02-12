@@ -5,6 +5,7 @@ import com.inner.circle.infra.repository.entity.PaymentTokenEntity
 import com.inner.circle.infra.repository.entity.PaymentTokenRepository
 import java.time.Duration
 import java.time.LocalDateTime
+import org.slf4j.LoggerFactory
 import org.springframework.data.redis.core.StringRedisTemplate
 import org.springframework.stereotype.Repository
 
@@ -12,34 +13,46 @@ import org.springframework.stereotype.Repository
 class PaymentTokenMemoryRepository(
     val redisTemplate: StringRedisTemplate
 ) : PaymentTokenRepository {
-    override fun getPaymentToken(
-        merchantId: String,
-        orderId: String
+    private val logger = LoggerFactory.getLogger(PaymentTokenMemoryRepository::class.java)
+
+    override fun getPaymentDataFromToken(token: String): PaymentTokenEntity {
+        val tokenData = redisTemplate.opsForHash<String, String>().entries(token)
+        if (tokenData.isEmpty()) {
+            throw PaymentJwtException.TokenNotFoundException()
+        }
+        return PaymentTokenEntity.fromToken(tokenData)
+    }
+
+    override fun savePaymentToken(
+        paymentToken: PaymentTokenEntity,
+        expiresAt: LocalDateTime
     ): PaymentTokenEntity {
-        val key = "$merchantId:$orderId"
-        val tokenString =
-            redisTemplate.opsForValue()[key]
-                ?: throw PaymentJwtException.TokenNotFoundException()
-        return PaymentTokenEntity.fromToken(tokenString)
-    }
+        val tokenString = paymentToken.generatedToken
+        val ttl = Duration.between(LocalDateTime.now(), expiresAt)
 
-    override fun isExpiredByToken(
-        merchantId: String,
-        orderId: String
-    ): Boolean {
-        val key = "$merchantId:$orderId"
-        val tokenString =
-            redisTemplate.opsForValue()[key]
-                ?: return true
-        val paymentToken = PaymentTokenEntity.fromToken(tokenString)
-        return paymentToken.expiresAt.isBefore(LocalDateTime.now())
-    }
+        redisTemplate.opsForHash<String, String>().put(tokenString, "token", tokenString)
+        redisTemplate.opsForHash<String, String>().put(
+            tokenString,
+            "merchantId",
+            paymentToken.merchantId
+        )
+        redisTemplate.opsForHash<String, String>().put(tokenString, "orderId", paymentToken.orderId)
+        redisTemplate.opsForHash<String, String>().put(
+            tokenString,
+            "signature",
+            paymentToken.signature
+        )
+        redisTemplate.expire(tokenString, ttl)
 
-    override fun savePaymentToken(paymentToken: PaymentTokenEntity): PaymentTokenEntity {
-        val key = "${paymentToken.merchantId}:${paymentToken.orderId}"
-        val tokenString = paymentToken.toString()
-        val ttl = Duration.between(LocalDateTime.now(), paymentToken.expiresAt)
-        redisTemplate.opsForValue().set(key, tokenString, ttl)
         return paymentToken
+    }
+
+    override fun removePaymentDataByToken(token: String) {
+        try {
+            logger.info("Token removed: $token")
+            redisTemplate.opsForHash<String, String>().delete("tokens", token)
+        } catch (ex: Exception) {
+            logger.error("Failed to remove token: $token", ex)
+        }
     }
 }

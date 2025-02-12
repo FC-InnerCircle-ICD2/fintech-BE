@@ -6,6 +6,8 @@ import com.inner.circle.core.sse.SseConnectionPool
 import com.inner.circle.core.usecase.ConfirmPaymentUseCase
 import com.inner.circle.core.usecase.ConfirmSimplePaymentUseCase
 import com.inner.circle.exception.AuthenticateException
+import com.inner.circle.exception.PaymentException
+import com.inner.circle.infra.adaptor.dto.PaymentProcessStatus
 import com.inner.circle.infra.http.HttpClient
 import com.inner.circle.infra.port.ConfirmPaymentPort
 import com.inner.circle.infra.port.SavePaymentRequestPort
@@ -43,6 +45,12 @@ internal class ConfirmPaymentService(
             throw AuthenticateException.CardAuthFailException()
         }
 
+        if (request.orderStatus != PaymentProcessStatus.READY) {
+            throw PaymentException.InvalidOrderStatusException(
+                request.orderStatus.toString()
+            )
+        }
+
         val paymentKeyTsid = TSID.fast().toString()
 
         val result =
@@ -59,9 +67,10 @@ internal class ConfirmPaymentService(
             SavePaymentRequestPort.Request(
                 orderId = request.orderId,
                 orderName = request.orderName,
-                orderStatus = request.orderStatus,
+                orderStatus = PaymentProcessStatus.IN_PROGRESS,
                 accountId = request.accountId,
                 merchantId = request.merchantId,
+                merchantName = request.merchantName,
                 paymentKey = paymentKeyTsid,
                 amount = request.amount,
                 cardNumber = request.cardNumber,
@@ -102,6 +111,7 @@ internal class ConfirmPaymentService(
                 orderStatus = paymentInfo.orderStatus,
                 accountId = paymentInfo.accountId,
                 merchantId = paymentInfo.merchantId,
+                merchantName = paymentInfo.merchantName,
                 paymentKey = paymentInfo.paymentKey,
                 amount = paymentInfo.amount,
                 requestTime = paymentInfo.requestTime,
@@ -131,6 +141,7 @@ internal class ConfirmPaymentService(
                 orderStatus = paymentInfo.orderStatus,
                 accountId = paymentInfo.accountId,
                 merchantId = paymentInfo.merchantId,
+                merchantName = paymentInfo.merchantName,
                 paymentKey = paymentInfo.paymentKey,
                 amount = paymentInfo.amount,
                 requestTime = paymentInfo.requestTime,

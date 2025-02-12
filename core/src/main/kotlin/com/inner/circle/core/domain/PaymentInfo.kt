@@ -1,12 +1,13 @@
 package com.inner.circle.core.domain
 
+import com.inner.circle.infra.adaptor.dto.PaymentProcessStatus
 import java.math.BigDecimal
 import java.time.LocalDateTime
 
 data class PaymentInfo(
     val orderId: String,
     val orderName: String?,
-    val orderStatus: String?,
+    val orderStatus: PaymentProcessStatus,
     val accountId: Long?,
     val merchantId: String,
     val paymentKey: String?,
@@ -14,5 +15,6 @@ data class PaymentInfo(
     val requestTime: LocalDateTime,
     val cardNumber: String,
     val expirationPeriod: String,
-    val cvc: String
+    val cvc: String,
+    val merchantName: String
 )

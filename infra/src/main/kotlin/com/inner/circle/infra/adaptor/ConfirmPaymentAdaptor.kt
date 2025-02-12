@@ -2,6 +2,7 @@ package com.inner.circle.infra.adaptor
 
 import com.inner.circle.exception.PaymentException
 import com.inner.circle.infra.adaptor.dto.ConfirmPaymentInfraDto
+import com.inner.circle.infra.adaptor.dto.PaymentProcessStatus
 import com.inner.circle.infra.port.ConfirmPaymentPort
 import com.inner.circle.infra.repository.PaymentRequestRepository
 import com.inner.circle.infra.repository.UserCardRepository
@@ -24,9 +25,10 @@ internal class ConfirmPaymentAdaptor(
         return ConfirmPaymentInfraDto(
             orderId = paymentRequest.orderId,
             orderName = paymentRequest.orderName,
-            orderStatus = paymentRequest.orderStatus,
+            orderStatus = PaymentProcessStatus.valueOf(paymentRequest.orderStatus.name),
             accountId = paymentRequest.accountId,
             merchantId = paymentRequest.merchantId,
+            merchantName = paymentRequest.merchantName,
             paymentKey = paymentRequest.paymentKey,
             amount = paymentRequest.amount,
             requestTime = paymentRequest.requestTime,

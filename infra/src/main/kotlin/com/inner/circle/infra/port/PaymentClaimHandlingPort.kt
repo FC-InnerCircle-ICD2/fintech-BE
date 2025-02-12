@@ -4,6 +4,7 @@ import com.inner.circle.infra.adaptor.dto.PaymentClaimDto
 import com.inner.circle.infra.adaptor.dto.PaymentTokenDto
 import com.inner.circle.infra.repository.entity.PaymentRequestEntity
 import com.inner.circle.infra.repository.entity.PaymentTokenEntity
+import java.time.LocalDateTime
 
 interface PaymentClaimHandlingPort {
     fun createAndSavePaymentRequest(
@@ -18,6 +19,7 @@ interface PaymentClaimHandlingPort {
 
     fun savePaymentRequest(
         paymentRequest: PaymentRequestEntity,
-        tokenEntity: PaymentTokenEntity
+        tokenEntity: PaymentTokenEntity,
+        expiredAt: LocalDateTime
     ): PaymentClaimDto
 }

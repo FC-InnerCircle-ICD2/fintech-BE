@@ -1,15 +1,14 @@
 package com.inner.circle.infra.repository.entity
 
+import java.time.LocalDateTime
+
 interface PaymentTokenRepository {
-    fun getPaymentToken(
-        merchantId: String,
-        orderId: String
+    fun getPaymentDataFromToken(token: String): PaymentTokenEntity
+
+    fun savePaymentToken(
+        paymentToken: PaymentTokenEntity,
+        expiresAt: LocalDateTime
     ): PaymentTokenEntity
 
-    fun isExpiredByToken(
-        merchantId: String,
-        orderId: String
-    ): Boolean
-
-    fun savePaymentToken(paymentToken: PaymentTokenEntity): PaymentTokenEntity
+    fun removePaymentDataByToken(token: String)
 }
