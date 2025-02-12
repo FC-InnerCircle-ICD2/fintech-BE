@@ -10,7 +10,7 @@ import com.inner.circle.api.controller.request.ConfirmPaymentRequest
 import com.inner.circle.api.controller.request.ConfirmSimplePaymentRequest
 import com.inner.circle.core.usecase.ConfirmPaymentUseCase
 import com.inner.circle.core.usecase.ConfirmSimplePaymentUseCase
-import com.inner.circle.core.usecase.SavePaymentApproveUseCase
+import com.inner.circle.core.usecase.PaymentTokenHandlingUseCase
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletRequest
@@ -23,8 +23,8 @@ import org.springframework.web.bind.annotation.RequestBody
 @Tag(name = "Payments - User", description = "결제 고객(App) 결제 관련 API")
 @PaymentForUserV1Api
 class UserPaymentController(
+    private val paymentTokenHandlingUseCase: PaymentTokenHandlingUseCase,
     private val confirmPaymentUseCase: ConfirmPaymentUseCase,
-    private val savePaymentApproveService: SavePaymentApproveUseCase,
     private val statusChangedMessageSender: PaymentStatusChangedMessageSender
 ) {
     private val logger: Logger = LoggerFactory.getLogger(UserPaymentController::class.java)
@@ -34,18 +34,25 @@ class UserPaymentController(
     fun proceedPaymentConfirm(
         @RequestBody confirmSimplePaymentRequest: ConfirmSimplePaymentRequest
     ): PaymentResponse<ConfirmPaymentDto> {
+        val foundPaymentToken =
+            paymentTokenHandlingUseCase.findPaymentToken(
+                confirmSimplePaymentRequest.token
+            )
+        val orderId = foundPaymentToken.orderId
+        val merchantId = foundPaymentToken.merchantId
+
         sendStatusChangedMessage(
             status = PaymentStatusEventType.IN_VERIFICATE,
-            orderId = confirmSimplePaymentRequest.orderId,
-            merchantId = confirmSimplePaymentRequest.merchantId
+            orderId = orderId,
+            merchantId = merchantId
         )
 
         val data =
             ConfirmPaymentDto.of(
                 confirmPaymentUseCase.confirmPayment(
                     ConfirmSimplePaymentUseCase.Request(
-                        orderId = confirmSimplePaymentRequest.orderId,
-                        merchantId = confirmSimplePaymentRequest.merchantId
+                        orderId = orderId,
+                        merchantId = merchantId
                     )
                 )
             )
@@ -56,13 +63,14 @@ class UserPaymentController(
 
         sendStatusChangedMessage(
             status = PaymentStatusEventType.IN_PROGRESS,
-            orderId = confirmSimplePaymentRequest.orderId,
-            merchantId = confirmSimplePaymentRequest.merchantId
+            orderId = orderId,
+            merchantId = merchantId
         )
 
         return response
     }
 
+    @Deprecated("일반 결제 기능 제외 예정")
     @Operation(summary = "일반 결제 인증")
     @PostMapping("/authentication")
     fun proceedPaymentConfirm(

@@ -39,10 +39,12 @@ class PaymentClaimService(
             )
 
         val issuedAt = Date()
+        val signatureString = jwtHandler.generateSignatureString()
         val jwtToken =
             jwtHandler.generateToken(
                 paymentClaimDto = requestDto,
-                issuedAt = issuedAt
+                issuedAt = issuedAt,
+                signatureString
             )
 
         val expiredAt = LocalDateTime.now().plusMinutes(PAYMENT_REQUEST_EXPIRED_MINUTES)
@@ -51,6 +53,7 @@ class PaymentClaimService(
                 merchantId = requestDto.merchantId,
                 orderId = requestDto.orderId,
                 generatedToken = jwtToken,
+                signature = signatureString,
                 expiredAt = expiredAt
             )
 
