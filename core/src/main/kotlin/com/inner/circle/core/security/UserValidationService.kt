@@ -1,41 +1,46 @@
 package com.inner.circle.core.security
 
-import com.inner.circle.infra.port.UserFinderPort
+import com.inner.circle.infra.port.AccountFinderPort
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 
 @Service
 class UserValidationService(
     @Value("\${jwt.secret}") private val secret: String,
-    private val userFinderPort: UserFinderPort
+    private val accountFinderPort: AccountFinderPort
 ) : UserValidation {
     override fun validateUserOrThrow(token: String) {
-        decodeUserAuthorizationToken(
+        getAuthorizationTokenClaimsOrNull(
             token = token,
             secretKey = secret
         )?.let {
-            userFinderPort.findByIdOrNull(
+            accountFinderPort.findByIdOrNull(
                 id = it["userId"].toString().toLong()
             )
         } ?: throw RuntimeException("Invalid token")
     }
 
-    fun decodeUserAuthorizationToken(
+    fun getAuthorizationTokenClaimsOrNull(
         token: String,
         secretKey: String
     ): Claims? =
-        try {
+        runCatching {
             Jwts
                 .parser()
                 .verifyWith(Keys.hmacShaKeyFor(secretKey.toByteArray()))
                 .build()
                 .parseSignedClaims(token)
                 .payload
-        } catch (e: Exception) {
-            println("Invalid JWT: ${e.message}")
-            null
+        }.onFailure {
+            logger.error("Invalid token", it)
         }
+            .getOrElse { null }
+
+    companion object {
+        private val logger = LoggerFactory.getLogger(UserValidationService::class.java)
+    }
 }
