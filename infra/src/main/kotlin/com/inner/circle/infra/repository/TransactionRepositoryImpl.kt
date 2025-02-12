@@ -4,7 +4,7 @@ import com.inner.circle.infra.repository.entity.TransactionEntity
 import org.springframework.stereotype.Repository
 
 @Repository
-internal class TransacrionRepositoryImpl(
+internal class TransactionRepositoryImpl(
     private val transactionJpaRepository: TransactionJpaRepository
 ) : TransactionRepository {
     override fun save(transactionEntity: TransactionEntity): TransactionEntity? =

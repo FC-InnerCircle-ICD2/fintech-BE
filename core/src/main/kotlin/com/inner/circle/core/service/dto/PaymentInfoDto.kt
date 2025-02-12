@@ -1,14 +1,14 @@
 package com.inner.circle.core.service.dto
 
 import com.inner.circle.core.domain.PaymentInfo
-import com.inner.circle.infra.repository.entity.PaymentStatusType
+import com.inner.circle.infra.adaptor.dto.PaymentProcessStatus
 import java.math.BigDecimal
 import java.time.LocalDateTime
 
 data class PaymentInfoDto(
     val orderId: String,
     val orderName: String?,
-    val orderStatus: PaymentStatusType,
+    val orderStatus: PaymentProcessStatus,
     val accountId: Long?,
     val merchantId: String,
     val paymentKey: String?,
@@ -24,7 +24,7 @@ data class PaymentInfoDto(
             PaymentInfoDto(
                 orderId = paymentInfo.orderId,
                 orderName = paymentInfo.orderName,
-                orderStatus = PaymentStatusType.valueOf(paymentInfo.orderStatus.name),
+                orderStatus = PaymentProcessStatus.valueOf(paymentInfo.orderStatus.name),
                 accountId = paymentInfo.accountId,
                 merchantId = paymentInfo.merchantId,
                 merchantName = paymentInfo.merchantName,

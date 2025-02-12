@@ -6,6 +6,7 @@ import com.inner.circle.core.sse.SseConnectionPool
 import com.inner.circle.core.usecase.ConfirmPaymentUseCase
 import com.inner.circle.core.usecase.ConfirmSimplePaymentUseCase
 import com.inner.circle.exception.AuthenticateException
+import com.inner.circle.exception.PaymentException
 import com.inner.circle.infra.adaptor.dto.PaymentProcessStatus
 import com.inner.circle.infra.http.HttpClient
 import com.inner.circle.infra.port.ConfirmPaymentPort
@@ -44,6 +45,12 @@ internal class ConfirmPaymentService(
             throw AuthenticateException.CardAuthFailException()
         }
 
+        if (request.orderStatus != PaymentProcessStatus.READY) {
+            throw PaymentException.InvalidOrderStatusException(
+                request.orderStatus.toString()
+            )
+        }
+
         val paymentKeyTsid = TSID.fast().toString()
 
         val result =
@@ -60,7 +67,7 @@ internal class ConfirmPaymentService(
             SavePaymentRequestPort.Request(
                 orderId = request.orderId,
                 orderName = request.orderName,
-                orderStatus = PaymentProcessStatus.valueOf(request.orderStatus.name),
+                orderStatus = PaymentProcessStatus.IN_PROGRESS,
                 accountId = request.accountId,
                 merchantId = request.merchantId,
                 merchantName = request.merchantName,

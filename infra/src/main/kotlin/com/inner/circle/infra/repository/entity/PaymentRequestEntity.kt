@@ -28,6 +28,7 @@ data class PaymentRequestEntity(
     @Column(name = "card_number")
     val cardNumber: String?,
     @Column(name = "payment_type")
+    @Enumerated(EnumType.STRING)
     val paymentType: PaymentType = PaymentType.CARD,
     @Column(name = "merchant_id", nullable = false)
     val merchantId: String,
@@ -39,5 +40,6 @@ data class PaymentRequestEntity(
     val paymentToken: String?,
     @Column(name = "request_time", nullable = false)
     val requestTime: LocalDateTime,
+    @Column(name = "merchant_name")
     val merchantName: String
 ) : BaseEntity()
