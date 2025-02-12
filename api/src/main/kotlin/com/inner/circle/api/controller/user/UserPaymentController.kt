@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestBody
 
 @Tag(name = "Payments - User", description = "결제 고객(App) 결제 관련 API")
 @PaymentForUserV1Api
-@SecurityRequirement(name = SwaggerConfig.BEARER_AUTH) // Basic Auth 적용
+@SecurityRequirement(name = SwaggerConfig.BEARER_AUTH)
 class UserPaymentController(
     private val confirmPaymentUseCase: ConfirmPaymentUseCase,
     private val savePaymentApproveService: SavePaymentApproveUseCase,
