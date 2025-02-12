@@ -29,9 +29,9 @@ class UserValidationService(
                 AccountDetails(
                     id = accountInfo.id,
                     userName = accountInfo.email,
-                    userPassword = accountInfo.password,
+                    userPassword = accountInfo.password
                 ),
-                null,
+                null
             )
         } ?: throw RuntimeException("Invalid token !")
 
