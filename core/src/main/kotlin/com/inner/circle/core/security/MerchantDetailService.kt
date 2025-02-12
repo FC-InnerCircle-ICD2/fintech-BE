@@ -16,7 +16,7 @@ class MerchantDetailService(
         val userDetails =
             MerchantUserDetails(
                 id = merchant.id,
-                username = merchant.username,
+                username = merchant.email,
                 password = merchant.password,
                 name = merchant.name
             )
