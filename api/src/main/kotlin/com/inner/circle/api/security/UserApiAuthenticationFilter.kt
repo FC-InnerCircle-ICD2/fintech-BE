@@ -1,6 +1,6 @@
 package com.inner.circle.api.security
 
-import com.inner.circle.core.security.UserValidation
+import com.inner.circle.core.security.UserValidationProvider
 import com.inner.circle.exception.UserAuthenticationException
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
@@ -10,7 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.filter.OncePerRequestFilter
 
 class UserApiAuthenticationFilter(
-    private val userValidation: UserValidation
+    private val userValidationProvider: UserValidationProvider
 ) : OncePerRequestFilter() {
     override fun doFilterInternal(
         request: HttpServletRequest,
@@ -24,7 +24,7 @@ class UserApiAuthenticationFilter(
                 )
 
         SecurityContextHolder.getContext().authentication =
-            userValidation.getUserValidAuthenticationOrThrow(token = authHeader)
+            userValidationProvider.getUserValidAuthenticationOrThrow(token = authHeader)
 
         filterChain.doFilter(request, response)
     }

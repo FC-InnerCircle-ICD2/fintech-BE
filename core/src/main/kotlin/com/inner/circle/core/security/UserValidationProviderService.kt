@@ -13,25 +13,25 @@ import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Service
 
 @Service
-class UserValidationService(
+class UserValidationProviderService(
     @Value("\${jwt.secret}") private val secret: String,
     private val accountFinderPort: AccountFinderPort
-) : UserValidation {
+) : UserValidationProvider {
     override fun getUserValidAuthenticationOrThrow(token: String): Authentication =
         getAuthorizationTokenClaimsOrNull(
             token = token,
             secretKey = secret
         )?.let {
-            val accountInfo =
-                accountFinderPort
-                    .findByIdOrNull(
-                        id = it["userId"].toString().toLong()
-                    )?.toUserDetails() ?: throw UserAuthenticationException.UserNotFoundException()
-
-            UsernamePasswordAuthenticationToken(
-                accountInfo,
-                null
-            )
+            accountFinderPort
+                .findByIdOrNull(
+                    id = it["userId"].toString().toLong()
+                )?.toUserDetails()
+                .let {
+                    UsernamePasswordAuthenticationToken(
+                        it,
+                        null
+                    )
+                }
         } ?: throw UserAuthenticationException.UnauthorizedException(message = "Invalid Token")
 
     fun getAuthorizationTokenClaimsOrNull(
@@ -57,6 +57,6 @@ class UserValidationService(
         )
 
     companion object {
-        private val logger = LoggerFactory.getLogger(UserValidationService::class.java)
+        private val logger = LoggerFactory.getLogger(UserValidationProviderService::class.java)
     }
 }
