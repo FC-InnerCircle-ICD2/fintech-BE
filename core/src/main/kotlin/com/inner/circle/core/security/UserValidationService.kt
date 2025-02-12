@@ -6,6 +6,8 @@ import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Service
 
 @Service
@@ -13,16 +15,25 @@ class UserValidationService(
     @Value("\${jwt.secret}") private val secret: String,
     private val accountFinderPort: AccountFinderPort
 ) : UserValidation {
-    override fun validateUserOrThrow(token: String) {
+    override fun getUserValidAuthenticationOrThrow(token: String): Authentication =
         getAuthorizationTokenClaimsOrNull(
             token = token,
             secretKey = secret
         )?.let {
-            accountFinderPort.findByIdOrNull(
-                id = it["userId"].toString().toLong()
+            val accountInfo =
+                accountFinderPort.findByIdOrNull(
+                    id = it["userId"].toString().toLong()
+                ) ?: throw RuntimeException("Invalid User !")
+
+            UsernamePasswordAuthenticationToken(
+                AccountDetails(
+                    id = accountInfo.id,
+                    userName = accountInfo.email,
+                    userPassword = accountInfo.password,
+                ),
+                null,
             )
-        } ?: throw RuntimeException("Invalid token")
-    }
+        } ?: throw RuntimeException("Invalid token !")
 
     fun getAuthorizationTokenClaimsOrNull(
         token: String,

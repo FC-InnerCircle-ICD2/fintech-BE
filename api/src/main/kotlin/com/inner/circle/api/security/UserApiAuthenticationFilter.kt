@@ -6,6 +6,7 @@ import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpHeaders
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.filter.OncePerRequestFilter
 
 class UserApiAuthenticationFilter(
@@ -22,7 +23,9 @@ class UserApiAuthenticationFilter(
                     "Missing Authorization header"
                 )
 
-        userValidation.validateUserOrThrow(token = authHeader)
+        SecurityContextHolder.getContext().authentication =
+            userValidation.getUserValidAuthenticationOrThrow(token = authHeader)
+
         filterChain.doFilter(request, response)
     }
 }
