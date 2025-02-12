@@ -35,8 +35,7 @@ class SwaggerConfig(
                 Info()
                     .title("API Documentation")
                     .version("v1")
-            )
-            .servers(
+            ).servers(
                 listOf(
                     Server().url(serverUrl).description("HTTPS Server")
                 )
