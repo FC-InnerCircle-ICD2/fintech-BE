@@ -37,8 +37,7 @@ class UserValidationService(
                 .payload
         }.onFailure {
             logger.error("Invalid token", it)
-        }
-            .getOrElse { null }
+        }.getOrElse { null }
 
     companion object {
         private val logger = LoggerFactory.getLogger(UserValidationService::class.java)
