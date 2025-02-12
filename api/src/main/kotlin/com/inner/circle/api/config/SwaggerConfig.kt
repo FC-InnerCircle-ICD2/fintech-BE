@@ -3,7 +3,6 @@ package com.inner.circle.api.config
 import io.swagger.v3.oas.models.Components
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.info.Info
-import io.swagger.v3.oas.models.security.SecurityRequirement
 import io.swagger.v3.oas.models.security.SecurityScheme
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
@@ -15,22 +14,19 @@ import org.springframework.context.annotation.Profile
 class SwaggerConfig(
     @Value("\${swagger.server-url}") private val serverUrl: String
 ) {
-    private val basicSchemeName = "basic"
-    private val bearerSchemaName = "bearer"
-
     @Bean
     fun customOpenAPI(): OpenAPI {
         val basicAuthScheme =
             SecurityScheme()
-                .name(basicSchemeName)
+                .name(BASIC_AUTH)
                 .type(SecurityScheme.Type.HTTP)
-                .scheme(basicSchemeName)
+                .scheme("basic")
 
         val bearerAuthScheme =
             SecurityScheme()
-                .name(bearerSchemaName)
+                .name(BEARER_AUTH)
                 .type(SecurityScheme.Type.HTTP)
-                .scheme(bearerSchemaName)
+                .scheme("bearer")
                 .bearerFormat("JWT")
 
         return OpenAPI()
@@ -40,9 +36,13 @@ class SwaggerConfig(
                     .version("v1")
             ).components(
                 Components()
-                    .addSecuritySchemes("basicAuth", basicAuthScheme)
-                    .addSecuritySchemes("bearerAuth", bearerAuthScheme)
-            ).addSecurityItem(SecurityRequirement().addList(basicSchemeName))
-            .addSecurityItem(SecurityRequirement().addList(bearerSchemaName))
+                    .addSecuritySchemes(BASIC_AUTH, basicAuthScheme)
+                    .addSecuritySchemes(BEARER_AUTH, bearerAuthScheme)
+            )
+    }
+
+    companion object {
+        const val BASIC_AUTH = "basicAuth"
+        const val BEARER_AUTH = "bearerAuth"
     }
 }
