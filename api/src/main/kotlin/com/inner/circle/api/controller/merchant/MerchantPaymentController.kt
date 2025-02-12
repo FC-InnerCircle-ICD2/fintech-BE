@@ -3,6 +3,7 @@ package com.inner.circle.api.controller.merchant
 import com.inner.circle.api.application.PaymentStatusChangedMessageSender
 import com.inner.circle.api.application.dto.PaymentStatusChangedSsePaymentRequest
 import com.inner.circle.api.application.dto.PaymentStatusEventType
+import com.inner.circle.api.config.SwaggerConfig
 import com.inner.circle.api.controller.PaymentForMerchantV1Api
 import com.inner.circle.api.controller.dto.PaymentApproveDto
 import com.inner.circle.api.controller.dto.PaymentResponse
@@ -12,6 +13,7 @@ import com.inner.circle.core.security.MerchantUserDetails
 import com.inner.circle.core.usecase.PaymentClaimUseCase
 import com.inner.circle.core.usecase.SavePaymentApproveUseCase
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestBody
 
 @Tag(name = "Payments - Merchant", description = "상점 고객(SDK) 결제 관련 API")
 @PaymentForMerchantV1Api
+@SecurityRequirement(name = SwaggerConfig.BASIC_AUTH)
 class MerchantPaymentController(
     private val claimUseCase: PaymentClaimUseCase,
     private val savePaymentApproveService: SavePaymentApproveUseCase,
