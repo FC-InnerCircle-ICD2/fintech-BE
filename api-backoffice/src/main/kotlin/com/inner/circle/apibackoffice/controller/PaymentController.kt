@@ -8,13 +8,13 @@ import com.inner.circle.apibackoffice.exception.BackofficeResponse
 import com.inner.circle.corebackoffice.usecase.GetPaymentUseCase
 import com.inner.circle.corebackoffice.usecase.GetTransactionUseCase
 import com.inner.circle.corebackoffice.usecase.UserCardUseCase
-import com.inner.circle.corebackoffice.service.dto.UserCardDto as CoreUserCardDto
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
+import com.inner.circle.corebackoffice.service.dto.UserCardDto as CoreUserCardDto
 
 @Tag(name = "Payment", description = "Payment API")
 @BackofficeV1Api
@@ -83,7 +83,7 @@ class PaymentController(
                         expirationPeriod = coreUserCardDto.expirationPeriod,
                         cvc = coreUserCardDto.cvc
                     )
-            }.toList()
+                }.toList()
         )
     }
 
