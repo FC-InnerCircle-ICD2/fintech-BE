@@ -13,19 +13,20 @@ import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Service
 
 @Service
-class UserValidationProviderManager(
+class AccountValidationProviderManager(
     @Value("\${jwt.secret}") private val secret: String,
     private val accountFinderPort: AccountFinderPort
-) : UserValidationProvider {
+) : AccountValidationProvider {
     override fun getUserValidAuthenticationOrThrow(token: String): Authentication =
         getAuthorizationTokenClaimsOrNull(
             token = token,
             secretKey = secret
         )?.let {
             val accountInfo =
-                accountFinderPort.findByIdOrNull(
-                    id = it["userId"].toString().toLong()
-                )?.toUserDetails() ?: throw UserAuthenticationException.UserNotFoundException()
+                accountFinderPort
+                    .findByIdOrNull(
+                        id = it["userId"].toString().toLong()
+                    )?.toUserDetails() ?: throw UserAuthenticationException.UserNotFoundException()
 
             UsernamePasswordAuthenticationToken(
                 accountInfo,
@@ -45,7 +46,7 @@ class UserValidationProviderManager(
                 .parseSignedClaims(token)
                 .payload
         }.onFailure {
-            logger.error("Invalid token", it)
+            logger.error("Invalid token Error Message : ${it.message}")
         }.getOrElse { null }
 
     private fun AccountEntity.toUserDetails(): AccountDetails =
@@ -56,6 +57,6 @@ class UserValidationProviderManager(
         )
 
     companion object {
-        private val logger = LoggerFactory.getLogger(UserValidationProviderManager::class.java)
+        private val logger = LoggerFactory.getLogger(AccountValidationProviderManager::class.java)
     }
 }
