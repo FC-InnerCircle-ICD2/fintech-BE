@@ -100,7 +100,8 @@ internal class ConfirmPaymentService(
             confirmPaymentPort.getCardNoAndPayInfo(
                 ConfirmPaymentPort.Request(
                     orderId = request.orderId,
-                    merchantId = request.merchantId
+                    merchantId = request.merchantId,
+                    accountId = request.accountId
                 )
             )
 
@@ -130,7 +131,8 @@ internal class ConfirmPaymentService(
             confirmPaymentPort.getCardNoAndPayInfo(
                 ConfirmPaymentPort.Request(
                     orderId = request.orderId,
-                    merchantId = request.merchantId
+                    merchantId = request.merchantId,
+                    accountId = null
                 )
             )
 

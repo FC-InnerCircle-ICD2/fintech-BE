@@ -5,7 +5,8 @@ import com.inner.circle.infra.adaptor.dto.ConfirmPaymentInfraDto
 fun interface ConfirmPaymentPort {
     data class Request(
         val orderId: String,
-        val merchantId: String
+        val merchantId: String,
+        val accountId: Long?
     )
 
     fun getCardNoAndPayInfo(request: Request): ConfirmPaymentInfraDto
