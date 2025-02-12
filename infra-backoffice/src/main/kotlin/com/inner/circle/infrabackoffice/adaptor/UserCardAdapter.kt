@@ -7,14 +7,11 @@ import com.inner.circle.infrabackoffice.repository.entity.UserCardEntity
 import kotlin.Long
 import org.springframework.stereotype.Component
 
-
 @Component
 internal class UserCardAdapter(
     private val repository: UserCardRepository
 ) : UserCardPort {
-    override fun save(
-        request: UserCardDto
-    ): UserCardDto {
+    override fun save(request: UserCardDto): UserCardDto {
         repository.save(
             UserCardEntity(
                 id = request.id,
@@ -28,33 +25,33 @@ internal class UserCardAdapter(
         return request
     }
 
-    override fun findByAccountId(
-        accountId: Long
-    ): List<UserCardDto> {
+    override fun findByAccountId(accountId: Long): List<UserCardDto> {
         val userCardEntityList = repository.findByAccountId(accountId)
-        return userCardEntityList.map { userCardEntity ->
-            UserCardDto(
-                id = userCardEntity.id,
-                accountId = userCardEntity.accountId,
-                isRepresentative = userCardEntity.isRepresentative,
-                cardNumber = userCardEntity.cardNumber,
-                expirationPeriod = userCardEntity.expirationPeriod,
-                cvc = userCardEntity.cvc
-            )
-        }.toList()
+        return userCardEntityList
+            .map { userCardEntity ->
+                UserCardDto(
+                    id = userCardEntity.id,
+                    accountId = userCardEntity.accountId,
+                    isRepresentative = userCardEntity.isRepresentative,
+                    cardNumber = userCardEntity.cardNumber,
+                    expirationPeriod = userCardEntity.expirationPeriod,
+                    cvc = userCardEntity.cvc
+                )
+            }.toList()
     }
 
     override fun findAll(): List<UserCardDto> {
         val userCardEntityList = repository.findAll()
-        return userCardEntityList.map { userCardEntity ->
-            UserCardDto(
-                id = userCardEntity.id,
-                accountId = userCardEntity.accountId,
-                isRepresentative = userCardEntity.isRepresentative,
-                cardNumber = userCardEntity.cardNumber,
-                expirationPeriod = userCardEntity.expirationPeriod,
-                cvc = userCardEntity.cvc
-            )
-        }.toList()
+        return userCardEntityList
+            .map { userCardEntity ->
+                UserCardDto(
+                    id = userCardEntity.id,
+                    accountId = userCardEntity.accountId,
+                    isRepresentative = userCardEntity.isRepresentative,
+                    cardNumber = userCardEntity.cardNumber,
+                    expirationPeriod = userCardEntity.expirationPeriod,
+                    cvc = userCardEntity.cvc
+                )
+            }.toList()
     }
 }

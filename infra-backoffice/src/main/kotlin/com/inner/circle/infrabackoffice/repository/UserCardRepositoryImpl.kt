@@ -7,8 +7,7 @@ import org.springframework.stereotype.Repository
 internal class UserCardRepositoryImpl(
     private val userCardJpaRepository: UserCardJpaRepository
 ) : UserCardRepository {
-    override fun findAll(): List<UserCardEntity> =
-        userCardJpaRepository.findAll()
+    override fun findAll(): List<UserCardEntity> = userCardJpaRepository.findAll()
 
     override fun findByAccountId(accountId: Long): List<UserCardEntity> =
         userCardJpaRepository.findByAccountId(accountId)
