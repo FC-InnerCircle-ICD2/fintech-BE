@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional
 internal class PaymentAdaptor(
     private val paymentRepository: PaymentRepository
 ) : PaymentPort {
-    @Transactional
     override fun save(request: PaymentPort.Request) {
         paymentRepository.save(
             PaymentEntity(

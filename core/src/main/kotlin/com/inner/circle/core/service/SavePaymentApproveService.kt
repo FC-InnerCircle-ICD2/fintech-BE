@@ -76,7 +76,7 @@ internal class SavePaymentApproveService(
                     paymentPort
                         .save(
                             PaymentPort.Request(
-                                id = paymentRequest.id,
+                                id = null,
                                 paymentKey =
                                     paymentRequest.paymentKey
                                         ?: throw PaymentException.PaymentKeyNotFoundException(),
@@ -93,7 +93,7 @@ internal class SavePaymentApproveService(
                         ).let {
                             transactionPort.save(
                                 TransactionPort.Request(
-                                    id = paymentRequest.id,
+                                    id = null,
                                     paymentKey =
                                         paymentRequest.paymentKey
                                             ?: throw PaymentException.PaymentKeyNotFoundException(),

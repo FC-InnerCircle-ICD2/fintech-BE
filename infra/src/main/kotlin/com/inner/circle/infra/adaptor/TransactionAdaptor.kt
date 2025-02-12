@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional
 internal class TransactionAdaptor(
     private val transactionRepository: TransactionRepository
 ) : TransactionPort {
-    @Transactional
     override fun save(request: TransactionPort.Request) {
         transactionRepository.save(
             TransactionEntity(
