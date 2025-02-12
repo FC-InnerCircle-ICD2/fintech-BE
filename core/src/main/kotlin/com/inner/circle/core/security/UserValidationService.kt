@@ -1,6 +1,8 @@
 package com.inner.circle.core.security
 
+import com.inner.circle.exception.UserAuthenticationException
 import com.inner.circle.infra.port.AccountFinderPort
+import com.inner.circle.infra.repository.entity.AccountEntity
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
@@ -20,20 +22,15 @@ class UserValidationService(
             token = token,
             secretKey = secret
         )?.let {
-            val accountInfo =
-                accountFinderPort.findByIdOrNull(
-                    id = it["userId"].toString().toLong()
-                ) ?: throw RuntimeException("Invalid User !")
+            val accountInfo = accountFinderPort.findByIdOrNull(
+                id = it["userId"].toString().toLong()
+            )?.toUserDetails() ?: throw UserAuthenticationException.UserNotFoundException()
 
             UsernamePasswordAuthenticationToken(
-                AccountDetails(
-                    id = accountInfo.id,
-                    userName = accountInfo.email,
-                    userPassword = accountInfo.password
-                ),
-                null
+                accountInfo,
+            null
             )
-        } ?: throw RuntimeException("Invalid token !")
+        } ?: throw UserAuthenticationException.UnauthorizedException(message = "Invalid Token")
 
     fun getAuthorizationTokenClaimsOrNull(
         token: String,
@@ -49,6 +46,13 @@ class UserValidationService(
         }.onFailure {
             logger.error("Invalid token", it)
         }.getOrElse { null }
+
+    private fun AccountEntity.toUserDetails(): AccountDetails =
+        AccountDetails(
+            id = this.id,
+            userName = this.email,
+            userPassword = this.password,
+        )
 
     companion object {
         private val logger = LoggerFactory.getLogger(UserValidationService::class.java)
