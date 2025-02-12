@@ -1,7 +1,7 @@
 package com.inner.circle.api.security
 
-import com.inner.circle.core.security.MerchantApiKeyProvider
 import com.inner.circle.core.security.AccountValidationProvider
+import com.inner.circle.core.security.MerchantApiKeyProvider
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
