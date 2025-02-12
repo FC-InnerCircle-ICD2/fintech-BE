@@ -1,6 +1,8 @@
 package com.inner.circle.infra.adaptor
 
+import com.inner.circle.exception.AuthenticateException
 import com.inner.circle.exception.PaymentException
+import com.inner.circle.exception.UserAuthenticationException
 import com.inner.circle.infra.adaptor.dto.ConfirmPaymentInfraDto
 import com.inner.circle.infra.adaptor.dto.PaymentProcessStatus
 import com.inner.circle.infra.port.ConfirmPaymentPort
@@ -14,13 +16,24 @@ internal class ConfirmPaymentAdaptor(
     private val userCardRepository: UserCardRepository
 ) : ConfirmPaymentPort {
     override fun getCardNoAndPayInfo(request: ConfirmPaymentPort.Request): ConfirmPaymentInfraDto {
+        val accountId =
+            request.accountId
+                ?: throw UserAuthenticationException.UserNotFoundException(
+                    "user not found in card find."
+                )
+        val orderId = request.orderId
+        val merchantId = request.merchantId
         val paymentRequest =
-            paymentRequestRepository.findByOrderIdAndMerchantId(request.orderId, request.merchantId)
+            paymentRequestRepository.findByOrderIdAndMerchantId(orderId, merchantId)
                 ?: throw PaymentException.OrderNotFoundException(
-                    request.orderId
+                    orderId
                 )
 
-        val userCard = paymentRequest.accountId?.let { userCardRepository.findByAccountId(it) }
+        val userCard =
+            userCardRepository.findByAccountId(accountId)
+                ?: throw AuthenticateException.CardNotFoundException(
+                    "user card not found. (order_id : $orderId)"
+                )
 
         return ConfirmPaymentInfraDto(
             orderId = paymentRequest.orderId,
@@ -32,9 +45,9 @@ internal class ConfirmPaymentAdaptor(
             paymentKey = paymentRequest.paymentKey,
             amount = paymentRequest.amount,
             requestTime = paymentRequest.requestTime,
-            cardNumber = userCard?.cardNumber,
-            expirationPeriod = userCard?.expirationPeriod,
-            cvc = userCard?.cvc
+            cardNumber = userCard.cardNumber,
+            expirationPeriod = userCard.expirationPeriod,
+            cvc = userCard.cvc
         )
     }
 }

@@ -27,7 +27,7 @@ server:
 
 card:
   url:
-    base-url: http://localhost:8082
+    base-url: https://mock.pay-200.com
     approve-end-point: /mock/card/approve
     validate-end-point: /mock/card/validate
 

@@ -9,6 +9,7 @@ import com.inner.circle.api.controller.dto.ConfirmPaymentDto
 import com.inner.circle.api.controller.dto.PaymentResponse
 import com.inner.circle.api.controller.request.ConfirmPaymentRequest
 import com.inner.circle.api.controller.request.ConfirmSimplePaymentRequest
+import com.inner.circle.core.security.AccountDetails
 import com.inner.circle.core.usecase.ConfirmPaymentUseCase
 import com.inner.circle.core.usecase.ConfirmSimplePaymentUseCase
 import com.inner.circle.core.usecase.PaymentTokenHandlingUseCase
@@ -18,6 +19,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -35,8 +37,10 @@ class UserPaymentController(
     @Operation(summary = "간편 결제 인증")
     @PostMapping("/authentication/simple")
     fun proceedPaymentConfirm(
+        @AuthenticationPrincipal account: AccountDetails,
         @RequestBody confirmSimplePaymentRequest: ConfirmSimplePaymentRequest
     ): PaymentResponse<ConfirmPaymentDto> {
+        val accountId = account.id
         val foundPaymentToken =
             paymentTokenHandlingUseCase.findPaymentToken(
                 confirmSimplePaymentRequest.token
@@ -55,7 +59,8 @@ class UserPaymentController(
                 confirmPaymentUseCase.confirmPayment(
                     ConfirmSimplePaymentUseCase.Request(
                         orderId = orderId,
-                        merchantId = merchantId
+                        merchantId = merchantId,
+                        accountId = accountId
                     )
                 )
             )
