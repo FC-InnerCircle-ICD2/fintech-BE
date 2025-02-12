@@ -22,10 +22,15 @@ class UserApiAuthenticationFilter(
                 ?: throw UserAuthenticationException.UnauthorizedException(
                     "Missing Authorization header"
                 )
+        val token = authHeader.removePrefix(BEARER_PREFIX).trim()
 
         SecurityContextHolder.getContext().authentication =
-            accountValidationProvider.getUserValidAuthenticationOrThrow(token = authHeader)
+            accountValidationProvider.getUserValidAuthenticationOrThrow(token = token)
 
         filterChain.doFilter(request, response)
+    }
+
+    companion object {
+        private const val BEARER_PREFIX = "Bearer "
     }
 }
