@@ -38,11 +38,11 @@ class JwtHandler {
     ): Boolean =
         try {
             val signatureKey = getSignature(keyString)
-                Jwts
-                    .parser()
-                    .verifyWith(signatureKey)
-                    .build()
-                    .parseSignedClaims(token)
+            Jwts
+                .parser()
+                .verifyWith(signatureKey)
+                .build()
+                .parseSignedClaims(token)
             true
         } catch (e: Exception) {
             when (e) {
