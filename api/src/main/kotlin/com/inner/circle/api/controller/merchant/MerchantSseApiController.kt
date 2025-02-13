@@ -3,12 +3,14 @@ package com.inner.circle.api.controller.merchant
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.inner.circle.api.config.SwaggerConfig
 import com.inner.circle.api.controller.PaymentForMerchantV1Api
+import com.inner.circle.core.security.MerchantUserDetails
 import com.inner.circle.core.sse.SseConnectionPool
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.slf4j.LoggerFactory
 import org.springframework.http.MediaType
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter
@@ -26,15 +28,14 @@ class MerchantSseApiController(
 
     @GetMapping(path = ["/sse/connect"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
     fun connect(
-        @Parameter(hidden = false)
-        @RequestParam merchantId: String,
+        @AuthenticationPrincipal merchantUserDetails: MerchantUserDetails,
         @RequestParam orderId: String
     ): ResponseBodyEmitter {
-        log.info("SSE user {}", merchantId + "_" + orderId)
+        log.info("SSE user {}", merchantUserDetails.getId() + "_" + orderId)
 
         val sseConnection =
             com.inner.circle.core.sse.SseConnection.connect(
-                merchantId + "_" + orderId,
+                merchantUserDetails.getId() + "_" + orderId,
                 sseConnectionPool,
                 objectMapper
             )
@@ -46,14 +47,13 @@ class MerchantSseApiController(
 
     @GetMapping("/sse/pushEvent")
     fun pushEvent(
-        @Parameter(hidden = false)
-        @RequestParam merchantId: String,
+        @AuthenticationPrincipal merchantUserDetails: MerchantUserDetails,
         @RequestParam orderId: String,
         @RequestParam message: String
     ) {
         val sseConnection =
             sseConnectionPool.getSession(
-                merchantId + "_" + orderId
+                merchantUserDetails.getId() + "_" + orderId
             )
 
         sseConnection.sendMessage(message)
