@@ -17,7 +17,7 @@ internal class CreateOrUpdateMerchantKeyAdaptor(
         val result = repository.save(merchant)
         return MerchantKeyDto(
             id = result.id ?: "",
-            token = result.token,
+            token = result.token
         )
     }
 }

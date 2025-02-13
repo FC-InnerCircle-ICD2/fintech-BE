@@ -14,6 +14,10 @@ internal class MerchantRepositoryImpl(
         merchantJpaRepository.findByIdOrNull(id)
             ?: throw AppException(HttpStatus.NOT_FOUND, "해당 사용자를 찾을 수 없습니다.")
 
+    override fun findByUsername(username: String): MerchantEntity? =
+        merchantJpaRepository.findByUsername(username)
+
+
     override fun save(merchant: MerchantEntity): MerchantEntity =
         merchantJpaRepository.save(merchant)
 }
