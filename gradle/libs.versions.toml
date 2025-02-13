@@ -4,6 +4,7 @@ kotlin = "2.1.0"
 kotlinxSerialization = "1.7.2"
 kotlinxCoroutines = "1.8.1"
 kotlinxDatetime = "0.6.1"
+jacksonKotlin = "2.18.2"
 # logging
 kotlinLogging = "7.0.0"
 logback = "1.5.15"
@@ -29,6 +30,7 @@ hypersistence-tsid = "2.1.3"
 kotlinGradlePlugin = { module = "org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin", version.ref = "kotlin" }
 kotlinMetadata = { module = "org.jetbrains.kotlin:kotlin-metadata-jvm", version.ref = "kotlin" }
 kotlinReflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
+jacksonKotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jacksonKotlin" }
 # data time
 kotlinxDatetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 # serialization
@@ -78,7 +80,7 @@ jwt = {module = "io.jsonwebtoken:jjwt", version = "0.12.6"}
 
 [bundles]
 boms = ["kotlinxSerializationBom", "kotlinxCoroutinesBom", "kotestBom"]
-kotlin = ["kotlinMetadata", "kotlinReflect", "kotlinxDatetime"]
+kotlin = ["kotlinMetadata", "kotlinReflect", "kotlinxDatetime", "jacksonKotlin"]
 kotlinxCoroutines = ["kotlinxCoroutinesCore"]
 kotlinxSerialization = ["kotlinxSerializationJson"]
 kotlinTest = ["kotestRunnerJunit5", "kotestExtensionsJunit5", "kotestAssertionsCore", "mockk"]

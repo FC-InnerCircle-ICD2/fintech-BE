@@ -16,7 +16,6 @@ dependencies {
     implementation(libs.bundles.springBoot)
     implementation(libs.bundles.kotlinxSerialization)
     implementation(libs.swagger)
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     testImplementation(libs.bundles.kotlinTest)
     testImplementation(libs.bundles.kotlinTestSpring)
     testImplementation(libs.bundles.testContainer)
