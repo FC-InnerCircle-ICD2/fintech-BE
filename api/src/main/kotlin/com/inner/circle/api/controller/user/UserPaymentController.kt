@@ -22,8 +22,8 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -155,16 +155,17 @@ class UserPaymentController(
         @AuthenticationPrincipal account: AccountDetails,
         @RequestBody request: UserCardRequest
     ): PaymentResponse<UserCardDto> {
-        val result = userCardUseCase.save(
-            CoreUserCardDto(
-                id = null,
-                accountId = account.id,
-                isRepresentative = request.isRepresentative,
-                cardNumber = request.cardNumber,
-                expirationPeriod = request.expirationPeriod,
-                cvc = request.cvc
+        val result =
+            userCardUseCase.save(
+                CoreUserCardDto(
+                    id = null,
+                    accountId = account.id,
+                    isRepresentative = request.isRepresentative,
+                    cardNumber = request.cardNumber,
+                    expirationPeriod = request.expirationPeriod,
+                    cvc = request.cvc
+                )
             )
-        )
         return PaymentResponse.ok(
             UserCardDto(
                 id = result.id,
@@ -180,7 +181,7 @@ class UserPaymentController(
     @Operation(summary = "유저 카드 조회")
     @GetMapping("/cards/me")
     fun getUserCard(
-        @AuthenticationPrincipal account: AccountDetails,
+        @AuthenticationPrincipal account: AccountDetails
     ): PaymentResponse<List<UserCardDto>> {
         val coreUserCardDtoList = userCardUseCase.findByAccountId(account.id)
         return PaymentResponse.ok(
