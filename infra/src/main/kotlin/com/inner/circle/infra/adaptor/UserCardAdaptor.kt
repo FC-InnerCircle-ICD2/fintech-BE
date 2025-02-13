@@ -8,7 +8,7 @@ import kotlin.Long
 import org.springframework.stereotype.Component
 
 @Component
-internal class UserCardAdapter(
+internal class UserCardAdaptor(
     private val repository: UserCardRepository
 ) : UserCardPort {
     override fun save(request: UserCardDto): UserCardDto {

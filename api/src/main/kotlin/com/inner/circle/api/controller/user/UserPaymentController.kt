@@ -141,7 +141,7 @@ class UserPaymentController(
     }
 
     @Operation(summary = "카드 등록")
-    @PostMapping("/card/register")
+    @PostMapping("/cards/register")
     fun registerCard(
         @RequestBody request: UserCardDto
     ): PaymentResponse<UserCardDto> {
@@ -159,7 +159,7 @@ class UserPaymentController(
     }
 
     @Operation(summary = "유저 카드 조회")
-    @GetMapping("/card/{accountId}")
+    @GetMapping("/cards/{accountId}")
     fun getUserCard(
         @PathVariable("accountId") accountId: Long
     ): PaymentResponse<List<UserCardDto>> {

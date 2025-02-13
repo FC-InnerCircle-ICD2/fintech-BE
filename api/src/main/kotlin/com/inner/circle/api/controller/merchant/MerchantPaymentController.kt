@@ -137,7 +137,7 @@ class MerchantPaymentController(
     }
 
     @Operation(summary = "모든 카드 조회")
-    @GetMapping("/payments/all/card")
+    @GetMapping("/cards/all")
     fun getAllCard(): PaymentResponse<List<UserCardDto>> {
         val coreUserCardDtoList = userCardUseCase.findAll()
         return PaymentResponse.ok(
