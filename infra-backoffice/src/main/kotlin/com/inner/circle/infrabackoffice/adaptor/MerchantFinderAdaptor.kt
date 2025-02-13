@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component
 class MerchantFinderAdaptor(
     private val merchantRepository: MerchantRepository
 ) : MerchantFinderPort {
-    override fun existByUsername(username: String): Boolean =
+    override fun existsByUsername(username: String): Boolean =
         merchantRepository.existsByUsername(username)
 
     override fun findByUsernameAndPassword(
