@@ -12,5 +12,7 @@ interface UserCardRepository {
 
     fun findAll(): List<UserCardEntity>
 
+    fun findByAccountIdAndIsRepresentative(accountId: Long): UserCardEntity?
+
     fun save(userCardEntity: UserCardEntity): UserCardEntity?
 }

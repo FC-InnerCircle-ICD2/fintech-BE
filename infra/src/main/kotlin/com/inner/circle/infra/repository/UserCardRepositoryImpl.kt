@@ -16,6 +16,9 @@ internal class UserCardRepositoryImpl(
             isRepresentative
         )
 
+    override fun findByAccountIdAndIsRepresentative(accountId: Long): UserCardEntity? =
+        userCardJpaRepository.findByAccountIdAndIsRepresentative(accountId, true)
+
     override fun save(userCardEntity: UserCardEntity): UserCardEntity? =
         userCardJpaRepository.save(userCardEntity)
 

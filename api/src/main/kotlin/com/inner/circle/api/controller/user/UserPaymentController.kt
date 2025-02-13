@@ -3,22 +3,27 @@ package com.inner.circle.api.controller.user
 import com.inner.circle.api.application.PaymentStatusChangedMessageSender
 import com.inner.circle.api.application.dto.PaymentStatusChangedSsePaymentRequest
 import com.inner.circle.api.application.dto.PaymentStatusEventType
+import com.inner.circle.api.config.SwaggerConfig
 import com.inner.circle.api.controller.PaymentForUserV1Api
 import com.inner.circle.api.controller.dto.ConfirmPaymentDto
 import com.inner.circle.api.controller.dto.PaymentResponse
 import com.inner.circle.api.controller.dto.UserCardDto
 import com.inner.circle.api.controller.request.ConfirmPaymentRequest
 import com.inner.circle.api.controller.request.ConfirmSimplePaymentRequest
+import com.inner.circle.api.controller.request.UserCardRequest
+import com.inner.circle.core.security.AccountDetails
 import com.inner.circle.core.usecase.ConfirmPaymentUseCase
 import com.inner.circle.core.usecase.ConfirmSimplePaymentUseCase
 import com.inner.circle.core.usecase.PaymentTokenHandlingUseCase
 import com.inner.circle.core.usecase.UserCardUseCase
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -26,6 +31,7 @@ import com.inner.circle.core.service.dto.UserCardDto as CoreUserCardDto
 
 @Tag(name = "Payments - User", description = "결제 고객(App) 결제 관련 API")
 @PaymentForUserV1Api
+@SecurityRequirement(name = SwaggerConfig.BEARER_AUTH)
 class UserPaymentController(
     private val paymentTokenHandlingUseCase: PaymentTokenHandlingUseCase,
     private val confirmPaymentUseCase: ConfirmPaymentUseCase,
@@ -37,8 +43,10 @@ class UserPaymentController(
     @Operation(summary = "간편 결제 인증")
     @PostMapping("/authentication/simple")
     fun proceedPaymentConfirm(
+        @AuthenticationPrincipal account: AccountDetails,
         @RequestBody confirmSimplePaymentRequest: ConfirmSimplePaymentRequest
     ): PaymentResponse<ConfirmPaymentDto> {
+        val accountId = account.id
         val foundPaymentToken =
             paymentTokenHandlingUseCase.findPaymentToken(
                 confirmSimplePaymentRequest.token
@@ -57,7 +65,8 @@ class UserPaymentController(
                 confirmPaymentUseCase.confirmPayment(
                     ConfirmSimplePaymentUseCase.Request(
                         orderId = orderId,
-                        merchantId = merchantId
+                        merchantId = merchantId,
+                        accountId = accountId
                     )
                 )
             )
@@ -143,27 +152,37 @@ class UserPaymentController(
     @Operation(summary = "카드 등록")
     @PostMapping("/cards/register")
     fun registerCard(
-        @RequestBody request: UserCardDto
+        @AuthenticationPrincipal account: AccountDetails,
+        @RequestBody request: UserCardRequest
     ): PaymentResponse<UserCardDto> {
-        userCardUseCase.save(
+        val result = userCardUseCase.save(
             CoreUserCardDto(
                 id = null,
-                accountId = request.accountId,
+                accountId = account.id,
                 isRepresentative = request.isRepresentative,
                 cardNumber = request.cardNumber,
                 expirationPeriod = request.expirationPeriod,
                 cvc = request.cvc
             )
         )
-        return PaymentResponse.ok(request)
+        return PaymentResponse.ok(
+            UserCardDto(
+                id = result.id,
+                accountId = result.accountId,
+                isRepresentative = result.isRepresentative,
+                cardNumber = result.cardNumber,
+                expirationPeriod = result.expirationPeriod,
+                cvc = result.cvc
+            )
+        )
     }
 
     @Operation(summary = "유저 카드 조회")
-    @GetMapping("/cards/{accountId}")
+    @GetMapping("/cards/me")
     fun getUserCard(
-        @PathVariable("accountId") accountId: Long
+        @AuthenticationPrincipal account: AccountDetails,
     ): PaymentResponse<List<UserCardDto>> {
-        val coreUserCardDtoList = userCardUseCase.findByAccountId(accountId)
+        val coreUserCardDtoList = userCardUseCase.findByAccountId(account.id)
         return PaymentResponse.ok(
             coreUserCardDtoList
                 .map { coreUserCardDto ->
