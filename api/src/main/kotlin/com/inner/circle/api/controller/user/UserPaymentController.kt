@@ -140,7 +140,6 @@ class UserPaymentController(
         }
     }
 
-
     @Operation(summary = "카드 등록")
     @PostMapping("/card/register")
     fun registerCard(

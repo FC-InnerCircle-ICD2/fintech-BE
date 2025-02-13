@@ -20,12 +20,13 @@ internal class ConfirmPaymentAdaptor(
                     request.orderId
                 )
 
-        val userCard = paymentRequest.accountId?.let {
-            userCardRepository.findByAccountIdAndIsRepresentative(
-                it,
-                true
-            )
-        }
+        val userCard =
+            paymentRequest.accountId?.let {
+                userCardRepository.findByAccountIdAndIsRepresentative(
+                    it,
+                    true
+                )
+            }
 
         return ConfirmPaymentInfraDto(
             orderId = paymentRequest.orderId,
