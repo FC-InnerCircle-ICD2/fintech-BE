@@ -33,7 +33,7 @@ class PostgreSqlTestContainerConfiguration :
                 withCreateContainerCmdModifier { cmd: CreateContainerCmd ->
                     cmd.withName(CONTAINER_NAME)
                 }
-                withDatabaseName("backoffice")
+                withDatabaseName("payment")
                 start()
             }
 

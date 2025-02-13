@@ -15,7 +15,7 @@ class PostgreSqlTestContainerConfiguration :
     ApplicationContextInitializer<ConfigurableApplicationContext> {
     companion object {
         private const val IMAGE_TAG = "postgres:16-alpine"
-        private const val CONTAINER_NAME = "reusable-postgres-api"
+        private const val CONTAINER_NAME = "reusable-postgres"
     }
 
     override fun initialize(applicationContext: ConfigurableApplicationContext) {
