@@ -18,7 +18,7 @@ data class MerchantEntity(
     @Column(nullable = false)
     val password: String,
     @Column(unique = true)
-    var token: String,
+    val token: String,
     @Column(nullable = false)
     val name: String
 ) : BaseEntity()
