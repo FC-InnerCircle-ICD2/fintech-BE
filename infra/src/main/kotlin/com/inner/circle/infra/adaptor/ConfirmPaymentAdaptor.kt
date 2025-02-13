@@ -30,7 +30,10 @@ internal class ConfirmPaymentAdaptor(
                 )
 
         val userCard =
-            userCardRepository.findByAccountIdAndIsRepresentative(accountId)
+            userCardRepository.findByAccountIdAndIsRepresentative(
+                accountId,
+                true
+            )
                 ?: throw AuthenticateException.CardNotFoundException(
                     "user card not found. (order_id : $orderId)"
                 )

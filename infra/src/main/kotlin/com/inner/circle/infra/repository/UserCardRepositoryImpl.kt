@@ -7,12 +7,20 @@ import org.springframework.stereotype.Repository
 internal class UserCardRepositoryImpl(
     private val userCardJpaRepository: UserCardJpaRepository
 ) : UserCardRepository {
-    override fun findByAccountId(accountId: Long): UserCardEntity? =
-        userCardJpaRepository.findByAccountId(accountId)
-
-    override fun findByAccountIdAndIsRepresentative(accountId: Long): UserCardEntity? =
-        userCardJpaRepository.findByAccountIdAndIsRepresentative(accountId, true)
+    override fun findByAccountIdAndIsRepresentative(
+        accountId: Long,
+        isRepresentative: Boolean
+    ): UserCardEntity? =
+        userCardJpaRepository.findByAccountIdAndIsRepresentative(
+            accountId,
+            isRepresentative
+        )
 
     override fun save(userCardEntity: UserCardEntity): UserCardEntity? =
         userCardJpaRepository.save(userCardEntity)
+
+    override fun findAll(): List<UserCardEntity> = userCardJpaRepository.findAll()
+
+    override fun findByAccountId(accountId: Long): List<UserCardEntity> =
+        userCardJpaRepository.findByAccountId(accountId)
 }
