@@ -1,4 +1,4 @@
-package com.inner.circle.infrabackoffice.adaptor.dto
+package com.inner.circle.corebackoffice.service.dto
 
 data class MerchantDto(
     val id: String,
