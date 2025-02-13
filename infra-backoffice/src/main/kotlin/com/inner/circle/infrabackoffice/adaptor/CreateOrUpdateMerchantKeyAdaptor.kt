@@ -1,6 +1,6 @@
 package com.inner.circle.infrabackoffice.adaptor
 
-import com.inner.circle.infrabackoffice.adaptor.dto.MerchantDto
+import com.inner.circle.infrabackoffice.adaptor.dto.MerchantKeyDto
 import com.inner.circle.infrabackoffice.port.CreateOrUpdateMerchantKeyPort
 import com.inner.circle.infrabackoffice.repository.MerchantRepository
 import org.springframework.stereotype.Component
@@ -11,15 +11,13 @@ internal class CreateOrUpdateMerchantKeyAdaptor(
 ) : CreateOrUpdateMerchantKeyPort {
     override fun createOrUpdateMerchantKey(
         request: CreateOrUpdateMerchantKeyPort.Request
-    ): MerchantDto {
+    ): MerchantKeyDto {
         val merchant = repository.findById(request.id)
         merchant.token = request.token
         val result = repository.save(merchant)
-        return MerchantDto(
-            id = result.id,
-            mid = result.mid,
+        return MerchantKeyDto(
+            id = result.id ?: "",
             token = result.token,
-            name = result.name
         )
     }
 }
