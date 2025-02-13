@@ -16,6 +16,10 @@ card:
     approve-end-point: /mock/card/approve
     validate-end-point: /mock/card/validate
 
+logging:
+    discord:
+        webhook-url: "none"
+
 ---
 spring:
   config:
@@ -43,3 +47,7 @@ card:
     base-url: https://mock.pay-200.com
     approve-end-point: /mock/card/approve
     validate-end-point: /mock/card/validate
+
+logging:
+    discord:
+        webhook-url: ${DISCORD_WEB_HOOK_URL}
