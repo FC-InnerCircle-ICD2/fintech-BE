@@ -14,4 +14,9 @@ sealed class UserAuthenticationException(
         override val message: String = "Unauthorized: Basic Auth required",
         override val cause: Throwable? = null
     ) : UserAuthenticationException(HttpStatus.UNAUTHORIZED, message, cause)
+
+    data class InvalidPassword(
+        override val message: String = "Invalid Password.",
+        override val cause: Throwable? = null,
+    ): UserAuthenticationException(status = HttpStatus.BAD_REQUEST, message = message, cause = cause)
 }
