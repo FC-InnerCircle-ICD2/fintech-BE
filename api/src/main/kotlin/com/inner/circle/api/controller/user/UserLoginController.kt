@@ -8,12 +8,10 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class UserLoginController {
-
     @PostMapping("/login")
     fun userLogin(
-        @RequestBody userLoginRequest: UserLoginRequest,
+        @RequestBody userLoginRequest: UserLoginRequest
     ) {
-
     }
 }
 
@@ -23,7 +21,6 @@ fun main(args: Array<String>) {
     val bCrypt = BCryptPasswordEncoder()
     val encodePassword = bCrypt.encode("pay200-user")
     println(encodePassword)
-
 
     println(bCrypt.matches(userRawPassword, encodePassword))
     println("MATCH DATA CHECK ${bCrypt.encode("pay200-user")}")
