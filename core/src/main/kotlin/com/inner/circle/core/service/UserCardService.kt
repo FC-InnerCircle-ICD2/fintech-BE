@@ -1,10 +1,10 @@
-package com.inner.circle.corebackoffice.service
+package com.inner.circle.core.service
 
-import com.inner.circle.corebackoffice.service.dto.UserCardDto
-import com.inner.circle.corebackoffice.usecase.UserCardUseCase
-import com.inner.circle.infrabackoffice.port.UserCardPort
+import com.inner.circle.core.service.dto.UserCardDto
+import com.inner.circle.core.usecase.UserCardUseCase
+import com.inner.circle.infra.port.UserCardPort
 import org.springframework.stereotype.Service
-import com.inner.circle.infrabackoffice.adaptor.dto.UserCardDto as InfraUserCardDto
+import com.inner.circle.infra.adaptor.dto.UserCardDto as InfraUserCardDto
 
 @Service
 internal class UserCardService(

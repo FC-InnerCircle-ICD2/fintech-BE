@@ -6,25 +6,30 @@ import com.inner.circle.api.application.dto.PaymentStatusEventType
 import com.inner.circle.api.controller.PaymentForUserV1Api
 import com.inner.circle.api.controller.dto.ConfirmPaymentDto
 import com.inner.circle.api.controller.dto.PaymentResponse
+import com.inner.circle.api.controller.dto.UserCardDto
 import com.inner.circle.api.controller.request.ConfirmPaymentRequest
 import com.inner.circle.api.controller.request.ConfirmSimplePaymentRequest
 import com.inner.circle.core.usecase.ConfirmPaymentUseCase
 import com.inner.circle.core.usecase.ConfirmSimplePaymentUseCase
 import com.inner.circle.core.usecase.PaymentTokenHandlingUseCase
+import com.inner.circle.core.usecase.UserCardUseCase
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
+import com.inner.circle.core.service.dto.UserCardDto as CoreUserCardDto
 
 @Tag(name = "Payments - User", description = "결제 고객(App) 결제 관련 API")
 @PaymentForUserV1Api
 class UserPaymentController(
     private val paymentTokenHandlingUseCase: PaymentTokenHandlingUseCase,
     private val confirmPaymentUseCase: ConfirmPaymentUseCase,
+    private val userCardUseCase: UserCardUseCase,
     private val statusChangedMessageSender: PaymentStatusChangedMessageSender
 ) {
     private val logger: Logger = LoggerFactory.getLogger(UserPaymentController::class.java)
@@ -133,5 +138,45 @@ class UserPaymentController(
         } catch (e: Exception) {
             logger.error("Error while send ${status.name} Status.", e)
         }
+    }
+
+
+    @Operation(summary = "카드 등록")
+    @PostMapping("/card/register")
+    fun registerCard(
+        @RequestBody request: UserCardDto
+    ): PaymentResponse<UserCardDto> {
+        userCardUseCase.save(
+            CoreUserCardDto(
+                id = null,
+                accountId = request.accountId,
+                isRepresentative = request.isRepresentative,
+                cardNumber = request.cardNumber,
+                expirationPeriod = request.expirationPeriod,
+                cvc = request.cvc
+            )
+        )
+        return PaymentResponse.ok(request)
+    }
+
+    @Operation(summary = "유저 카드 조회")
+    @GetMapping("/card/{accountId}")
+    fun getUserCard(
+        @PathVariable("accountId") accountId: Long
+    ): PaymentResponse<List<UserCardDto>> {
+        val coreUserCardDtoList = userCardUseCase.findByAccountId(accountId)
+        return PaymentResponse.ok(
+            coreUserCardDtoList
+                .map { coreUserCardDto ->
+                    UserCardDto(
+                        id = coreUserCardDto.id,
+                        accountId = coreUserCardDto.accountId,
+                        isRepresentative = coreUserCardDto.isRepresentative,
+                        cardNumber = coreUserCardDto.cardNumber,
+                        expirationPeriod = coreUserCardDto.expirationPeriod,
+                        cvc = coreUserCardDto.cvc
+                    )
+                }.toList()
+        )
     }
 }

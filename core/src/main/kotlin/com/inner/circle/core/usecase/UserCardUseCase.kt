@@ -1,8 +1,8 @@
-package com.inner.circle.infrabackoffice.port
+package com.inner.circle.core.usecase
 
-import com.inner.circle.infrabackoffice.adaptor.dto.UserCardDto
+import com.inner.circle.core.service.dto.UserCardDto
 
-interface UserCardPort {
+interface UserCardUseCase {
     fun save(userCard: UserCardDto): UserCardDto
 
     fun findByAccountId(accountId: Long): List<UserCardDto>

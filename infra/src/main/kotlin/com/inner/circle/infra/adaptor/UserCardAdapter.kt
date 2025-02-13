@@ -1,9 +1,9 @@
-package com.inner.circle.infrabackoffice.adaptor
+package com.inner.circle.infra.adaptor
 
-import com.inner.circle.infrabackoffice.adaptor.dto.UserCardDto
-import com.inner.circle.infrabackoffice.port.UserCardPort
-import com.inner.circle.infrabackoffice.repository.UserCardRepository
-import com.inner.circle.infrabackoffice.repository.entity.UserCardEntity
+import com.inner.circle.infra.adaptor.dto.UserCardDto
+import com.inner.circle.infra.port.UserCardPort
+import com.inner.circle.infra.repository.UserCardRepository
+import com.inner.circle.infra.repository.entity.UserCardEntity
 import kotlin.Long
 import org.springframework.stereotype.Component
 

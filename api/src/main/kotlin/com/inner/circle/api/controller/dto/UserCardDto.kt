@@ -1,4 +1,4 @@
-package com.inner.circle.infrabackoffice.adaptor.dto
+package com.inner.circle.api.controller.dto
 
 data class UserCardDto(
     val id: Long?,
