@@ -139,8 +139,8 @@ class MerchantPaymentController(
         }
     }
 
-    @Operation(summary = "모든 카드 조회")
-    @GetMapping("/cards/all")
+    @Operation(summary = "[테스트 용도] - 모든 유저의 카드 목록 조회")
+    @GetMapping("/cards")
     fun getAllCard(): PaymentResponse<List<UserCardDto>> {
         val coreUserCardDtoList = userCardUseCase.findAll()
         return PaymentResponse.ok(
