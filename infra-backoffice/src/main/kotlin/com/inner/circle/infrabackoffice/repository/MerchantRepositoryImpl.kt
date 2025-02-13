@@ -1,5 +1,7 @@
 package com.inner.circle.infrabackoffice.repository
 
+import com.inner.circle.exception.AppException
+import com.inner.circle.exception.HttpStatus
 import com.inner.circle.exception.PaymentException
 import com.inner.circle.infrabackoffice.repository.entity.MerchantEntity
 import org.springframework.data.repository.findByIdOrNull

@@ -3,7 +3,6 @@ package com.inner.circle.infrabackoffice.adaptor
 import com.inner.circle.infrabackoffice.adaptor.dto.MerchantKeyDto
 import com.inner.circle.infrabackoffice.port.CreateOrUpdateMerchantKeyPort
 import com.inner.circle.infrabackoffice.repository.MerchantRepository
-import com.inner.circle.infrabackoffice.repository.entity.MerchantEntity
 import org.springframework.stereotype.Component
 
 @Component
