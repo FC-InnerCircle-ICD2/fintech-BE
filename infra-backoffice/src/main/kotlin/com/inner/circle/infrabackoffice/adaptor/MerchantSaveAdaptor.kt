@@ -12,15 +12,16 @@ internal class MerchantSaveAdaptor(
     private val merchantRepository: MerchantRepository
 ) : MerchantSavePort {
     override fun saveMerchant(request: MerchantSavePort.Request): MerchantDto {
-        val merchant = merchantRepository.save(
-            MerchantEntity(
-                id = null,
-                username = request.username,
-                password = request.password,
-                token = request.token,
-                name = request.name
+        val merchant =
+            merchantRepository.save(
+                MerchantEntity(
+                    id = null,
+                    username = request.username,
+                    password = request.password,
+                    token = request.token,
+                    name = request.name
+                )
             )
-        )
 
         return MerchantDto(
             id = merchant.id ?: throw BackofficeException.MerchantNotSaveException(),
@@ -30,5 +31,4 @@ internal class MerchantSaveAdaptor(
             name = merchant.name
         )
     }
-
 }

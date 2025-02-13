@@ -8,4 +8,9 @@ interface MerchantRepository {
     fun findByUsername(username: String): MerchantEntity?
 
     fun save(merchant: MerchantEntity): MerchantEntity
+
+    fun findByUsernameAndPassword(
+        username: String,
+        password: String
+    ): MerchantEntity
 }

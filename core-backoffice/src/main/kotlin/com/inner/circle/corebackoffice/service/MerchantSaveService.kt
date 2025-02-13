@@ -20,14 +20,15 @@ class MerchantSaveService(
             throw BackofficeException.MerchantAlreadyExistException()
         }
 
-        val savedMerchant = merchantSavePort.saveMerchant(
-            MerchantSavePort.Request(
-                username = request.username,
-                password = request.password,
-                token = clientCredentialsGenerator.generateClientSecret(),
-                name = request.name
+        val savedMerchant =
+            merchantSavePort.saveMerchant(
+                MerchantSavePort.Request(
+                    username = request.username,
+                    password = request.password,
+                    token = clientCredentialsGenerator.generateClientSecret(),
+                    name = request.name
+                )
             )
-        )
 
         return MerchantDto(
             id = savedMerchant.id,
