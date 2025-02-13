@@ -17,6 +17,10 @@ sealed class UserAuthenticationException(
 
     data class InvalidPassword(
         override val message: String = "Invalid Password.",
-        override val cause: Throwable? = null,
-    ): UserAuthenticationException(status = HttpStatus.BAD_REQUEST, message = message, cause = cause)
+        override val cause: Throwable? = null
+    ) : UserAuthenticationException(
+            status = HttpStatus.BAD_REQUEST,
+            message = message,
+            cause = cause
+        )
 }

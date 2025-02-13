@@ -4,7 +4,6 @@ import com.inner.circle.core.service.dto.AccountInfo
 import com.inner.circle.core.usecase.UserLoginUseCase
 import com.inner.circle.exception.UserAuthenticationException
 import com.inner.circle.infra.port.AccountFinderPort
-import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
 
