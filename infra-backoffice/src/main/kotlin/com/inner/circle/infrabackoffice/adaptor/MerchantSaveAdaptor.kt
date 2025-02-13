@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component
 internal class MerchantSaveAdaptor(
     private val merchantRepository: MerchantRepository
 ) : MerchantSavePort {
-    override fun saveMerchant(request: MerchantSavePort.Request): MerchantDto {
+    override fun save(request: MerchantSavePort.Request): MerchantDto {
         val merchant =
             merchantRepository.save(
                 MerchantEntity(

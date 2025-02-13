@@ -9,10 +9,10 @@ import org.springframework.stereotype.Component
 class MerchantFinderAdaptor(
     private val merchantRepository: MerchantRepository
 ) : MerchantFinderPort {
-    override fun findByUsername(username: String): MerchantEntity? =
-        merchantRepository.findByUsername(username)
+    override fun existsByUsername(username: String): Boolean =
+        merchantRepository.existsByUsername(username)
 
-    override fun findByUsernamePassword(
+    override fun findByUsernameAndPassword(
         username: String,
         password: String
     ): MerchantEntity = merchantRepository.findByUsernameAndPassword(username, password)

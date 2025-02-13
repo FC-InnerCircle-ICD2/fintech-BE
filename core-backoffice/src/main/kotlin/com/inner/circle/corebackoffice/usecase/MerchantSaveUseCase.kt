@@ -9,5 +9,5 @@ fun interface MerchantSaveUseCase {
         val name: String
     )
 
-    fun saveMerchant(request: Request): MerchantDto
+    fun save(request: Request): MerchantDto
 }
