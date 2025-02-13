@@ -40,7 +40,10 @@ class GlobalExceptionHandler {
     )
     fun handleAuthorizationException(
         exception: AuthenticationException
-    ): ResponseEntity<AppExceptionResponse> = ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
+    ): ResponseEntity<AppExceptionResponse> {
+        logger.error("AuthenticationException (type = {})", exception::class.simpleName, exception)
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
+    }
 
     @ExceptionHandler(Exception::class)
     @ApiResponse(
@@ -67,7 +70,7 @@ class GlobalExceptionHandler {
     fun handleIllegalArgumentException(
         ex: IllegalArgumentException
     ): ResponseEntity<PaymentResponse<Nothing>> {
-        logger.error("invalid request occurred", ex)
+        logger.error("IllegalArgumentException (type = {})", ex::class.simpleName, ex)
         val status = HttpStatus.BAD_REQUEST
         val errorResponse =
             PaymentResponse.fail(
