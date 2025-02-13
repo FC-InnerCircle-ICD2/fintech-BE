@@ -1,33 +1,35 @@
 package com.inner.circle.api.controller.user
 
+import com.inner.circle.api.controller.dto.PaymentResponse
+import com.inner.circle.api.controller.dto.UserLoginResponse
 import com.inner.circle.api.controller.request.UserLoginRequest
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import com.inner.circle.core.usecase.TokenHandlerUseCase
+import com.inner.circle.core.usecase.UserLoginUseCase
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class UserLoginController {
+class UserLoginController(
+    private val userLoginUseCase: UserLoginUseCase,
+    private val tokenHandlerUseCase: TokenHandlerUseCase,
+) {
     @PostMapping("/login")
     fun userLogin(
         @RequestBody userLoginRequest: UserLoginRequest
-    ) {
-    }
-}
-
-fun main(args: Array<String>) {
-    val userRawPassword = "pay200-user"
-
-    val bCrypt = BCryptPasswordEncoder()
-    val encodePassword = bCrypt.encode("pay200-user")
-    println(encodePassword)
-
-    println(bCrypt.matches(userRawPassword, encodePassword))
-    println("MATCH DATA CHECK ${bCrypt.encode("pay200-user")}")
-
-    println(bCrypt.encode("pay200-user"))
-    val test = "\$2a\$10\$3LUZbNN8PSXkuq1.zO1pEuIXkERIc/RwQbJSV/7EILrYzia7AlRC."
-    println(bCrypt.matches("pay200-user", test))
-    // $2a$10$y9u68rF3yR/c.hHzAL8YOO.eQ/mEQhZy58gAkUXppHOnwEJ9Qm/nG
-    // $2a$10$S09UPOa5ZQh4n/Yb1PdRnuoJgWJ.f.Z20
+    ): PaymentResponse<UserLoginResponse> =
+        userLoginUseCase.findValidAccountOrThrow(
+            loginInfo = UserLoginRequest.from(userLoginRequest = userLoginRequest)
+        ).run {
+            tokenHandlerUseCase.generateTokenBy(
+                keyString = this.id.toString(),
+                data = this,
+            )
+        }.let {
+            PaymentResponse.ok(
+                data = UserLoginResponse(
+                    accessToken = it,
+                )
+            )
+        }
 }

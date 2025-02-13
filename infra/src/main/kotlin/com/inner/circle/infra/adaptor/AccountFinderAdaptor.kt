@@ -11,4 +11,6 @@ class AccountFinderAdaptor(
     private val userRepository: UserRepository
 ) : AccountFinderPort {
     override fun findByIdOrNull(id: Long): AccountEntity? = userRepository.findByIdOrNull(id)
+
+    override fun findByEmailOrNull(email: String): AccountEntity? = userRepository.findByEmail(email)
 }
