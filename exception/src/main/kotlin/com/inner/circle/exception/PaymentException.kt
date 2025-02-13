@@ -1,5 +1,6 @@
 package com.inner.circle.exception
 
+// TODO: PaymentException -> BackofficeException
 sealed class PaymentException(
     status: HttpStatus,
     override val message: String,
@@ -17,9 +18,9 @@ sealed class PaymentException(
         override val cause: Throwable? = null
     ) : PaymentException(HttpStatus.NOT_FOUND, message, cause)
 
-    data class UserNotFoundException(
-        val userId: Long?,
-        override val message: String = "UserId with ID $userId not found",
+    data class MerchantNotFoundException(
+        val merchantId: String,
+        override val message: String = "Merchant with ID $merchantId not found",
         override val cause: Throwable? = null
     ) : PaymentException(HttpStatus.NOT_FOUND, message, cause)
 
