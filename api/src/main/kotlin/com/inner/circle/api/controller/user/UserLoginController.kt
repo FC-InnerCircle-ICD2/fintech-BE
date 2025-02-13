@@ -12,24 +12,26 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class UserLoginController(
     private val userLoginUseCase: UserLoginUseCase,
-    private val tokenHandlerUseCase: TokenHandlerUseCase,
+    private val tokenHandlerUseCase: TokenHandlerUseCase
 ) {
     @PostMapping("/login")
     fun userLogin(
         @RequestBody userLoginRequest: UserLoginRequest
     ): PaymentResponse<UserLoginResponse> =
-        userLoginUseCase.findValidAccountOrThrow(
-            loginInfo = UserLoginRequest.from(userLoginRequest = userLoginRequest)
-        ).run {
-            tokenHandlerUseCase.generateTokenBy(
-                keyString = this.id.toString(),
-                data = this,
-            )
-        }.let {
-            PaymentResponse.ok(
-                data = UserLoginResponse(
-                    accessToken = it,
+        userLoginUseCase
+            .findValidAccountOrThrow(
+                loginInfo = UserLoginRequest.from(userLoginRequest = userLoginRequest)
+            ).run {
+                tokenHandlerUseCase.generateTokenBy(
+                    keyString = this.id.toString(),
+                    data = this
                 )
-            )
-        }
+            }.let {
+                PaymentResponse.ok(
+                    data =
+                        UserLoginResponse(
+                            accessToken = it
+                        )
+                )
+            }
 }

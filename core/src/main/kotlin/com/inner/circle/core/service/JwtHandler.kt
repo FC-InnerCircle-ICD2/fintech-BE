@@ -15,18 +15,19 @@ import org.springframework.stereotype.Component
 
 @Component
 class JwtHandler(
-    @Value("\${jwt.secret}") private val secret: String,
+    @Value("\${jwt.secret}") private val secret: String
 ) {
     private val logger = LoggerFactory.getLogger(JwtHandler::class.java)
 
-    fun <T>generateTokenBy(
+    fun <T> generateTokenBy(
         expireTargetDate: Date = Date(System.currentTimeMillis() + SECONDS_IN_HOUR),
         issuedAt: Date = Date(),
         signAlgorithm: MacAlgorithm = Jwts.SIG.HS256,
         keyString: String = secret,
-        claimTarget : T,
+        claimTarget: T
     ): String =
-        Jwts.builder()
+        Jwts
+            .builder()
             .claim(CLAIM_DATA_PREFIX, claimTarget)
             .issuedAt(issuedAt)
             .signWith(getSignature(signString = keyString), signAlgorithm)

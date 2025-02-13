@@ -10,18 +10,16 @@ import org.springframework.stereotype.Service
 @Service
 class UserLoginService(
     private val accountFinderPort: AccountFinderPort,
-    private val bCryptPasswordEncoder: BCryptPasswordEncoder,
-): UserLoginUseCase {
-    override fun findValidAccountOrThrow(
-        loginInfo: UserLoginUseCase.UserLoginInfo,
-    ): AccountInfo =
-        accountFinderPort.findByEmailOrNull(
-            email = loginInfo.email,
-        )?.let { accountEntity ->
-            accountEntity
-                .takeIf { bCryptPasswordEncoder.matches(loginInfo.password, it.password) }
-                ?.let { AccountInfo.from(dto = it) }
-                ?: throw UsernameNotFoundException("InvalidPassword")
-        } ?: throw RuntimeException("Invalid user login info")
+    private val bCryptPasswordEncoder: BCryptPasswordEncoder
+) : UserLoginUseCase {
+    override fun findValidAccountOrThrow(loginInfo: UserLoginUseCase.UserLoginInfo): AccountInfo =
+        accountFinderPort
+            .findByEmailOrNull(
+                email = loginInfo.email
+            )?.let { accountEntity ->
+                accountEntity
+                    .takeIf { bCryptPasswordEncoder.matches(loginInfo.password, it.password) }
+                    ?.let { AccountInfo.from(dto = it) }
+                    ?: throw UsernameNotFoundException("InvalidPassword")
+            } ?: throw RuntimeException("Invalid user login info")
 }
-

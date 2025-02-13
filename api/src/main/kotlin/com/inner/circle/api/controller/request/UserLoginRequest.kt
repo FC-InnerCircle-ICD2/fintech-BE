@@ -10,7 +10,7 @@ data class UserLoginRequest(
         fun from(userLoginRequest: UserLoginRequest): UserLoginUseCase.UserLoginInfo =
             UserLoginUseCase.UserLoginInfo(
                 email = userLoginRequest.email,
-                password = userLoginRequest.password,
+                password = userLoginRequest.password
             )
     }
 }
