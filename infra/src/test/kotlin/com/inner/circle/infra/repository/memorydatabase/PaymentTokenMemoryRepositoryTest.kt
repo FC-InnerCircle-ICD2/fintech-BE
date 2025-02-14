@@ -56,7 +56,7 @@ class PaymentTokenMemoryRepositoryTest {
         val tokenString = "merchant1,order1,token123,${LocalDateTime.now().plusMinutes(5)}"
         redisTemplate.opsForValue()[key] = tokenString
 
-        val token = repository.getPaymentToken("merchant1", "order1")
+        val token = repository.getPaymentDataFromToken("merchant1", "order1")
 
         assertNotNull(token)
         assertEquals("merchant1", token.merchantId)
@@ -71,7 +71,7 @@ class PaymentTokenMemoryRepositoryTest {
         val key = "merchant2:order1"
 
         assertThrows<PaymentJwtException.TokenNotFoundException> {
-            repository.getPaymentToken("merchant2", "order1")
+            repository.getPaymentDataFromToken("merchant2", "order1")
         }
     }
 
@@ -105,7 +105,7 @@ class PaymentTokenMemoryRepositoryTest {
         Thread.sleep(1500)
 
         assertThrows<PaymentJwtException.TokenNotFoundException> {
-            repository.getPaymentToken("merchant10", "order10")
+            repository.getPaymentDataFromToken("merchant10", "order10")
         }
     }
 

@@ -3,7 +3,7 @@ spring:
     name: api
   profiles:
     active: local
-    include: infra, openapi
+    include: infra, openapi, core
   jackson:
     deserialization:
       use-big-decimal-for-floats: true
@@ -27,7 +27,7 @@ server:
 
 card:
   url:
-    base-url: http://localhost:8082
+    base-url: https://mock.pay-200.com
     approve-end-point: /mock/card/approve
     validate-end-point: /mock/card/validate
 
@@ -40,6 +40,6 @@ spring:
 
 card:
   url:
-    base-url: http://localhost:8082
+    base-url: https://mock.pay-200.com
     approve-end-point: /mock/card/approve
     validate-end-point: /mock/card/validate

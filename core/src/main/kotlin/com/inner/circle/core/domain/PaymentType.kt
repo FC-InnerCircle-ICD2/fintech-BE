@@ -1,12 +1,14 @@
 package com.inner.circle.core.domain
 
+import com.inner.circle.infra.repository.entity.PaymentType as InfraPaymentType
+
 enum class PaymentType {
     CARD;
 
     companion object {
-        fun of(paymentType: com.inner.circle.infra.repository.entity.PaymentType): PaymentType =
+        fun of(paymentType: InfraPaymentType): PaymentType =
             when (paymentType) {
-                com.inner.circle.infra.repository.entity.PaymentType.CARD -> CARD
+                InfraPaymentType.CARD -> CARD
             }
     }
 }

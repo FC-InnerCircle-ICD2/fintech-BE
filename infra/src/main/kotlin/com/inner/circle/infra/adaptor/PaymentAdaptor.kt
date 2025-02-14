@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component
 internal class PaymentAdaptor(
     private val paymentRepository: PaymentRepository
 ) : PaymentPort {
-    override fun save(request: PaymentPort.Request): PaymentEntity =
+    override fun save(request: PaymentPort.Request) {
         paymentRepository.save(
             PaymentEntity(
                 id = request.id,
@@ -26,4 +26,5 @@ internal class PaymentAdaptor(
         ) ?: throw PaymentException.PaymentNotSaveException(
             paymentKey = request.paymentKey
         )
+    }
 }

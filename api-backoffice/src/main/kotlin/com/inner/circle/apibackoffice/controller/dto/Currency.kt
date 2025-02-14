@@ -1,14 +1,16 @@
 package com.inner.circle.apibackoffice.controller.dto
 
+import com.inner.circle.corebackoffice.domain.Currency as CoreBackofficeCurrency
+
 enum class Currency {
     KRW,
     USD;
 
     companion object {
-        fun of(currency: com.inner.circle.corebackoffice.domain.Currency): Currency =
+        fun of(currency: CoreBackofficeCurrency): Currency =
             when (currency) {
-                com.inner.circle.corebackoffice.domain.Currency.KRW -> KRW
-                com.inner.circle.corebackoffice.domain.Currency.USD -> USD
+                CoreBackofficeCurrency.KRW -> KRW
+                CoreBackofficeCurrency.USD -> USD
             }
     }
 }

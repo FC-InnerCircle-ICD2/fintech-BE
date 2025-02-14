@@ -3,30 +3,35 @@ package com.inner.circle.api.controller.merchant
 import com.inner.circle.api.application.PaymentStatusChangedMessageSender
 import com.inner.circle.api.application.dto.PaymentStatusChangedSsePaymentRequest
 import com.inner.circle.api.application.dto.PaymentStatusEventType
+import com.inner.circle.api.config.SwaggerConfig
 import com.inner.circle.api.controller.PaymentForMerchantV1Api
 import com.inner.circle.api.controller.dto.PaymentApproveDto
 import com.inner.circle.api.controller.dto.PaymentResponse
+import com.inner.circle.api.controller.dto.UserCardDto
 import com.inner.circle.api.controller.request.PaymentApproveRequest
 import com.inner.circle.api.controller.request.PaymentClaimRequest
-import com.inner.circle.core.service.dto.MerchantDto
-import com.inner.circle.core.usecase.ConfirmPaymentUseCase
+import com.inner.circle.core.security.MerchantUserDetails
 import com.inner.circle.core.usecase.PaymentClaimUseCase
 import com.inner.circle.core.usecase.SavePaymentApproveUseCase
+import com.inner.circle.core.usecase.UserCardUseCase
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
-import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 
 @Tag(name = "Payments - Merchant", description = "상점 고객(SDK) 결제 관련 API")
 @PaymentForMerchantV1Api
+@SecurityRequirement(name = SwaggerConfig.BASIC_AUTH)
 class MerchantPaymentController(
-    private val confirmPaymentUseCase: ConfirmPaymentUseCase,
     private val claimUseCase: PaymentClaimUseCase,
     private val savePaymentApproveService: SavePaymentApproveUseCase,
+    private val userCardUseCase: UserCardUseCase,
     private val statusChangedMessageSender: PaymentStatusChangedMessageSender
 ) {
     private val logger: Logger = LoggerFactory.getLogger(MerchantPaymentController::class.java)
@@ -34,11 +39,11 @@ class MerchantPaymentController(
     @Operation(summary = "결제 요청")
     @PostMapping
     fun createPayment(
-        @RequestBody request: PaymentClaimRequest,
-        servletRequest: HttpServletRequest
+        @AuthenticationPrincipal merchantUserDetails: MerchantUserDetails,
+        @RequestBody request: PaymentClaimRequest
     ): PaymentResponse<PaymentClaimUseCase.PaymentClaimResponse> {
-        val merchantDto = servletRequest.getAttribute("merchantUser") as MerchantDto
-        val merchantId = merchantDto.merchantId
+        val merchantId = merchantUserDetails.getId()
+        val merchantName = merchantUserDetails.getName()
 
         val claimRequest =
             PaymentClaimUseCase.ClaimRequest(
@@ -47,7 +52,7 @@ class MerchantPaymentController(
                 orderName = request.orderId
             )
 
-        val response = claimUseCase.createPayment(claimRequest, merchantId)
+        val response = claimUseCase.createPayment(claimRequest, merchantId, merchantName)
 
         sendStatusChangedMessage(
             status = PaymentStatusEventType.READY,
@@ -61,11 +66,10 @@ class MerchantPaymentController(
     @Operation(summary = "결제 승인")
     @PostMapping("/confirm")
     fun confirmPayment(
-        @RequestBody paymentApproveRequest: PaymentApproveRequest,
-        servletRequest: HttpServletRequest
+        @AuthenticationPrincipal merchantUserDetails: MerchantUserDetails,
+        @RequestBody paymentApproveRequest: PaymentApproveRequest
     ): PaymentResponse<PaymentApproveDto> {
-        val merchantDto = servletRequest.getAttribute("merchantUser") as MerchantDto
-        val merchantId = merchantDto.merchantId
+        val merchantId = merchantUserDetails.getId()
 
         val data =
             savePaymentApproveService
@@ -97,8 +101,8 @@ class MerchantPaymentController(
     @Operation(summary = "결제 취소 - orderId")
     @PostMapping("/orders/{orderId}/cancel")
     fun cancelPaymentConfirmWithOrderId(
-        @PathVariable("order_id") orderId: String,
-        servletRequest: HttpServletRequest
+        @AuthenticationPrincipal merchantUserDetails: MerchantUserDetails,
+        @PathVariable("orderId") orderId: String
     ): PaymentResponse<String> {
         val response = PaymentResponse.ok("결제가 취소되었습니다.")
 
@@ -108,8 +112,8 @@ class MerchantPaymentController(
     @Operation(summary = "결제 취소 - paymentKey")
     @PostMapping("/orders/{paymentKey}/cancel")
     fun cancelPaymentConfirmWithPaymentKey(
-        @PathVariable("payment_key") paymentKey: String,
-        servletRequest: HttpServletRequest
+        @AuthenticationPrincipal merchantUserDetails: MerchantUserDetails,
+        @PathVariable("paymentKey") paymentKey: String
     ): PaymentResponse<String> {
         val response = PaymentResponse.ok("결제가 취소되었습니다.")
 
@@ -133,5 +137,24 @@ class MerchantPaymentController(
         } catch (e: Exception) {
             logger.error("Error while send ${status.name} Status.", e)
         }
+    }
+
+    @Operation(summary = "[테스트 용도] - 모든 유저의 카드 목록 조회")
+    @GetMapping("/cards")
+    fun getAllCard(): PaymentResponse<List<UserCardDto>> {
+        val coreUserCardDtoList = userCardUseCase.findAll()
+        return PaymentResponse.ok(
+            coreUserCardDtoList
+                .map { coreUserCardDto ->
+                    UserCardDto(
+                        id = coreUserCardDto.id,
+                        accountId = coreUserCardDto.accountId,
+                        isRepresentative = coreUserCardDto.isRepresentative,
+                        cardNumber = coreUserCardDto.cardNumber,
+                        expirationPeriod = coreUserCardDto.expirationPeriod,
+                        cvc = coreUserCardDto.cvc
+                    )
+                }.toList()
+        )
     }
 }

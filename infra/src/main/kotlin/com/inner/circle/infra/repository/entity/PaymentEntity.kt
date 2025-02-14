@@ -19,7 +19,8 @@ data class PaymentEntity(
     @Column(name = "card_number")
     val cardNumber: String,
     @Column(nullable = false)
-    val currency: String,
+    @Enumerated(EnumType.STRING)
+    val currency: Currency,
     @Column(name = "account_id")
     val accountId: Long?,
     @Column(name = "merchant_id", nullable = false)

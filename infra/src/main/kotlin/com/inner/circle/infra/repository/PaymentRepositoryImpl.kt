@@ -8,8 +8,5 @@ internal class PaymentRepositoryImpl(
     private val paymentJpaRepository: PaymentJpaRepository
 ) : PaymentRepository {
     override fun save(paymentEntity: PaymentEntity): PaymentEntity? =
-        paymentJpaRepository.save(paymentEntity)
-
-    override fun findByPaymentKey(paymentKey: String): PaymentEntity? =
-        paymentJpaRepository.findByPaymentKey(paymentKey)
+        paymentJpaRepository.saveAndFlush(paymentEntity)
 }

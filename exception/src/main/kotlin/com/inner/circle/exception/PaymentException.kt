@@ -11,15 +11,21 @@ sealed class PaymentException(
         override val cause: Throwable? = null
     ) : PaymentException(HttpStatus.NOT_FOUND, message, cause)
 
+    data class AccountNotFoundException(
+        val accountId: Long?,
+        override val message: String = "Account with ID $accountId not found",
+        override val cause: Throwable? = null
+    ) : PaymentException(HttpStatus.NOT_FOUND, message, cause)
+
     data class PaymentNotFoundException(
         val paymentId: String,
         override val message: String = "Payment with ID $paymentId not found",
         override val cause: Throwable? = null
     ) : PaymentException(HttpStatus.NOT_FOUND, message, cause)
 
-    data class UserNotFoundException(
-        val userId: Long?,
-        override val message: String = "UserId with ID $userId not found",
+    data class MerchantNotFoundException(
+        val merchantId: String,
+        override val message: String = "Merchant with ID $merchantId not found",
         override val cause: Throwable? = null
     ) : PaymentException(HttpStatus.NOT_FOUND, message, cause)
 
@@ -48,6 +54,12 @@ sealed class PaymentException(
 
     data class CardNotFoundException(
         override val message: String = "Payment method (card) not found.",
+        override val cause: Throwable? = null
+    ) : PaymentException(HttpStatus.BAD_REQUEST, message, cause)
+
+    data class InvalidOrderStatusException(
+        val orderStatus: String,
+        override val message: String = "$orderStatus is not in IN_PROGRESS state.",
         override val cause: Throwable? = null
     ) : PaymentException(HttpStatus.BAD_REQUEST, message, cause)
 }

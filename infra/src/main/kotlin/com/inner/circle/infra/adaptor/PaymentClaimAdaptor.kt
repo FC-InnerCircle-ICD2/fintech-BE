@@ -1,5 +1,6 @@
 package com.inner.circle.infra.adaptor
 
+import com.inner.circle.exception.PaymentJwtException
 import com.inner.circle.infra.adaptor.dto.PaymentClaimDto
 import com.inner.circle.infra.adaptor.dto.PaymentTokenDto
 import com.inner.circle.infra.port.PaymentClaimHandlingPort
@@ -7,6 +8,7 @@ import com.inner.circle.infra.repository.entity.PaymentClaimRepository
 import com.inner.circle.infra.repository.entity.PaymentRequestEntity
 import com.inner.circle.infra.repository.entity.PaymentTokenEntity
 import com.inner.circle.infra.repository.entity.PaymentTokenRepository
+import java.time.LocalDateTime
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
@@ -20,11 +22,15 @@ class PaymentClaimAdaptor(
         paymentRequestData: PaymentClaimDto,
         tokenData: PaymentTokenDto
     ): PaymentClaimDto {
+        val expiredAt =
+            tokenData.expiredAt
+                ?: throw PaymentJwtException.TokenInvalidException("token expired not set.")
+
         // 결제 요청 정보 및 토큰 entity 생성
         val (paymentRequest, tokenEntity) = createPaymentRequest(paymentRequestData, tokenData)
 
         // paymentRequest, token entity 저장
-        return savePaymentRequest(paymentRequest, tokenEntity)
+        return savePaymentRequest(paymentRequest, tokenEntity, expiredAt)
     }
 
     override fun createPaymentRequest(
@@ -38,12 +44,13 @@ class PaymentClaimAdaptor(
 
     override fun savePaymentRequest(
         paymentRequest: PaymentRequestEntity,
-        tokenEntity: PaymentTokenEntity
+        tokenEntity: PaymentTokenEntity,
+        expiredAt: LocalDateTime
     ): PaymentClaimDto {
         // payment request entity 저장
         val savedPaymentRequest = paymentClaimRepository.save(paymentRequest)
         // token entity 저장
-        paymentTokenRepository.savePaymentToken(tokenEntity)
+        paymentTokenRepository.savePaymentToken(tokenEntity, expiredAt)
 
         return PaymentClaimDto.fromEntity(savedPaymentRequest)
     }
