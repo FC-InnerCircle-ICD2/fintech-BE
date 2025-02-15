@@ -32,9 +32,9 @@ internal class CancelPaymentService(
                 accountId = paymentInfo.accountId,
                 merchantId = paymentInfo.merchantId,
                 merchantName = paymentInfo.merchantName,
-                paymentKey = paymentInfo.paymentKey ?: "",
+                paymentKey = paymentInfo.paymentKey,
                 amount = paymentInfo.amount,
-                cardNumber = paymentInfo.cardNumber ?: "",
+                cardNumber = paymentInfo.cardNumber,
                 paymentType = PaymentType.CARD,
                 requestTime = paymentInfo.requestTime
             )
