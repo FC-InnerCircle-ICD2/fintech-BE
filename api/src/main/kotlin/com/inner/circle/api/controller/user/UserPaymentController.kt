@@ -13,7 +13,6 @@ import com.inner.circle.api.controller.request.ConfirmSimplePaymentRequest
 import com.inner.circle.api.controller.request.UserCardRequest
 import com.inner.circle.core.security.AccountDetails
 import com.inner.circle.core.service.dto.ConfirmPaymentCoreDto
-import com.inner.circle.core.service.dto.UserCardDto as CoreUserCardDto
 import com.inner.circle.core.usecase.ConfirmPaymentUseCase
 import com.inner.circle.core.usecase.ConfirmSimplePaymentUseCase
 import com.inner.circle.core.usecase.PaymentTokenHandlingUseCase
@@ -29,6 +28,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
+import com.inner.circle.core.service.dto.UserCardDto as CoreUserCardDto
 
 @Tag(name = "Payments - User", description = "결제 고객(App) 결제 관련 API")
 @PaymentForUserV1Api
