@@ -50,7 +50,7 @@ internal class SavePaymentApproveService(
                         requestTime = paymentRequest.requestTime
                     )
 
-                if (request.amount == paymentRequest.amount) {
+                if (request.amount != paymentRequest.amount) {
                     throw PaymentException.InvalidAmountException(
                         request.paymentKey
                     )
