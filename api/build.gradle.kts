@@ -15,6 +15,7 @@ dependencies {
     implementation(libs.bundles.kotlin)
     implementation(libs.bundles.springBoot)
     implementation(libs.bundles.kotlinxSerialization)
+    implementation(libs.bundles.springBootValidation)
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.1")
     implementation("org.springframework.boot:spring-boot-starter-security")
     testImplementation(libs.bundles.testContainer)

@@ -17,6 +17,13 @@ class UserApiAuthenticationFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
+        // TODO : Security 로 옮겨야 한다. 임시 처리로 해놓음
+        // Security 개선작업 시 옮겨야 함
+        if (request.requestURI == USER_LOGIN_PATH) {
+            filterChain.doFilter(request, response)
+            return
+        }
+
         val authHeader =
             request.getHeader(HttpHeaders.AUTHORIZATION)
                 ?: throw UserAuthenticationException.UnauthorizedException(
@@ -32,5 +39,6 @@ class UserApiAuthenticationFilter(
 
     companion object {
         private const val BEARER_PREFIX = "Bearer "
+        private const val USER_LOGIN_PATH = "/api/v1/p/user/sign-in"
     }
 }
