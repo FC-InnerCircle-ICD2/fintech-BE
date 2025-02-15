@@ -20,7 +20,7 @@ class JwtHandler(
     private val logger = LoggerFactory.getLogger(JwtHandler::class.java)
 
     fun <T> generateTokenBy(
-        expireTargetDate: Date = Date(System.currentTimeMillis() + SECONDS_IN_HOUR),
+        expireTargetDate: Date = Date(System.currentTimeMillis() + MILLI_SECONDS_IN_THREE_HOUR),
         issuedAt: Date = Date(),
         signAlgorithm: MacAlgorithm = Jwts.SIG.HS256,
         keyString: String = secret,
@@ -30,6 +30,7 @@ class JwtHandler(
             .builder()
             .claim(CLAIM_DATA_PREFIX, claimTarget)
             .issuedAt(issuedAt)
+            .expiration(expireTargetDate)
             .signWith(getSignature(signString = keyString), signAlgorithm)
             .compact()
 
@@ -93,7 +94,7 @@ class JwtHandler(
         Keys.hmacShaKeyFor(Decoders.BASE64.decode(signString))
 
     companion object {
-        private const val SECONDS_IN_HOUR = 3600 * 1800
+        private const val MILLI_SECONDS_IN_THREE_HOUR = 3 * 60 * 60 * 1000
         private const val CLAIM_DATA_PREFIX = "data"
     }
 }
