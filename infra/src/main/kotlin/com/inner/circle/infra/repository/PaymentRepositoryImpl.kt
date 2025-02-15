@@ -9,4 +9,13 @@ internal class PaymentRepositoryImpl(
 ) : PaymentRepository {
     override fun save(paymentEntity: PaymentEntity): PaymentEntity? =
         paymentJpaRepository.saveAndFlush(paymentEntity)
+
+    override fun findByAccountIdAndPaymentKey(
+        accountId: Long,
+        paymentKey: String
+    ): PaymentEntity? =
+        paymentJpaRepository.findByAccountIdAndPaymentKey(
+            accountId = accountId,
+            paymentKey = paymentKey
+        )
 }

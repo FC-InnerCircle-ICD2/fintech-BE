@@ -1,6 +1,7 @@
 package com.inner.circle.infra.adaptor
 
 import com.inner.circle.exception.PaymentException
+import com.inner.circle.infra.port.GetPaymentPort
 import com.inner.circle.infra.port.PaymentPort
 import com.inner.circle.infra.repository.PaymentRepository
 import com.inner.circle.infra.repository.entity.PaymentEntity
@@ -9,7 +10,8 @@ import org.springframework.stereotype.Component
 @Component
 internal class PaymentAdaptor(
     private val paymentRepository: PaymentRepository
-) : PaymentPort {
+) : PaymentPort,
+    GetPaymentPort {
     override fun save(request: PaymentPort.Request) {
         paymentRepository.save(
             PaymentEntity(
@@ -27,4 +29,16 @@ internal class PaymentAdaptor(
             paymentKey = request.paymentKey
         )
     }
+
+    override fun findByAccountIdAndPaymentKey(request: GetPaymentPort.Request): PaymentEntity =
+        paymentRepository.findByAccountIdAndPaymentKey(
+            accountId = request.accountId,
+            paymentKey = request.paymentKey
+        )
+            ?: throw PaymentException.PaymentNotFoundException(
+                paymentId = "",
+                message =
+                    "Payment not found: " +
+                        "accountId ${request.accountId} paymentKey ${request.paymentKey}"
+            )
 }
