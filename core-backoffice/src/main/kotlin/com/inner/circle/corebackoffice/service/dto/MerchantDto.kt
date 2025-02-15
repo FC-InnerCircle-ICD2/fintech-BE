@@ -1,7 +1,7 @@
 package com.inner.circle.corebackoffice.service.dto
 
 data class MerchantDto(
-    val id: String,
+    val id: Long,
     val username: String,
     val password: String,
     val token: String,

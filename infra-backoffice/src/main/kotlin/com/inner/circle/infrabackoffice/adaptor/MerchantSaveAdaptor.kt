@@ -15,7 +15,6 @@ internal class MerchantSaveAdaptor(
         val merchant =
             merchantRepository.save(
                 MerchantEntity(
-                    id = null,
                     username = request.username,
                     password = request.password,
                     token = request.token,
