@@ -10,7 +10,7 @@ data class PaymentRequestDto(
     val cardNumber: String,
     val orderStatus: PaymentProcessStatus,
     val accountId: Long?,
-    val merchantId: String,
+    val merchantId: Long,
     val paymentKey: String,
     val amount: BigDecimal,
     val paymentType: PaymentType,

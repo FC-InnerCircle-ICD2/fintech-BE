@@ -5,12 +5,12 @@ import com.inner.circle.infrabackoffice.repository.entity.MerchantEntity
 interface MerchantRepository {
     fun findById(id: String): MerchantEntity
 
-    fun existsByUsername(username: String): Boolean
+    fun existsByEmail(email: String): Boolean
 
     fun save(merchant: MerchantEntity): MerchantEntity
 
     fun findByUsernameAndPassword(
-        username: String,
+        email: String,
         password: String
     ): MerchantEntity
 }

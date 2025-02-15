@@ -11,7 +11,7 @@ interface PaymentRequestJpaRepository : JpaRepository<PaymentRequestEntity, Stri
 
     fun findByOrderIdAndMerchantId(
         orderId: String,
-        merchantId: String
+        merchantId: Long
     ): PaymentRequestEntity?
 
     fun findByOrderId(orderId: String): PaymentRequestEntity?

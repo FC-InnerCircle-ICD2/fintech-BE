@@ -170,7 +170,7 @@ class UserPaymentController(
     private fun sendStatusChangedMessage(
         status: PaymentStatusEventType,
         orderId: String,
-        merchantId: String
+        merchantId: Long
     ) {
         try {
             statusChangedMessageSender.sendProcessChangedMessage(

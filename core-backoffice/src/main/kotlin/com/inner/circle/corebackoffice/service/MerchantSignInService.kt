@@ -12,12 +12,12 @@ class MerchantSignInService(
     override fun signIn(request: MerchantSignInUseCase.Request): MerchantSignInDto {
         val merchant =
             merchantFinderPort.findByUsernameAndPassword(
-                username = request.username,
+                email = request.email,
                 password = request.password
             )
 
         return MerchantSignInDto(
-            id = merchant.id ?: "",
+            id = merchant.id,
             token = merchant.token,
             name = merchant.name
         )

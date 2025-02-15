@@ -24,7 +24,7 @@ data class PaymentEntity(
     @Column(name = "account_id")
     val accountId: Long?,
     @Column(name = "merchant_id", nullable = false)
-    val merchantId: String,
+    val merchantId: Long,
     @Column(name = "payment_type", nullable = false)
     @Enumerated(EnumType.STRING)
     val paymentType: PaymentType,

@@ -10,22 +10,6 @@ class MerchantApiKeyProviderImpl(
     private val merchantDetailsService: MerchantDetailService
 ) : MerchantApiKeyProvider {
     override fun getAuthentication(secret: String): Authentication {
-        if (secret == "pay200") {
-            val mockMerchantUserDetails =
-                MerchantUserDetails(
-                    id = "12345tsid",
-                    username = "test@gmail.com",
-                    password = "qwer1234",
-                    name = "테스트 상점"
-                )
-            return UsernamePasswordAuthenticationToken(
-                mockMerchantUserDetails,
-                "",
-                listOf(
-                    SimpleGrantedAuthority("ROLE_MERCHANT")
-                )
-            )
-        }
         val userDetails = merchantDetailsService.loadUserByUsername(secret)
         val authentication =
             UsernamePasswordAuthenticationToken(
