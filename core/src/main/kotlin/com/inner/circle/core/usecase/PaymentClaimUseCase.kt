@@ -24,7 +24,7 @@ fun interface PaymentClaimUseCase {
 
     fun createPayment(
         request: ClaimRequest,
-        merchantId: String,
+        merchantId: Long,
         merchantName: String
     ): PaymentClaimResponse
 }

@@ -14,7 +14,7 @@ class PaymentClaimDto(
     val orderStatus: PaymentProcessStatus,
     val paymentType: PaymentType?,
     val cardNumber: String?,
-    val merchantId: String,
+    val merchantId: Long,
     val paymentKey: String?,
     val amount: BigDecimal,
     val requestTime: LocalDateTime,
@@ -56,11 +56,10 @@ class PaymentClaimDto(
 
         private fun validateRequiredOrderInformation(
             orderName: String?,
-            merchantId: String,
+            merchantId: Long,
             orderId: String?
         ) {
             if (orderName.isNullOrEmpty() ||
-                merchantId.isNullOrEmpty() ||
                 orderId.isNullOrEmpty()
             ) {
                 throw PaymentClaimException.BadPaymentClaimRequestException()

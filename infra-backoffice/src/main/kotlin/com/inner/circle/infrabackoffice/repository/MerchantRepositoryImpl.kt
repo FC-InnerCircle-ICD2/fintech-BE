@@ -16,19 +16,18 @@ internal class MerchantRepositoryImpl(
                 message = "Merchant with id $id not found"
             )
 
-    override fun existsByUsername(username: String): Boolean =
-        merchantJpaRepository.existsByUsername(username)
+    override fun existsByEmail(email: String): Boolean = merchantJpaRepository.existsByEmail(email)
 
     override fun save(merchant: MerchantEntity): MerchantEntity =
         merchantJpaRepository.save(merchant)
 
     override fun findByUsernameAndPassword(
-        username: String,
+        email: String,
         password: String
     ): MerchantEntity =
-        merchantJpaRepository.findByUsernameAndPassword(username, password)
+        merchantJpaRepository.findByEmailAndPassword(email, password)
             ?: throw PaymentException.MerchantNotFoundException(
                 merchantId = "",
-                message = "Invalid username or password"
+                message = "Invalid email or password"
             )
 }
