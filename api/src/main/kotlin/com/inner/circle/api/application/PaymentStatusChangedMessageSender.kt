@@ -28,10 +28,9 @@ class PaymentStatusChangedMessageSender(
                 sseConnectionPool.getSession(
                     uniqueKey
                 )
-            val eventData = PaymentStatusChangedResponse.of(eventType, orderId, uniqueKey)
-            val eventMessage = objectMapper.writeValueAsString(eventData)
+            val eventData = PaymentStatusChangedResponse.of(eventType, orderId, merchantId)
 
-            session.sendMessage(eventType, eventMessage)
+            session.sendMessage(eventType, eventData)
             log.info(
                 "sse message send. (merchantId: {}, orderId: {}, eventType: {})",
                 merchantId,
