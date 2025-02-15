@@ -2,7 +2,11 @@ package com.inner.circle.core.service
 
 import com.inner.circle.core.service.dto.UserCardDto
 import com.inner.circle.core.usecase.UserCardUseCase
+import com.inner.circle.exception.UserPaymentMethodException
 import com.inner.circle.infra.port.UserCardPort
+import net.gentledot.maskit.DataMasking
+import net.gentledot.maskit.applications.modules.MaskingModule
+import net.gentledot.maskit.models.DataTypes
 import org.springframework.stereotype.Service
 import com.inner.circle.infra.adaptor.dto.UserCardDto as InfraUserCardDto
 
@@ -26,18 +30,35 @@ internal class UserCardService(
     }
 
     override fun findByAccountId(accountId: Long): List<UserCardDto> {
+        val dataMasking = DataMasking.builder().build()
+        val cardMaskingModule = dataMasking.getModule(DataTypes.CREDIT_CARD)
+        val nameMaskingModule = dataMasking.getModule(DataTypes.NAME)
         val infraUserCardDtoList = userCardPort.findByAccountId(accountId)
+
         return infraUserCardDtoList
             .map { infraUserCardDto ->
+                val maskedCardNumber = maskingCardNumber(cardMaskingModule, infraUserCardDto)
                 UserCardDto(
                     id = infraUserCardDto.id,
                     accountId = infraUserCardDto.accountId,
                     isRepresentative = infraUserCardDto.isRepresentative,
-                    cardNumber = infraUserCardDto.cardNumber,
+                    cardNumber = maskedCardNumber,
                     expirationPeriod = infraUserCardDto.expirationPeriod,
-                    cvc = infraUserCardDto.cvc
+                    cvc = nameMaskingModule.mask(infraUserCardDto.cvc, 1, 2)
                 )
             }.toList()
+    }
+
+    private fun maskingCardNumber(
+        cardMaskingModule: MaskingModule,
+        infraUserCardDto: com.inner.circle.infra.adaptor.dto.UserCardDto
+    ): String {
+        val cardNumber = infraUserCardDto.cardNumber
+        val split = cardNumber.split("-")
+        val masked = cardMaskingModule.mask(cardNumber)
+        if (split.size != 4) throw UserPaymentMethodException.InvalidCardNumberException(masked)
+        val firstNumberPart = split[0]
+        return """$firstNumberPart${masked.substring(4)}"""
     }
 
     override fun findAll(): List<UserCardDto> {
