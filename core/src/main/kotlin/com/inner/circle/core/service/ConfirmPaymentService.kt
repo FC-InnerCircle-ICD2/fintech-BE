@@ -78,18 +78,6 @@ internal class ConfirmPaymentService(
                 requestTime = request.requestTime
             )
         )
-
-        // sse 전송 일단 try catch로 구현 이후 Controller에 통합 후 삭제 예정
-        try {
-            val orderConnection =
-                sseConnectionPool.getSession(
-                    request.merchantId.toString() + "_" + request.orderId
-                )
-            orderConnection.sendMessage(result)
-        } catch (e: Exception) {
-            logger.error("SSE connection not found", e)
-        }
-
         return result
     }
 

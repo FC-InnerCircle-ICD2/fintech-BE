@@ -12,6 +12,7 @@ import com.inner.circle.api.controller.request.ConfirmPaymentRequest
 import com.inner.circle.api.controller.request.ConfirmSimplePaymentRequest
 import com.inner.circle.api.controller.request.UserCardRequest
 import com.inner.circle.core.security.AccountDetails
+import com.inner.circle.core.service.dto.ConfirmPaymentCoreDto
 import com.inner.circle.core.usecase.ConfirmPaymentUseCase
 import com.inner.circle.core.usecase.ConfirmSimplePaymentUseCase
 import com.inner.circle.core.usecase.PaymentTokenHandlingUseCase
@@ -60,27 +61,25 @@ class UserPaymentController(
             merchantId = merchantId
         )
 
+        val authResult =
+            confirmPaymentUseCase.confirmPayment(
+                ConfirmSimplePaymentUseCase.Request(
+                    orderId = orderId,
+                    merchantId = merchantId,
+                    accountId = accountId
+                )
+            )
+
         val data =
             ConfirmPaymentDto.of(
-                confirmPaymentUseCase.confirmPayment(
-                    ConfirmSimplePaymentUseCase.Request(
-                        orderId = orderId,
-                        merchantId = merchantId,
-                        accountId = accountId
-                    )
-                )
+                authResult
             )
         val response =
             PaymentResponse.ok(
                 data
             )
 
-        sendStatusChangedMessage(
-            status = PaymentStatusEventType.IN_PROGRESS,
-            orderId = orderId,
-            merchantId = merchantId
-        )
-
+        sendAuthResultMessage(authResult)
         return response
     }
 
@@ -146,6 +145,18 @@ class UserPaymentController(
             )
         } catch (e: Exception) {
             logger.error("Error while send ${status.name} Status.", e)
+        }
+    }
+
+    private fun sendAuthResultMessage(authResult: ConfirmPaymentCoreDto) {
+        val inProgress = PaymentStatusEventType.IN_PROGRESS
+        try {
+            statusChangedMessageSender.sendPaymentAuthResultMessage(
+                inProgress,
+                authResult
+            )
+        } catch (e: Exception) {
+            logger.error("Error while send ${inProgress.name} Status.", e)
         }
     }
 

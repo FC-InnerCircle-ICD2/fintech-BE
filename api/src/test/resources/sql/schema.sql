@@ -88,7 +88,6 @@ create table if not exists account
     updated_at timestamp(6) default CURRENT_TIMESTAMP not null
 );
 
-
 INSERT INTO account (id, email, password, status, created_at, updated_at) VALUES (293847562342874239, 'test@test.com', '$2a$10$S09UPOa5ZQh4n/Yb1PdRnuoJgWJ.f.Z20', 0, '2025-02-12 22:05:32.901464', '2025-02-12 22:05:32.901464');
 INSERT INTO merchant (id, username, password, token, name, created_at, updated_at) VALUES (1707665290123456, 'pay200', 'pay200', 'eyJuYW1lIjoicGF5MjAwIn0', 'pay200', '2025-02-11 20:25:42.000000', '2025-02-11 20:25:42.000000');
 INSERT INTO user_card (id, account_id, is_representative, card_number, expiration_period, cvc, created_at, updated_at) VALUES (7295051915259393268, 5, true, '4567-8923-6378-3982', '03/28', '654', '2025-02-11 21:20:14.188948', '2025-02-11 21:20:14.188948');
