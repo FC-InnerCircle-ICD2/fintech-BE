@@ -116,7 +116,7 @@ internal class SavePaymentApproveService(
                                         paymentRequest.paymentKey
                                             ?: throw PaymentException.PaymentKeyNotFoundException(),
                                     amount = paymentRequest.amount,
-                                    cardNumber = paymentRequest.cardNumber ?: "",
+                                    cardNumber = paymentRequest.cardNumber,
                                     paymentType = paymentRequest.paymentType,
                                     requestTime = paymentRequest.requestTime
                                 )

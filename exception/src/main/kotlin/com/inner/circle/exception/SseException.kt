@@ -7,7 +7,7 @@ class SseException(
 ) : AppException(status, message, cause) {
     companion object {
         fun connectionNotFound(
-            merchantId: String,
+            merchantId: Long,
             orderId: String
         ): SseException =
             SseException(

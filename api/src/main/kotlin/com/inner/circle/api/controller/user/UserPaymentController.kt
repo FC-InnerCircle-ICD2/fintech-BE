@@ -5,14 +5,17 @@ import com.inner.circle.api.application.dto.PaymentStatusChangedSsePaymentReques
 import com.inner.circle.api.application.dto.PaymentStatusEventType
 import com.inner.circle.api.config.SwaggerConfig
 import com.inner.circle.api.controller.PaymentForUserV1Api
+import com.inner.circle.api.controller.dto.CancelPaymentDto
 import com.inner.circle.api.controller.dto.ConfirmPaymentDto
 import com.inner.circle.api.controller.dto.PaymentResponse
 import com.inner.circle.api.controller.dto.UserCardDto
+import com.inner.circle.api.controller.request.CancelPaymentRequest
 import com.inner.circle.api.controller.request.ConfirmPaymentRequest
 import com.inner.circle.api.controller.request.ConfirmSimplePaymentRequest
 import com.inner.circle.api.controller.request.UserCardRequest
 import com.inner.circle.core.security.AccountDetails
 import com.inner.circle.core.service.dto.ConfirmPaymentCoreDto
+import com.inner.circle.core.usecase.CancelPaymentUseCase
 import com.inner.circle.core.usecase.ConfirmPaymentUseCase
 import com.inner.circle.core.usecase.ConfirmSimplePaymentUseCase
 import com.inner.circle.core.usecase.PaymentTokenHandlingUseCase
@@ -20,12 +23,10 @@ import com.inner.circle.core.usecase.UserCardUseCase
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
-import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import com.inner.circle.core.service.dto.UserCardDto as CoreUserCardDto
@@ -37,6 +38,7 @@ class UserPaymentController(
     private val paymentTokenHandlingUseCase: PaymentTokenHandlingUseCase,
     private val confirmPaymentUseCase: ConfirmPaymentUseCase,
     private val userCardUseCase: UserCardUseCase,
+    private val cancelPaymentUseCase: CancelPaymentUseCase,
     private val statusChangedMessageSender: PaymentStatusChangedMessageSender
 ) {
     private val logger: Logger = LoggerFactory.getLogger(UserPaymentController::class.java)
@@ -118,13 +120,49 @@ class UserPaymentController(
         return response
     }
 
-    @Operation(summary = "결제 취소 - paymentKey")
-    @PostMapping("/orders/{paymentKey}/cancel")
+    @Operation(summary = "결제 취소")
+    @PostMapping("/cancel")
     fun cancelPaymentConfirmWithOrderId(
-        @PathVariable("paymentKey") paymentKey: String,
-        servletRequest: HttpServletRequest
-    ): PaymentResponse<String> {
-        val response = PaymentResponse.ok("결제가 취소되었습니다.")
+        @AuthenticationPrincipal account: AccountDetails,
+        @RequestBody cancelPaymentRequest: CancelPaymentRequest
+    ): PaymentResponse<CancelPaymentDto> {
+        val accountId = account.id
+        val foundPaymentToken =
+            paymentTokenHandlingUseCase.findPaymentToken(
+                cancelPaymentRequest.token
+            )
+        val orderId = foundPaymentToken.orderId
+        val merchantId = foundPaymentToken.merchantId
+
+        sendStatusChangedMessage(
+            status = PaymentStatusEventType.IN_VERIFICATE,
+            orderId = orderId,
+            merchantId = merchantId
+        )
+
+        val cancelResult =
+            cancelPaymentUseCase.cancelPayment(
+                CancelPaymentUseCase.Request(
+                    orderId = orderId,
+                    merchantId = merchantId,
+                    accountId = accountId
+                )
+            )
+
+        val data =
+            CancelPaymentDto.of(
+                cancelResult
+            )
+        val response =
+            PaymentResponse.ok(
+                data
+            )
+
+        sendStatusChangedMessage(
+            status = PaymentStatusEventType.CANCELED,
+            orderId = orderId,
+            merchantId = merchantId
+        )
 
         return response
     }
