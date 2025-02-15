@@ -49,7 +49,7 @@ class PaymentStatusChangedMessageSender(
         statusEventType: PaymentStatusEventType,
         authResult: ConfirmPaymentCoreDto
     ) {
-        val merchantId = authResult.merchantId
+        val merchantId = authResult.merchantId.toString()
         val orderId = authResult.orderId
         val eventType = statusEventType.getEventType()
 
