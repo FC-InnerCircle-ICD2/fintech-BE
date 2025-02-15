@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository
 internal class MerchantRepositoryImpl(
     private val merchantJpaRepository: MerchantJpaRepository
 ) : MerchantRepository {
-    override fun findById(id: String): MerchantEntity =
+    override fun findById(id: Long): MerchantEntity =
         merchantJpaRepository.findByIdOrNull(id)
             ?: throw PaymentException.MerchantNotFoundException(
                 merchantId = id,
@@ -27,7 +27,7 @@ internal class MerchantRepositoryImpl(
     ): MerchantEntity =
         merchantJpaRepository.findByEmailAndPassword(email, password)
             ?: throw PaymentException.MerchantNotFoundException(
-                merchantId = "",
+                merchantId = 0,
                 message = "Invalid email or password"
             )
 }
