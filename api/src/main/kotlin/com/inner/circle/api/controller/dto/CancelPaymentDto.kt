@@ -5,7 +5,7 @@ import com.inner.circle.core.service.dto.CancelPaymentDto as CoreCancelPaymentDt
 
 data class CancelPaymentDto(
     val orderId: String,
-    val merchantId: String,
+    val merchantId: Long,
     val accountId: Long?,
     val orderStatus: PaymentProcessStatus
 ) {

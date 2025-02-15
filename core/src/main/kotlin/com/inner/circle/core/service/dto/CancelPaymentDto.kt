@@ -4,7 +4,7 @@ import com.inner.circle.core.domain.PaymentProcessStatus
 
 data class CancelPaymentDto(
     val orderId: String,
-    val merchantId: String,
+    val merchantId: Long,
     val accountId: Long?,
     val orderStatus: PaymentProcessStatus
 )

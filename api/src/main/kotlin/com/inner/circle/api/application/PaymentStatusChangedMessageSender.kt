@@ -20,12 +20,12 @@ class PaymentStatusChangedMessageSender(
     }
 
     fun sendProcessChangedMessage(ssePaymentRequest: PaymentStatusChangedSsePaymentRequest) {
-        val merchantId = ssePaymentRequest.merchantId.toString()
+        val merchantId = ssePaymentRequest.merchantId
         val orderId = ssePaymentRequest.orderId
         val eventType = ssePaymentRequest.eventType
 
         try {
-            val uniqueKey = merchantId + "_" + orderId
+            val uniqueKey = merchantId.toString() + "_" + orderId
             val session =
                 sseConnectionPool.getSession(
                     uniqueKey
@@ -49,12 +49,12 @@ class PaymentStatusChangedMessageSender(
         statusEventType: PaymentStatusEventType,
         authResult: ConfirmPaymentCoreDto
     ) {
-        val merchantId = authResult.merchantId.toString()
+        val merchantId = authResult.merchantId
         val orderId = authResult.orderId
         val eventType = statusEventType.getEventType()
 
         try {
-            val uniqueKey = merchantId + "_" + orderId
+            val uniqueKey = merchantId.toString() + "_" + orderId
             val session =
                 sseConnectionPool.getSession(
                     uniqueKey

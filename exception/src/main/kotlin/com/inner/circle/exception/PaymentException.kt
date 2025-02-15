@@ -24,7 +24,7 @@ sealed class PaymentException(
     ) : PaymentException(HttpStatus.NOT_FOUND, message, cause)
 
     data class MerchantNotFoundException(
-        val merchantId: String,
+        val merchantId: Long,
         override val message: String = "Merchant with ID $merchantId not found",
         override val cause: Throwable? = null
     ) : PaymentException(HttpStatus.NOT_FOUND, message, cause)
