@@ -30,11 +30,12 @@ class MerchantSseApiController(
         @AuthenticationPrincipal merchantUserDetails: MerchantUserDetails,
         @RequestParam orderId: String
     ): ResponseBodyEmitter {
-        log.info("SSE user {}", merchantUserDetails.getId() + "_" + orderId)
+        val merchantId = merchantUserDetails.getId().toString()
+        log.info("SSE user {}", merchantId + "_" + orderId)
 
         val sseConnection =
             com.inner.circle.core.sse.SseConnection.connect(
-                merchantUserDetails.getId() + "_" + orderId,
+                merchantId + "_" + orderId,
                 sseConnectionPool,
                 objectMapper
             )
@@ -52,7 +53,7 @@ class MerchantSseApiController(
     ) {
         val sseConnection =
             sseConnectionPool.getSession(
-                merchantUserDetails.getId() + "_" + orderId
+                merchantUserDetails.getId().toString() + "_" + orderId
             )
 
         sseConnection.sendMessage(message)

@@ -83,7 +83,7 @@ internal class ConfirmPaymentService(
         try {
             val orderConnection =
                 sseConnectionPool.getSession(
-                    request.merchantId + "_" + request.orderId
+                    request.merchantId.toString() + "_" + request.orderId
                 )
             orderConnection.sendMessage(result)
         } catch (e: Exception) {

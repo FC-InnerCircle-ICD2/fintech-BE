@@ -9,7 +9,7 @@ fun interface PaymentPort {
         val paymentKey: String,
         val currency: Currency,
         val accountId: Long?,
-        val merchantId: String,
+        val merchantId: Long,
         val paymentType: PaymentType,
         val orderId: String,
         val orderName: String?,

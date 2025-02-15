@@ -18,7 +18,7 @@ class PaymentStatusChangedMessageSender(
     }
 
     fun sendProcessChangedMessage(ssePaymentRequest: PaymentStatusChangedSsePaymentRequest) {
-        val merchantId = ssePaymentRequest.merchantId
+        val merchantId = ssePaymentRequest.merchantId.toString()
         val orderId = ssePaymentRequest.orderId
         val eventType = ssePaymentRequest.eventType
 

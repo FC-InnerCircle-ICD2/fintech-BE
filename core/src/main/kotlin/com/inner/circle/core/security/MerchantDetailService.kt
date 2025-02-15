@@ -16,11 +16,7 @@ class MerchantDetailService(
 
         val userDetails =
             MerchantUserDetails(
-                id =
-                    merchant.id
-                        ?: throw UserAuthenticationException.UserNotFoundException(
-                            "Merchant id not found"
-                        ),
+                id = merchant.id,
                 username = merchant.username,
                 password = merchant.password,
                 name = merchant.name

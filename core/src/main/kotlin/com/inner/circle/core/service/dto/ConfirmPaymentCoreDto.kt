@@ -5,7 +5,7 @@ import java.math.BigDecimal
 
 data class ConfirmPaymentCoreDto(
     val paymentKey: String,
-    val merchantId: String,
+    val merchantId: Long,
     val orderId: String,
     val cardNumber: String,
     val amount: BigDecimal

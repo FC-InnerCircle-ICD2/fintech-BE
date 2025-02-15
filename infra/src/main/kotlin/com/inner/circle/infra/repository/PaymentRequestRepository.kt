@@ -10,7 +10,7 @@ interface PaymentRequestRepository {
 
     fun findByOrderIdAndMerchantId(
         orderId: String,
-        merchantId: String
+        merchantId: Long
     ): PaymentRequestEntity?
 
     fun findByOrderId(orderId: String): PaymentRequestEntity?
