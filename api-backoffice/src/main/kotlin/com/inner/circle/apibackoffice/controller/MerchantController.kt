@@ -27,7 +27,7 @@ class MerchantController(
             MerchantDto.of(
                 merchantSaveUseCase.save(
                     MerchantSaveUseCase.Request(
-                        username = request.username,
+                        email = request.email,
                         password = request.password,
                         name = request.name
                     )
@@ -45,7 +45,7 @@ class MerchantController(
             MerchantSignInDto.of(
                 merchantSignInUseCase.signIn(
                     MerchantSignInUseCase.Request(
-                        username = request.username,
+                        email = request.email,
                         password = request.password
                     )
                 )

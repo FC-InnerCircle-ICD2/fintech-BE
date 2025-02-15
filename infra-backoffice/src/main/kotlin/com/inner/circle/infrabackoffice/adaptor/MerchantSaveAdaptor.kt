@@ -15,7 +15,7 @@ internal class MerchantSaveAdaptor(
         val merchant =
             merchantRepository.save(
                 MerchantEntity(
-                    username = request.username,
+                    email = request.email,
                     password = request.password,
                     token = request.token,
                     name = request.name
@@ -24,7 +24,7 @@ internal class MerchantSaveAdaptor(
 
         return MerchantDto(
             id = merchant.id ?: throw BackofficeException.MerchantNotSaveException(),
-            username = merchant.username,
+            email = merchant.email,
             password = merchant.password,
             token = merchant.token,
             name = merchant.name

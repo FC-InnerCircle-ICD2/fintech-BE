@@ -1,7 +1,7 @@
 package com.inner.circle.apibackoffice.controller.dto
 
 data class MerchantSignInDto(
-    val id: Long,
+    val id: String,
     val token: String,
     val name: String
 ) {
@@ -10,7 +10,7 @@ data class MerchantSignInDto(
             merchant: com.inner.circle.corebackoffice.service.dto.MerchantSignInDto
         ): MerchantSignInDto =
             MerchantSignInDto(
-                id = merchant.id,
+                id = merchant.id.toString(),
                 token = merchant.token,
                 name = merchant.name
             )

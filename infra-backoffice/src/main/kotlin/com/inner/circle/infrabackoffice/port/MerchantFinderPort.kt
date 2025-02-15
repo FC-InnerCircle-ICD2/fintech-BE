@@ -3,10 +3,10 @@ package com.inner.circle.infrabackoffice.port
 import com.inner.circle.infrabackoffice.repository.entity.MerchantEntity
 
 interface MerchantFinderPort {
-    fun existsByUsername(username: String): Boolean
+    fun existsByEmail(email: String): Boolean
 
     fun findByUsernameAndPassword(
-        username: String,
+        email: String,
         password: String
     ): MerchantEntity
 }

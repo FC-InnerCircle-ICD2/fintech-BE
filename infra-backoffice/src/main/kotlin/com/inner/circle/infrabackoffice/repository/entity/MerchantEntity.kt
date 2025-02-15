@@ -12,7 +12,7 @@ data class MerchantEntity(
     @Id
     val id: Long = TSID.fast().toLong(),
     @Column(nullable = false, unique = true)
-    val username: String,
+    val email: String,
     @Column(nullable = false)
     val password: String,
     @Column(unique = true)
