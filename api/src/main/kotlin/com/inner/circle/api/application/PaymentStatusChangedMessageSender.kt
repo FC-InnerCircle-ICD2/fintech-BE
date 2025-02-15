@@ -3,6 +3,8 @@ package com.inner.circle.api.application
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.inner.circle.api.application.dto.PaymentStatusChangedResponse
 import com.inner.circle.api.application.dto.PaymentStatusChangedSsePaymentRequest
+import com.inner.circle.api.application.dto.PaymentStatusEventType
+import com.inner.circle.core.service.dto.ConfirmPaymentCoreDto
 import com.inner.circle.core.sse.SseConnectionPool
 import com.inner.circle.exception.SseException
 import org.slf4j.LoggerFactory
@@ -28,10 +30,37 @@ class PaymentStatusChangedMessageSender(
                 sseConnectionPool.getSession(
                     uniqueKey
                 )
-            val eventData = PaymentStatusChangedResponse.of(eventType, orderId, uniqueKey)
-            val eventMessage = objectMapper.writeValueAsString(eventData)
+            val eventData = PaymentStatusChangedResponse.of(eventType, orderId, merchantId)
 
-            session.sendMessage(eventType, eventMessage)
+            session.sendMessage(eventType, eventData)
+            log.info(
+                "sse message send. (merchantId: {}, orderId: {}, eventType: {})",
+                merchantId,
+                orderId,
+                eventType
+            )
+        } catch (e: NoSuchElementException) {
+            log.error("get sse session failed", e)
+            throw SseException.connectionNotFound(merchantId, orderId)
+        }
+    }
+
+    fun sendPaymentAuthResultMessage(
+        statusEventType: PaymentStatusEventType,
+        authResult: ConfirmPaymentCoreDto
+    ) {
+        val merchantId = authResult.merchantId
+        val orderId = authResult.orderId
+        val eventType = statusEventType.getEventType()
+
+        try {
+            val uniqueKey = merchantId + "_" + orderId
+            val session =
+                sseConnectionPool.getSession(
+                    uniqueKey
+                )
+
+            session.sendMessage(eventType, authResult)
             log.info(
                 "sse message send. (merchantId: {}, orderId: {}, eventType: {})",
                 merchantId,
