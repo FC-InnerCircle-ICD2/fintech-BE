@@ -2,7 +2,6 @@ package com.inner.circle.core.service
 
 import com.inner.circle.core.service.dto.ConfirmPaymentCoreDto
 import com.inner.circle.core.service.dto.PaymentInfoDto
-import com.inner.circle.core.sse.SseConnectionPool
 import com.inner.circle.core.usecase.ConfirmPaymentUseCase
 import com.inner.circle.core.usecase.ConfirmSimplePaymentUseCase
 import com.inner.circle.exception.AuthenticateException
@@ -22,7 +21,6 @@ import org.springframework.stereotype.Service
 internal class ConfirmPaymentService(
     private val confirmPaymentPort: ConfirmPaymentPort,
     private val savePaymentRequestPort: SavePaymentRequestPort,
-    private val sseConnectionPool: SseConnectionPool,
     @Value("\${card.url.base-url}") private var baseUrl: String,
     @Value("\${card.url.validate-end-point}") private var endPoint: String
 ) : ConfirmPaymentUseCase {
