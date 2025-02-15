@@ -1,6 +1,5 @@
 package com.inner.circle.core.security
 
-import com.inner.circle.exception.UserAuthenticationException
 import com.inner.circle.infra.port.MerchantHandlePort
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -17,7 +16,7 @@ class MerchantDetailService(
         val userDetails =
             MerchantUserDetails(
                 id = merchant.id,
-                username = merchant.username,
+                email = merchant.email,
                 password = merchant.password,
                 name = merchant.name
             )

@@ -16,8 +16,7 @@ internal class MerchantRepositoryImpl(
                 message = "Merchant with id $id not found"
             )
 
-    override fun existsByEmail(email: String): Boolean =
-        merchantJpaRepository.existsByEmail(email)
+    override fun existsByEmail(email: String): Boolean = merchantJpaRepository.existsByEmail(email)
 
     override fun save(merchant: MerchantEntity): MerchantEntity =
         merchantJpaRepository.save(merchant)

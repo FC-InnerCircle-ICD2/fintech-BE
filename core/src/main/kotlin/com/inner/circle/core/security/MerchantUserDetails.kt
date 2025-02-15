@@ -6,14 +6,14 @@ import org.springframework.security.core.userdetails.UserDetails
 
 class MerchantUserDetails(
     private val id: Long,
-    private val username: String,
+    private val email: String,
     private val password: String,
     private val name: String
 ) : UserDetails {
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> =
         mutableListOf(SimpleGrantedAuthority("ROLE_MERCHANT"))
 
-    override fun getUsername(): String = username
+    override fun getUsername(): String = email
 
     override fun getPassword(): String = password
 

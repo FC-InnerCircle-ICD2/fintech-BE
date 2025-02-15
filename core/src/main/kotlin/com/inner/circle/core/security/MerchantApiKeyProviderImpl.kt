@@ -14,7 +14,7 @@ class MerchantApiKeyProviderImpl(
             val mockMerchantUserDetails =
                 MerchantUserDetails(
                     id = 678467526895083491,
-                    username = "test@gmail.com",
+                    email = "test@gmail.com",
                     password = "qwer1234",
                     name = "테스트 상점"
                 )
