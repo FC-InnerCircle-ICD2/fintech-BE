@@ -18,13 +18,14 @@ internal class TransactionService(
         request: GetPaymentWithTransactionsUseCase.FindAllByAccountIdRequest
     ): List<PaymentWithTransactionsDto> {
         val payments =
-            getPaymentPort.findAllByAccountId(
-                GetPaymentPort.FindAllByAccountIdRequest(
-                    accountId = request.accountId,
-                    page = request.page,
-                    limit = request.limit
-                )
-            )
+            getPaymentPort
+                .findAllByAccountId(
+                    GetPaymentPort.FindAllByAccountIdRequest(
+                        accountId = request.accountId,
+                        page = request.page,
+                        limit = request.limit
+                    )
+                ).takeIf { it.isNotEmpty() } ?: return emptyList()
 
         val transactionMap =
             getTransactionPort
@@ -47,7 +48,7 @@ internal class TransactionService(
                 paymentKey = payment.paymentKey,
                 cardNumber = payment.cardNumber,
                 accountId = payment.accountId,
-                transactions = transactionMap.getValue(payment.paymentKey),
+                transactions = transactionMap[payment.paymentKey].orEmpty(),
                 paymentType = PaymentType.of(payment.paymentType),
                 orderId = payment.orderId,
                 orderName = payment.orderName

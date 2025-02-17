@@ -46,12 +46,6 @@ internal class TransactionAdaptor(
                     updatedAt = transaction.updatedAt.toKotlinLocalDateTime()
                 )
             }.toList()
-            .ifEmpty {
-                throw PaymentException.TransactionNotFoundException(
-                    transactionId = "",
-                    message = "Transaction with paymentKeys ${paymentKeys.joinToString()} not found"
-                )
-            }
 
     override fun findAllByPaymentKey(request: GetTransactionPort.Request): List<TransactionDto> =
         transactionRepository
