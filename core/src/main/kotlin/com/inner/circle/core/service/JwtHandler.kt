@@ -2,6 +2,7 @@ package com.inner.circle.core.service
 
 import com.inner.circle.exception.PaymentJwtException
 import com.inner.circle.infra.adaptor.dto.PaymentClaimDto
+import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.io.Encoders
@@ -33,6 +34,21 @@ class JwtHandler(
             .expiration(expireTargetDate)
             .signWith(getSignature(signString = keyString), signAlgorithm)
             .compact()
+
+    fun getAuthorizationTokenClaimsOrNull(
+        token: String,
+        secretKey: String
+    ): Claims? =
+        runCatching {
+            Jwts
+                .parser()
+                .verifyWith(getSignature(signString = secretKey))
+                .build()
+                .parseSignedClaims(token)
+                .payload
+        }.onFailure {
+            logger.error("Invalid token Error Message : ${it.message}", it)
+        }.getOrElse { null }
 
     fun generateToken(
         paymentClaimDto: PaymentClaimDto,

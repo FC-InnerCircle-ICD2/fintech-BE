@@ -1,11 +1,10 @@
 package com.inner.circle.core.security
 
+import com.inner.circle.core.service.JwtHandler
 import com.inner.circle.exception.UserAuthenticationException
 import com.inner.circle.infra.port.AccountFinderPort
 import com.inner.circle.infra.repository.entity.AccountEntity
 import io.jsonwebtoken.Claims
-import io.jsonwebtoken.Jwts
-import io.jsonwebtoken.security.Keys
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -15,39 +14,27 @@ import org.springframework.stereotype.Service
 @Service
 class AccountValidationProviderManager(
     @Value("\${jwt.secret}") private val secret: String,
-    private val accountFinderPort: AccountFinderPort
+    private val accountFinderPort: AccountFinderPort,
+    private val jwtHandler: JwtHandler
 ) : AccountValidationProvider {
     override fun getUserValidAuthenticationOrThrow(token: String): Authentication =
-        getAuthorizationTokenClaimsOrNull(
-            token = token,
-            secretKey = secret
-        )?.let {
-            val accountInfo =
-                accountFinderPort
-                    .findByIdOrNull(
-                        id = it["userId"].toString().toLong()
-                    )?.toUserDetails() ?: throw UserAuthenticationException.UserNotFoundException()
+        jwtHandler
+            .getAuthorizationTokenClaimsOrNull(
+                token = token,
+                secretKey = secret
+            )?.let {
+                val accountInfo =
+                    accountFinderPort
+                        .findByIdOrNull(
+                            id = it.getAccountIdFromClaims()
+                        )?.toUserDetails()
+                        ?: throw UserAuthenticationException.UserNotFoundException()
 
-            UsernamePasswordAuthenticationToken(
-                accountInfo,
-                null
-            )
-        } ?: throw UserAuthenticationException.UnauthorizedException(message = "Invalid Token")
-
-    fun getAuthorizationTokenClaimsOrNull(
-        token: String,
-        secretKey: String
-    ): Claims? =
-        runCatching {
-            Jwts
-                .parser()
-                .verifyWith(Keys.hmacShaKeyFor(secretKey.toByteArray()))
-                .build()
-                .parseSignedClaims(token)
-                .payload
-        }.onFailure {
-            logger.error("Invalid token Error Message : ${it.message}")
-        }.getOrElse { null }
+                UsernamePasswordAuthenticationToken(
+                    accountInfo,
+                    null
+                )
+            } ?: throw UserAuthenticationException.UnauthorizedException(message = "Invalid Token")
 
     private fun AccountEntity.toUserDetails(): AccountDetails =
         AccountDetails(
@@ -55,6 +42,9 @@ class AccountValidationProviderManager(
             userName = this.email,
             userPassword = this.password
         )
+
+    private fun Claims.getAccountIdFromClaims() =
+        (this["data"] as Map<*, *>)["id"].toString().toLong()
 
     companion object {
         private val logger = LoggerFactory.getLogger(AccountValidationProviderManager::class.java)
