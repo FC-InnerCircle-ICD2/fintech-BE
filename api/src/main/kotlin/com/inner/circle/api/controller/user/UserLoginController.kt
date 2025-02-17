@@ -6,12 +6,12 @@ import com.inner.circle.api.controller.dto.UserLoginResponse
 import com.inner.circle.api.controller.request.UserLoginRequest
 import com.inner.circle.core.usecase.TokenHandlerUseCase
 import com.inner.circle.core.usecase.UserLoginUseCase
+import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
 
-@RestController
+@Tag(name = "User - Account", description = "고객(App) 관련 API")
 @PaymentForUserV1Api
 class UserLoginController(
     private val userLoginUseCase: UserLoginUseCase,
