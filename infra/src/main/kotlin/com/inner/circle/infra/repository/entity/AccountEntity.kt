@@ -1,5 +1,6 @@
 package com.inner.circle.infra.repository.entity
 
+import com.inner.circle.infra.type.AccountStatus
 import io.hypersistence.tsid.TSID
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -16,5 +17,5 @@ data class AccountEntity(
     @Column(nullable = false, unique = false, length = 255)
     val password: String,
     @Column(nullable = false, unique = false)
-    val status: Int
+    val status: Int = AccountStatus.ACTIVE.code,
 ) : BaseEntity()

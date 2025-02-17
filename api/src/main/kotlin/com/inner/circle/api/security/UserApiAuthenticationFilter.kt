@@ -19,7 +19,7 @@ class UserApiAuthenticationFilter(
     ) {
         // TODO : Security 로 옮겨야 한다. 임시 처리로 해놓음
         // Security 개선작업 시 옮겨야 함
-        if (request.requestURI == USER_LOGIN_PATH) {
+        if (request.requestURI == USER_LOGIN_PATH || request.requestURI == USER_SIGN_UP_PATH) {
             filterChain.doFilter(request, response)
             return
         }
@@ -40,5 +40,6 @@ class UserApiAuthenticationFilter(
     companion object {
         private const val BEARER_PREFIX = "Bearer "
         private const val USER_LOGIN_PATH = "/api/v1/p/user/sign-in"
+        private const val USER_SIGN_UP_PATH = "/api/v1/p/user/sign-up"
     }
 }
