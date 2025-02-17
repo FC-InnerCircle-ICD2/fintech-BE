@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component
 @Component
 class AccountSaveAdapter(
     private val userRepository: UserRepository,
-    private val bCryptPasswordEncoder: BCryptPasswordEncoder,
-): AccountSavePort {
+    private val bCryptPasswordEncoder: BCryptPasswordEncoder
+) : AccountSavePort {
     override fun saveAccount(account: AccountSavePort.AccountSaveInfo) {
         userRepository.save(
             account.toEntity()
@@ -20,7 +20,6 @@ class AccountSaveAdapter(
     private fun AccountSavePort.AccountSaveInfo.toEntity(): AccountEntity =
         AccountEntity(
             email = email,
-            password = bCryptPasswordEncoder.encode(password),
+            password = bCryptPasswordEncoder.encode(password)
         )
 }
-

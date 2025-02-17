@@ -17,5 +17,5 @@ data class AccountEntity(
     @Column(nullable = false, unique = false, length = 255)
     val password: String,
     @Column(nullable = false, unique = false)
-    val status: Int = AccountStatus.ACTIVE.code,
+    val status: Int = AccountStatus.ACTIVE.code
 ) : BaseEntity()

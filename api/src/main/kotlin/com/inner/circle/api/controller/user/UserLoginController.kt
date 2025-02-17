@@ -46,13 +46,14 @@ class UserLoginController(
     @PostMapping("/sign-up")
     @ResponseStatus(HttpStatus.CREATED)
     fun userSingUp(
-        @RequestBody @Valid userSignUpRequest: UserSignUpRequest,
+        @RequestBody @Valid userSignUpRequest: UserSignUpRequest
     ) {
         userSignUpUseCase.signUp(
-            account = UserSignUpUseCase.UserSignUpInfo(
-                email = userSignUpRequest.email,
-                password = userSignUpRequest.password,
-            )
+            account =
+                UserSignUpUseCase.UserSignUpInfo(
+                    email = userSignUpRequest.email,
+                    password = userSignUpRequest.password
+                )
         )
     }
 }
