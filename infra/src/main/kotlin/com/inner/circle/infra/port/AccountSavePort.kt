@@ -6,5 +6,5 @@ interface AccountSavePort {
         val password: String
     )
 
-    fun saveAccount(account: AccountSaveInfo)
+    fun save(account: AccountSaveInfo)
 }

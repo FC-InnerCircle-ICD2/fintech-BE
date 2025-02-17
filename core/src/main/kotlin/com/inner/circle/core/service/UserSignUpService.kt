@@ -9,7 +9,7 @@ class UserSignUpService(
     private val accountSavePort: AccountSavePort
 ) : UserSignUpUseCase {
     override fun signUp(account: UserSignUpUseCase.UserSignUpInfo) {
-        accountSavePort.saveAccount(
+        accountSavePort.save(
             AccountSavePort.AccountSaveInfo(
                 email = account.email,
                 password = account.password

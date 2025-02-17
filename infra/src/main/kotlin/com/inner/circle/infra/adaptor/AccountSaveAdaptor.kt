@@ -11,7 +11,7 @@ class AccountSaveAdaptor(
     private val accountRepository: AccountRepository,
     private val bCryptPasswordEncoder: BCryptPasswordEncoder
 ) : AccountSavePort {
-    override fun saveAccount(account: AccountSavePort.AccountSaveInfo) {
+    override fun save(account: AccountSavePort.AccountSaveInfo) {
         accountRepository.save(
             account.toEntity()
         )
