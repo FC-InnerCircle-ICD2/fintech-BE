@@ -27,12 +27,12 @@ class UserSseApiController(
     fun connect(
         @RequestParam token: String
     ): ResponseBodyEmitter {
-        val foundPaymentToken =
+        val paymentTokenInfo =
             paymentTokenHandlingUseCase.findPaymentToken(
                 token
             )
-        val orderId = foundPaymentToken.orderId
-        val merchantId = foundPaymentToken.merchantId
+        val orderId = paymentTokenInfo.orderId
+        val merchantId = paymentTokenInfo.merchantId
         val uniqueKey = "${merchantId}_$orderId"
         log.info("SSE user ({}) connected.", uniqueKey)
         val sseConnection =
