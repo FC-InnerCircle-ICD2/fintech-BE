@@ -59,32 +59,35 @@ internal class UserCardService(
         accountId: Long,
         id: Long
     ): UserCardDto {
-        //기존 카드 대표 여부 해제
-        val infraUserCardDto = userCardPort.findByAccountIdAndIsRepresentative(
-            accountId,
-            true
-        )
+        // 기존 카드 대표 여부 해제
+        val infraUserCardDto =
+            userCardPort.findByAccountIdAndIsRepresentative(
+                accountId,
+                true
+            )
 
-        //선택 카드 대표 여부 설정
+        // 선택 카드 대표 여부 설정
         val infraUserCardDto2 = userCardPort.findById(id)
 
-        userCardPort.saveAll(mutableListOf(
-            InfraUserCardDto(
-                id = infraUserCardDto.id,
-                accountId = infraUserCardDto.accountId,
-                isRepresentative = false,
-                cardNumber = infraUserCardDto.cardNumber,
-                expirationPeriod = infraUserCardDto.expirationPeriod,
-                cvc = infraUserCardDto.cvc
-            ),
-            InfraUserCardDto(
-                id = id,
-                accountId = infraUserCardDto2.accountId,
-                isRepresentative = true,
-                cardNumber = infraUserCardDto2.cardNumber,
-                expirationPeriod = infraUserCardDto2.expirationPeriod,
-                cvc = infraUserCardDto2.cvc
-            ))
+        userCardPort.saveAll(
+            mutableListOf(
+                InfraUserCardDto(
+                    id = infraUserCardDto.id,
+                    accountId = infraUserCardDto.accountId,
+                    isRepresentative = false,
+                    cardNumber = infraUserCardDto.cardNumber,
+                    expirationPeriod = infraUserCardDto.expirationPeriod,
+                    cvc = infraUserCardDto.cvc
+                ),
+                InfraUserCardDto(
+                    id = id,
+                    accountId = infraUserCardDto2.accountId,
+                    isRepresentative = true,
+                    cardNumber = infraUserCardDto2.cardNumber,
+                    expirationPeriod = infraUserCardDto2.expirationPeriod,
+                    cvc = infraUserCardDto2.cvc
+                )
+            )
         )
 
         return UserCardDto(
@@ -97,15 +100,15 @@ internal class UserCardService(
         )
     }
 
-
     override fun deleteById(
         accountId: Long,
         id: Long
     ): UserCardDto {
-        val infraUserCardDto = userCardPort.deleteById(
-            accountId,
-            id
-        )
+        val infraUserCardDto =
+            userCardPort.deleteById(
+                accountId,
+                id
+            )
 
         return UserCardDto(
             id = id,

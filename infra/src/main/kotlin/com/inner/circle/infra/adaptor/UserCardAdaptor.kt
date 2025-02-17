@@ -15,13 +15,14 @@ internal class UserCardAdaptor(
 ) : UserCardPort {
     @Transactional
     override fun save(request: UserCardDto): UserCardDto {
-        val userCardEntity = repository.findByAccountIdAndIsRepresentative(
-            request.accountId,
-            true
-        )
+        val userCardEntity =
+            repository.findByAccountIdAndIsRepresentative(
+                request.accountId,
+                true
+            )
 
-        //이미 대표 카드가 있으면 기존 카드 대표 여부 해제
-        if(request.isRepresentative && userCardEntity != null){
+        // 이미 대표 카드가 있으면 기존 카드 대표 여부 해제
+        if (request.isRepresentative && userCardEntity != null) {
             repository.save(
                 UserCardEntity(
                     id = userCardEntity.id,
@@ -34,22 +35,23 @@ internal class UserCardAdaptor(
             )
         }
 
-        //대표 카드가 하나도 없으면 대표 카드로 고정
+        // 대표 카드가 하나도 없으면 대표 카드로 고정
         var isRepresentative = request.isRepresentative
-        if(!request.isRepresentative && userCardEntity == null){
+        if (!request.isRepresentative && userCardEntity == null) {
             isRepresentative = true
         }
 
-        val result = repository.save(
-            UserCardEntity(
-                id = request.id,
-                accountId = request.accountId,
-                isRepresentative = isRepresentative,
-                cardNumber = request.cardNumber,
-                expirationPeriod = request.expirationPeriod,
-                cvc = request.cvc
+        val result =
+            repository.save(
+                UserCardEntity(
+                    id = request.id,
+                    accountId = request.accountId,
+                    isRepresentative = isRepresentative,
+                    cardNumber = request.cardNumber,
+                    expirationPeriod = request.expirationPeriod,
+                    cvc = request.cvc
+                )
             )
-        )
 
         return UserCardDto(
             id = result.id,
@@ -108,12 +110,12 @@ internal class UserCardAdaptor(
         accountId: Long,
         id: Long
     ): UserCardDto {
-        //선택한 카드 삭제
+        // 선택한 카드 삭제
         val userCardEntity = repository.findById(id)
         repository.deleteById(id)
 
-        //해당 카드가 대표 카드인 경우 id가 가장 작은 카드를 대표카드로 설정
-        if(userCardEntity.isRepresentative){
+        // 해당 카드가 대표 카드인 경우 id가 가장 작은 카드를 대표카드로 설정
+        if (userCardEntity.isRepresentative) {
             val UserCardDtoList = repository.findByAccountId(accountId)
             repository.save(
                 UserCardEntity(
@@ -126,7 +128,6 @@ internal class UserCardAdaptor(
                 )
             )
         }
-
 
         return UserCardDto(
             id = userCardEntity.id,
@@ -142,10 +143,11 @@ internal class UserCardAdaptor(
         accountId: Long,
         isRepresentative: Boolean
     ): UserCardDto {
-        val userCardEntity = repository.findByAccountIdAndIsRepresentative(
-            accountId,
-            isRepresentative
-        ) ?: throw PaymentException.CardNotFoundException()
+        val userCardEntity =
+            repository.findByAccountIdAndIsRepresentative(
+                accountId,
+                isRepresentative
+            ) ?: throw PaymentException.CardNotFoundException()
 
         return UserCardDto(
             id = userCardEntity.id,
@@ -158,7 +160,7 @@ internal class UserCardAdaptor(
     }
 
     @Transactional
-    override fun saveAll(userCardDtoList: List<UserCardDto>): List<UserCardDto>{
+    override fun saveAll(userCardDtoList: List<UserCardDto>): List<UserCardDto> {
         repository.saveAll(
             userCardDtoList
                 .map { userCardDto ->
