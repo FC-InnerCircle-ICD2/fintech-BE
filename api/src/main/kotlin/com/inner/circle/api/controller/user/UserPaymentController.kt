@@ -9,6 +9,7 @@ import com.inner.circle.api.controller.dto.CancelPaymentDto
 import com.inner.circle.api.controller.dto.ConfirmPaymentDto
 import com.inner.circle.api.controller.dto.PaymentResponse
 import com.inner.circle.api.controller.dto.PaymentWithTransactionsDto
+import com.inner.circle.api.controller.dto.PaymentsWithTransactionsDto
 import com.inner.circle.api.controller.dto.UserCardDto
 import com.inner.circle.api.controller.request.CancelPaymentRequest
 import com.inner.circle.api.controller.request.ConfirmPaymentRequest
@@ -32,6 +33,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestParam
 import com.inner.circle.core.service.dto.UserCardDto as CoreUserCardDto
 
 @Tag(name = "Payments - User", description = "결제 고객(App) 결제 관련 API")
@@ -252,6 +254,34 @@ class UserPaymentController(
         )
     }
 
+    @Operation(summary = "Payment, Transactions 조회")
+    @GetMapping("/payments")
+    fun getPayments(
+        @AuthenticationPrincipal account: AccountDetails,
+        @RequestParam("page", defaultValue = "0") page: Int,
+        @RequestParam("limit", defaultValue = "20") limit: Int
+    ): PaymentResponse<PaymentsWithTransactionsDto> {
+        val request =
+            GetPaymentWithTransactionsUseCase.FindAllByAccountIdRequest(
+                accountId = account.id,
+                page = page,
+                limit = limit
+            )
+
+        return PaymentResponse.ok(
+            PaymentsWithTransactionsDto(
+                payments =
+                    getPaymentWithTransactionsUseCase
+                        .findAllByAccountId(request)
+                        .map { paymentWithTransactionsDto ->
+                            PaymentWithTransactionsDto.of(
+                                paymentWithTransactionsDto
+                            )
+                        }.toList()
+            )
+        )
+    }
+
     @Operation(summary = "Payment Key를 이용한 Transactions 조회")
     @GetMapping("/payments/{paymentKey}/transactions")
     fun getTransactionsByPaymentKey(
@@ -259,7 +289,7 @@ class UserPaymentController(
         @PathVariable("paymentKey") paymentKey: String
     ): PaymentResponse<PaymentWithTransactionsDto> {
         val request =
-            GetPaymentWithTransactionsUseCase.Request(
+            GetPaymentWithTransactionsUseCase.FindByPaymentKeyRequest(
                 accountId = account.id,
                 paymentKey = paymentKey
             )

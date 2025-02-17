@@ -31,6 +31,28 @@ internal class TransactionAdaptor(
         )
     }
 
+    override fun findAllByPaymentKeyIn(paymentKeys: List<String>): List<TransactionDto> =
+        transactionRepository
+            .findAllByPaymentKeyIn(paymentKeys)
+            .map { transaction ->
+                TransactionDto(
+                    id = requireNotNull(transaction.id),
+                    paymentKey = transaction.paymentKey,
+                    amount = transaction.amount,
+                    status = transaction.status,
+                    reason = transaction.reason,
+                    requestedAt = transaction.requestedAt.toKotlinLocalDateTime(),
+                    createdAt = transaction.createdAt.toKotlinLocalDateTime(),
+                    updatedAt = transaction.updatedAt.toKotlinLocalDateTime()
+                )
+            }.toList()
+            .ifEmpty {
+                throw PaymentException.TransactionNotFoundException(
+                    transactionId = "",
+                    message = "Transaction with paymentKeys ${paymentKeys.joinToString()} not found"
+                )
+            }
+
     override fun findAllByPaymentKey(request: GetTransactionPort.Request): List<TransactionDto> =
         transactionRepository
             .findAllByPaymentKey(request.paymentKey)
