@@ -14,12 +14,54 @@ internal class TransactionService(
     private val getPaymentPort: GetPaymentPort,
     private val getTransactionPort: GetTransactionPort
 ) : GetPaymentWithTransactionsUseCase {
+    override fun findAllByAccountId(
+        request: GetPaymentWithTransactionsUseCase.FindAllByAccountIdRequest
+    ): List<PaymentWithTransactionsDto> {
+        val payments =
+            getPaymentPort
+                .findAllByAccountId(
+                    GetPaymentPort.FindAllByAccountIdRequest(
+                        accountId = request.accountId,
+                        page = request.page,
+                        limit = request.limit
+                    )
+                ).takeIf { it.isNotEmpty() } ?: return emptyList()
+
+        val transactionMap =
+            getTransactionPort
+                .findAllByPaymentKeyIn(paymentKeys = payments.map { it.paymentKey })
+                .map { transaction ->
+                    TransactionDto(
+                        id = transaction.id,
+                        paymentKey = transaction.paymentKey,
+                        amount = transaction.amount,
+                        status = TransactionStatus.of(transaction.status),
+                        reason = transaction.reason,
+                        requestedAt = transaction.requestedAt,
+                        createdAt = transaction.createdAt,
+                        updatedAt = transaction.updatedAt
+                    )
+                }.groupBy { it.paymentKey }
+
+        return payments.map { payment ->
+            PaymentWithTransactionsDto(
+                paymentKey = payment.paymentKey,
+                cardNumber = payment.cardNumber,
+                accountId = payment.accountId,
+                transactions = transactionMap[payment.paymentKey].orEmpty(),
+                paymentType = PaymentType.of(payment.paymentType),
+                orderId = payment.orderId,
+                orderName = payment.orderName
+            )
+        }
+    }
+
     override fun findByPaymentKey(
-        request: GetPaymentWithTransactionsUseCase.Request
+        request: GetPaymentWithTransactionsUseCase.FindByPaymentKeyRequest
     ): PaymentWithTransactionsDto {
         val payment =
             getPaymentPort.findByAccountIdAndPaymentKey(
-                GetPaymentPort.Request(
+                GetPaymentPort.FindByPaymentKeyRequest(
                     accountId = request.accountId,
                     paymentKey = request.paymentKey
                 )

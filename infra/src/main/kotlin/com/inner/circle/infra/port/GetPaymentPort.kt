@@ -1,12 +1,20 @@
 package com.inner.circle.infra.port
 
-import com.inner.circle.infra.repository.entity.PaymentEntity
+import com.inner.circle.infra.adaptor.dto.PaymentDto
 
-fun interface GetPaymentPort {
-    data class Request(
+interface GetPaymentPort {
+    data class FindAllByAccountIdRequest(
+        val accountId: Long,
+        val page: Int,
+        val limit: Int
+    )
+
+    data class FindByPaymentKeyRequest(
         val accountId: Long,
         val paymentKey: String
     )
 
-    fun findByAccountIdAndPaymentKey(request: Request): PaymentEntity
+    fun findAllByAccountId(request: FindAllByAccountIdRequest): List<PaymentDto>
+
+    fun findByAccountIdAndPaymentKey(request: FindByPaymentKeyRequest): PaymentDto
 }
