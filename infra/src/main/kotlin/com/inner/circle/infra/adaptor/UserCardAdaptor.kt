@@ -116,15 +116,15 @@ internal class UserCardAdaptor(
 
         // 해당 카드가 대표 카드인 경우 id가 가장 작은 카드를 대표카드로 설정
         if (userCardEntity.isRepresentative) {
-            val UserCardDtoList = repository.findByAccountId(accountId)
+            val userCardDtoList = repository.findByAccountId(accountId)
             repository.save(
                 UserCardEntity(
-                    id = UserCardDtoList[0].id,
+                    id = userCardDtoList[0].id,
                     accountId = accountId,
                     isRepresentative = true,
-                    cardNumber = UserCardDtoList[0].cardNumber,
-                    expirationPeriod = UserCardDtoList[0].expirationPeriod,
-                    cvc = UserCardDtoList[0].cvc
+                    cardNumber = userCardDtoList[0].cardNumber,
+                    expirationPeriod = userCardDtoList[0].expirationPeriod,
+                    cvc = userCardDtoList[0].cvc
                 )
             )
         }
