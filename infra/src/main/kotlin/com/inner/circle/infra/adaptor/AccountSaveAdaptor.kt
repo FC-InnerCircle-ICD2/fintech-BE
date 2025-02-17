@@ -1,18 +1,18 @@
 package com.inner.circle.infra.adaptor
 
 import com.inner.circle.infra.port.AccountSavePort
-import com.inner.circle.infra.repository.UserRepository
+import com.inner.circle.infra.repository.AccountRepository
 import com.inner.circle.infra.repository.entity.AccountEntity
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Component
 
 @Component
-class AccountSaveAdapter(
-    private val userRepository: UserRepository,
+class AccountSaveAdaptor(
+    private val accountRepository: AccountRepository,
     private val bCryptPasswordEncoder: BCryptPasswordEncoder
 ) : AccountSavePort {
     override fun saveAccount(account: AccountSavePort.AccountSaveInfo) {
-        userRepository.save(
+        accountRepository.save(
             account.toEntity()
         )
     }
