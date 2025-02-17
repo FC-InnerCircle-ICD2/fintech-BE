@@ -217,7 +217,7 @@ class UserPaymentController(
             )
         return PaymentResponse.ok(
             UserCardDto(
-                id = result.id,
+                id = result.id.toString(),
                 accountId = result.accountId,
                 isRepresentative = result.isRepresentative,
                 cardNumber = result.cardNumber,
@@ -237,7 +237,7 @@ class UserPaymentController(
             coreUserCardDtoList
                 .map { coreUserCardDto ->
                     UserCardDto(
-                        id = coreUserCardDto.id,
+                        id = coreUserCardDto.id.toString(),
                         accountId = coreUserCardDto.accountId,
                         isRepresentative = coreUserCardDto.isRepresentative,
                         cardNumber = coreUserCardDto.cardNumber,
@@ -245,6 +245,52 @@ class UserPaymentController(
                         cvc = coreUserCardDto.cvc
                     )
                 }.toList()
+        )
+    }
+
+    @Operation(summary = "유저 카드 삭제")
+    @PostMapping("/cards/delete")
+    fun deleteCard(
+        @AuthenticationPrincipal account: AccountDetails,
+        @RequestBody id: Long
+    ): PaymentResponse<UserCardDto> {
+        val result =
+            userCardUseCase.deleteById(
+                account.id,
+                id
+            )
+        return PaymentResponse.ok(
+            UserCardDto(
+                id = result.id.toString(),
+                accountId = result.accountId,
+                isRepresentative = result.isRepresentative,
+                cardNumber = result.cardNumber,
+                expirationPeriod = result.expirationPeriod,
+                cvc = result.cvc
+            )
+        )
+    }
+
+    @Operation(summary = "유저 대표 카드 변경")
+    @PostMapping("/cards/update")
+    fun updateRepresentativeCard(
+        @AuthenticationPrincipal account: AccountDetails,
+        @RequestBody id: Long
+    ): PaymentResponse<UserCardDto> {
+        val result =
+            userCardUseCase.updateRepresentativeCard(
+                account.id,
+                id
+            )
+        return PaymentResponse.ok(
+            UserCardDto(
+                id = result.id.toString(),
+                accountId = result.accountId,
+                isRepresentative = result.isRepresentative,
+                cardNumber = result.cardNumber,
+                expirationPeriod = result.expirationPeriod,
+                cvc = result.cvc
+            )
         )
     }
 }

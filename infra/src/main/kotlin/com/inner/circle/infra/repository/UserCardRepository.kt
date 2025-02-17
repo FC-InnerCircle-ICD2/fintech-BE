@@ -12,5 +12,11 @@ interface UserCardRepository {
 
     fun findAll(): List<UserCardEntity>
 
-    fun save(userCardEntity: UserCardEntity): UserCardEntity?
+    fun save(userCardEntity: UserCardEntity): UserCardEntity
+
+    fun findById(id: Long): UserCardEntity
+
+    fun deleteById(id: Long)
+
+    fun saveAll(userCardEntityList: List<UserCardEntity>): List<UserCardEntity>
 }

@@ -147,7 +147,7 @@ class MerchantPaymentController(
             coreUserCardDtoList
                 .map { coreUserCardDto ->
                     UserCardDto(
-                        id = coreUserCardDto.id,
+                        id = coreUserCardDto.id.toString(),
                         accountId = coreUserCardDto.accountId,
                         isRepresentative = coreUserCardDto.isRepresentative,
                         cardNumber = coreUserCardDto.cardNumber,
