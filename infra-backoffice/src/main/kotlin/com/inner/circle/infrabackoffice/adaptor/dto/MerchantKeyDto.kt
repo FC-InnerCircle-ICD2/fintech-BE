@@ -1,6 +1,6 @@
 package com.inner.circle.infrabackoffice.adaptor.dto
 
 data class MerchantKeyDto(
-    val id: String,
+    val id: Long,
     val token: String
 )

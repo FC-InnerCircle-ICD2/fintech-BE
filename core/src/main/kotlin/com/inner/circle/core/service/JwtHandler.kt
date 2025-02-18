@@ -2,18 +2,53 @@ package com.inner.circle.core.service
 
 import com.inner.circle.exception.PaymentJwtException
 import com.inner.circle.infra.adaptor.dto.PaymentClaimDto
+import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.io.Encoders
 import io.jsonwebtoken.security.Keys
+import io.jsonwebtoken.security.MacAlgorithm
 import java.util.Date
 import javax.crypto.SecretKey
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 
 @Component
-class JwtHandler {
+class JwtHandler(
+    @Value("\${jwt.secret}") private val secret: String
+) {
     private val logger = LoggerFactory.getLogger(JwtHandler::class.java)
+
+    fun <T> generateTokenBy(
+        expireTargetDate: Date = Date(System.currentTimeMillis() + MILLI_SECONDS_IN_THREE_HOUR),
+        issuedAt: Date = Date(),
+        signAlgorithm: MacAlgorithm = Jwts.SIG.HS256,
+        keyString: String = secret,
+        claimTarget: T
+    ): String =
+        Jwts
+            .builder()
+            .claim(CLAIM_DATA_PREFIX, claimTarget)
+            .issuedAt(issuedAt)
+            .expiration(expireTargetDate)
+            .signWith(getSignature(signString = keyString), signAlgorithm)
+            .compact()
+
+    fun getAuthorizationTokenClaimsOrNull(
+        token: String,
+        secretKey: String
+    ): Claims? =
+        runCatching {
+            Jwts
+                .parser()
+                .verifyWith(getSignature(signString = secretKey))
+                .build()
+                .parseSignedClaims(token)
+                .payload
+        }.onFailure {
+            logger.error("Invalid token Error Message : ${it.message}", it)
+        }.getOrElse { null }
 
     fun generateToken(
         paymentClaimDto: PaymentClaimDto,
@@ -73,4 +108,9 @@ class JwtHandler {
 
     private fun getSignature(signString: String): SecretKey =
         Keys.hmacShaKeyFor(Decoders.BASE64.decode(signString))
+
+    companion object {
+        private const val MILLI_SECONDS_IN_THREE_HOUR = 3 * 60 * 60 * 1000
+        private const val CLAIM_DATA_PREFIX = "data"
+    }
 }

@@ -9,15 +9,15 @@ import org.springframework.stereotype.Service
 class MerchantSignInService(
     private val merchantFinderPort: MerchantFinderPort
 ) : MerchantSignInUseCase {
-    override fun signInMerchant(request: MerchantSignInUseCase.Request): MerchantSignInDto {
+    override fun signIn(request: MerchantSignInUseCase.Request): MerchantSignInDto {
         val merchant =
-            merchantFinderPort.findByUsernamePassword(
-                username = request.username,
+            merchantFinderPort.findByUsernameAndPassword(
+                email = request.email,
                 password = request.password
             )
 
         return MerchantSignInDto(
-            id = merchant.id ?: "",
+            id = merchant.id,
             token = merchant.token,
             name = merchant.name
         )

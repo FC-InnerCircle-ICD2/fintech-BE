@@ -31,7 +31,7 @@ data class PaymentRequestEntity(
     @Enumerated(EnumType.STRING)
     val paymentType: PaymentType = PaymentType.CARD,
     @Column(name = "merchant_id", nullable = false)
-    val merchantId: String,
+    val merchantId: Long,
     @Column(name = "merchant_name")
     val merchantName: String,
     @Column(name = "payment_key")

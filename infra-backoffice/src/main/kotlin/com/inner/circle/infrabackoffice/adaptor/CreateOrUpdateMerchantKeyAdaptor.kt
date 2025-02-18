@@ -12,12 +12,11 @@ internal class CreateOrUpdateMerchantKeyAdaptor(
     override fun createOrUpdateMerchantKey(
         request: CreateOrUpdateMerchantKeyPort.Request
     ): MerchantKeyDto {
-        val merchant = repository.findById(request.id)
-        merchant.token = request.token
-        val result = repository.save(merchant)
+        val newMerchant = repository.findById(request.id).copy(token = request.token)
+        val savedMerchant = repository.save(newMerchant)
         return MerchantKeyDto(
-            id = result.id ?: "",
-            token = result.token
+            id = requireNotNull(savedMerchant.id),
+            token = savedMerchant.token
         )
     }
 }

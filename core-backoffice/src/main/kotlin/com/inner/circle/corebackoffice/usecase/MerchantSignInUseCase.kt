@@ -2,11 +2,11 @@ package com.inner.circle.corebackoffice.usecase
 
 import com.inner.circle.corebackoffice.service.dto.MerchantSignInDto
 
-interface MerchantSignInUseCase {
+fun interface MerchantSignInUseCase {
     data class Request(
-        val username: String,
+        val email: String,
         val password: String
     )
 
-    fun signInMerchant(request: Request): MerchantSignInDto
+    fun signIn(request: Request): MerchantSignInDto
 }

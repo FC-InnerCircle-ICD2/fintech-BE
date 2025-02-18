@@ -11,10 +11,10 @@ fun interface SavePaymentRequestPort {
         val orderName: String?,
         val orderStatus: PaymentProcessStatus,
         val accountId: Long?,
-        val merchantId: String,
-        val paymentKey: String,
+        val merchantId: Long,
+        val paymentKey: String?,
         val amount: BigDecimal,
-        val cardNumber: String,
+        val cardNumber: String?,
         val paymentType: PaymentType,
         val requestTime: LocalDateTime,
         val merchantName: String

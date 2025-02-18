@@ -31,7 +31,7 @@ class PaymentClaimAdaptorTest : AbstractJpaTestWithLocalTestContainer() {
     fun paymentRequestSaveTest() {
         // Given
         val orderId = "12345"
-        val merchantId = "merchant123"
+        val merchantId = 123L
         val paymentClaimDto =
             PaymentClaimDto(
                 paymentRequestId = null,
@@ -54,7 +54,8 @@ class PaymentClaimAdaptorTest : AbstractJpaTestWithLocalTestContainer() {
                 merchantId = merchantId,
                 orderId = orderId,
                 generatedToken = jwtToken,
-                expiresAt = LocalDateTime.now().plusMinutes(3)
+                expiredAt = LocalDateTime.now().plusMinutes(3),
+                signature = ""
             )
 
         val paymentRequestEntity = paymentClaimDto.toInitGenerate(tokenData)
@@ -80,7 +81,7 @@ class PaymentClaimAdaptorTest : AbstractJpaTestWithLocalTestContainer() {
     fun fail_paymentRequestSaveFailureWhenOrderStatusIsReadyAndMinusAmountTest() {
         // Given
         val orderId = "12345"
-        val merchantId = "merchant123"
+        val merchantId = 123L
 
         // When & Then
         val exception =
@@ -110,7 +111,7 @@ class PaymentClaimAdaptorTest : AbstractJpaTestWithLocalTestContainer() {
     fun fail_paymentRequestSaveFailureDueToNullStatusTest() {
         // Given
         val orderId = "12345"
-        val merchantId = "merchant123"
+        val merchantId = 123L
 
         // When & Then
         assertThrows(PaymentClaimException.BadPaymentClaimRequestException::class.java) {
@@ -136,7 +137,7 @@ class PaymentClaimAdaptorTest : AbstractJpaTestWithLocalTestContainer() {
     fun fail_paymentRequestSaveFailureDueToMissingRequiredInformationTest() {
         // Given
         val orderId = "12345"
-        val merchantId = "merchant123"
+        val merchantId = 123L
 
         // When & Then
         assertThrows(PaymentClaimException.BadPaymentClaimRequestException::class.java) {
@@ -162,7 +163,7 @@ class PaymentClaimAdaptorTest : AbstractJpaTestWithLocalTestContainer() {
     fun fail_duplicatePaymentRequestSaveTest() {
         // Given
         val orderId = "12345"
-        val merchantId = "merchant123"
+        val merchantId = 123L
         val paymentClaimDto =
             PaymentClaimDto(
                 paymentRequestId = null,
@@ -185,7 +186,8 @@ class PaymentClaimAdaptorTest : AbstractJpaTestWithLocalTestContainer() {
                 merchantId = merchantId,
                 orderId = orderId,
                 generatedToken = jwtToken,
-                expiresAt = LocalDateTime.now().plusMinutes(3)
+                expiredAt = LocalDateTime.now().plusMinutes(3),
+                signature = ""
             )
 
         val paymentRequestEntity = paymentClaimDto.toInitGenerate(tokenData)
@@ -201,7 +203,7 @@ class PaymentClaimAdaptorTest : AbstractJpaTestWithLocalTestContainer() {
     }
 
     private fun generateJwtToken(
-        merchantId: String,
+        merchantId: Long,
         orderId: String
     ): String = "test_jwt_token"
 }

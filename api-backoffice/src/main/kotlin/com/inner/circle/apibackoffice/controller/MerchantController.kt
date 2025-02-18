@@ -19,15 +19,15 @@ class MerchantController(
     private val merchantSignInUseCase: MerchantSignInUseCase
 ) {
     @Operation(summary = "회원가입")
-    @PostMapping("/users")
+    @PostMapping("/sign-up")
     fun signUp(
         @RequestBody request: SignUpMerchantRequest
     ): BackofficeResponse<MerchantDto> {
         val response =
             MerchantDto.of(
-                merchantSaveUseCase.saveMerchant(
+                merchantSaveUseCase.save(
                     MerchantSaveUseCase.Request(
-                        username = request.username,
+                        email = request.email,
                         password = request.password,
                         name = request.name
                     )
@@ -37,15 +37,15 @@ class MerchantController(
     }
 
     @Operation(summary = "로그인")
-    @PostMapping("users/login")
+    @PostMapping("/sign-in")
     fun signIn(
         @RequestBody request: SignInMerchantRequest
     ): BackofficeResponse<MerchantSignInDto> {
         val response =
             MerchantSignInDto.of(
-                merchantSignInUseCase.signInMerchant(
+                merchantSignInUseCase.signIn(
                     MerchantSignInUseCase.Request(
-                        username = request.username,
+                        email = request.email,
                         password = request.password
                     )
                 )

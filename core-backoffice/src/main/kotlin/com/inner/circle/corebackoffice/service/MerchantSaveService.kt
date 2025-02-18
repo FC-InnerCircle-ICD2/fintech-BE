@@ -14,16 +14,15 @@ class MerchantSaveService(
     private val merchantFinderPort: MerchantFinderPort,
     private val clientCredentialsGenerator: ClientCredentialsGenerator
 ) : MerchantSaveUseCase {
-    override fun saveMerchant(request: MerchantSaveUseCase.Request): MerchantDto {
-        val merchant = merchantFinderPort.findByUsername(request.username)
-        if (merchant != null) {
+    override fun save(request: MerchantSaveUseCase.Request): MerchantDto {
+        if (merchantFinderPort.existsByEmail(request.email)) {
             throw BackofficeException.MerchantAlreadyExistException()
         }
 
         val savedMerchant =
-            merchantSavePort.saveMerchant(
+            merchantSavePort.save(
                 MerchantSavePort.Request(
-                    username = request.username,
+                    email = request.email,
                     password = request.password,
                     token = clientCredentialsGenerator.generateClientSecret(),
                     name = request.name
@@ -32,7 +31,7 @@ class MerchantSaveService(
 
         return MerchantDto(
             id = savedMerchant.id,
-            username = savedMerchant.username,
+            email = savedMerchant.email,
             password = savedMerchant.password,
             token = savedMerchant.token,
             name = savedMerchant.name

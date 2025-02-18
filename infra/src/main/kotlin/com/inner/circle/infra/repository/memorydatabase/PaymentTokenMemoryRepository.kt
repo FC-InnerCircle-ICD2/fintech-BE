@@ -34,7 +34,7 @@ class PaymentTokenMemoryRepository(
         redisTemplate.opsForHash<String, String>().put(
             tokenString,
             "merchantId",
-            paymentToken.merchantId
+            paymentToken.merchantId.toString()
         )
         redisTemplate.opsForHash<String, String>().put(tokenString, "orderId", paymentToken.orderId)
         redisTemplate.opsForHash<String, String>().put(

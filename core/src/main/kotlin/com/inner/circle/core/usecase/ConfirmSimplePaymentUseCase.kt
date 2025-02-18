@@ -5,7 +5,7 @@ import com.inner.circle.core.service.dto.ConfirmPaymentCoreDto
 fun interface ConfirmSimplePaymentUseCase {
     data class Request(
         val orderId: String,
-        val merchantId: String,
+        val merchantId: Long,
         val accountId: Long
     )
 

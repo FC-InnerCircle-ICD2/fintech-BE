@@ -4,10 +4,10 @@ import com.inner.circle.corebackoffice.service.dto.MerchantDto
 
 fun interface MerchantSaveUseCase {
     data class Request(
-        val username: String,
+        val email: String,
         val password: String,
         val name: String
     )
 
-    fun saveMerchant(request: Request): MerchantDto
+    fun save(request: Request): MerchantDto
 }

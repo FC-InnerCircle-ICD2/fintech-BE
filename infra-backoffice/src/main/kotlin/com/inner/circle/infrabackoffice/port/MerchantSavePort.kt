@@ -4,11 +4,11 @@ import com.inner.circle.infrabackoffice.adaptor.dto.MerchantDto
 
 fun interface MerchantSavePort {
     data class Request(
-        val username: String,
+        val email: String,
         val password: String,
         val token: String,
         val name: String
     )
 
-    fun saveMerchant(request: Request): MerchantDto
+    fun save(request: Request): MerchantDto
 }

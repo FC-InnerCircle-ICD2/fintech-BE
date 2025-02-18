@@ -1,7 +1,5 @@
 package com.inner.circle.infrabackoffice.repository
 
-import com.inner.circle.exception.AppException
-import com.inner.circle.exception.HttpStatus
 import com.inner.circle.exception.PaymentException
 import com.inner.circle.infrabackoffice.repository.entity.MerchantEntity
 import org.springframework.data.repository.findByIdOrNull
@@ -11,23 +9,25 @@ import org.springframework.stereotype.Repository
 internal class MerchantRepositoryImpl(
     private val merchantJpaRepository: MerchantJpaRepository
 ) : MerchantRepository {
-    override fun findById(id: String): MerchantEntity =
+    override fun findById(id: Long): MerchantEntity =
         merchantJpaRepository.findByIdOrNull(id)
             ?: throw PaymentException.MerchantNotFoundException(
                 merchantId = id,
                 message = "Merchant with id $id not found"
             )
 
-    override fun findByUsername(username: String): MerchantEntity? =
-        merchantJpaRepository.findByUsername(username)
+    override fun existsByEmail(email: String): Boolean = merchantJpaRepository.existsByEmail(email)
 
     override fun save(merchant: MerchantEntity): MerchantEntity =
         merchantJpaRepository.save(merchant)
 
     override fun findByUsernameAndPassword(
-        username: String,
+        email: String,
         password: String
     ): MerchantEntity =
-        merchantJpaRepository.findByUsernameAndPassword(username, password)
-            ?: throw AppException(HttpStatus.NOT_FOUND, "로그인 정보가 잘 못 되었습니다.")
+        merchantJpaRepository.findByEmailAndPassword(email, password)
+            ?: throw PaymentException.MerchantNotFoundException(
+                merchantId = 0,
+                message = "Invalid email or password"
+            )
 }

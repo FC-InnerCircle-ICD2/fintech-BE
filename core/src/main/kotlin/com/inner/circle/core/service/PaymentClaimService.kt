@@ -18,7 +18,7 @@ class PaymentClaimService(
 ) : PaymentClaimUseCase {
     override fun createPayment(
         request: PaymentClaimUseCase.ClaimRequest,
-        merchantId: String,
+        merchantId: Long,
         merchantName: String
     ): PaymentClaimUseCase.PaymentClaimResponse {
         val (amount, orderId, orderName) = request

@@ -10,7 +10,7 @@ data class MerchantSignInDto(
             merchant: com.inner.circle.corebackoffice.service.dto.MerchantSignInDto
         ): MerchantSignInDto =
             MerchantSignInDto(
-                id = merchant.id,
+                id = merchant.id.toString(),
                 token = merchant.token,
                 name = merchant.name
             )

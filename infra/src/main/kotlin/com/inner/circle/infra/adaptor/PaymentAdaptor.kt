@@ -1,15 +1,19 @@
 package com.inner.circle.infra.adaptor
 
 import com.inner.circle.exception.PaymentException
+import com.inner.circle.infra.adaptor.dto.PaymentDto
+import com.inner.circle.infra.port.GetPaymentPort
 import com.inner.circle.infra.port.PaymentPort
 import com.inner.circle.infra.repository.PaymentRepository
 import com.inner.circle.infra.repository.entity.PaymentEntity
+import kotlinx.datetime.toKotlinLocalDateTime
 import org.springframework.stereotype.Component
 
 @Component
 internal class PaymentAdaptor(
     private val paymentRepository: PaymentRepository
-) : PaymentPort {
+) : PaymentPort,
+    GetPaymentPort {
     override fun save(request: PaymentPort.Request) {
         paymentRepository.save(
             PaymentEntity(
@@ -25,6 +29,59 @@ internal class PaymentAdaptor(
             )
         ) ?: throw PaymentException.PaymentNotSaveException(
             paymentKey = request.paymentKey
+        )
+    }
+
+    override fun findAllByAccountId(
+        request: GetPaymentPort.FindAllByAccountIdRequest
+    ): List<PaymentDto> =
+        paymentRepository
+            .findAllByAccountId(
+                accountId = request.accountId,
+                page = request.page,
+                limit = request.limit
+            ).map { payment ->
+                PaymentDto(
+                    id = requireNotNull(payment.id),
+                    paymentKey = payment.paymentKey,
+                    cardNumber = payment.cardNumber,
+                    currency = payment.currency,
+                    accountId = requireNotNull(payment.accountId),
+                    merchantId = payment.merchantId,
+                    paymentType = payment.paymentType,
+                    orderId = payment.orderId,
+                    orderName = payment.orderName,
+                    createdAt = payment.createdAt.toKotlinLocalDateTime(),
+                    updatedAt = payment.updatedAt.toKotlinLocalDateTime()
+                )
+            }
+
+    override fun findByAccountIdAndPaymentKey(
+        request: GetPaymentPort.FindByPaymentKeyRequest
+    ): PaymentDto {
+        val payment =
+            paymentRepository.findByAccountIdAndPaymentKey(
+                accountId = request.accountId,
+                paymentKey = request.paymentKey
+            )
+                ?: throw PaymentException.PaymentNotFoundException(
+                    paymentId = "",
+                    message =
+                        "Payment not found: " +
+                            "accountId ${request.accountId} paymentKey ${request.paymentKey}"
+                )
+        return PaymentDto(
+            id = requireNotNull(payment.id),
+            paymentKey = payment.paymentKey,
+            cardNumber = payment.cardNumber,
+            currency = payment.currency,
+            accountId = requireNotNull(payment.accountId),
+            merchantId = payment.merchantId,
+            paymentType = payment.paymentType,
+            orderId = payment.orderId,
+            orderName = payment.orderName,
+            createdAt = payment.createdAt.toKotlinLocalDateTime(),
+            updatedAt = payment.updatedAt.toKotlinLocalDateTime()
         )
     }
 }

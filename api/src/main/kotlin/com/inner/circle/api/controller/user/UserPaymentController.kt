@@ -5,21 +5,27 @@ import com.inner.circle.api.application.dto.PaymentStatusChangedSsePaymentReques
 import com.inner.circle.api.application.dto.PaymentStatusEventType
 import com.inner.circle.api.config.SwaggerConfig
 import com.inner.circle.api.controller.PaymentForUserV1Api
+import com.inner.circle.api.controller.dto.CancelPaymentDto
 import com.inner.circle.api.controller.dto.ConfirmPaymentDto
 import com.inner.circle.api.controller.dto.PaymentResponse
+import com.inner.circle.api.controller.dto.PaymentWithTransactionsDto
+import com.inner.circle.api.controller.dto.PaymentsWithTransactionsDto
 import com.inner.circle.api.controller.dto.UserCardDto
+import com.inner.circle.api.controller.request.CancelPaymentRequest
 import com.inner.circle.api.controller.request.ConfirmPaymentRequest
 import com.inner.circle.api.controller.request.ConfirmSimplePaymentRequest
 import com.inner.circle.api.controller.request.UserCardRequest
 import com.inner.circle.core.security.AccountDetails
+import com.inner.circle.core.service.dto.ConfirmPaymentCoreDto
+import com.inner.circle.core.usecase.CancelPaymentUseCase
 import com.inner.circle.core.usecase.ConfirmPaymentUseCase
 import com.inner.circle.core.usecase.ConfirmSimplePaymentUseCase
+import com.inner.circle.core.usecase.GetPaymentWithTransactionsUseCase
 import com.inner.circle.core.usecase.PaymentTokenHandlingUseCase
 import com.inner.circle.core.usecase.UserCardUseCase
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
-import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -27,6 +33,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestParam
 import com.inner.circle.core.service.dto.UserCardDto as CoreUserCardDto
 
 @Tag(name = "Payments - User", description = "결제 고객(App) 결제 관련 API")
@@ -36,7 +43,9 @@ class UserPaymentController(
     private val paymentTokenHandlingUseCase: PaymentTokenHandlingUseCase,
     private val confirmPaymentUseCase: ConfirmPaymentUseCase,
     private val userCardUseCase: UserCardUseCase,
-    private val statusChangedMessageSender: PaymentStatusChangedMessageSender
+    private val cancelPaymentUseCase: CancelPaymentUseCase,
+    private val statusChangedMessageSender: PaymentStatusChangedMessageSender,
+    private val getPaymentWithTransactionsUseCase: GetPaymentWithTransactionsUseCase
 ) {
     private val logger: Logger = LoggerFactory.getLogger(UserPaymentController::class.java)
 
@@ -60,27 +69,25 @@ class UserPaymentController(
             merchantId = merchantId
         )
 
+        val authResult =
+            confirmPaymentUseCase.confirmPayment(
+                ConfirmSimplePaymentUseCase.Request(
+                    orderId = orderId,
+                    merchantId = merchantId,
+                    accountId = accountId
+                )
+            )
+
         val data =
             ConfirmPaymentDto.of(
-                confirmPaymentUseCase.confirmPayment(
-                    ConfirmSimplePaymentUseCase.Request(
-                        orderId = orderId,
-                        merchantId = merchantId,
-                        accountId = accountId
-                    )
-                )
+                authResult
             )
         val response =
             PaymentResponse.ok(
                 data
             )
 
-        sendStatusChangedMessage(
-            status = PaymentStatusEventType.IN_PROGRESS,
-            orderId = orderId,
-            merchantId = merchantId
-        )
-
+        sendAuthResultMessage(authResult)
         return response
     }
 
@@ -119,13 +126,49 @@ class UserPaymentController(
         return response
     }
 
-    @Operation(summary = "결제 취소 - paymentKey")
-    @PostMapping("/orders/{paymentKey}/cancel")
+    @Operation(summary = "결제 취소")
+    @PostMapping("/cancel")
     fun cancelPaymentConfirmWithOrderId(
-        @PathVariable("paymentKey") paymentKey: String,
-        servletRequest: HttpServletRequest
-    ): PaymentResponse<String> {
-        val response = PaymentResponse.ok("결제가 취소되었습니다.")
+        @AuthenticationPrincipal account: AccountDetails,
+        @RequestBody cancelPaymentRequest: CancelPaymentRequest
+    ): PaymentResponse<CancelPaymentDto> {
+        val accountId = account.id
+        val foundPaymentToken =
+            paymentTokenHandlingUseCase.findPaymentToken(
+                cancelPaymentRequest.token
+            )
+        val orderId = foundPaymentToken.orderId
+        val merchantId = foundPaymentToken.merchantId
+
+        sendStatusChangedMessage(
+            status = PaymentStatusEventType.IN_VERIFICATE,
+            orderId = orderId,
+            merchantId = merchantId
+        )
+
+        val cancelResult =
+            cancelPaymentUseCase.cancelPayment(
+                CancelPaymentUseCase.Request(
+                    orderId = orderId,
+                    merchantId = merchantId,
+                    accountId = accountId
+                )
+            )
+
+        val data =
+            CancelPaymentDto.of(
+                cancelResult
+            )
+        val response =
+            PaymentResponse.ok(
+                data
+            )
+
+        sendStatusChangedMessage(
+            status = PaymentStatusEventType.CANCELED,
+            orderId = orderId,
+            merchantId = merchantId
+        )
 
         return response
     }
@@ -133,7 +176,7 @@ class UserPaymentController(
     private fun sendStatusChangedMessage(
         status: PaymentStatusEventType,
         orderId: String,
-        merchantId: String
+        merchantId: Long
     ) {
         try {
             statusChangedMessageSender.sendProcessChangedMessage(
@@ -146,6 +189,18 @@ class UserPaymentController(
             )
         } catch (e: Exception) {
             logger.error("Error while send ${status.name} Status.", e)
+        }
+    }
+
+    private fun sendAuthResultMessage(authResult: ConfirmPaymentCoreDto) {
+        val inProgress = PaymentStatusEventType.IN_PROGRESS
+        try {
+            statusChangedMessageSender.sendPaymentAuthResultMessage(
+                inProgress,
+                authResult
+            )
+        } catch (e: Exception) {
+            logger.error("Error while send ${inProgress.name} Status.", e)
         }
     }
 
@@ -196,6 +251,53 @@ class UserPaymentController(
                         cvc = coreUserCardDto.cvc
                     )
                 }.toList()
+        )
+    }
+
+    @Operation(summary = "Payment, Transactions 조회")
+    @GetMapping("/payments")
+    fun getPayments(
+        @AuthenticationPrincipal account: AccountDetails,
+        @RequestParam("page", defaultValue = "0") page: Int,
+        @RequestParam("limit", defaultValue = "20") limit: Int
+    ): PaymentResponse<PaymentsWithTransactionsDto> {
+        val request =
+            GetPaymentWithTransactionsUseCase.FindAllByAccountIdRequest(
+                accountId = account.id,
+                page = page,
+                limit = limit
+            )
+
+        return PaymentResponse.ok(
+            PaymentsWithTransactionsDto(
+                payments =
+                    getPaymentWithTransactionsUseCase
+                        .findAllByAccountId(request)
+                        .map { paymentWithTransactionsDto ->
+                            PaymentWithTransactionsDto.of(
+                                paymentWithTransactionsDto
+                            )
+                        }.toList()
+            )
+        )
+    }
+
+    @Operation(summary = "Payment Key를 이용한 Transactions 조회")
+    @GetMapping("/payments/{paymentKey}/transactions")
+    fun getTransactionsByPaymentKey(
+        @AuthenticationPrincipal account: AccountDetails,
+        @PathVariable("paymentKey") paymentKey: String
+    ): PaymentResponse<PaymentWithTransactionsDto> {
+        val request =
+            GetPaymentWithTransactionsUseCase.FindByPaymentKeyRequest(
+                accountId = account.id,
+                paymentKey = paymentKey
+            )
+        return PaymentResponse.ok(
+            PaymentWithTransactionsDto.of(
+                getPaymentWithTransactionsUseCase
+                    .findByPaymentKey(request)
+            )
         )
     }
 }

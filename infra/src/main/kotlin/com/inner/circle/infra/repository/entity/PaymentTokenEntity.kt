@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter
 private val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
 
 data class PaymentTokenEntity(
-    val merchantId: String,
+    val merchantId: Long,
     val orderId: String,
     val generatedToken: String,
     val signature: String
@@ -19,7 +19,7 @@ data class PaymentTokenEntity(
                     tokenData["token"]
                         ?: throw PaymentJwtException.TokenNotFoundException(notFoundMessage),
                 merchantId =
-                    tokenData["merchantId"]
+                    tokenData["merchantId"]?.toLong()
                         ?: throw PaymentJwtException.TokenNotFoundException(notFoundMessage),
                 orderId =
                     tokenData["orderId"]
