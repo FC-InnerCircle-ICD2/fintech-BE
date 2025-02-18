@@ -4,6 +4,8 @@ import com.inner.circle.infra.type.AccountStatus
 import io.hypersistence.tsid.TSID
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 
@@ -16,6 +18,7 @@ data class AccountEntity(
     val email: String,
     @Column(nullable = false, unique = false, length = 255)
     val password: String,
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, unique = false)
-    val status: Int = AccountStatus.ACTIVE.code
+    val status: AccountStatus = AccountStatus.ACTIVE
 ) : BaseEntity()

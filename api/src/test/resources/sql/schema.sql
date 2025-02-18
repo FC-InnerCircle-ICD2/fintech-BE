@@ -83,7 +83,7 @@ create table if not exists account
     email      varchar(255)                           not null
         unique,
     password   varchar(255)                           not null,
-    status     integer                                not null,
+    status     varchar(30)                            not null,
     created_at timestamp(6) default CURRENT_TIMESTAMP not null,
     updated_at timestamp(6) default CURRENT_TIMESTAMP not null
 );
