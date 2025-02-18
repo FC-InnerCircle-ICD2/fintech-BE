@@ -28,7 +28,6 @@ class UserSseApiController(
         @RequestParam merchantId: String,
         @RequestParam orderId: String
     ): ResponseBodyEmitter {
-
         val uniqueKey = "${merchantId}_$orderId"
         log.info("SSE user ({}) connected.", uniqueKey)
         val sseConnection =
