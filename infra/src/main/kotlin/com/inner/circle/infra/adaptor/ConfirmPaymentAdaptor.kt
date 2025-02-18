@@ -1,6 +1,5 @@
 package com.inner.circle.infra.adaptor
 
-import com.inner.circle.exception.AuthenticateException
 import com.inner.circle.exception.PaymentException
 import com.inner.circle.exception.UserAuthenticationException
 import com.inner.circle.infra.adaptor.dto.ConfirmPaymentInfraDto
@@ -33,10 +32,7 @@ internal class ConfirmPaymentAdaptor(
             userCardRepository.findByAccountIdAndIsRepresentative(
                 accountId,
                 true
-            )
-                ?: throw AuthenticateException.CardNotFoundException(
-                    "user card not found. (order_id : $orderId)"
-                )
+            ) ?: throw PaymentException.CardNotFoundException()
 
         return ConfirmPaymentInfraDto(
             orderId = paymentRequest.orderId,
