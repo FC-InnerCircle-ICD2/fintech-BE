@@ -1,45 +1,67 @@
 package com.inner.circle.apibackoffice.controller
 
-import com.inner.circle.apibackoffice.controller.dto.PaymentDto
-import com.inner.circle.apibackoffice.controller.dto.TransactionDto
-import com.inner.circle.apibackoffice.controller.dto.TransactionsDto
+import com.inner.circle.apibackoffice.controller.dto.PaymentWithTransactionsDto
+import com.inner.circle.apibackoffice.controller.dto.PaymentsWithTransactionsDto
 import com.inner.circle.apibackoffice.exception.BackofficeResponse
-import com.inner.circle.corebackoffice.usecase.GetPaymentUseCase
-import com.inner.circle.corebackoffice.usecase.GetTransactionUseCase
+import com.inner.circle.corebackoffice.usecase.GetPaymentWithTransactionsUseCase
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestParam
 
 @Tag(name = "Payment", description = "Payment API")
 @BackofficeV1Api
 class PaymentController(
-    private val getPaymentUseCase: GetPaymentUseCase,
-    private val getTransactionUseCase: GetTransactionUseCase
+    private val getPaymentWithTransactionsUseCase: GetPaymentWithTransactionsUseCase
 ) {
-    @Operation(summary = "Payment 조회")
-    @GetMapping("/payments/{paymentKey}")
-    fun getPayment(
-        @PathVariable("paymentKey") paymentKey: String
-    ): BackofficeResponse<PaymentDto> {
-        val request = GetPaymentUseCase.Request(paymentKey)
+    @Operation(summary = "Payment, Transactions 조회")
+    @GetMapping("/payments")
+    fun getPayments(
+        // TODO: 추후 인증/인가 적용시 적용
+//        @AuthenticationPrincipal merchant: MerchantUserDetails,
+        @RequestParam("merchantId", defaultValue = "1707665290123456") merchantId: Long,
+        @RequestParam("page", defaultValue = "0") page: Int,
+        @RequestParam("limit", defaultValue = "20") limit: Int
+    ): BackofficeResponse<PaymentsWithTransactionsDto> {
+        val request =
+            GetPaymentWithTransactionsUseCase.FindAllByMerchantIdRequest(
+                merchantId = merchantId,
+                page = page,
+                limit = limit
+            )
+
         return BackofficeResponse.ok(
-            PaymentDto.of(getPaymentUseCase.getPaymentByPaymentKey(request))
+            PaymentsWithTransactionsDto(
+                payments =
+                    getPaymentWithTransactionsUseCase
+                        .findAllByMerchantId(request)
+                        .map { paymentWithTransactionsDto ->
+                            PaymentWithTransactionsDto.of(
+                                paymentWithTransactionsDto
+                            )
+                        }.toList()
+            )
         )
     }
 
     @Operation(summary = "Payment Key를 이용한 Transactions 조회")
     @GetMapping("/payments/{paymentKey}/transactions")
-    fun getTransactions(
+    fun getTransactionsByPaymentKey(
+        // TODO: 추후 인증/인가 적용시 적용
+//        @AuthenticationPrincipal merchant: MerchantUserDetails,
+        @RequestParam("merchantId", defaultValue = "1707665290123456") merchantId: Long,
         @PathVariable("paymentKey") paymentKey: String
-    ): BackofficeResponse<TransactionsDto> {
-        val request = GetTransactionUseCase.Request(paymentKey)
+    ): BackofficeResponse<PaymentWithTransactionsDto> {
+        val request =
+            GetPaymentWithTransactionsUseCase.FindByPaymentKeyRequest(
+                merchantId = merchantId,
+                paymentKey = paymentKey
+            )
         return BackofficeResponse.ok(
-            TransactionsDto(
-                getTransactionUseCase
-                    .getTransactionsByPaymentKey(request)
-                    .map { transaction -> TransactionDto.of(transaction) }
-                    .toList()
+            PaymentWithTransactionsDto.of(
+                getPaymentWithTransactionsUseCase
+                    .findByPaymentKey(request)
             )
         )
     }

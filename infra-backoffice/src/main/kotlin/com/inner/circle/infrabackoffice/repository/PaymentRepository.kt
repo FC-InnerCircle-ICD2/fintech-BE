@@ -3,7 +3,14 @@ package com.inner.circle.infrabackoffice.repository
 import com.inner.circle.infrabackoffice.repository.entity.PaymentEntity
 
 interface PaymentRepository {
-    fun save(payment: PaymentEntity): PaymentEntity
+    fun findAllByMerchantId(
+        merchantId: Long,
+        page: Int,
+        limit: Int
+    ): List<PaymentEntity>
 
-    fun findByPaymentKey(paymentKey: String): PaymentEntity?
+    fun findByMerchantIdAndPaymentKey(
+        merchantId: Long,
+        paymentKey: String
+    ): PaymentEntity?
 }

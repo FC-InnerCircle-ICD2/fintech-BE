@@ -11,6 +11,7 @@ data class TransactionDto(
     val amount: BigDecimal,
     val status: TransactionStatus,
     val reason: String?,
+    val requestedAt: LocalDateTime,
     val createdAt: LocalDateTime,
     val updatedAt: LocalDateTime
 ) {
@@ -22,6 +23,7 @@ data class TransactionDto(
                 amount = transaction.amount,
                 status = transaction.status,
                 reason = transaction.reason,
+                requestedAt = transaction.requestedAt,
                 createdAt = transaction.createdAt,
                 updatedAt = transaction.updatedAt
             )

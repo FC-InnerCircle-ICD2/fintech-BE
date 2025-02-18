@@ -16,7 +16,11 @@ internal class PaymentRepositoryImpl(
         page: Int,
         limit: Int
     ): List<PaymentEntity> =
-        paymentJpaRepository.findAllByAccountId(accountId, PageRequest.of(page, limit)).content
+        paymentJpaRepository
+            .findAllByAccountId(
+                accountId = accountId,
+                pageable = PageRequest.of(page, limit)
+            ).content
 
     override fun findByAccountIdAndPaymentKey(
         accountId: Long,

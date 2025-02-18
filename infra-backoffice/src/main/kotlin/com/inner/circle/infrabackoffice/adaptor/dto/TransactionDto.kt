@@ -10,6 +10,7 @@ data class TransactionDto(
     val amount: BigDecimal,
     val status: TransactionStatus,
     val reason: String?,
+    val requestedAt: LocalDateTime,
     val createdAt: LocalDateTime,
     val updatedAt: LocalDateTime
 )
