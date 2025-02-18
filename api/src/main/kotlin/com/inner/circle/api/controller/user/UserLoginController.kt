@@ -1,17 +1,23 @@
 package com.inner.circle.api.controller.user
 
+import com.inner.circle.api.config.SwaggerConfig
 import com.inner.circle.api.controller.PaymentForUserV1Api
 import com.inner.circle.api.controller.dto.PaymentResponse
+import com.inner.circle.api.controller.dto.UserInfoResponse
 import com.inner.circle.api.controller.dto.UserLoginResponse
 import com.inner.circle.api.controller.request.UserLoginRequest
 import com.inner.circle.api.controller.request.UserSignUpRequest
+import com.inner.circle.core.security.AccountDetails
 import com.inner.circle.core.usecase.TokenHandlerUseCase
 import com.inner.circle.core.usecase.UserLoginUseCase
 import com.inner.circle.core.usecase.UserSignUpUseCase
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
+import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -59,4 +65,14 @@ class UserLoginController(
                 )
         )
     }
+
+    @GetMapping("/me")
+    @SecurityRequirement(name = SwaggerConfig.BEARER_AUTH)
+    fun getCurrentUserInfo(
+        @AuthenticationPrincipal user: AccountDetails,
+    ): UserInfoResponse =
+        UserInfoResponse(
+            id = user.id.toString(),
+            email = user.username,
+        )
 }
