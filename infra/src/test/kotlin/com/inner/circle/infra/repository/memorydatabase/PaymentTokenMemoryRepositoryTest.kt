@@ -4,10 +4,8 @@ import com.inner.circle.exception.PaymentJwtException
 import com.inner.circle.infra.config.TestRedisConfiguration
 import com.inner.circle.infra.repository.entity.PaymentTokenEntity
 import java.time.LocalDateTime
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertFalse
+import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -33,59 +31,32 @@ class PaymentTokenMemoryRepositoryTest {
         repository = PaymentTokenMemoryRepository(redisTemplate)
         val paymentToken =
             PaymentTokenEntity(
-                merchantId = "merchant1",
+                merchantId = 123L,
                 orderId = "order1",
                 generatedToken = "token123",
-                expiresAt = LocalDateTime.now().plusMinutes(5)
+                "test"
             )
-        val key = "${paymentToken.merchantId}:${paymentToken.orderId}"
-        val tokenString = paymentToken.toString()
+        val key = "token123"
 
-        repository.savePaymentToken(paymentToken)
+        repository.savePaymentToken(paymentToken, LocalDateTime.now().plusMinutes(5))
 
-        val savedTokenString = redisTemplate.opsForValue()[key]
-        assertNotNull(savedTokenString)
-        assertEquals(tokenString, savedTokenString)
-    }
-
-    @DisplayName("토큰이 존재하면 해당 토큰 문자열을 확인할 수 있다.")
-    @Test
-    fun `getPaymentToken should return token when exists`() {
-        repository = PaymentTokenMemoryRepository(redisTemplate)
-        val key = "merchant1:order1"
-        val tokenString = "merchant1,order1,token123,${LocalDateTime.now().plusMinutes(5)}"
-        redisTemplate.opsForValue()[key] = tokenString
-
-        val token = repository.getPaymentDataFromToken("merchant1", "order1")
-
-        assertNotNull(token)
-        assertEquals("merchant1", token.merchantId)
-        assertEquals("order1", token.orderId)
-        assertEquals("token123", token.generatedToken)
+        val savedToken = redisTemplate.opsForHash<String, String>().entries("token123")
+        assertNotNull(savedToken)
+        Assertions.assertThat(savedToken["token"]).isEqualTo("token123")
+        Assertions.assertThat(savedToken["merchantId"]).isEqualTo("123")
+        Assertions.assertThat(savedToken["orderId"]).isEqualTo("order1")
+        Assertions.assertThat(savedToken["signature"]).isEqualTo("test")
     }
 
     @DisplayName("토큰을 찾지 못하면 예외를 던진다.")
     @Test
     fun `fail_getPaymentToken should throw exception when token not found`() {
         repository = PaymentTokenMemoryRepository(redisTemplate)
-        val key = "merchant2:order1"
+        val key = "testToken"
 
         assertThrows<PaymentJwtException.TokenNotFoundException> {
-            repository.getPaymentDataFromToken("merchant2", "order1")
+            repository.getPaymentDataFromToken(key)
         }
-    }
-
-    @DisplayName("만료된 토큰을 조회 시 예외를 던진다.")
-    @Test
-    fun `fail_isExpiredByToken should return true when token not found`() {
-        repository = PaymentTokenMemoryRepository(redisTemplate)
-        val key = "merchant999:order123"
-        val tokenString = "merchant999,order123,token123,${LocalDateTime.now().plusNanos(1)}"
-        redisTemplate.opsForValue()[key] = tokenString
-
-        val expiredByToken = repository.isExpiredByToken("merchant999", "order123")
-
-        assertTrue(expiredByToken)
     }
 
     @DisplayName("TTL 만료된 토큰 동작 테스트 - 토큰이 확인되지 않으므로 예외를 반환한다.")
@@ -94,31 +65,18 @@ class PaymentTokenMemoryRepositoryTest {
         repository = PaymentTokenMemoryRepository(redisTemplate)
         val paymentToken =
             PaymentTokenEntity(
-                merchantId = "merchant10",
+                merchantId = 12310L,
                 orderId = "order10",
                 generatedToken = "token123",
-                expiresAt = LocalDateTime.now().plusSeconds(1)
+                "test"
             )
 
-        repository.savePaymentToken(paymentToken)
+        repository.savePaymentToken(paymentToken, LocalDateTime.now().plusSeconds(1))
 
         Thread.sleep(1500)
 
         assertThrows<PaymentJwtException.TokenNotFoundException> {
-            repository.getPaymentDataFromToken("merchant10", "order10")
+            repository.getPaymentDataFromToken("token123")
         }
-    }
-
-    @DisplayName("토큰을 조회할 때 만료되지 않았으면 false를 반환한다.")
-    @Test
-    fun `isExpiredByToken should return false when token is not expired`() {
-        repository = PaymentTokenMemoryRepository(redisTemplate)
-        val key = "merchant1:order1"
-        val tokenString = "merchant1,order1,token123,${LocalDateTime.now().plusMinutes(5)}"
-        redisTemplate.opsForValue()[key] = tokenString
-
-        val isExpired = repository.isExpiredByToken("merchant1", "order1")
-
-        assertFalse(isExpired)
     }
 }

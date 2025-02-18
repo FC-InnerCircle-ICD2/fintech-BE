@@ -1,10 +1,12 @@
 package com.inner.circle.infra.adaptor.dto
 
+import com.google.common.hash.Hashing
 import com.inner.circle.exception.PaymentClaimException
 import com.inner.circle.infra.repository.entity.PaymentRequestEntity
 import com.inner.circle.infra.repository.entity.PaymentStatusType
 import com.inner.circle.infra.repository.entity.PaymentType
 import java.math.BigDecimal
+import java.nio.charset.StandardCharsets
 import java.time.LocalDateTime
 
 class PaymentClaimDto(
@@ -60,7 +62,8 @@ class PaymentClaimDto(
             orderId: String?
         ) {
             if (orderName.isNullOrEmpty() ||
-                orderId.isNullOrEmpty()
+                orderId.isNullOrEmpty() ||
+                merchantId <= 0L
             ) {
                 throw PaymentClaimException.BadPaymentClaimRequestException()
             }
@@ -86,7 +89,13 @@ class PaymentClaimDto(
             cardNumber = cardNumber,
             paymentKey = paymentKey,
             amount = amount,
-            paymentToken = tokenData.generatedToken,
+            paymentToken =
+                Hashing
+                    .murmur3_128()
+                    .hashString(
+                        tokenData.generatedToken,
+                        StandardCharsets.UTF_8
+                    ).toString(),
             requestTime = requestTime
         )
 }
