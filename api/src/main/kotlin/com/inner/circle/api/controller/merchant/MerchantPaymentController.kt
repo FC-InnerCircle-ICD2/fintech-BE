@@ -17,6 +17,7 @@ import com.inner.circle.core.usecase.UserCardUseCase
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
+import jakarta.validation.Valid
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -40,7 +41,7 @@ class MerchantPaymentController(
     @PostMapping
     fun createPayment(
         @AuthenticationPrincipal merchantUserDetails: MerchantUserDetails,
-        @RequestBody request: PaymentClaimRequest
+        @Valid @RequestBody request: PaymentClaimRequest
     ): PaymentResponse<PaymentClaimUseCase.PaymentClaimResponse> {
         val merchantId = merchantUserDetails.getId()
         val merchantName = merchantUserDetails.getName()
