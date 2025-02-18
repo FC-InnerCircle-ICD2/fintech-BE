@@ -21,9 +21,7 @@ class MerchantSseApiController(
     private val sseConnectionPool: SseConnectionPool,
     private val objectMapper: ObjectMapper
 ) {
-    companion object {
-        private val log = LoggerFactory.getLogger(MerchantSseApiController::class.java)
-    }
+    private val log = LoggerFactory.getLogger(MerchantSseApiController::class.java)
 
     @GetMapping(path = ["/sse/connect"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
     fun connect(
@@ -31,7 +29,7 @@ class MerchantSseApiController(
         @RequestParam orderId: String
     ): ResponseBodyEmitter {
         val merchantId = merchantUserDetails.getId().toString()
-        log.info("SSE user {}", merchantId + "_" + orderId)
+        log.info("SSE merchant ({}) connected.", merchantId + "_" + orderId)
 
         val sseConnection =
             com.inner.circle.core.sse.SseConnection.connect(
@@ -45,17 +43,20 @@ class MerchantSseApiController(
         return sseConnection.sseEmitter
     }
 
+    @Deprecated("test용으로 구성된 api이므로 제거 예정입니다.")
     @GetMapping("/sse/pushEvent")
     fun pushEvent(
         @AuthenticationPrincipal merchantUserDetails: MerchantUserDetails,
         @RequestParam orderId: String,
         @RequestParam message: String
     ) {
-        val sseConnection =
-            sseConnectionPool.getSession(
+        val connection =
+            sseConnectionPool.getSessions(
                 merchantUserDetails.getId().toString() + "_" + orderId
             )
 
-        sseConnection.sendMessage(message)
+        for (sseConnection in connection) {
+            sseConnection.sendMessage(message)
+        }
     }
 }

@@ -6,7 +6,7 @@ interface ConnectionPool<T, R> {
         session: R
     )
 
-    fun getSession(uniqueKey: T): R
+    fun getSessions(uniqueKey: T): List<R>
 
     fun onCompletionCallback(session: R)
 }
