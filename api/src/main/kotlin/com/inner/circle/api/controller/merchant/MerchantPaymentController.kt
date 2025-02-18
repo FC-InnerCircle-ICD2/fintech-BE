@@ -41,7 +41,7 @@ class MerchantPaymentController(
     @PostMapping
     fun createPayment(
         @AuthenticationPrincipal merchantUserDetails: MerchantUserDetails,
-       @Valid @RequestBody request: PaymentClaimRequest
+        @Valid @RequestBody request: PaymentClaimRequest
     ): PaymentResponse<PaymentClaimUseCase.PaymentClaimResponse> {
         val merchantId = merchantUserDetails.getId()
         val merchantName = merchantUserDetails.getName()
