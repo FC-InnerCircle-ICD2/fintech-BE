@@ -260,7 +260,7 @@ class UserPaymentController(
     @DeleteMapping("/cards/{cardId}/delete")
     fun deleteCard(
         @AuthenticationPrincipal account: AccountDetails,
-        @PathVariable("cardId")  cardId: Long
+        @PathVariable("cardId") cardId: Long
     ): PaymentResponse<UserCardDto> {
         val result =
             userCardUseCase.deleteById(
@@ -283,7 +283,7 @@ class UserPaymentController(
     @PatchMapping("/cards/{cardId}")
     fun updateRepresentativeCard(
         @AuthenticationPrincipal account: AccountDetails,
-        @PathVariable("cardId")  cardId: Long
+        @PathVariable("cardId") cardId: Long
     ): PaymentResponse<List<UserCardDto>> {
         val result =
             userCardUseCase.updateRepresentativeCard(

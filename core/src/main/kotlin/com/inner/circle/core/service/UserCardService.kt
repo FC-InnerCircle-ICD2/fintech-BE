@@ -64,13 +64,14 @@ internal class UserCardService(
             userCardPort.findByAccountId(accountId)
 
         // 대표 카드 변경
-        val result = userCardPort.saveAll(
-            infraUserCardDtoList.map { infraUserCardDto ->
-                infraUserCardDto.copy(
-                    isRepresentative = (id == infraUserCardDto.id)
-                )
-            }
-        )
+        val result =
+            userCardPort.saveAll(
+                infraUserCardDtoList.map { infraUserCardDto ->
+                    infraUserCardDto.copy(
+                        isRepresentative = (id == infraUserCardDto.id)
+                    )
+                }
+            )
 
         return result
             .map { userCardDto ->
