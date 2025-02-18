@@ -11,12 +11,26 @@ import javax.security.sasl.AuthenticationException
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 
 @RestControllerAdvice
 class GlobalExceptionHandler {
     private val logger = LoggerFactory.getLogger(GlobalExceptionHandler::class.java)
+
+    @ExceptionHandler(MethodArgumentNotValidException::class)
+    fun handleValidationException(ex: MethodArgumentNotValidException): ResponseEntity<PaymentResponse<Nothing>> {
+        return ResponseEntity(
+            PaymentResponse.fail(
+                error = PaymentError(
+                    code = HttpStatus.BAD_REQUEST.toString(),
+                    message = ex.bindingResult.allErrors.first().defaultMessage ?: "Invalid Argument"
+                )
+            ),
+            HttpStatus.BAD_REQUEST,
+        )
+    }
 
     @ExceptionHandler(AppException::class)
     @ApiResponse(

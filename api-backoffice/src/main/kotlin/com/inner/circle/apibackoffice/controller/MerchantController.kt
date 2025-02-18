@@ -9,6 +9,7 @@ import com.inner.circle.corebackoffice.usecase.MerchantSaveUseCase
 import com.inner.circle.corebackoffice.usecase.MerchantSignInUseCase
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
+import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 
@@ -21,7 +22,7 @@ class MerchantController(
     @Operation(summary = "회원가입")
     @PostMapping("/sign-up")
     fun signUp(
-        @RequestBody request: SignUpMerchantRequest
+        @RequestBody @Valid request: SignUpMerchantRequest
     ): BackofficeResponse<MerchantDto> {
         val response =
             MerchantDto.of(
