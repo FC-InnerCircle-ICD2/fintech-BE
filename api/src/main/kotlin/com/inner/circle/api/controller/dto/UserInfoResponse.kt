@@ -10,7 +10,7 @@ data class UserInfoResponse(
         fun from(userInfo: AccountDetails): UserInfoResponse =
             UserInfoResponse(
                 id = userInfo.id.toString(),
-                email = userInfo.username,
+                email = userInfo.username
             )
     }
 }
