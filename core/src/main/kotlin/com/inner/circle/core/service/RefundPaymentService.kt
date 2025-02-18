@@ -30,7 +30,7 @@ internal class RefundPaymentService(
             }
 
         if (totalAmount.compareTo(BigDecimal.ZERO) == 0) {
-            PaymentException.AlreadyRefundException(paymentKey)
+            throw PaymentException.AlreadyRefundException(paymentKey)
         }
 
         val infraUserCardDto =
@@ -74,7 +74,7 @@ internal class RefundPaymentService(
             }
 
         if (amount.compareTo(totalAmount) > 0) {
-            PaymentException.ExceedRefundAmountException(
+            throw PaymentException.ExceedRefundAmountException(
                 paymentKey,
                 totalAmount
             )
