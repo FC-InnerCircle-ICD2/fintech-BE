@@ -69,10 +69,10 @@ class UserLoginController(
     @GetMapping("/me")
     @SecurityRequirement(name = SwaggerConfig.BEARER_AUTH)
     fun getCurrentUserInfo(
-        @AuthenticationPrincipal user: AccountDetails,
+        @AuthenticationPrincipal user: AccountDetails
     ): UserInfoResponse =
         UserInfoResponse(
             id = user.id.toString(),
-            email = user.username,
+            email = user.username
         )
 }
