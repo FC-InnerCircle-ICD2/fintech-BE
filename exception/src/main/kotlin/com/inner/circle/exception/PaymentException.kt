@@ -1,5 +1,7 @@
 package com.inner.circle.exception
 
+import java.math.BigDecimal
+
 sealed class PaymentException(
     status: HttpStatus,
     override val message: String,
@@ -66,6 +68,19 @@ sealed class PaymentException(
     data class TransactionNotFoundException(
         val transactionId: String,
         override val message: String = "Transaction with ID $transactionId not found",
+        override val cause: Throwable? = null
+    ) : PaymentException(HttpStatus.NOT_FOUND, message, cause)
+
+    data class AlreadyRefundException(
+        val paymentKey: String,
+        override val message: String = "Already got a full refund : $paymentKey",
+        override val cause: Throwable? = null
+    ) : PaymentException(HttpStatus.NOT_FOUND, message, cause)
+
+    data class ExceedRefundAmountException(
+        val paymentKey: String,
+        val amount: BigDecimal,
+        override val message: String = "No refunds for amounts exceeding $amount. : $paymentKey",
         override val cause: Throwable? = null
     ) : PaymentException(HttpStatus.NOT_FOUND, message, cause)
 }
