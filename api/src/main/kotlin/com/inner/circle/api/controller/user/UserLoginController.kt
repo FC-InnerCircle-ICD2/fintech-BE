@@ -70,9 +70,5 @@ class UserLoginController(
     @SecurityRequirement(name = SwaggerConfig.BEARER_AUTH)
     fun getCurrentUserInfo(
         @AuthenticationPrincipal user: AccountDetails
-    ): UserInfoResponse =
-        UserInfoResponse(
-            id = user.id.toString(),
-            email = user.username
-        )
+    ): UserInfoResponse = UserInfoResponse.from(userInfo = user)
 }
