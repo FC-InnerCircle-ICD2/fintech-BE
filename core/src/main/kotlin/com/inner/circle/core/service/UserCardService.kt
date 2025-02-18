@@ -58,46 +58,31 @@ internal class UserCardService(
     override fun updateRepresentativeCard(
         accountId: Long,
         id: Long
-    ): UserCardDto {
-        // 기존 카드 대표 여부 해제
-        val infraUserCardDto =
-            userCardPort.findByAccountIdAndIsRepresentative(
-                accountId,
-                true
-            )
+    ): List<UserCardDto> {
+        // 유저 카드 목록 전체 조회
+        val infraUserCardDtoList =
+            userCardPort.findByAccountId(accountId)
 
-        // 선택 카드 대표 여부 설정
-        val infraUserCardDto2 = userCardPort.findById(id)
-
-        userCardPort.saveAll(
-            mutableListOf(
-                InfraUserCardDto(
-                    id = infraUserCardDto.id,
-                    accountId = infraUserCardDto.accountId,
-                    isRepresentative = false,
-                    cardNumber = infraUserCardDto.cardNumber,
-                    expirationPeriod = infraUserCardDto.expirationPeriod,
-                    cvc = infraUserCardDto.cvc
-                ),
-                InfraUserCardDto(
-                    id = id,
-                    accountId = infraUserCardDto2.accountId,
-                    isRepresentative = true,
-                    cardNumber = infraUserCardDto2.cardNumber,
-                    expirationPeriod = infraUserCardDto2.expirationPeriod,
-                    cvc = infraUserCardDto2.cvc
+        // 대표 카드 변경
+        val result = userCardPort.saveAll(
+            infraUserCardDtoList.map { infraUserCardDto ->
+                infraUserCardDto.copy(
+                    isRepresentative = (id == infraUserCardDto.id)
                 )
-            )
+            }
         )
 
-        return UserCardDto(
-            id = id,
-            accountId = infraUserCardDto2.accountId,
-            isRepresentative = true,
-            cardNumber = infraUserCardDto2.cardNumber,
-            expirationPeriod = infraUserCardDto2.expirationPeriod,
-            cvc = infraUserCardDto2.cvc
-        )
+        return result
+            .map { userCardDto ->
+                UserCardDto(
+                    id = userCardDto.id,
+                    accountId = userCardDto.accountId,
+                    isRepresentative = userCardDto.isRepresentative,
+                    cardNumber = userCardDto.cardNumber,
+                    expirationPeriod = userCardDto.expirationPeriod,
+                    cvc = userCardDto.cvc
+                )
+            }.toList()
     }
 
     override fun deleteById(

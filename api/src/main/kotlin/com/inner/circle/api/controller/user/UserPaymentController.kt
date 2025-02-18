@@ -29,6 +29,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -256,15 +257,15 @@ class UserPaymentController(
     }
 
     @Operation(summary = "유저 카드 삭제")
-    @PostMapping("/cards/delete")
+    @DeleteMapping("/cards/{cardId}/delete")
     fun deleteCard(
         @AuthenticationPrincipal account: AccountDetails,
-        @RequestBody id: Long
+        @PathVariable("cardId")  cardId: Long
     ): PaymentResponse<UserCardDto> {
         val result =
             userCardUseCase.deleteById(
                 account.id,
-                id
+                cardId
             )
         return PaymentResponse.ok(
             UserCardDto(
@@ -279,25 +280,28 @@ class UserPaymentController(
     }
 
     @Operation(summary = "유저 대표 카드 변경")
-    @PatchMapping("/cards/update")
+    @PatchMapping("/cards/{cardId}")
     fun updateRepresentativeCard(
         @AuthenticationPrincipal account: AccountDetails,
-        @RequestBody id: Long
-    ): PaymentResponse<UserCardDto> {
+        @PathVariable("cardId")  cardId: Long
+    ): PaymentResponse<List<UserCardDto>> {
         val result =
             userCardUseCase.updateRepresentativeCard(
                 account.id,
-                id
+                cardId
             )
         return PaymentResponse.ok(
-            UserCardDto(
-                id = result.id.toString(),
-                accountId = result.accountId,
-                isRepresentative = result.isRepresentative,
-                cardNumber = result.cardNumber,
-                expirationPeriod = result.expirationPeriod,
-                cvc = result.cvc
-            )
+            result
+                .map { userCardDto ->
+                    UserCardDto(
+                        id = userCardDto.id.toString(),
+                        accountId = userCardDto.accountId,
+                        isRepresentative = userCardDto.isRepresentative,
+                        cardNumber = userCardDto.cardNumber,
+                        expirationPeriod = userCardDto.expirationPeriod,
+                        cvc = userCardDto.cvc
+                    )
+                }.toList()
         )
     }
 

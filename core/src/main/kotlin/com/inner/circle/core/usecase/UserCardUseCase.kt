@@ -12,7 +12,7 @@ interface UserCardUseCase {
     fun updateRepresentativeCard(
         accountId: Long,
         id: Long
-    ): UserCardDto
+    ): List<UserCardDto>
 
     fun deleteById(
         accountId: Long,
