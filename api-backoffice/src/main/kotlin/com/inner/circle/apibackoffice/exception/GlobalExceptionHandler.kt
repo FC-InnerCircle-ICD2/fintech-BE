@@ -59,13 +59,13 @@ class GlobalExceptionHandler {
         ResponseEntity(
             BackofficeResponse.fail(
                 error =
-                BackofficeError(
-                    code = HttpStatus.BAD_REQUEST.toString(),
-                    message =
-                        ex.bindingResult.allErrors
-                        .first()
-                        .defaultMessage ?: "Invalid Argument"
-                )
+                    BackofficeError(
+                        code = HttpStatus.BAD_REQUEST.toString(),
+                        message =
+                            ex.bindingResult.allErrors
+                                .first()
+                                .defaultMessage ?: "Invalid Argument"
+                    )
             ),
             HttpStatus.BAD_REQUEST
         )
