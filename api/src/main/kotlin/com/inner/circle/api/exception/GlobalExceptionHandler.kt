@@ -20,17 +20,22 @@ class GlobalExceptionHandler {
     private val logger = LoggerFactory.getLogger(GlobalExceptionHandler::class.java)
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
-    fun handleValidationException(ex: MethodArgumentNotValidException): ResponseEntity<PaymentResponse<Nothing>> {
-        return ResponseEntity(
+    fun handleValidationException(
+        ex: MethodArgumentNotValidException
+    ): ResponseEntity<PaymentResponse<Nothing>> =
+        ResponseEntity(
             PaymentResponse.fail(
-                error = PaymentError(
-                    code = HttpStatus.BAD_REQUEST.toString(),
-                    message = ex.bindingResult.allErrors.first().defaultMessage ?: "Invalid Argument"
-                )
+                error =
+                    PaymentError(
+                        code = HttpStatus.BAD_REQUEST.toString(),
+                        message =
+                            ex.bindingResult.allErrors
+                                .first()
+                                .defaultMessage ?: "Invalid Argument"
+                    )
             ),
-            HttpStatus.BAD_REQUEST,
+            HttpStatus.BAD_REQUEST
         )
-    }
 
     @ExceptionHandler(AppException::class)
     @ApiResponse(
