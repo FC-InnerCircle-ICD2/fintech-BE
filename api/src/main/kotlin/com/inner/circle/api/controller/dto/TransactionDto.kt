@@ -6,7 +6,7 @@ import kotlinx.datetime.toJavaLocalDateTime
 import com.inner.circle.core.service.dto.TransactionDto as CoreTransactionStatus
 
 data class TransactionDto(
-    val id: Long,
+    val id: String,
     val paymentKey: String,
     val amount: BigDecimal,
     val status: TransactionStatus,
@@ -17,7 +17,7 @@ data class TransactionDto(
     companion object {
         fun of(transaction: CoreTransactionStatus): TransactionDto =
             TransactionDto(
-                id = transaction.id,
+                id = transaction.id.toString(),
                 paymentKey = transaction.paymentKey,
                 amount = transaction.amount,
                 status = TransactionStatus.of(transaction.status),
