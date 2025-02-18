@@ -83,12 +83,12 @@ create table if not exists account
     email      varchar(255)                           not null
         unique,
     password   varchar(255)                           not null,
-    status     integer                                not null,
+    status     varchar(30)                            not null,
     created_at timestamp(6) default CURRENT_TIMESTAMP not null,
     updated_at timestamp(6) default CURRENT_TIMESTAMP not null
 );
 
-INSERT INTO account (id, email, password, status, created_at, updated_at) VALUES (293847562342874239, 'test@test.com', '$2a$10$8I6102l2DJvon6gkFJUHh.ZAeszd5swcabHdpr8iFsDXJ6WOZ51v2', 0, '2025-02-12 22:05:32.901464', '2025-02-12 22:05:32.901464');
+INSERT INTO account (id, email, password, status, created_at, updated_at) VALUES (293847562342874239, 'test@test.com', '$2a$10$8I6102l2DJvon6gkFJUHh.ZAeszd5swcabHdpr8iFsDXJ6WOZ51v2', 'ACTIVE', '2025-02-12 22:05:32.901464', '2025-02-12 22:05:32.901464');
 INSERT INTO merchant (id, email, password, token, name, created_at, updated_at) VALUES (435345345, 'pay200', 'pay200', 'pay200', 'pay200', '2025-02-11 20:25:42.000000', '2025-02-11 20:25:42.000000');
 INSERT INTO user_card (id, account_id, is_representative, card_number, expiration_period, cvc, created_at, updated_at) VALUES (7295051915259393268, 5, true, '4567-8923-6378-3982', '03/28', '654', '2025-02-11 21:20:14.188948', '2025-02-11 21:20:14.188948');
 INSERT INTO user_card (id, account_id, is_representative, card_number, expiration_period, cvc, created_at, updated_at) VALUES (7295051915258292529, 3, true, '9876-5432-1098-7654', '01/27', '789', '2025-02-11 21:20:14.188948', '2025-02-11 21:20:14.188948');
