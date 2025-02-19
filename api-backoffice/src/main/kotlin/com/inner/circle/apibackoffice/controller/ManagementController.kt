@@ -1,8 +1,8 @@
 package com.inner.circle.apibackoffice.controller
 
-import com.inner.circle.apibackoffice.controller.dto.CreateOrUpdateMerchantKeyDto
+import com.inner.circle.apibackoffice.controller.dto.ApiKeyCreateOrUpdateDto
 import com.inner.circle.apibackoffice.exception.BackofficeResponse
-import com.inner.circle.corebackoffice.usecase.ManagementsUseCase
+import com.inner.circle.corebackoffice.usecase.ApiKeyCreateOrUpdateUseCase
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.GetMapping
@@ -12,16 +12,16 @@ import org.springframework.web.bind.annotation.RequestBody
 @Tag(name = "Management", description = "Management API")
 @BackofficeV1Api
 class ManagementController(
-    private val managementsUseCase: ManagementsUseCase
+    private val apiKeyCreateOrUpdateUseCase: ApiKeyCreateOrUpdateUseCase
 ) {
     @Operation(summary = "API 키 발급 및 갱신")
     @PostMapping("/key")
     fun createOrUpdateKey(
-        @RequestBody request: ManagementsUseCase.CreateOrUpdateKeyRequest
-    ): BackofficeResponse<CreateOrUpdateMerchantKeyDto> {
+        @RequestBody request: ApiKeyCreateOrUpdateUseCase.CreateOrUpdateKeyRequest
+    ): BackofficeResponse<ApiKeyCreateOrUpdateDto> {
         val response =
-            CreateOrUpdateMerchantKeyDto.of(
-                managementsUseCase.createOrUpdateKey(request)
+            ApiKeyCreateOrUpdateDto.of(
+                apiKeyCreateOrUpdateUseCase.createOrUpdateKey(request)
             )
         return BackofficeResponse.ok(response)
     }

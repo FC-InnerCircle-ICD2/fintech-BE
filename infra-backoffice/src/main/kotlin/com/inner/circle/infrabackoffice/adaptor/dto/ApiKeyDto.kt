@@ -1,5 +1,5 @@
 package com.inner.circle.infrabackoffice.adaptor.dto
 
-data class MerchantKeyDto(
+data class ApiKeyDto(
     val apiKey: String
 )
