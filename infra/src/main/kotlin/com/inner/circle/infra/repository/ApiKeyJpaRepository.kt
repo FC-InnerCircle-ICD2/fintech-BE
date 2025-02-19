@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 interface ApiKeyJpaRepository : JpaRepository<ApiKeyEntity, Long> {
     fun findByMerchantId(merchantId: Long): ApiKeyEntity?
 
-    fun findByApiKey(apiKey: String): ApiKeyEntity?
+    fun findByToken(token: String): ApiKeyEntity?
 }

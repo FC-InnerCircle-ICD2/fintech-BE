@@ -12,7 +12,7 @@ internal class ApiKeyRepositoryImpl(
         apiKeyJpaRepository.findByMerchantId(merchantId)
             ?: throw UserAuthenticationException.UserNotFoundException()
 
-    override fun findByApiKey(apiKey: String): ApiKeyEntity =
-        apiKeyJpaRepository.findByApiKey(apiKey = apiKey)
+    override fun findByToken(token: String): ApiKeyEntity =
+        apiKeyJpaRepository.findByToken(token = token)
             ?: throw UserAuthenticationException.UserNotFoundException()
 }

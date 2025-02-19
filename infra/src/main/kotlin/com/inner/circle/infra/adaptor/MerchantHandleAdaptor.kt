@@ -11,8 +11,8 @@ internal class MerchantHandleAdaptor(
     private val apiKeyRepository: ApiKeyRepository,
     private val merchantRepository: MerchantRepository
 ) : MerchantHandlePort {
-    override fun findMerchantByKey(key: String): MerchantEntity {
-        val apiKey = apiKeyRepository.findByApiKey(key)
+    override fun findMerchantByToken(token: String): MerchantEntity {
+        val apiKey = apiKeyRepository.findByToken(token)
         return merchantRepository.findById(apiKey.merchantId)
     }
 }

@@ -14,5 +14,5 @@ data class ApiKeyEntity(
     @Column(name = "merchant_id", nullable = false, unique = true)
     val merchantId: Long,
     @Column(name = "token", unique = true)
-    var apiKey: String
+    var token: String
 ) : BaseEntity()

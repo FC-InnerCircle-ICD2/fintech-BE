@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service
 class MerchantUserService(
     private val merchantHandlePort: MerchantHandlePort
 ) : MerchantUserHandleUseCase {
-    override fun findMerchantUser(key: String): MerchantDto {
-        val findMerchantByKey = merchantHandlePort.findMerchantByKey(key)
+    override fun findMerchantUser(token: String): MerchantDto {
+        val findMerchantByKey = merchantHandlePort.findMerchantByToken(token)
         return MerchantDto.fromEntity(findMerchantByKey)
     }
 }
