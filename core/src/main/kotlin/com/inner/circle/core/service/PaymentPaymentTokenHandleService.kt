@@ -3,7 +3,6 @@ package com.inner.circle.core.service
 import com.inner.circle.core.service.dto.PaymentTokenHandleDto
 import com.inner.circle.core.usecase.PaymentTokenHandlingUseCase
 import com.inner.circle.exception.PaymentJwtException
-import com.inner.circle.exception.SseException
 import com.inner.circle.infra.port.PaymentTokenHandlingPort
 import org.springframework.stereotype.Service
 
@@ -40,10 +39,8 @@ class PaymentPaymentTokenHandleService(
     override fun checkPaymentStatus(
         merchantId: String,
         orderId: String
-    ) {
+    ): Boolean {
         val checkPaymentStatus = paymentTokenHandlingPort.checkPaymentStatus(merchantId, orderId)
-        if (checkPaymentStatus.isBlank()) {
-            throw SseException.EndOfPaymentProgressException()
-        }
+        return checkPaymentStatus.isNotBlank()
     }
 }

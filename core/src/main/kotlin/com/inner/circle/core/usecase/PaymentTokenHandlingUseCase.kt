@@ -8,5 +8,5 @@ interface PaymentTokenHandlingUseCase {
     fun checkPaymentStatus(
         merchantId: String,
         orderId: String
-    )
+    ): Boolean
 }
