@@ -1,6 +1,7 @@
 package com.inner.circle.infra.repository.memorydatabase
 
 import com.inner.circle.exception.PaymentJwtException
+import com.inner.circle.exception.SseException
 import com.inner.circle.infra.repository.entity.PaymentTokenEntity
 import com.inner.circle.infra.repository.entity.PaymentTokenRepository
 import java.time.Duration
@@ -56,11 +57,22 @@ class PaymentTokenMemoryRepository(
         }
     }
 
-    override fun savePaymentInProgress(merchantId: String, orderId: String, expiresAt: LocalDateTime): String {
-        TODO("Not yet implemented")
+    override fun savePaymentInProgress(
+        merchantId: String,
+        orderId: String,
+        expiresAt: LocalDateTime
+    ) {
+        val key = "$merchantId:$orderId"
+        val ttl = Duration.between(LocalDateTime.now(), expiresAt)
+        redisTemplate.opsForValue().set(key, "paymentInProcess", ttl)
     }
 
-    override fun checkPaymentInProgress(merchantId: String, orderId: String): String? {
-        TODO("Not yet implemented")
+    override fun checkPaymentInProgress(
+        merchantId: String,
+        orderId: String
+    ): String? {
+        val key = "$merchantId:$orderId"
+        return redisTemplate.opsForValue()[key]
+            ?: throw SseException.ConnectionNotFoundException(merchantId, orderId)
     }
 }
