@@ -14,16 +14,28 @@ internal class TransactionAdaptor(
     private val transactionRepository: TransactionRepository
 ) : TransactionPort,
     GetTransactionPort {
-    override fun save(request: TransactionPort.Request) {
-        transactionRepository.save(
-            TransactionEntity(
-                id = request.id,
-                paymentKey = request.paymentKey,
-                amount = request.amount,
-                status = request.status,
-                reason = request.reason,
-                requestedAt = request.requestedAt
+    override fun save(request: TransactionPort.Request): TransactionDto {
+        val result =
+            transactionRepository.save(
+                TransactionEntity(
+                    id = request.id,
+                    paymentKey = request.paymentKey,
+                    amount = request.amount,
+                    status = request.status,
+                    reason = request.reason,
+                    requestedAt = request.requestedAt
+                )
             )
+
+        return TransactionDto(
+            id = requireNotNull(result.id),
+            paymentKey = result.paymentKey,
+            amount = result.amount,
+            status = result.status,
+            reason = result.reason,
+            requestedAt = result.requestedAt.toKotlinLocalDateTime(),
+            createdAt = result.createdAt.toKotlinLocalDateTime(),
+            updatedAt = result.updatedAt.toKotlinLocalDateTime()
         )
     }
 

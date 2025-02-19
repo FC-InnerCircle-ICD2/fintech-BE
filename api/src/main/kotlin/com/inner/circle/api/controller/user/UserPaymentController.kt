@@ -14,14 +14,18 @@ import com.inner.circle.api.controller.dto.UserCardDto
 import com.inner.circle.api.controller.request.CancelPaymentRequest
 import com.inner.circle.api.controller.request.ConfirmPaymentRequest
 import com.inner.circle.api.controller.request.ConfirmSimplePaymentRequest
+import com.inner.circle.api.controller.request.RefundAllPaymentRequest
+import com.inner.circle.api.controller.request.RefundPaymentRequest
 import com.inner.circle.api.controller.request.UserCardRequest
 import com.inner.circle.core.security.AccountDetails
 import com.inner.circle.core.service.dto.ConfirmPaymentCoreDto
+import com.inner.circle.core.service.dto.TransactionDto
 import com.inner.circle.core.usecase.CancelPaymentUseCase
 import com.inner.circle.core.usecase.ConfirmPaymentUseCase
 import com.inner.circle.core.usecase.ConfirmSimplePaymentUseCase
 import com.inner.circle.core.usecase.GetPaymentWithTransactionsUseCase
 import com.inner.circle.core.usecase.PaymentTokenHandlingUseCase
+import com.inner.circle.core.usecase.RefundPaymentUseCase
 import com.inner.circle.core.usecase.UserCardUseCase
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
@@ -47,7 +51,8 @@ class UserPaymentController(
     private val userCardUseCase: UserCardUseCase,
     private val cancelPaymentUseCase: CancelPaymentUseCase,
     private val statusChangedMessageSender: PaymentStatusChangedMessageSender,
-    private val getPaymentWithTransactionsUseCase: GetPaymentWithTransactionsUseCase
+    private val getPaymentWithTransactionsUseCase: GetPaymentWithTransactionsUseCase,
+    private val refundPaymentUseCase: RefundPaymentUseCase
 ) {
     private val logger: Logger = LoggerFactory.getLogger(UserPaymentController::class.java)
 
@@ -257,15 +262,15 @@ class UserPaymentController(
     }
 
     @Operation(summary = "유저 카드 삭제")
-    @DeleteMapping("/cards/{cardId}/delete")
+    @DeleteMapping("/cards/{cardId}")
     fun deleteCard(
         @AuthenticationPrincipal account: AccountDetails,
         @PathVariable("cardId") cardId: Long
     ): PaymentResponse<UserCardDto> {
         val result =
             userCardUseCase.deleteById(
-                account.id,
-                cardId
+                accountId = account.id,
+                id = cardId
             )
         return PaymentResponse.ok(
             UserCardDto(
@@ -287,8 +292,8 @@ class UserPaymentController(
     ): PaymentResponse<List<UserCardDto>> {
         val result =
             userCardUseCase.updateRepresentativeCard(
-                account.id,
-                cardId
+                accountId = account.id,
+                id = cardId
             )
         return PaymentResponse.ok(
             result
@@ -348,6 +353,59 @@ class UserPaymentController(
             PaymentWithTransactionsDto.of(
                 getPaymentWithTransactionsUseCase
                     .findByPaymentKey(request)
+            )
+        )
+    }
+
+    @Operation(summary = "전액 환불")
+    @PostMapping("/payments/refund/all")
+    fun refundAll(
+        @AuthenticationPrincipal account: AccountDetails,
+        @RequestBody request: RefundAllPaymentRequest
+    ): PaymentResponse<TransactionDto> {
+        val result =
+            refundPaymentUseCase.refundAll(
+                accountId = account.id,
+                paymentKey = request.paymentKey
+            )
+
+        return PaymentResponse.ok(
+            TransactionDto(
+                id = result.id,
+                paymentKey = result.paymentKey,
+                amount = result.amount,
+                status = result.status,
+                reason = result.reason,
+                requestedAt = result.requestedAt,
+                createdAt = result.createdAt,
+                updatedAt = result.createdAt
+            )
+        )
+    }
+
+    @Operation(summary = "부분 환불")
+    @PostMapping("/payments/refund")
+    fun refundPartial(
+        @AuthenticationPrincipal account: AccountDetails,
+        @RequestBody request: RefundPaymentRequest
+    ): PaymentResponse<TransactionDto> {
+        val result =
+            refundPaymentUseCase.refundPartial(
+                accountId = account.id,
+                paymentKey = request.paymentKey,
+                amount = request.amount
+            )
+
+        return PaymentResponse.ok(
+            TransactionDto(
+                id = result.id,
+                paymentKey = result.paymentKey,
+                amount = result.amount,
+                status = result.status,
+                reason = result.reason,
+                requestedAt = result.requestedAt,
+                createdAt = result.createdAt,
+                updatedAt = result.createdAt
             )
         )
     }
