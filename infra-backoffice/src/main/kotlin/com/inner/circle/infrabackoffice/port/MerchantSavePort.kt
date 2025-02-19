@@ -6,7 +6,6 @@ fun interface MerchantSavePort {
     data class Request(
         val email: String,
         val password: String,
-        val token: String,
         val name: String
     )
 

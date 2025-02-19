@@ -5,9 +5,18 @@ create table if not exists merchant
     email   varchar(255) not null
         unique,
     password   varchar(255) not null,
+    name       varchar(255) not null,
+    created_at timestamp(6) not null,
+    updated_at timestamp(6) not null
+);
+
+create table if not exists api_key
+(
+    id         bigint not null
+        primary key,
+    merchant_id   bigint   not null,
     token      varchar(255) not null
         unique,
-    name       varchar(255) not null,
     created_at timestamp(6) not null,
     updated_at timestamp(6) not null
 );
@@ -89,7 +98,8 @@ create table if not exists account
 );
 
 INSERT INTO account (id, email, password, status, created_at, updated_at) VALUES (293847562342874239, 'test@test.com', '$2a$10$8I6102l2DJvon6gkFJUHh.ZAeszd5swcabHdpr8iFsDXJ6WOZ51v2', 'ACTIVE', '2025-02-12 22:05:32.901464', '2025-02-12 22:05:32.901464');
-INSERT INTO merchant (id, email, password, token, name, created_at, updated_at) VALUES (435345345, 'pay200', 'pay200', 'pay200', 'pay200', '2025-02-11 20:25:42.000000', '2025-02-11 20:25:42.000000');
+INSERT INTO merchant (id, email, password, name, created_at, updated_at) VALUES (679851028133504349, 'pay200', 'pay200', 'pay200', '2025-02-11 20:25:42.000000', '2025-02-11 20:25:42.000000');
+INSERT INTO api_key (id, merchant_id, token, created_at, updated_at) VALUES (679851702594364766, 679851028133504349, 'pay200', '2025-02-11 20:25:42.000000', '2025-02-11 20:25:42.000000');
 INSERT INTO user_card (id, account_id, is_representative, card_number, expiration_period, cvc, created_at, updated_at) VALUES (7295051915259393268, 5, true, '4567-8923-6378-3982', '03/28', '654', '2025-02-11 21:20:14.188948', '2025-02-11 21:20:14.188948');
 INSERT INTO user_card (id, account_id, is_representative, card_number, expiration_period, cvc, created_at, updated_at) VALUES (7295051915258292529, 3, true, '9876-5432-1098-7654', '01/27', '789', '2025-02-11 21:20:14.188948', '2025-02-11 21:20:14.188948');
 INSERT INTO user_card (id, account_id, is_representative, card_number, expiration_period, cvc, created_at, updated_at) VALUES (7295051915259438759, 2, true, '5678-1234-5678-9012', '10/23', '456', '2025-02-11 21:20:14.188948', '2025-02-11 21:20:14.188948');

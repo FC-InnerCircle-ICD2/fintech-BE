@@ -24,7 +24,6 @@ class MerchantSaveService(
                 MerchantSavePort.Request(
                     email = request.email,
                     password = request.password,
-                    token = clientCredentialsGenerator.generateClientSecret(),
                     name = request.name
                 )
             )
@@ -33,7 +32,6 @@ class MerchantSaveService(
             id = savedMerchant.id,
             email = savedMerchant.email,
             password = savedMerchant.password,
-            token = savedMerchant.token,
             name = savedMerchant.name
         )
     }
