@@ -335,13 +335,13 @@ class UserPaymentController(
         return PaymentResponse.ok(
             PaymentsWithTransactionsDto(
                 payments =
-                getPaymentWithTransactionsUseCase
-                    .findAllByAccountId(request)
-                    .map { paymentWithTransactionsDto ->
-                        PaymentWithTransactionsDto.of(
-                            paymentWithTransactionsDto
-                        )
-                    }.toList()
+                    getPaymentWithTransactionsUseCase
+                        .findAllByAccountId(request)
+                        .map { paymentWithTransactionsDto ->
+                            PaymentWithTransactionsDto.of(
+                                paymentWithTransactionsDto
+                            )
+                        }.toList()
             )
         )
     }
