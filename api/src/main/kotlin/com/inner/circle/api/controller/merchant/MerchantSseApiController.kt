@@ -32,8 +32,6 @@ class MerchantSseApiController(
     ): ResponseBodyEmitter {
         val merchantId = merchantUserDetails.getId().toString()
 
-        paymentTokenHandlingUseCase.checkPaymentStatus(merchantId, orderId)
-
         val sseConnection =
             com.inner.circle.core.sse.SseConnection.connect(
                 merchantId + "_" + orderId,
