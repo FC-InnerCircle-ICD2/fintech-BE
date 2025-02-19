@@ -1,6 +1,5 @@
 package com.inner.circle.infrabackoffice.adaptor
 
-import com.inner.circle.exception.BackofficeException
 import com.inner.circle.infrabackoffice.adaptor.dto.MerchantDto
 import com.inner.circle.infrabackoffice.port.MerchantSavePort
 import com.inner.circle.infrabackoffice.repository.MerchantRepository
@@ -17,16 +16,14 @@ internal class MerchantSaveAdaptor(
                 MerchantEntity(
                     email = request.email,
                     password = request.password,
-                    token = request.token,
                     name = request.name
                 )
             )
 
         return MerchantDto(
-            id = merchant.id ?: throw BackofficeException.MerchantNotSaveException(),
+            id = merchant.id,
             email = merchant.email,
             password = merchant.password,
-            token = merchant.token,
             name = merchant.name
         )
     }

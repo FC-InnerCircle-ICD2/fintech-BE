@@ -1,8 +1,8 @@
 package com.inner.circle.infrabackoffice.adaptor
 
+import com.inner.circle.infrabackoffice.adaptor.dto.MerchantDto
 import com.inner.circle.infrabackoffice.port.MerchantFinderPort
 import com.inner.circle.infrabackoffice.repository.MerchantRepository
-import com.inner.circle.infrabackoffice.repository.entity.MerchantEntity
 import org.springframework.stereotype.Component
 
 @Component
@@ -14,5 +14,13 @@ class MerchantFinderAdaptor(
     override fun findByUsernameAndPassword(
         email: String,
         password: String
-    ): MerchantEntity = merchantRepository.findByUsernameAndPassword(email, password)
+    ): MerchantDto {
+        val merchant = merchantRepository.findByUsernameAndPassword(email, password)
+        return MerchantDto(
+            id = merchant.id,
+            email = merchant.email,
+            password = merchant.password,
+            name = merchant.name
+        )
+    }
 }

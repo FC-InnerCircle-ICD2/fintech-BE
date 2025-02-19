@@ -4,8 +4,8 @@ import com.inner.circle.infrabackoffice.adaptor.dto.MerchantKeyDto
 
 fun interface CreateOrUpdateMerchantKeyPort {
     data class Request(
-        val id: Long,
-        val token: String
+        val merchantId: Long,
+        val apiKey: String
     )
 
     fun createOrUpdateMerchantKey(request: Request): MerchantKeyDto

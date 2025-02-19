@@ -18,7 +18,6 @@ class MerchantSignInService(
 
         return MerchantSignInDto(
             id = merchant.id,
-            token = merchant.token,
             name = merchant.name
         )
     }

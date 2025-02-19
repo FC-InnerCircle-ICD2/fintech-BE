@@ -14,15 +14,15 @@ internal class ManagementsService(
     override fun createOrUpdateKey(
         request: ManagementsUseCase.CreateOrUpdateKeyRequest
     ): CreateOrUpdateMerchantKeyDto {
-        val merchant =
+        val dto =
             createOrUpdateMerchantKeyPort
                 .createOrUpdateMerchantKey(
                     request =
                         CreateOrUpdateMerchantKeyPort.Request(
-                            id = request.id,
-                            token = clientCredentialsGenerator.generateClientSecret()
+                            merchantId = request.id,
+                            apiKey = clientCredentialsGenerator.generateClientSecret()
                         )
                 )
-        return CreateOrUpdateMerchantKeyDto(key = merchant.token)
+        return CreateOrUpdateMerchantKeyDto(apiKey = dto.apiKey)
     }
 }
