@@ -11,4 +11,8 @@ interface PaymentTokenRepository {
     ): PaymentTokenEntity
 
     fun removePaymentDataByToken(token: String)
+
+    fun checkPaymentInProgress(merchantId: String, orderId: String): String?
+
+    fun savePaymentInProgress(merchantId: String, orderId: String, expiresAt: LocalDateTime): String
 }

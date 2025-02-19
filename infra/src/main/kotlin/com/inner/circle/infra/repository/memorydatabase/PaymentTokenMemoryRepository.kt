@@ -55,4 +55,12 @@ class PaymentTokenMemoryRepository(
             logger.error("Failed to remove token: $token", ex)
         }
     }
+
+    override fun savePaymentInProgress(merchantId: String, orderId: String, expiresAt: LocalDateTime): String {
+        TODO("Not yet implemented")
+    }
+
+    override fun checkPaymentInProgress(merchantId: String, orderId: String): String? {
+        TODO("Not yet implemented")
+    }
 }
