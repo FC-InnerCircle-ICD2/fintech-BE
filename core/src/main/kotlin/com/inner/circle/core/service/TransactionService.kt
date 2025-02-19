@@ -17,11 +17,19 @@ internal class TransactionService(
     override fun findAllByAccountId(
         request: GetPaymentWithTransactionsUseCase.FindAllByAccountIdRequest
     ): List<PaymentWithTransactionsDto> {
+        request.startDate?.let { start ->
+            request.endDate?.let { end ->
+                require(start <= end) { "startDate must be less than or equal to endDate" }
+            }
+        }
+
         val payments =
             getPaymentPort
                 .findAllByAccountId(
                     GetPaymentPort.FindAllByAccountIdRequest(
                         accountId = request.accountId,
+                        startDate = request.startDate,
+                        endDate = request.endDate,
                         page = request.page,
                         limit = request.limit
                     )

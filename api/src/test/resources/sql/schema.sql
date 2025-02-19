@@ -95,3 +95,15 @@ INSERT INTO user_card (id, account_id, is_representative, card_number, expiratio
 INSERT INTO user_card (id, account_id, is_representative, card_number, expiration_period, cvc, created_at, updated_at) VALUES (7295051915259438759, 2, true, '5678-1234-5678-9012', '10/23', '456', '2025-02-11 21:20:14.188948', '2025-02-11 21:20:14.188948');
 INSERT INTO user_card (id, account_id, is_representative, card_number, expiration_period, cvc, created_at, updated_at) VALUES (7295051915262387503, 293847562342874239, true, '1234-5678-9012-3456', '12/25', '123', '2025-02-11 21:20:14.188948', '2025-02-11 21:20:14.188948');
 INSERT INTO user_card (id, account_id, is_representative, card_number, expiration_period, cvc, created_at, updated_at) VALUES (7295051915258934220, 1, true, '4321-8765-4321-8765', '03/24', '987', '2025-02-11 21:20:14.188948', '2025-02-11 21:20:14.188948');
+
+INSERT INTO payment (id, payment_key, card_number, currency, account_id, merchant_id, payment_type, order_id, order_name, created_at, updated_at)
+VALUES
+  (7295051915259393268, 'pay_123456', 435345345, 'KRW', 293847562342874239, 2001, 'CARD', 'order_78901', 'Laptop Purchase', '2025-02-16 21:20:14.188948', '2025-02-16 21:20:14.188948'),
+  (7295051915259393269, 'pay_654321', 435345345, 'KRW', 293847562342874239, 2002, 'CARD', 'order_78902', 'Headphones', '2025-02-20 21:20:14.188948', '2025-02-20 21:20:14.188948');
+
+INSERT INTO payment_transaction (id, payment_key, amount, status, reason, requested_at, created_at, updated_at)
+VALUES
+  (7295051915259393270, 'pay_123456', 1500.00, 'APPROVED', NULL, '2025-02-16 21:19:14.188948', '2025-02-16 21:20:14.188948', '2025-02-16 21:20:14.188948'),
+  (7295051915259393271, 'pay_123456', 1500.00, 'REFUNDED', 'Customer returned item', '2025-02-17 21:19:14.188948', '2025-02-17 21:20:14.188948', '2025-02-17 21:20:14.188948'),
+  (7295051915259393272, 'pay_654321', 200.00, 'APPROVED', NULL, '2025-02-20 21:19:14.188948', '2025-02-20 22:20:14.188948', '2025-02-20 22:20:14.188948'),
+  (7295051915259393273, 'pay_654321', 200.00, 'CANCELED', 'Payment failed', '2025-02-21 21:19:14.188948', '2025-02-21 21:21:14.188948', '2025-02-21 21:21:14.188948');
