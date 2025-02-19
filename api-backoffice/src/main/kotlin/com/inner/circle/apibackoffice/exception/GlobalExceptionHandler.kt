@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 
@@ -50,4 +51,22 @@ class GlobalExceptionHandler {
             )
         return ResponseEntity(errorResponse, status)
     }
+
+    @ExceptionHandler(MethodArgumentNotValidException::class)
+    fun handleValidationException(
+        ex: MethodArgumentNotValidException
+    ): ResponseEntity<BackofficeResponse<Nothing>> =
+        ResponseEntity(
+            BackofficeResponse.fail(
+                error =
+                    BackofficeError(
+                        code = HttpStatus.BAD_REQUEST.toString(),
+                        message =
+                            ex.bindingResult.allErrors
+                                .first()
+                                .defaultMessage ?: "Invalid Argument"
+                    )
+            ),
+            HttpStatus.BAD_REQUEST
+        )
 }

@@ -19,7 +19,7 @@ class PaymentPaymentTokenHandleService(
         val orderId = paymentData.orderId
         val validateToken =
             jwtHandler.validateToken(
-                paymentData.generatedToken,
+                token,
                 paymentData.signature
             )
 

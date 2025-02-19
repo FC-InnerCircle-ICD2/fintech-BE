@@ -25,8 +25,6 @@ internal class TransactionAdaptor(
                     reason = request.reason,
                     requestedAt = request.requestedAt
                 )
-            ) ?: throw IllegalArgumentException(
-                "Payment Transaction not save"
             )
 
         return TransactionDto(

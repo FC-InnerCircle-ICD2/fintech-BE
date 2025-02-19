@@ -27,12 +27,15 @@ class PaymentStatusChangedMessageSender(
         try {
             val uniqueKey = merchantId.toString() + "_" + orderId
             val session =
-                sseConnectionPool.getSession(
+                sseConnectionPool.getSessions(
                     uniqueKey
                 )
             val eventData = PaymentStatusChangedResponse.of(eventType, orderId, merchantId)
 
-            session.sendMessage(eventType, eventData)
+            for (sseConnection in session) {
+                sseConnection.sendMessage(eventType, eventData)
+            }
+
             log.info(
                 "sse message send. (merchantId: {}, orderId: {}, eventType: {})",
                 merchantId,
@@ -56,11 +59,14 @@ class PaymentStatusChangedMessageSender(
         try {
             val uniqueKey = merchantId.toString() + "_" + orderId
             val session =
-                sseConnectionPool.getSession(
+                sseConnectionPool.getSessions(
                     uniqueKey
                 )
 
-            session.sendMessage(eventType, authResult)
+            for (sseConnection in session) {
+                sseConnection.sendMessage(eventType, authResult)
+            }
+
             log.info(
                 "sse message send. (merchantId: {}, orderId: {}, eventType: {})",
                 merchantId,

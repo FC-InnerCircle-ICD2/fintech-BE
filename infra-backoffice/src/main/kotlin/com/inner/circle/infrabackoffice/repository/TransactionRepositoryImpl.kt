@@ -7,10 +7,9 @@ import org.springframework.stereotype.Repository
 internal class TransactionRepositoryImpl(
     private val transactionJpaRepository: TransactionJpaRepository
 ) : TransactionRepository {
-    // TODO: Payment쪽에 있어야할 로직이지만, 당분간 테스트를 위해 여기에 둠
-    override fun save(transaction: TransactionEntity): TransactionEntity =
-        transactionJpaRepository.save(transaction)
+    override fun findAllByPaymentKeyIn(paymentKeys: List<String>): List<TransactionEntity> =
+        transactionJpaRepository.findAllByPaymentKeyIn(paymentKeys = paymentKeys)
 
-    override fun findByPaymentKey(paymentKey: String): List<TransactionEntity> =
-        transactionJpaRepository.findByPaymentKey(paymentKey)
+    override fun findAllByPaymentKey(paymentKey: String): List<TransactionEntity> =
+        transactionJpaRepository.findAllByPaymentKey(paymentKey = paymentKey)
 }

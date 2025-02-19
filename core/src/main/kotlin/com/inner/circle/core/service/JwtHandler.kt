@@ -58,6 +58,7 @@ class JwtHandler(
         val signatureKey = getSignature(keyString)
         return Jwts
             .builder()
+            .claim("merchantId", paymentClaimDto.merchantId)
             .claim("merchantName", paymentClaimDto.merchantName)
             .claim("orderId", paymentClaimDto.orderId)
             .claim("orderName", paymentClaimDto.orderName)
