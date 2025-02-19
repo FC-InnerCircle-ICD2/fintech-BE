@@ -1,5 +1,6 @@
 package com.inner.circle.core.usecase
 
+import com.inner.circle.core.domain.TransactionStatus
 import com.inner.circle.core.service.dto.PaymentWithTransactionsDto
 import kotlinx.datetime.LocalDate
 
@@ -8,6 +9,7 @@ interface GetPaymentWithTransactionsUseCase {
         val accountId: Long,
         val startDate: LocalDate?,
         val endDate: LocalDate?,
+        val status: TransactionStatus?,
         val page: Int,
         val limit: Int
     )

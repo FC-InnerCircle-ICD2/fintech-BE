@@ -58,6 +58,11 @@ internal class TransactionService(
                         updatedAt = transaction.updatedAt
                     )
                 }.groupBy { it.paymentKey }
+                .let {
+                    it.takeIf { request.status == null } ?: it.filterValues { transactions ->
+                        transactions.any { transaction -> transaction.status == request.status }
+                    }
+                }
 
         return payments.map { payment ->
             PaymentWithTransactionsDto(
