@@ -9,8 +9,7 @@ import org.springframework.stereotype.Repository
 internal class MerchantRepositoryImpl(
     private val merchantJpaRepository: MerchantJpaRepository
 ) : MerchantRepository {
-    override fun findById(merchantId: Long): MerchantEntity {
-        return merchantJpaRepository.findByIdOrNull(merchantId)
+    override fun findById(merchantId: Long): MerchantEntity =
+        merchantJpaRepository.findByIdOrNull(merchantId)
             ?: throw UserAuthenticationException.UserNotFoundException()
-    }
 }

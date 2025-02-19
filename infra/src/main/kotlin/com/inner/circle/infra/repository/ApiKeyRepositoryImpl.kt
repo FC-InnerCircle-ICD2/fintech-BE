@@ -15,5 +15,4 @@ internal class ApiKeyRepositoryImpl(
     override fun findByApiKey(apiKey: String): ApiKeyEntity =
         apiKeyJpaRepository.findByApiKey(apiKey = apiKey)
             ?: throw UserAuthenticationException.UserNotFoundException()
-
 }

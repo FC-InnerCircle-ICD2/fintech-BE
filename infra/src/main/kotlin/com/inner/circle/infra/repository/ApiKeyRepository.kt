@@ -4,5 +4,6 @@ import com.inner.circle.infra.repository.entity.ApiKeyEntity
 
 interface ApiKeyRepository {
     fun findByMerchantId(merchantId: Long): ApiKeyEntity
+
     fun findByApiKey(apiKey: String): ApiKeyEntity
 }
