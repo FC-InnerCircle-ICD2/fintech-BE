@@ -5,7 +5,6 @@ import com.inner.circle.core.service.dto.TransactionDto
 import com.inner.circle.core.usecase.RefundPaymentUseCase
 import com.inner.circle.exception.PaymentException
 import com.inner.circle.infra.port.GetPaymentPort
-import com.inner.circle.infra.port.GetPaymentPort.FindByPaymentKeyRequest
 import com.inner.circle.infra.port.GetTransactionPort
 import com.inner.circle.infra.port.TransactionPort
 import java.math.BigDecimal
