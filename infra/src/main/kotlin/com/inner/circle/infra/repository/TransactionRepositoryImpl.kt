@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository
 internal class TransactionRepositoryImpl(
     private val transactionJpaRepository: TransactionJpaRepository
 ) : TransactionRepository {
-    override fun save(transactionEntity: TransactionEntity): TransactionEntity? =
+    override fun save(transactionEntity: TransactionEntity): TransactionEntity =
         transactionJpaRepository.save(transactionEntity)
 
     override fun findAllByPaymentKeyIn(paymentKeys: List<String>): List<TransactionEntity> =
