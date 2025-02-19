@@ -7,6 +7,7 @@ import com.inner.circle.core.service.dto.TransactionDto
 import com.inner.circle.core.usecase.GetPaymentWithTransactionsUseCase
 import com.inner.circle.infra.port.GetPaymentPort
 import com.inner.circle.infra.port.GetTransactionPort
+import kotlinx.datetime.toKotlinLocalDate
 import org.springframework.stereotype.Service
 
 @Service
@@ -19,7 +20,14 @@ internal class TransactionService(
     ): List<PaymentWithTransactionsDto> {
         request.startDate?.let { start ->
             request.endDate?.let { end ->
+                val currentDate =
+                    java.time.LocalDate
+                        .now()
+                        .toKotlinLocalDate()
                 require(start <= end) { "startDate must be less than or equal to endDate" }
+                require(
+                    end <= currentDate
+                ) { "endDate must be less than or equal to the current date" }
             }
         }
 

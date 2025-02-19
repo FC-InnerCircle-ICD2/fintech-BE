@@ -311,8 +311,8 @@ class UserPaymentController(
     @GetMapping("/payments")
     fun getPayments(
         @AuthenticationPrincipal account: AccountDetails,
-        @RequestParam("startDate") startDate: LocalDate?,
-        @RequestParam("endDate") endDate: LocalDate?,
+        @RequestParam("startDate", defaultValue = "2025-02-15") startDate: LocalDate?,
+        @RequestParam("endDate", defaultValue = "2025-02-19") endDate: LocalDate?,
         @RequestParam("page", defaultValue = "0") page: Int,
         @RequestParam("limit", defaultValue = "10") limit: Int
     ): PaymentResponse<PaymentsWithTransactionsDto> {
