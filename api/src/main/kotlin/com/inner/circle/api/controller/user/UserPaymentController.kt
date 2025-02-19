@@ -14,6 +14,8 @@ import com.inner.circle.api.controller.dto.UserCardDto
 import com.inner.circle.api.controller.request.CancelPaymentRequest
 import com.inner.circle.api.controller.request.ConfirmPaymentRequest
 import com.inner.circle.api.controller.request.ConfirmSimplePaymentRequest
+import com.inner.circle.api.controller.request.RefundAllPaymentRequest
+import com.inner.circle.api.controller.request.RefundPaymentRequest
 import com.inner.circle.api.controller.request.UserCardRequest
 import com.inner.circle.core.security.AccountDetails
 import com.inner.circle.core.service.dto.ConfirmPaymentCoreDto
@@ -268,8 +270,8 @@ class UserPaymentController(
     ): PaymentResponse<UserCardDto> {
         val result =
             userCardUseCase.deleteById(
-                account.id,
-                cardId
+                accountId = account.id,
+                id = cardId
             )
         return PaymentResponse.ok(
             UserCardDto(
@@ -291,8 +293,8 @@ class UserPaymentController(
     ): PaymentResponse<List<UserCardDto>> {
         val result =
             userCardUseCase.updateRepresentativeCard(
-                account.id,
-                cardId
+                accountId = account.id,
+                id = cardId
             )
         return PaymentResponse.ok(
             result
@@ -360,12 +362,12 @@ class UserPaymentController(
     @PostMapping("/payments/refund/all")
     fun refundAll(
         @AuthenticationPrincipal account: AccountDetails,
-        @RequestBody paymentId: String
+        @RequestBody request: RefundAllPaymentRequest
     ): PaymentResponse<TransactionDto> {
         val result =
             refundPaymentUseCase.refundAll(
-                account.id,
-                paymentId
+                accountId = account.id,
+                paymentKey = request.paymentKey
             )
 
         return PaymentResponse.ok(
@@ -386,14 +388,13 @@ class UserPaymentController(
     @PostMapping("/payments/refund")
     fun refundPartial(
         @AuthenticationPrincipal account: AccountDetails,
-        @RequestBody paymentId: String,
-        @RequestBody amount: BigDecimal
+        @RequestBody request: RefundPaymentRequest,
     ): PaymentResponse<TransactionDto> {
         val result =
             refundPaymentUseCase.refundPartial(
-                account.id,
-                paymentId,
-                amount
+                accountId = account.id,
+                paymentKey = request.paymentKey,
+                amount = request.amount
             )
 
         return PaymentResponse.ok(

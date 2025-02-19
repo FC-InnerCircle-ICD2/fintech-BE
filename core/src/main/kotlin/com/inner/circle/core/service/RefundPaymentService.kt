@@ -22,7 +22,7 @@ internal class RefundPaymentService(
         accountId: Long,
         paymentKey: String
     ): TransactionDto {
-        val infraPaymentDto =
+        val payment =
             getPaymentPort.findByAccountIdAndPaymentKey(
                 GetPaymentPort.FindByPaymentKeyRequest(
                     accountId = accountId,
@@ -75,7 +75,7 @@ internal class RefundPaymentService(
         paymentKey: String,
         amount: BigDecimal
     ): TransactionDto {
-        val infraPaymentDto =
+        val payment =
             getPaymentPort.findByAccountIdAndPaymentKey(
                 GetPaymentPort.FindByPaymentKeyRequest(
                     accountId = accountId,
