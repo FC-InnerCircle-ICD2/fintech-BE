@@ -13,11 +13,11 @@ internal class ApiKeyCreateOrUpdateAdaptor(
     override fun createOrUpdateApiKey(request: ApiKeyCreateOrUpdatePort.Request): ApiKeyDto {
         val apiKey =
             when (val existingKey = repository.findByMerchantId(request.merchantId)) {
-                null -> ApiKeyEntity(merchantId = request.merchantId, apiKey = request.apiKey)
-                else -> existingKey.apply { apiKey = request.apiKey }
+                null -> ApiKeyEntity(merchantId = request.merchantId, token = request.token)
+                else -> existingKey.apply { token = request.token }
             }
         return repository.save(apiKey).let {
-            ApiKeyDto(apiKey = it.apiKey)
+            ApiKeyDto(apiKey = it.token)
         }
     }
 }

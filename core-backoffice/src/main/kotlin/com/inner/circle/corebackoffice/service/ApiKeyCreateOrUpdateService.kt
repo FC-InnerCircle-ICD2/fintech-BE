@@ -20,7 +20,7 @@ internal class ApiKeyCreateOrUpdateService(
                     request =
                         ApiKeyCreateOrUpdatePort.Request(
                             merchantId = request.id,
-                            apiKey = clientCredentialsGenerator.generateClientSecret()
+                            token = clientCredentialsGenerator.generateClientSecret()
                         )
                 )
         return ApiKeyCreateOrUpdateDto(apiKey = dto.apiKey)
