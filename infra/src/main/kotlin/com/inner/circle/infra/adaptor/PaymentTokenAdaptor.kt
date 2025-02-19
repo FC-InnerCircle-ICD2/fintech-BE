@@ -26,4 +26,9 @@ class PaymentTokenAdaptor(
     override fun deletePaymentToken(token: String) {
         paymentTokenRepository.removePaymentDataByToken(token)
     }
+
+    override fun checkPaymentStatus(
+        merchantId: String,
+        orderId: String
+    ): String = paymentTokenRepository.checkPaymentInProgress(merchantId, orderId).orEmpty()
 }

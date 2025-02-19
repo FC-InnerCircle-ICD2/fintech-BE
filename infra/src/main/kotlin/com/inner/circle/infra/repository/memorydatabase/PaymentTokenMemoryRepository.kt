@@ -1,7 +1,6 @@
 package com.inner.circle.infra.repository.memorydatabase
 
 import com.inner.circle.exception.PaymentJwtException
-import com.inner.circle.exception.SseException
 import com.inner.circle.infra.repository.entity.PaymentTokenEntity
 import com.inner.circle.infra.repository.entity.PaymentTokenRepository
 import java.time.Duration
@@ -72,7 +71,6 @@ class PaymentTokenMemoryRepository(
         orderId: String
     ): String? {
         val key = "$merchantId:$orderId"
-        return redisTemplate.opsForValue()[key]
-            ?: throw SseException.ConnectionNotFoundException(merchantId, orderId)
+        return redisTemplate.opsForValue()[key].orEmpty()
     }
 }

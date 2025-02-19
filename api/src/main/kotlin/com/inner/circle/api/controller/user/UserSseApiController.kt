@@ -28,8 +28,8 @@ class UserSseApiController(
         @RequestParam merchantId: String,
         @RequestParam orderId: String
     ): ResponseBodyEmitter {
+        paymentTokenHandlingUseCase.checkPaymentStatus(merchantId, orderId)
         val uniqueKey = "${merchantId}_$orderId"
-        log.info("SSE user ({}) connected.", uniqueKey)
         val sseConnection =
             com.inner.circle.core.sse.SseConnection.connect(
                 uniqueKey,
@@ -37,6 +37,7 @@ class UserSseApiController(
                 objectMapper
             )
 
+        log.info("SSE user ({}) connected.", uniqueKey)
         sseConnectionPool.addSession(sseConnection.uniqueKey, sseConnection)
 
         return sseConnection.sseEmitter

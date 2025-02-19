@@ -12,4 +12,9 @@ sealed class SseException(
             "SSE connection not found for merchantId: $merchantId, orderId: $orderId",
         override val cause: Throwable? = null
     ) : SseException(HttpStatus.NOT_FOUND, message, cause)
+
+    data class EndOfPaymentProgressException(
+        override val message: String = "Payment process has ended.",
+        override val cause: Throwable? = null
+    ) : SseException(HttpStatus.BAD_REQUEST, message, cause)
 }

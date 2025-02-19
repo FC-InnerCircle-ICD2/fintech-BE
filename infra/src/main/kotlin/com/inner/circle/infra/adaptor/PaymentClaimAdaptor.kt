@@ -51,6 +51,11 @@ class PaymentClaimAdaptor(
         val savedPaymentRequest = paymentClaimRepository.save(paymentRequest)
         // token entity 저장
         paymentTokenRepository.savePaymentToken(tokenEntity, expiredAt)
+        paymentTokenRepository.savePaymentInProgress(
+            tokenEntity.merchantId.toString(),
+            tokenEntity.orderId,
+            expiredAt
+        )
 
         return PaymentClaimDto.fromEntity(savedPaymentRequest)
     }
