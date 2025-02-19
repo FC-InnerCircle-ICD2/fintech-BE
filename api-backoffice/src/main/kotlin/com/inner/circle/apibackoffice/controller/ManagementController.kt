@@ -19,7 +19,7 @@ class ManagementController(
     private val apiKeyGetUseCase: ApiKeyGetUseCase
 ) {
     @Operation(summary = "API 키 발급 및 갱신")
-    @PostMapping("/key")
+    @PostMapping("/keys")
     fun createOrUpdateKey(
         @RequestBody request: ApiKeyCreateOrUpdateUseCase.CreateOrUpdateKeyRequest
     ): BackofficeResponse<ApiKeyCreateOrUpdateDto> {
@@ -31,7 +31,7 @@ class ManagementController(
     }
 
     @Operation(summary = "API 키 조회")
-    @GetMapping("/key/{id}")
+    @GetMapping("/keys/{id}")
     fun getKey(
         @PathVariable("id") merchantId: Long
     ): BackofficeResponse<ApiKeyGetDto> {

@@ -14,10 +14,8 @@ internal class ApiKeyCreateOrUpdateAdaptor(
         val apiKey =
             when (val existingKey = repository.findByMerchantId(request.merchantId)) {
                 null -> ApiKeyEntity(merchantId = request.merchantId, token = request.token)
-                else -> existingKey.apply { token = request.token }
+                else -> ApiKeyEntity(id = existingKey.id, merchantId = request.merchantId, token = request.token)
             }
-        return repository.save(apiKey).let {
-            ApiKeyDto(apiKey = it.token)
-        }
+        return ApiKeyDto(apiKey = repository.save(apiKey).token)
     }
 }

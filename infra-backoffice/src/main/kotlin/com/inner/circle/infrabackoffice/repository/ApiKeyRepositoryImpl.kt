@@ -8,7 +8,7 @@ internal class ApiKeyRepositoryImpl(
     private val apiKeyJpaRepository: ApiKeyJpaRepository
 ) : ApiKeyRepository {
     override fun findByMerchantId(merchantId: Long): ApiKeyEntity? =
-        apiKeyJpaRepository.findByMerchantId(merchantId)
+        apiKeyJpaRepository.findByMerchantId(merchantId = merchantId)
 
     override fun save(apiKey: ApiKeyEntity): ApiKeyEntity = apiKeyJpaRepository.save(apiKey)
 }
