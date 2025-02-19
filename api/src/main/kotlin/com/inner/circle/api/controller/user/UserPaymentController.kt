@@ -30,7 +30,6 @@ import com.inner.circle.core.usecase.UserCardUseCase
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
-import java.math.BigDecimal
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -388,7 +387,7 @@ class UserPaymentController(
     @PostMapping("/payments/refund")
     fun refundPartial(
         @AuthenticationPrincipal account: AccountDetails,
-        @RequestBody request: RefundPaymentRequest,
+        @RequestBody request: RefundPaymentRequest
     ): PaymentResponse<TransactionDto> {
         val result =
             refundPaymentUseCase.refundPartial(
