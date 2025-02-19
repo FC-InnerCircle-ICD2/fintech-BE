@@ -10,9 +10,7 @@ import org.springframework.stereotype.Component
 internal class ApiKeyCreateOrUpdateAdaptor(
     private val repository: ApiKeyRepository
 ) : ApiKeyCreateOrUpdatePort {
-    override fun createOrUpdateApiKey(
-        request: ApiKeyCreateOrUpdatePort.Request
-    ): ApiKeyDto {
+    override fun createOrUpdateApiKey(request: ApiKeyCreateOrUpdatePort.Request): ApiKeyDto {
         val apiKey =
             when (val existingKey = repository.findByMerchantId(request.merchantId)) {
                 null -> ApiKeyEntity(merchantId = request.merchantId, apiKey = request.apiKey)
