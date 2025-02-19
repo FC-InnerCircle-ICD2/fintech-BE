@@ -35,11 +35,12 @@ class ManagementController(
     fun getKey(
         @PathVariable("id") merchantId: Long
     ): BackofficeResponse<ApiKeyGetDto> {
-        val response = ApiKeyGetDto.of(
-            apiKeyGetUseCase.getApiKeyByMerchantId(
-                ApiKeyGetUseCase.Request(merchantId = merchantId)
+        val response =
+            ApiKeyGetDto.of(
+                apiKeyGetUseCase.getApiKeyByMerchantId(
+                    ApiKeyGetUseCase.Request(merchantId = merchantId)
+                )
             )
-        )
         return BackofficeResponse.ok(response)
     }
 }

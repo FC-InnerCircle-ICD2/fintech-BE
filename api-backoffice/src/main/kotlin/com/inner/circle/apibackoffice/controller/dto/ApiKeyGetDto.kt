@@ -4,8 +4,7 @@ data class ApiKeyGetDto(
     val apiKey: String?
 ) {
     companion object {
-        fun of(
-           dto: com.inner.circle.corebackoffice.service.dto.ApiKeyGetDto
-        ): ApiKeyGetDto = ApiKeyGetDto(apiKey = dto.apiKey)
+        fun of(dto: com.inner.circle.corebackoffice.service.dto.ApiKeyGetDto): ApiKeyGetDto =
+            ApiKeyGetDto(apiKey = dto.apiKey)
     }
 }
