@@ -357,12 +357,16 @@ class UserPaymentController(
     }
 
     @Operation(summary = "전액 환불")
-    @PostMapping("/refund/{paymentId}")
+    @PostMapping("/payments/refund/all")
     fun refundAll(
-        @PathVariable("paymentId") paymentId: String
+        @AuthenticationPrincipal account: AccountDetails,
+        @RequestBody paymentId: String
     ): PaymentResponse<TransactionDto> {
         val result =
-            refundPaymentUseCase.refundAll(paymentId)
+            refundPaymentUseCase.refundAll(
+                account.id,
+                paymentId
+            )
 
         return PaymentResponse.ok(
             TransactionDto(
@@ -379,13 +383,15 @@ class UserPaymentController(
     }
 
     @Operation(summary = "부분 환불")
-    @PostMapping("/refund/{paymentId}/{amount}")
-    fun refundAll(
-        @PathVariable("paymentId") paymentId: String,
-        @PathVariable("amount") amount: BigDecimal
+    @PostMapping("/payments/refund")
+    fun refundPartial(
+        @AuthenticationPrincipal account: AccountDetails,
+        @RequestBody paymentId: String,
+        @RequestBody amount: BigDecimal
     ): PaymentResponse<TransactionDto> {
         val result =
             refundPaymentUseCase.refundPartial(
+                account.id,
                 paymentId,
                 amount
             )

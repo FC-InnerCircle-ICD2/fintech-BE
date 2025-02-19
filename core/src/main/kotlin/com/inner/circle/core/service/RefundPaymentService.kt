@@ -4,6 +4,8 @@ import com.inner.circle.core.domain.TransactionStatus
 import com.inner.circle.core.service.dto.TransactionDto
 import com.inner.circle.core.usecase.RefundPaymentUseCase
 import com.inner.circle.exception.PaymentException
+import com.inner.circle.infra.port.GetPaymentPort
+import com.inner.circle.infra.port.GetPaymentPort.FindByPaymentKeyRequest
 import com.inner.circle.infra.port.GetTransactionPort
 import com.inner.circle.infra.port.TransactionPort
 import java.math.BigDecimal
@@ -14,9 +16,21 @@ import com.inner.circle.infra.repository.entity.TransactionStatus as InfraTransa
 @Service
 internal class RefundPaymentService(
     private val transactionPort: TransactionPort,
-    private val getTransactionPort: GetTransactionPort
+    private val getTransactionPort: GetTransactionPort,
+    private val getPaymentPort: GetPaymentPort
 ) : RefundPaymentUseCase {
-    override fun refundAll(paymentKey: String): TransactionDto {
+    override fun refundAll(
+        accountId: Long,
+        paymentKey: String
+    ): TransactionDto {
+        val infraPaymentDto =
+            getPaymentPort.findByAccountIdAndPaymentKey(
+                GetPaymentPort.FindByPaymentKeyRequest(
+                    accountId = accountId,
+                    paymentKey = paymentKey
+                )
+            )
+
         val infraTransactionDtoList =
             getTransactionPort.findAllByPaymentKey(
                 GetTransactionPort.Request(
@@ -53,14 +67,23 @@ internal class RefundPaymentService(
             reason = infraUserCardDto.reason,
             requestedAt = infraUserCardDto.requestedAt,
             createdAt = infraUserCardDto.createdAt,
-            updatedAt = infraUserCardDto.createdAt
+            updatedAt = infraUserCardDto.updatedAt
         )
     }
 
     override fun refundPartial(
+        accountId: Long,
         paymentKey: String,
         amount: BigDecimal
     ): TransactionDto {
+        val infraPaymentDto =
+            getPaymentPort.findByAccountIdAndPaymentKey(
+                GetPaymentPort.FindByPaymentKeyRequest(
+                    accountId = accountId,
+                    paymentKey = paymentKey
+                )
+            )
+
         val infraTransactionDtoList =
             getTransactionPort.findAllByPaymentKey(
                 GetTransactionPort.Request(
@@ -100,7 +123,7 @@ internal class RefundPaymentService(
             reason = infraUserCardDto.reason,
             requestedAt = infraUserCardDto.requestedAt,
             createdAt = infraUserCardDto.createdAt,
-            updatedAt = infraUserCardDto.createdAt
+            updatedAt = infraUserCardDto.updatedAt
         )
     }
 }

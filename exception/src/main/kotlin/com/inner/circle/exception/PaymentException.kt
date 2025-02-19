@@ -75,12 +75,12 @@ sealed class PaymentException(
         val paymentKey: String,
         override val message: String = "Already got a full refund : $paymentKey",
         override val cause: Throwable? = null
-    ) : PaymentException(HttpStatus.NOT_FOUND, message, cause)
+    ) : PaymentException(HttpStatus.BAD_REQUEST, message, cause)
 
     data class ExceedRefundAmountException(
         val paymentKey: String,
         val amount: BigDecimal,
         override val message: String = "No refunds for amounts exceeding $amount. : $paymentKey",
         override val cause: Throwable? = null
-    ) : PaymentException(HttpStatus.NOT_FOUND, message, cause)
+    ) : PaymentException(HttpStatus.BAD_REQUEST, message, cause)
 }
