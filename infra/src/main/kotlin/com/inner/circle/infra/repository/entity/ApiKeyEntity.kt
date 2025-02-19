@@ -13,6 +13,6 @@ data class ApiKeyEntity(
     val id: Long = TSID.fast().toLong(),
     @Column(name = "merchant_id", nullable = false, unique = true)
     val merchantId: Long,
-    @Column(name = "api_key", unique = true)
+    @Column(name = "token", unique = true)
     var apiKey: String
 ) : BaseEntity()
