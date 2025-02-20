@@ -26,9 +26,5 @@ class MerchantFinderAdaptor(
         )
     }
 
-    override fun findByIdOrNull(id: Long): MerchantEntity? =
-        merchantRepository.findByIdOrNull(id)
-
-
-
+    override fun findByIdOrNull(id: Long): MerchantEntity? = merchantRepository.findByIdOrNull(id)
 }

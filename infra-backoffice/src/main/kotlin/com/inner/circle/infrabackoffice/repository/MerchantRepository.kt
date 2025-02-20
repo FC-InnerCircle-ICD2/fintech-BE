@@ -14,7 +14,5 @@ interface MerchantRepository {
         password: String
     ): MerchantEntity
 
-    fun findByIdOrNull(
-        id: Long
-    ): MerchantEntity?
+    fun findByIdOrNull(id: Long): MerchantEntity?
 }

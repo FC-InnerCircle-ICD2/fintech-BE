@@ -31,8 +31,6 @@ internal class MerchantRepositoryImpl(
                 message = "Invalid email or password"
             )
 
-    override fun findByIdOrNull(
-        id: Long
-    ): MerchantEntity? =
+    override fun findByIdOrNull(id: Long): MerchantEntity? =
         merchantJpaRepository.findByIdOrNull(id)
 }
