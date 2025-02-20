@@ -19,6 +19,7 @@ dependencies {
     implementation(libs.bundles.kotlinxSerialization)
     implementation(libs.springBootDataJpa)
     implementation(libs.awsSecretsManagerConfig)
+    implementation(libs.springBootDataRedis)
     implementation(libs.h2)
     implementation(libs.bundles.hypersistence)
     runtimeOnly(libs.postgresql)
