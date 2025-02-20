@@ -13,7 +13,7 @@ class PaymentClaimDto(
     val merchantId: Long,
     val paymentKey: String?,
     val amount: BigDecimal,
-    val merchantName: String = "testMerchant",
+    val merchantName: String = "testMerchant"
 ) {
     init {
         validateRequiredOrderInformation(orderName, merchantId, orderId)

@@ -26,15 +26,16 @@ class MerchantController(
     fun signUp(
         @RequestBody @Valid request: SignUpMerchantRequest
     ): BackofficeResponse<MerchantDto> {
-        val response = MerchantDto.of(
-            merchantSaveUseCase.save(
-                MerchantSaveUseCase.Request(
-                    email = request.email,
-                    password = request.password,
-                    name = request.name
+        val response =
+            MerchantDto.of(
+                merchantSaveUseCase.save(
+                    MerchantSaveUseCase.Request(
+                        email = request.email,
+                        password = request.password,
+                        name = request.name
+                    )
                 )
             )
-        )
         return BackofficeResponse.ok(response)
     }
 
