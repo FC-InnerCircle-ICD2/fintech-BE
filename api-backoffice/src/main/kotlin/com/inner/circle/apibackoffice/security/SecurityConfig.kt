@@ -16,23 +16,17 @@ class SecurityConfig(
     private val authenticationEntryPoint: CustomAuthenticationEntryPoint
 ) {
     @Bean
-    fun apiSecurityFilterChain(http: HttpSecurity): SecurityFilterChain {
+    fun apiSecurityFilterChain(http: HttpSecurity): SecurityFilterChain =
         http
             .securityMatcher("/api/backoffice/v1/**")
             .csrf { it.disable() }
-            .httpBasic { it.disable() }
             .cors { it.disable() }
-            .authorizeHttpRequests { authorizeRequests ->
-                authorizeRequests
-                    .anyRequest()
-                    .hasAuthority("ROLE_MERCHANT")
-            }.addFilterBefore(
+            .httpBasic { it.disable() }
+            .formLogin { it.disable() }
+            .addFilterBefore(
                 MerchantApiKeyAuthenticationFilter(
-                    merchantApiKeyProvider,
-                    authenticationEntryPoint
+                    merchantApiKeyProvider
                 ),
                 UsernamePasswordAuthenticationFilter::class.java
-            ).formLogin { it.disable() }
-        return http.build()
-    }
+            ).build()
 }

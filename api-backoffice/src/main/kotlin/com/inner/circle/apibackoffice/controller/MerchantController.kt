@@ -1,5 +1,6 @@
 package com.inner.circle.apibackoffice.controller
 
+import com.inner.circle.apibackoffice.config.SwaggerConfig
 import com.inner.circle.apibackoffice.controller.dto.BackofficeResponse
 import com.inner.circle.apibackoffice.controller.dto.MerchantDto
 import com.inner.circle.apibackoffice.controller.dto.MerchantSignInDto

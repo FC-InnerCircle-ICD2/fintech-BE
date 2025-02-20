@@ -3,6 +3,8 @@ package com.inner.circle.infrabackoffice.adaptor
 import com.inner.circle.infrabackoffice.adaptor.dto.MerchantDto
 import com.inner.circle.infrabackoffice.port.MerchantFinderPort
 import com.inner.circle.infrabackoffice.repository.MerchantRepository
+import com.inner.circle.infrabackoffice.repository.entity.MerchantEntity
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 
 @Component
@@ -23,4 +25,10 @@ class MerchantFinderAdaptor(
             name = merchant.name
         )
     }
+
+    override fun findByIdOrNull(id: Long): MerchantEntity? =
+        merchantRepository.findByIdOrNull(id)
+
+
+
 }

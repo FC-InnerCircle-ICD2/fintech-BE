@@ -13,4 +13,8 @@ interface MerchantRepository {
         email: String,
         password: String
     ): MerchantEntity
+
+    fun findByIdOrNull(
+        id: Long
+    ): MerchantEntity?
 }

@@ -1,82 +1,45 @@
 package com.inner.circle.apibackoffice.security
 
-import com.inner.circle.apibackoffice.exception.CustomAuthenticationEntryPoint
 import com.inner.circle.corebackoffice.security.MerchantApiKeyProvider
 import com.inner.circle.exception.UserAuthenticationException
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpHeaders
-import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.filter.OncePerRequestFilter
 
 class MerchantApiKeyAuthenticationFilter(
-    private val provider: MerchantApiKeyProvider,
-    private val authenticationEntryPoint: CustomAuthenticationEntryPoint
+    private val provider: MerchantApiKeyProvider
 ) : OncePerRequestFilter() {
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        try {
-            val authHeader =
-                request.getHeader(HttpHeaders.AUTHORIZATION)
-                    ?: throw UserAuthenticationException.UnauthorizedException(
-                        "Missing Authorization header"
-                    )
-
-            val apiKey = resolveApiKey(authHeader)
-
-            val authentication = provider.getAuthentication(apiKey)
-            SecurityContextHolder.getContext().authentication = authentication
-
+        // TODO : Security 로 옮겨야 한다. 임시 처리로 해놓음
+        // Security 개선작업 시 옮겨야 함
+        if (request.requestURI == MERCHANT_LOGIN_PATH || request.requestURI == MERCHANT_SIGN_UP_PATH) {
             filterChain.doFilter(request, response)
-        } catch (ex: Exception) {
-            SecurityContextHolder.clearContext()
-            authenticationEntryPoint.commence(
-                request,
-                response,
-                BadCredentialsException(ex.message)
-            )
-        }
-    }
-
-    private fun resolveApiKey(authHeader: String): String {
-        authenticateWithBasicAuth(authHeader = authHeader)
-
-        val authorizationInfo = authHeader.split(" ")
-        if (authorizationInfo.size != 2 || authorizationInfo[0] != BASIC_AUTH_TOKEN_PREFIX) {
-            throw UserAuthenticationException.UnauthorizedException()
+            return
         }
 
-        val encodedApiKey = authorizationInfo[1]
-        val decodedApiKey =
-            try {
-                String(
-                    java.util.Base64
-                        .getDecoder()
-                        .decode(encodedApiKey)
+        val authHeader =
+            request.getHeader(HttpHeaders.AUTHORIZATION)
+                ?: throw UserAuthenticationException.UnauthorizedException(
+                    "Missing Authorization header"
                 )
-            } catch (e: IllegalArgumentException) {
-                throw UserAuthenticationException.UnauthorizedException()
-            }
+        val token = authHeader.removePrefix(BEARER_PREFIX).trim()
 
-        if (!decodedApiKey.contains(":")) {
-            throw UserAuthenticationException.UnauthorizedException()
-        }
+        SecurityContextHolder.getContext().authentication =
+            provider.getMerchantValidAuthenticationOrThrow(secret = token)
 
-        return decodedApiKey.substringBefore(":")
-    }
-
-    private fun authenticateWithBasicAuth(authHeader: String?) {
-        if (authHeader == null || !authHeader.startsWith(prefix = BASIC_AUTH_TOKEN_PREFIX)) {
-            throw UserAuthenticationException.UnauthorizedException()
-        }
+        filterChain.doFilter(request, response)
     }
 
     companion object {
-        private const val BASIC_AUTH_TOKEN_PREFIX = "Basic"
+        private const val BEARER_PREFIX = "Bearer "
+        private const val MERCHANT_LOGIN_PATH = "/api/backoffice/v1/sign-in"
+        private const val MERCHANT_SIGN_UP_PATH = "/api/backoffice/v1/sign-up"
     }
 }
