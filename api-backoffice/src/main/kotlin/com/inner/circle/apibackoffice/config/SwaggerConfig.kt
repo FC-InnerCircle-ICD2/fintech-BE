@@ -1,5 +1,6 @@
 package com.inner.circle.apibackoffice.config
 
+import io.swagger.v3.oas.models.Components
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.info.Info
 import io.swagger.v3.oas.models.security.SecurityRequirement
@@ -15,30 +16,39 @@ import org.springframework.context.annotation.Profile
 class SwaggerConfig(
     @Value("\${swagger.server-url}") private val serverUrl: String
 ) {
-    private val securitySchemeName = "basicAuth"
-
     @Bean
     fun customOpenAPI(): OpenAPI {
-        val server = Server().url(serverUrl) // 환경별 서버 URL 설정
+        val basicAuthScheme =
+            SecurityScheme()
+                .name(BASIC_AUTH)
+                .type(SecurityScheme.Type.HTTP)
+                .scheme("basic")
+
+        val bearerAuthScheme =
+            SecurityScheme()
+                .name(BEARER_AUTH)
+                .type(SecurityScheme.Type.HTTP)
+                .scheme("bearer")
+                .bearerFormat("JWT")
 
         return OpenAPI()
             .info(
                 Info()
-                    .title("Pay200 API Docs")
-                    .version("1.0")
-                    .description("PG 백오피스 프로젝트")
-            ).addServersItem(server)
-            .addSecurityItem(SecurityRequirement().addList(securitySchemeName))
-            .components(
-                io.swagger.v3.oas.models
-                    .Components()
-                    .addSecuritySchemes(
-                        securitySchemeName,
-                        SecurityScheme()
-                            .name(securitySchemeName)
-                            .type(SecurityScheme.Type.HTTP)
-                            .scheme("basic")
-                    )
+                    .title("API Documentation")
+                    .version("v1")
+            ).servers(
+                listOf(
+                    Server().url(serverUrl).description("HTTPS Server")
+                )
+            ).components(
+                Components()
+                    .addSecuritySchemes(BASIC_AUTH, basicAuthScheme)
+                    .addSecuritySchemes(BEARER_AUTH, bearerAuthScheme)
             )
+    }
+
+    companion object {
+        const val BASIC_AUTH = "basicAuth"
+        const val BEARER_AUTH = "bearerAuth"
     }
 }
