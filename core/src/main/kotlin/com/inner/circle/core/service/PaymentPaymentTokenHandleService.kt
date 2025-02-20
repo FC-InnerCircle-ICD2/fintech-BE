@@ -35,4 +35,12 @@ class PaymentPaymentTokenHandleService(
             generatedToken = token
         )
     }
+
+    override fun checkPaymentStatus(
+        merchantId: String,
+        orderId: String
+    ): Boolean {
+        val checkPaymentStatus = paymentTokenHandlingPort.checkPaymentStatus(merchantId, orderId)
+        return checkPaymentStatus.isNotBlank()
+    }
 }

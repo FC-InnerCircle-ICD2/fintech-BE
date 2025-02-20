@@ -44,7 +44,7 @@ class PaymentStatusChangedMessageSender(
             )
         } catch (e: NoSuchElementException) {
             log.error("get sse session failed", e)
-            throw SseException.connectionNotFound(merchantId, orderId)
+            throw SseException.ConnectionNotFoundException(merchantId.toString(), orderId)
         }
     }
 
@@ -75,7 +75,7 @@ class PaymentStatusChangedMessageSender(
             )
         } catch (e: NoSuchElementException) {
             log.error("get sse session failed", e)
-            throw SseException.connectionNotFound(merchantId, orderId)
+            throw SseException.ConnectionNotFoundException(merchantId.toString(), orderId)
         }
     }
 }

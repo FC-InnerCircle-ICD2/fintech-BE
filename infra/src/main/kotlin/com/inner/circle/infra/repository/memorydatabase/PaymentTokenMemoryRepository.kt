@@ -55,4 +55,22 @@ class PaymentTokenMemoryRepository(
             logger.error("Failed to remove token: $token", ex)
         }
     }
+
+    override fun savePaymentInProgress(
+        merchantId: String,
+        orderId: String,
+        expiresAt: LocalDateTime
+    ) {
+        val key = "$merchantId:$orderId"
+        val ttl = Duration.between(LocalDateTime.now(), expiresAt)
+        redisTemplate.opsForValue().set(key, "paymentInProcess", ttl)
+    }
+
+    override fun checkPaymentInProgress(
+        merchantId: String,
+        orderId: String
+    ): String? {
+        val key = "$merchantId:$orderId"
+        return redisTemplate.opsForValue()[key].orEmpty()
+    }
 }
