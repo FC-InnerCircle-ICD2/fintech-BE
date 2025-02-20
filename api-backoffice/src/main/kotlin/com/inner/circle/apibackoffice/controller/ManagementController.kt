@@ -2,7 +2,7 @@ package com.inner.circle.apibackoffice.controller
 
 import com.inner.circle.apibackoffice.controller.dto.ApiKeyCreateOrUpdateDto
 import com.inner.circle.apibackoffice.controller.dto.ApiKeyGetDto
-import com.inner.circle.apibackoffice.exception.BackofficeResponse
+import com.inner.circle.apibackoffice.controller.dto.BackofficeResponse
 import com.inner.circle.corebackoffice.usecase.ApiKeyCreateOrUpdateUseCase
 import com.inner.circle.corebackoffice.usecase.ApiKeyGetUseCase
 import io.swagger.v3.oas.annotations.Operation

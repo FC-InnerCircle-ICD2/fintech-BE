@@ -17,6 +17,7 @@ dependencies {
     implementation(libs.bundles.kotlinxSerialization)
     implementation(projects.infraBackoffice)
     implementation(projects.exception)
+    implementation("org.springframework.boot:spring-boot-starter-security")
     compileOnly(libs.bundles.kotlinLogging)
     compileOnly(libs.bundles.kotlinxCoroutines)
     testImplementation(libs.bundles.kotlinTest)

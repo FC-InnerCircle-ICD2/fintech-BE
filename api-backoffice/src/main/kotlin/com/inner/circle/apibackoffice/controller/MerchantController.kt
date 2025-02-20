@@ -4,7 +4,7 @@ import com.inner.circle.apibackoffice.controller.dto.MerchantDto
 import com.inner.circle.apibackoffice.controller.dto.MerchantSignInDto
 import com.inner.circle.apibackoffice.controller.request.SignInMerchantRequest
 import com.inner.circle.apibackoffice.controller.request.SignUpMerchantRequest
-import com.inner.circle.apibackoffice.exception.BackofficeResponse
+import com.inner.circle.apibackoffice.controller.dto.BackofficeResponse
 import com.inner.circle.corebackoffice.usecase.MerchantSaveUseCase
 import com.inner.circle.corebackoffice.usecase.MerchantSignInUseCase
 import io.swagger.v3.oas.annotations.Operation
