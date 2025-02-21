@@ -1,9 +1,9 @@
-package com.inner.circle.apibackoffice.exception
+package com.inner.circle.apibackoffice.controller.dto
 
 import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.annotation.JsonInclude.Include
+import com.inner.circle.apibackoffice.exception.BackofficeError
 
-@JsonInclude(value = Include.NON_NULL)
+@JsonInclude(value = JsonInclude.Include.NON_NULL)
 data class BackofficeResponse<T> private constructor(
     val ok: Boolean,
     val data: T?,

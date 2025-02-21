@@ -1,6 +1,7 @@
 package com.inner.circle.apibackoffice.exception
 
 import com.inner.circle.apibackoffice.common.response.AppExceptionResponse
+import com.inner.circle.apibackoffice.controller.dto.BackofficeResponse
 import com.inner.circle.exception.AppException
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
