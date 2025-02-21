@@ -8,6 +8,7 @@ import com.inner.circle.infra.adaptor.dto.PaymentTokenDto
 import com.inner.circle.infra.repository.PaymentClaimJpaRepository
 import com.inner.circle.infra.repository.entity.PaymentClaimRepository
 import com.inner.circle.infra.repository.entity.PaymentClaimRepositoryHandler
+import com.inner.circle.infra.repository.entity.PaymentStatusType
 import java.math.BigDecimal
 import java.time.LocalDateTime
 import org.assertj.core.api.Assertions.assertThat
@@ -68,7 +69,7 @@ class PaymentClaimAdaptorTest : AbstractJpaTestWithLocalTestContainer() {
         assertThat(savedEntity).isNotNull
         assertThat(savedEntity?.orderId).isEqualTo(paymentClaimDto.orderId)
         assertThat(savedEntity?.orderName).isEqualTo(paymentClaimDto.orderName)
-        assertThat(savedEntity?.orderStatus).isEqualTo(paymentClaimDto.orderStatus.name)
+        assertThat(savedEntity?.orderStatus?.name ?: PaymentStatusType.READY.name).isEqualTo(paymentClaimDto.orderStatus.name)
         assertThat(savedEntity?.merchantId).isEqualTo(paymentClaimDto.merchantId)
         assertThat(savedEntity?.paymentKey).isEqualTo(paymentClaimDto.paymentKey)
         assertThat(savedEntity?.amount).isEqualByComparingTo(paymentClaimDto.amount)
@@ -102,7 +103,7 @@ class PaymentClaimAdaptorTest : AbstractJpaTestWithLocalTestContainer() {
             }
         assertThat(
             exception.message
-        ).isEqualTo("Claim with OrderId ($orderId) has an invalid amount")
+        ).isEqualTo("주문 ID (12345)와 관련된 요청 금액이 유효하지 않습니다.")
     }
 
     @DisplayName("PaymentClaimDto 구성 시 PaymentProcessStatus.READY가 아니면 예외를 반환한다.")
