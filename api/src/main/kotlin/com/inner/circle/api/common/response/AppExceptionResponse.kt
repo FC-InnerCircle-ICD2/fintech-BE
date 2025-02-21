@@ -1,17 +1,15 @@
 package com.inner.circle.api.common.response
 
 import com.inner.circle.exception.AppException
-import com.inner.circle.exception.HttpStatus
-
 
 data class AppExceptionResponse(
-    val code: HttpStatus,
+    val code: String,
     val message: String
 ) {
     companion object {
         fun of(exception: AppException): AppExceptionResponse =
             AppExceptionResponse(
-                code = exception.status,
+                code = exception.status.name,
                 message = exception.message
             )
     }

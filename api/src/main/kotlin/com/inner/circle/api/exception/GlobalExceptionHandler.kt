@@ -45,9 +45,16 @@ class GlobalExceptionHandler {
     )
     fun handleAppException(exception: AppException): ResponseEntity<AppExceptionResponse> {
         logger.error("AppException (type = {})", exception::class.simpleName, exception)
+
+        var code = exception.status.code
+        try {
+            code = HttpStatus.valueOf(code).value()
+        } catch (e: Exception) {
+            code = HttpStatus.BAD_REQUEST.value()
+        }
         return ResponseEntity(
             AppExceptionResponse.of(exception),
-            HttpStatus.valueOf(exception.status.code)
+            HttpStatus.valueOf(code)
         )
     }
 
