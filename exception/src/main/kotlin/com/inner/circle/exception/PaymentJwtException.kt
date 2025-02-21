@@ -21,13 +21,13 @@ sealed class PaymentJwtException(
     ) : PaymentJwtException(HttpStatus.UNAUTHORIZED, message, cause)
 
     data class TokenSignatureException(
-        override val message: String = "Payment token has an invalid signature",
+        override val message: String = "서명이 유효하지 않습니다.",
         override val cause: Throwable? = null
     ) : PaymentJwtException(HttpStatus.UNAUTHORIZED, message, cause)
 
     data class ClaimExtractionException(
         val claimName: String,
-        override val message: String = "Error extracting claim: $claimName",
+        override val message: String = "토큰 내 정보를 확인할 수 없습니다. ($claimName)",
         override val cause: Throwable? = null
     ) : PaymentJwtException(HttpStatus.BAD_REQUEST, message, cause)
 }
