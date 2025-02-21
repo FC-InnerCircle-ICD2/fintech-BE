@@ -15,9 +15,7 @@ internal class SavePaymentRequestAdaptor(
         val existingEntity =
             paymentRequestRepository.findByOrderIdAndMerchantId(request.orderId, request.merchantId)
                 ?: throw PaymentException.PaymentRequestNotFoundException(
-                    "",
-                    "Payment request not found"
-                )
+                    "")
 
         val orderStatus = request.orderStatus
         paymentRequestRepository.save(

@@ -46,8 +46,8 @@ internal class PaymentAdaptor(
                 ?: throw PaymentNotFoundException(
                     paymentId = "",
                     message =
-                        "Payment not found: " +
-                            "merchantId ${request.merchantId} paymentKey ${request.paymentKey}"
+                        "요청된 결제 정보를 찾을 수 없습니다. : " +
+                            "가맹점[${request.merchantId}], paymentKey[${request.paymentKey}]"
                 )
         return PaymentDto(
             id = requireNotNull(payment.id),
