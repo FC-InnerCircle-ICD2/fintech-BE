@@ -25,7 +25,7 @@ class PaymentPaymentTokenHandleService(
 
         if (!validateToken) {
             throw PaymentJwtException.TokenInvalidException(
-                "paymentToken invalid. (token = $token)"
+                "결제 토큰이 유효하지 않습니다. ($token)"
             )
         }
 

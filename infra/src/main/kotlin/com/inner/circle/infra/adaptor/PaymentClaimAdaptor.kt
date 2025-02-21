@@ -24,7 +24,7 @@ class PaymentClaimAdaptor(
     ): PaymentClaimDto {
         val expiredAt =
             tokenData.expiredAt
-                ?: throw PaymentJwtException.TokenInvalidException("token expired not set.")
+                ?: throw PaymentJwtException.TokenInvalidException()
 
         // 결제 요청 정보 및 토큰 entity 생성
         val (paymentRequest, tokenEntity) = createPaymentRequest(paymentRequestData, tokenData)
