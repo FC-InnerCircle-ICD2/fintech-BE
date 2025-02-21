@@ -27,11 +27,11 @@ class GlobalExceptionHandler {
             PaymentResponse.fail(
                 error =
                     PaymentError(
-                        code = HttpStatus.BAD_REQUEST.toString(),
+                        code = HttpStatus.BAD_REQUEST.name,
                         message =
                             ex.bindingResult.allErrors
                                 .first()
-                                .defaultMessage ?: "Invalid Argument"
+                                .defaultMessage ?: "유효하지 않은 요청입니다."
                     )
             ),
             HttpStatus.BAD_REQUEST

@@ -57,7 +57,7 @@ sealed class PaymentException(
     data class CardNotFoundException(
         override val message: String = "유효한 결제수단을 찾을 수 없습니다.",
         override val cause: Throwable? = null
-    ) : PaymentException(HttpStatus.BAD_REQUEST, message, cause)
+    ) : PaymentException(HttpStatus.PRECONDITION_FAILED, message, cause)
 
     data class InvalidOrderStatusException(
         val orderStatus: String,

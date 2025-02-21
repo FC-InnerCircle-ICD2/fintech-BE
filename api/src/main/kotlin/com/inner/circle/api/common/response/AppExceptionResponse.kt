@@ -1,7 +1,8 @@
 package com.inner.circle.api.common.response
 
 import com.inner.circle.exception.AppException
-import org.springframework.http.HttpStatus
+import com.inner.circle.exception.HttpStatus
+
 
 data class AppExceptionResponse(
     val code: HttpStatus,
@@ -10,7 +11,7 @@ data class AppExceptionResponse(
     companion object {
         fun of(exception: AppException): AppExceptionResponse =
             AppExceptionResponse(
-                code = HttpStatus.valueOf(exception.status.code),
+                code = exception.status,
                 message = exception.message
             )
     }
