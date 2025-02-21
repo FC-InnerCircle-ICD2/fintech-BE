@@ -93,7 +93,7 @@ class GlobalExceptionHandler {
         val status = HttpStatus.BAD_REQUEST
         val errorResponse =
             PaymentResponse.fail(
-                PaymentError(status.toString(), "Invalid request")
+                PaymentError(status.toString(), ex.message ?: "Invalid request.")
             )
         return ResponseEntity(errorResponse, status)
     }

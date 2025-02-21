@@ -10,7 +10,9 @@ import com.inner.circle.api.controller.dto.ConfirmPaymentDto
 import com.inner.circle.api.controller.dto.PaymentResponse
 import com.inner.circle.api.controller.dto.PaymentWithTransactionsDto
 import com.inner.circle.api.controller.dto.PaymentsWithTransactionsDto
+import com.inner.circle.api.controller.dto.TransactionStatus
 import com.inner.circle.api.controller.dto.UserCardDto
+import com.inner.circle.api.controller.dto.convertCoreTransactionStatus
 import com.inner.circle.api.controller.request.CancelPaymentRequest
 import com.inner.circle.api.controller.request.ConfirmPaymentRequest
 import com.inner.circle.api.controller.request.ConfirmSimplePaymentRequest
@@ -28,8 +30,11 @@ import com.inner.circle.core.usecase.PaymentTokenHandlingUseCase
 import com.inner.circle.core.usecase.RefundPaymentUseCase
 import com.inner.circle.core.usecase.UserCardUseCase
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
+import java.time.LocalDate
+import kotlinx.datetime.toKotlinLocalDate
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -314,13 +319,21 @@ class UserPaymentController(
     @GetMapping("/payments")
     fun getPayments(
         @AuthenticationPrincipal account: AccountDetails,
+        @Parameter(example = "2025-02-15")
+        @RequestParam("startDate") startDate: LocalDate?,
+        @Parameter(example = "2025-02-19")
+        @RequestParam("endDate") endDate: LocalDate?,
+        @RequestParam("status") status: TransactionStatus?,
         @RequestParam("page", defaultValue = "0") page: Int,
-        @RequestParam("limit", defaultValue = "20") limit: Int
+        @RequestParam("limit", defaultValue = "10") limit: Int
     ): PaymentResponse<PaymentsWithTransactionsDto> {
         val request =
             GetPaymentWithTransactionsUseCase.FindAllByAccountIdRequest(
                 accountId = account.id,
                 page = page,
+                startDate = startDate?.toKotlinLocalDate(),
+                endDate = endDate?.toKotlinLocalDate(),
+                status = status?.convertCoreTransactionStatus(),
                 limit = limit
             )
 

@@ -22,6 +22,8 @@ internal class TransactionService(
                 .findAllByAccountId(
                     GetPaymentPort.FindAllByAccountIdRequest(
                         accountId = request.accountId,
+                        startDate = request.startDate,
+                        endDate = request.endDate,
                         page = request.page,
                         limit = request.limit
                     )
@@ -42,6 +44,11 @@ internal class TransactionService(
                         updatedAt = transaction.updatedAt
                     )
                 }.groupBy { it.paymentKey }
+                .let {
+                    it.takeIf { request.status == null } ?: it.filterValues { transactions ->
+                        transactions.any { transaction -> transaction.status == request.status }
+                    }
+                }
 
         return payments.map { payment ->
             PaymentWithTransactionsDto(
