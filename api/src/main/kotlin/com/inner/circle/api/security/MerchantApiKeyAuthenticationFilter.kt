@@ -23,9 +23,7 @@ class MerchantApiKeyAuthenticationFilter(
         try {
             val authHeader =
                 request.getHeader(HttpHeaders.AUTHORIZATION)
-                    ?: throw UserAuthenticationException.UnauthorizedException(
-                        "Missing Authorization header"
-                    )
+                    ?: throw UserAuthenticationException.UnauthorizedException()
 
             val apiKey = resolveApiKey(authHeader)
 

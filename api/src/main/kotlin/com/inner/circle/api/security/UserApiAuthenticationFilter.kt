@@ -26,9 +26,7 @@ class UserApiAuthenticationFilter(
 
         val authHeader =
             request.getHeader(HttpHeaders.AUTHORIZATION)
-                ?: throw UserAuthenticationException.UnauthorizedException(
-                    "Missing Authorization header"
-                )
+                ?: throw UserAuthenticationException.UnauthorizedException()
         val token = authHeader.removePrefix(BEARER_PREFIX).trim()
 
         SecurityContextHolder.getContext().authentication =

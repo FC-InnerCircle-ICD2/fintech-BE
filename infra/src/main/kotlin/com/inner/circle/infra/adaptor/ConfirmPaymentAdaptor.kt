@@ -17,9 +17,7 @@ internal class ConfirmPaymentAdaptor(
     override fun getCardNoAndPayInfo(request: ConfirmPaymentPort.Request): ConfirmPaymentInfraDto {
         val accountId =
             request.accountId
-                ?: throw UserAuthenticationException.UserNotFoundException(
-                    "user not found in card find."
-                )
+                ?: throw UserAuthenticationException.UserNotFoundException()
         val orderId = request.orderId
         val merchantId = request.merchantId
         val paymentRequest =

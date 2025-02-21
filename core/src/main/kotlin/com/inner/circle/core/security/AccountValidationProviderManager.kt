@@ -34,7 +34,7 @@ class AccountValidationProviderManager(
                     accountInfo,
                     null
                 )
-            } ?: throw UserAuthenticationException.UnauthorizedException(message = "Invalid Token")
+            } ?: throw UserAuthenticationException.UnauthorizedException()
 
     private fun AccountEntity.toUserDetails(): AccountDetails =
         AccountDetails(
