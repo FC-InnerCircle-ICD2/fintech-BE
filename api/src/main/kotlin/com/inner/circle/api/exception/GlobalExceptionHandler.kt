@@ -1,6 +1,5 @@
 package com.inner.circle.api.exception
 
-import com.inner.circle.api.common.response.AppExceptionResponse
 import com.inner.circle.api.controller.dto.PaymentError
 import com.inner.circle.api.controller.dto.PaymentResponse
 import com.inner.circle.exception.AppException
@@ -43,7 +42,7 @@ class GlobalExceptionHandler {
         description = "Unexpected error",
         content = [Content(schema = Schema(implementation = PaymentResponse::class))]
     )
-    fun handleAppException(exception: AppException): ResponseEntity<AppExceptionResponse> {
+    fun handleAppException(exception: AppException): ResponseEntity<PaymentResponse<Nothing>> {
         logger.error("AppException (type = {})", exception::class.simpleName, exception)
 
         var code = exception.status.code
@@ -53,7 +52,13 @@ class GlobalExceptionHandler {
             code = HttpStatus.BAD_REQUEST.value()
         }
         return ResponseEntity(
-            AppExceptionResponse.of(exception),
+            PaymentResponse.fail(
+                error =
+                    PaymentError(
+                        code = exception.status.name,
+                        message = exception.message
+                    )
+            ),
             HttpStatus.valueOf(code)
         )
     }
@@ -66,9 +71,19 @@ class GlobalExceptionHandler {
     )
     fun handleAuthorizationException(
         exception: AuthenticationException
-    ): ResponseEntity<AppExceptionResponse> {
+    ): ResponseEntity<PaymentResponse<Nothing>> {
         logger.error("AuthenticationException (type = {})", exception::class.simpleName, exception)
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
+        val unauthorized = com.inner.circle.exception.HttpStatus.UNAUTHORIZED
+        return ResponseEntity(
+            PaymentResponse.fail(
+                error =
+                    PaymentError(
+                        code = unauthorized.name,
+                        message = unauthorized.description
+                    )
+            ),
+            HttpStatus.valueOf(unauthorized.code)
+        )
     }
 
     @ExceptionHandler(Exception::class)
