@@ -14,6 +14,5 @@ class MerchantFinderAdaptor(
     override fun findByEmailOrNull(email: String): MerchantEntity? =
         merchantRepository.findByEmailOrNull(email)
 
-
     override fun findByIdOrNull(id: Long): MerchantEntity? = merchantRepository.findByIdOrNull(id)
 }

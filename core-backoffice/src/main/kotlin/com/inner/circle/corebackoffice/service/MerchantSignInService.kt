@@ -13,15 +13,17 @@ class MerchantSignInService(
     private val bCryptPasswordEncoder: BCryptPasswordEncoder
 ) : MerchantSignInUseCase {
     override fun signIn(request: MerchantSignInUseCase.Request): MerchantSignInDto =
-            merchantFinderPort.findByEmailOrNull(
+        merchantFinderPort
+            .findByEmailOrNull(
                 email = request.email
             )?.let { merchantEntity ->
                 merchantEntity
                     .takeIf { bCryptPasswordEncoder.matches(request.password, it.password) }
-                    ?.let { MerchantSignInDto(
-                        id = it.id,
-                        name = it.name
-                    ) }
+                    ?.let {
+                        MerchantSignInDto(
+                            id = it.id,
+                            name = it.name
+                        )
+                    }
             } ?: throw UserAuthenticationException.UserNotFoundException()
-
 }

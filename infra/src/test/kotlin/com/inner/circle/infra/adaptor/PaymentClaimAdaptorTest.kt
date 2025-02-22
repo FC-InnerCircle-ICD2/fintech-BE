@@ -69,7 +69,9 @@ class PaymentClaimAdaptorTest : AbstractJpaTestWithLocalTestContainer() {
         assertThat(savedEntity).isNotNull
         assertThat(savedEntity?.orderId).isEqualTo(paymentClaimDto.orderId)
         assertThat(savedEntity?.orderName).isEqualTo(paymentClaimDto.orderName)
-        assertThat(savedEntity?.orderStatus?.name ?: PaymentStatusType.READY.name).isEqualTo(paymentClaimDto.orderStatus.name)
+        assertThat(
+            savedEntity?.orderStatus?.name ?: PaymentStatusType.READY.name
+        ).isEqualTo(paymentClaimDto.orderStatus.name)
         assertThat(savedEntity?.merchantId).isEqualTo(paymentClaimDto.merchantId)
         assertThat(savedEntity?.paymentKey).isEqualTo(paymentClaimDto.paymentKey)
         assertThat(savedEntity?.amount).isEqualByComparingTo(paymentClaimDto.amount)

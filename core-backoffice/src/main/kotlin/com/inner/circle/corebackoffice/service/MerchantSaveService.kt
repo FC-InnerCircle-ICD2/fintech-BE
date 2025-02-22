@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service
 @Service
 class MerchantSaveService(
     private val merchantSavePort: MerchantSavePort,
-    private val merchantFinderPort: MerchantFinderPort,
+    private val merchantFinderPort: MerchantFinderPort
 ) : MerchantSaveUseCase {
     override fun save(request: MerchantSaveUseCase.Request): MerchantDto {
         if (merchantFinderPort.existsByEmail(request.email)) {

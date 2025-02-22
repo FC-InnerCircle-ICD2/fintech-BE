@@ -43,24 +43,24 @@ class MerchantController(
     @PostMapping("/sign-in")
     fun signIn(
         @RequestBody request: SignInMerchantRequest
-    ): BackofficeResponse<MerchantSignInDto> =
-        merchantSignInUseCase
+    ): BackofficeResponse<MerchantSignInDto> {
+        val merchant = merchantSignInUseCase
             .signIn(
                 MerchantSignInUseCase.Request(
                     email = request.email,
                     password = request.password
                 )
-            ).run {
-                tokenHandlerUseCase.generateTokenBy(
-                    keyString = this.id.toString(),
-                    data = this
-                )
-            }.let {
-                BackofficeResponse.ok(
-                    data =
-                        MerchantSignInDto(
-                            accessToken = it
-                        )
-                )
-            }
+            )
+        val token = tokenHandlerUseCase.generateTokenBy(
+            keyString = merchant.id.toString(),
+            data = merchant
+        )
+        return BackofficeResponse.ok(
+            data = MerchantSignInDto(
+                accessToken = token,
+                id = merchant.id.toString(),
+                name = merchant.name
+            )
+        )
+    }
 }
