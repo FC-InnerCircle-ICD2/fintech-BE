@@ -1,11 +1,13 @@
 package com.inner.circle.apibackoffice.controller
 
+import com.inner.circle.apibackoffice.config.SwaggerConfig
 import com.inner.circle.apibackoffice.controller.dto.ApiKeyCreateOrUpdateDto
 import com.inner.circle.apibackoffice.controller.dto.ApiKeyGetDto
 import com.inner.circle.apibackoffice.controller.dto.BackofficeResponse
 import com.inner.circle.corebackoffice.usecase.ApiKeyCreateOrUpdateUseCase
 import com.inner.circle.corebackoffice.usecase.ApiKeyGetUseCase
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 
 @Tag(name = "Management", description = "Management API")
+@SecurityRequirement(name = SwaggerConfig.BEARER_AUTH)
 @BackofficeV1Api
 class ManagementController(
     private val apiKeyCreateOrUpdateUseCase: ApiKeyCreateOrUpdateUseCase,

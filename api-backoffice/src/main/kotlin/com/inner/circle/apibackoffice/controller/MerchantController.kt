@@ -10,14 +10,12 @@ import com.inner.circle.corebackoffice.usecase.MerchantSaveUseCase
 import com.inner.circle.corebackoffice.usecase.MerchantSignInUseCase
 import com.inner.circle.corebackoffice.usecase.TokenHandlerUseCase
 import io.swagger.v3.oas.annotations.Operation
-import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 
 @Tag(name = "Payment", description = "Payment API")
-@SecurityRequirement(name = SwaggerConfig.BEARER_AUTH)
 @BackofficeV1Api
 class MerchantController(
     private val merchantSaveUseCase: MerchantSaveUseCase,
