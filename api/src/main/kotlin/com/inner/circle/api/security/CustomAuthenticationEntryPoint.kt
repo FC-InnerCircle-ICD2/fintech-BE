@@ -1,4 +1,4 @@
-package com.inner.circle.api.exception
+package com.inner.circle.api.security
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.inner.circle.api.controller.dto.PaymentError
@@ -12,7 +12,9 @@ import org.springframework.stereotype.Component
 
 @Component
 class CustomAuthenticationEntryPoint : AuthenticationEntryPoint {
-    private val mapper = ObjectMapper()
+    companion object {
+        private val OBJECT_MAPPER = ObjectMapper()
+    }
 
     override fun commence(
         request: HttpServletRequest,
@@ -27,7 +29,7 @@ class CustomAuthenticationEntryPoint : AuthenticationEntryPoint {
                 )
             )
 
-        val result = mapper.writeValueAsString(error)
+        val result = OBJECT_MAPPER.writeValueAsString(error)
 
         response.status = HttpServletResponse.SC_UNAUTHORIZED
         response.contentType = "application/json;charset=UTF-8"
