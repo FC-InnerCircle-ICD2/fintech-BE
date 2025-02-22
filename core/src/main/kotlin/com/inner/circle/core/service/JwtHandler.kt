@@ -46,9 +46,28 @@ class JwtHandler(
                 .build()
                 .parseSignedClaims(token)
                 .payload
-        }.onFailure {
-            logger.error("Invalid token Error Message : ${it.message}", it)
-            throw PaymentJwtException.TokenInvalidException()
+        }.onFailure { exception ->
+            when (exception) {
+                is io.jsonwebtoken.ExpiredJwtException -> {
+                    logger.error("Token validation error: Token has expired", exception)
+                    throw PaymentJwtException.TokenExpiredException(cause = exception)
+                }
+
+                is io.jsonwebtoken.MalformedJwtException -> {
+                    logger.error("Token validation error: Invalid token", exception)
+                    throw PaymentJwtException.TokenInvalidException(cause = exception)
+                }
+
+                is io.jsonwebtoken.security.SignatureException -> {
+                    logger.error("Token validation error: Invalid signature", exception)
+                    throw PaymentJwtException.TokenInvalidException(cause = exception)
+                }
+
+                else -> {
+                    logger.error("Token validation error occurred.", exception)
+                    throw PaymentJwtException.TokenInvalidException(cause = exception)
+                }
+            }
         }.getOrElse { null }
 
     fun generateToken(
