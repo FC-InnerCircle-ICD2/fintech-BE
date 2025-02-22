@@ -1,10 +1,14 @@
 package com.inner.circle.infrabackoffice.repository
 
 import com.inner.circle.infrabackoffice.repository.entity.PaymentEntity
+import java.time.LocalDate
 
 interface PaymentRepository {
     fun findAllByMerchantId(
         merchantId: Long,
+        paymentKey: String?,
+        startDate: LocalDate?,
+        endDate: LocalDate?,
         page: Int,
         limit: Int
     ): List<PaymentEntity>

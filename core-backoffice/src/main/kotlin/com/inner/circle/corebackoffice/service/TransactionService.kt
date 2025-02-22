@@ -22,6 +22,9 @@ internal class TransactionService(
                 .findAllByMerchantId(
                     GetPaymentPort.FindAllByMerchantIdRequest(
                         merchantId = request.merchantId,
+                        paymentKey = request.paymentKey,
+                        startDate = request.startDate,
+                        endDate = request.endDate,
                         page = request.page,
                         limit = request.limit
                     )
@@ -42,13 +45,21 @@ internal class TransactionService(
                         updatedAt = transaction.updatedAt
                     )
                 }.groupBy { it.paymentKey }
+                .mapValues { entry ->
+                    entry.value.sortedByDescending { it.createdAt }
+                }.let {
+                    it.takeIf { request.status == null } ?: it.filterValues { transactions ->
+                        transactions.any { transaction -> transaction.status == request.status }
+                    }
+                }
 
-        return payments.map { payment ->
+        return transactionMap.map { (paymentKey, transactions) ->
+            val payment = payments.find { it.paymentKey == paymentKey }!!
             PaymentWithTransactionsDto(
                 paymentKey = payment.paymentKey,
                 cardNumber = payment.cardNumber,
                 accountId = payment.accountId,
-                transactions = transactionMap[payment.paymentKey].orEmpty(),
+                transactions = transactions,
                 paymentType = PaymentType.of(payment.paymentType),
                 orderId = payment.orderId,
                 orderName = payment.orderName

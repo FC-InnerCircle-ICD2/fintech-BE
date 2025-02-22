@@ -4,6 +4,7 @@ import com.inner.circle.exception.PaymentException.PaymentNotFoundException
 import com.inner.circle.infrabackoffice.adaptor.dto.PaymentDto
 import com.inner.circle.infrabackoffice.port.GetPaymentPort
 import com.inner.circle.infrabackoffice.repository.PaymentRepository
+import kotlinx.datetime.toJavaLocalDate
 import kotlinx.datetime.toKotlinLocalDateTime
 import org.springframework.stereotype.Component
 
@@ -17,6 +18,9 @@ internal class PaymentAdaptor(
         paymentRepository
             .findAllByMerchantId(
                 merchantId = request.merchantId,
+                paymentKey = request.paymentKey,
+                startDate = request.startDate?.toJavaLocalDate(),
+                endDate = request.endDate?.toJavaLocalDate(),
                 page = request.page,
                 limit = request.limit
             ).map { payment ->
