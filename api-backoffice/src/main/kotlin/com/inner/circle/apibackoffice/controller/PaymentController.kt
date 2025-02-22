@@ -4,11 +4,16 @@ import com.inner.circle.apibackoffice.config.SwaggerConfig
 import com.inner.circle.apibackoffice.controller.dto.BackofficeResponse
 import com.inner.circle.apibackoffice.controller.dto.PaymentWithTransactionsDto
 import com.inner.circle.apibackoffice.controller.dto.PaymentsWithTransactionsDto
+import com.inner.circle.apibackoffice.controller.dto.TransactionStatus
+import com.inner.circle.apibackoffice.controller.dto.convertCoreTransactionStatus
 import com.inner.circle.corebackoffice.security.MerchantUserDetails
 import com.inner.circle.corebackoffice.usecase.GetPaymentWithTransactionsUseCase
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
+import java.time.LocalDate
+import kotlinx.datetime.toKotlinLocalDate
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -24,12 +29,22 @@ class PaymentController(
     @GetMapping("/payments")
     fun getPayments(
         @AuthenticationPrincipal merchant: MerchantUserDetails,
+        @RequestParam("paymentKey") paymentKey: String?,
+        @RequestParam("status") status: TransactionStatus?,
+        @Parameter(example = "2025-02-15")
+        @RequestParam("startDate") startDate: LocalDate?,
+        @Parameter(example = "2025-02-19")
+        @RequestParam("endDate") endDate: LocalDate?,
         @RequestParam("page", defaultValue = "0") page: Int,
         @RequestParam("limit", defaultValue = "20") limit: Int
     ): BackofficeResponse<PaymentsWithTransactionsDto> {
         val request =
             GetPaymentWithTransactionsUseCase.FindAllByMerchantIdRequest(
                 merchantId = merchant.getId(),
+                paymentKey = paymentKey,
+                status = status?.convertCoreTransactionStatus(),
+                startDate = startDate?.toKotlinLocalDate(),
+                endDate = endDate?.toKotlinLocalDate(),
                 page = page,
                 limit = limit
             )
