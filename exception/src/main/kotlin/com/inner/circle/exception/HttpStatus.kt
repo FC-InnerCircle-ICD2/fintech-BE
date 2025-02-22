@@ -78,7 +78,8 @@ enum class HttpStatus(
     // 6xx Connection to the card issuer's server failed.
     CARD_NOT_APPROVED(code = 601, description = "Card Not Approve"),
     CARD_COMPANY_CONNECT_FAIL(code = 602, description = "Card Company Connect Fail"),
-    PAYMENT_METHOD_NOT_FOUND(code = 603, description = "Payment Method Not Found.");
+    PAYMENT_METHOD_NOT_FOUND(code = 603, description = "Payment Method Not Found."),
+    PAYMENT_METHOD_NOT_VERIFIED(code = 604, description = "Payment Method Not authenticated.") ;
 
     companion object {
         fun fromCode(code: Int): HttpStatus? = entries.find { it.code == code }
