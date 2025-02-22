@@ -1,0 +1,50 @@
+<configuration>
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%thread] [%-5level] %logger{36} - %msg%n</pattern>
+        </layout>
+    </appender>
+    <springProfile name="dev">
+        <springProperty name="DISCORD_WEBHOOK_URL" source="logging.discord.webhook-url"/>
+        <appender name="DISCORD" class="com.github.napstr.logback.DiscordAppender">
+            <webhookUri>${DISCORD_WEBHOOK_URL}</webhookUri>
+            <layout class="ch.qos.logback.classic.PatternLayout">
+                <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%thread] [%-5level] %logger{36} - %msg%n ```%ex{6}```</pattern>
+            </layout>
+            <username>Backoffice - errorAlert</username>
+            <avatarUrl>https://i.imgur.com/7qHPfQf.png</avatarUrl>
+            <tts>false</tts>
+        </appender>
+
+        <appender name="ASYNC_DISCORD" class="ch.qos.logback.classic.AsyncAppender">
+            <appender-ref ref="DISCORD"/>
+            <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+                <level>WARN</level>
+            </filter>
+        </appender>
+
+        <logger name="com.zaxxer.hikari" level="WARN"/>
+        <logger name="org.apache" level="WARN"/>
+        <logger name="com.inner.circle.api" level="WARN"/>
+        <logger name="org.springframework" level="ERROR"/>
+        <logger name="org.hibernate.validator.internal.util.Version" level="WARN"/>
+        <logger name="org.apache.catalina.startup.DigesterFactory" level="ERROR"/>
+        <logger name="org.apache.catalina.util.LifecycleBase" level="ERROR"/>
+        <logger name="org.eclipse.jetty.util.component.AbstractLifeCycle" level="ERROR"/>
+
+        <logger name="org.springframework.orm.jpa" level="DEBUG"/>
+        <logger name="org.hibernate.SQL" level="DEBUG"/>
+
+
+        <root level="INFO">
+            <appender-ref ref="ASYNC_DISCORD"/>
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="local">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+</configuration>
