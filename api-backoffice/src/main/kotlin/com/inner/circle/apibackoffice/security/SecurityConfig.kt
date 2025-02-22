@@ -13,7 +13,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 class SecurityConfig(
     private val merchantApiKeyProvider: MerchantApiKeyProvider,
-    private val authenticationEntryPoint: CustomAuthenticationEntryPoint
+//    private val authenticationEntryPoint: CustomAuthenticationEntryPoint
 ) {
     @Bean
     fun apiSecurityFilterChain(http: HttpSecurity): SecurityFilterChain =
@@ -23,6 +23,10 @@ class SecurityConfig(
             .cors { it.disable() }
             .httpBasic { it.disable() }
             .formLogin { it.disable() }
+            .addFilterBefore(
+                AuthenticationExceptionHandlingFilter(),
+                UsernamePasswordAuthenticationFilter::class.java
+            )
             .addFilterBefore(
                 MerchantApiKeyAuthenticationFilter(
                     merchantApiKeyProvider
