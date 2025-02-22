@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.filter.OncePerRequestFilter
 
-class AuthenticationExceptionHandlingFilter() : OncePerRequestFilter()  {
+class AuthenticationExceptionHandlingFilter : OncePerRequestFilter() {
     private val mapper = ObjectMapper()
 
     override fun doFilterInternal(
@@ -36,7 +36,5 @@ class AuthenticationExceptionHandlingFilter() : OncePerRequestFilter()  {
             response.contentType = "application/json;charset=UTF-8"
             response.writer.write(result)
         }
-
-
     }
 }
