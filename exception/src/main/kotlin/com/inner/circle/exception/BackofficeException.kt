@@ -11,7 +11,7 @@ sealed class BackofficeException(
     ) : BackofficeException(HttpStatus.NOT_FOUND, message, cause)
 
     data class MerchantAlreadyExistException(
-        override val message: String = "Merchant already exist",
+        override val message: String = "이미 가입된 회원입니다.",
         override val cause: Throwable? = null
     ) : BackofficeException(HttpStatus.NOT_FOUND, message, cause)
 }

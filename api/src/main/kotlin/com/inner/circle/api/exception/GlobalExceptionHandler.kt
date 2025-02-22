@@ -1,6 +1,5 @@
 package com.inner.circle.api.exception
 
-import com.inner.circle.api.common.response.AppExceptionResponse
 import com.inner.circle.api.controller.dto.PaymentError
 import com.inner.circle.api.controller.dto.PaymentResponse
 import com.inner.circle.exception.AppException
@@ -27,11 +26,11 @@ class GlobalExceptionHandler {
             PaymentResponse.fail(
                 error =
                     PaymentError(
-                        code = HttpStatus.BAD_REQUEST.toString(),
+                        code = HttpStatus.BAD_REQUEST.name,
                         message =
                             ex.bindingResult.allErrors
                                 .first()
-                                .defaultMessage ?: "Invalid Argument"
+                                .defaultMessage ?: "유효하지 않은 요청입니다."
                     )
             ),
             HttpStatus.BAD_REQUEST
@@ -43,11 +42,24 @@ class GlobalExceptionHandler {
         description = "Unexpected error",
         content = [Content(schema = Schema(implementation = PaymentResponse::class))]
     )
-    fun handleAppException(exception: AppException): ResponseEntity<AppExceptionResponse> {
+    fun handleAppException(exception: AppException): ResponseEntity<PaymentResponse<Nothing>> {
         logger.error("AppException (type = {})", exception::class.simpleName, exception)
+
+        var code = exception.status.code
+        try {
+            code = HttpStatus.valueOf(code).value()
+        } catch (e: Exception) {
+            code = HttpStatus.BAD_REQUEST.value()
+        }
         return ResponseEntity(
-            AppExceptionResponse.of(exception),
-            HttpStatus.valueOf(exception.status.code)
+            PaymentResponse.fail(
+                error =
+                    PaymentError(
+                        code = exception.status.name,
+                        message = exception.message
+                    )
+            ),
+            HttpStatus.valueOf(code)
         )
     }
 
@@ -59,9 +71,19 @@ class GlobalExceptionHandler {
     )
     fun handleAuthorizationException(
         exception: AuthenticationException
-    ): ResponseEntity<AppExceptionResponse> {
+    ): ResponseEntity<PaymentResponse<Nothing>> {
         logger.error("AuthenticationException (type = {})", exception::class.simpleName, exception)
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
+        val unauthorized = com.inner.circle.exception.HttpStatus.UNAUTHORIZED
+        return ResponseEntity(
+            PaymentResponse.fail(
+                error =
+                    PaymentError(
+                        code = unauthorized.name,
+                        message = unauthorized.description
+                    )
+            ),
+            HttpStatus.valueOf(unauthorized.code)
+        )
     }
 
     @ExceptionHandler(Exception::class)

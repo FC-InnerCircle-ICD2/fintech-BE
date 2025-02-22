@@ -9,78 +9,78 @@ sealed class PaymentException(
 ) : AppException(status, message, cause) {
     data class OrderNotFoundException(
         val orderId: String,
-        override val message: String = "Order with ID $orderId not found",
+        override val message: String = "주문 ID ($orderId)로 결제 정보가 확인되지 않습니다.",
         override val cause: Throwable? = null
     ) : PaymentException(HttpStatus.NOT_FOUND, message, cause)
 
     data class AccountNotFoundException(
         val accountId: Long?,
-        override val message: String = "Account with ID $accountId not found",
+        override val message: String = "계정을 찾을 수 없습니다.",
         override val cause: Throwable? = null
     ) : PaymentException(HttpStatus.NOT_FOUND, message, cause)
 
     data class PaymentNotFoundException(
         val paymentId: String,
-        override val message: String = "Payment with ID $paymentId not found",
+        override val message: String = "요청된 결제 정보를 찾을 수 없습니다.",
         override val cause: Throwable? = null
     ) : PaymentException(HttpStatus.NOT_FOUND, message, cause)
 
     data class MerchantNotFoundException(
         val merchantId: Long,
-        override val message: String = "Merchant with ID $merchantId not found",
+        override val message: String = "가맹점 정보를 찾을 수 없습니다.",
         override val cause: Throwable? = null
     ) : PaymentException(HttpStatus.NOT_FOUND, message, cause)
 
     data class InvalidAmountException(
         val paymentKey: String,
-        override val message: String = "PaymentKey $paymentKey order payment amount is different.",
+        override val message: String = "승인 요청($paymentKey)의 결제 금액이 요청 금액과 다릅니다.",
         override val cause: Throwable? = null
     ) : PaymentException(HttpStatus.NOT_FOUND, message, cause)
 
     data class PaymentRequestNotFoundException(
         val paymentKey: String,
-        override val message: String = "Payment Request not found : $paymentKey",
+        override val message: String = "결제 요청을 확인할 수 없습니다. $paymentKey",
         override val cause: Throwable? = null
     ) : PaymentException(HttpStatus.NOT_FOUND, message, cause)
 
     data class PaymentNotSaveException(
         val paymentKey: String,
-        override val message: String = "Payment not save : $paymentKey",
+        override val message: String = "결제 처리 중 오류가 발생했습니다. ($paymentKey)",
         override val cause: Throwable? = null
-    ) : PaymentException(HttpStatus.NOT_FOUND, message, cause)
+    ) : PaymentException(HttpStatus.INTERNAL_SERVER_ERROR, message, cause)
 
     data class PaymentKeyNotFoundException(
-        override val message: String = "PaymentKey not found.",
+        override val message: String = "결제 정보를 찾을 수 없습니다.",
         override val cause: Throwable? = null
     ) : PaymentException(HttpStatus.NOT_FOUND, message, cause)
 
     data class CardNotFoundException(
-        override val message: String = "Payment method (card) not found.",
+        override val message: String = "유효한 결제수단을 찾을 수 없습니다.",
         override val cause: Throwable? = null
-    ) : PaymentException(HttpStatus.BAD_REQUEST, message, cause)
+    ) : PaymentException(HttpStatus.PAYMENT_METHOD_NOT_FOUND, message, cause)
 
     data class InvalidOrderStatusException(
         val orderStatus: String,
-        override val message: String = "$orderStatus is not in IN_PROGRESS state.",
+        override val message: String = "주문 상태 ($orderStatus)에서는 처리될 수 없는 요청입니다.",
         override val cause: Throwable? = null
     ) : PaymentException(HttpStatus.BAD_REQUEST, message, cause)
 
     data class TransactionNotFoundException(
         val transactionId: String,
-        override val message: String = "Transaction with ID $transactionId not found",
+        override val message: String = "거래 내역 정보($transactionId)를 찾을 수 없습니다.",
         override val cause: Throwable? = null
     ) : PaymentException(HttpStatus.NOT_FOUND, message, cause)
 
     data class AlreadyRefundException(
         val paymentKey: String,
-        override val message: String = "Already got a full refund : $paymentKey",
+        override val message: String = "요청하신 결제 ($paymentKey)는 이미 전액 환불되었습니다",
         override val cause: Throwable? = null
     ) : PaymentException(HttpStatus.BAD_REQUEST, message, cause)
 
     data class ExceedRefundAmountException(
         val paymentKey: String,
         val amount: BigDecimal,
-        override val message: String = "No refunds for amounts exceeding $amount. : $paymentKey",
+        override val message: String = "환불 금액이 $amount 를 초과할 수 없습니다. (요청 : $paymentKey)",
         override val cause: Throwable? = null
     ) : PaymentException(HttpStatus.BAD_REQUEST, message, cause)
 }

@@ -9,12 +9,12 @@ sealed class SseException(
         val merchantId: String,
         val orderId: String,
         override val message: String =
-            "SSE connection not found for merchantId: $merchantId, orderId: $orderId",
+            "SSE 연결 정보를 확인할 수 없습니다. (merchantId: $merchantId, orderId: $orderId)",
         override val cause: Throwable? = null
     ) : SseException(HttpStatus.NOT_FOUND, message, cause)
 
     data class EndOfPaymentProgressException(
-        override val message: String = "Payment process has ended.",
+        override val message: String = "결제 처리가 완료된 상태입니다.",
         override val cause: Throwable? = null
     ) : SseException(HttpStatus.BAD_REQUEST, message, cause)
 }

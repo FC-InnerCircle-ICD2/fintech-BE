@@ -48,6 +48,7 @@ class JwtHandler(
                 .payload
         }.onFailure {
             logger.error("Invalid token Error Message : ${it.message}", it)
+            throw PaymentJwtException.TokenInvalidException()
         }.getOrElse { null }
 
     fun generateToken(

@@ -9,7 +9,11 @@ internal class PaymentClaimRepositoryHandler(
     private val repository: PaymentClaimJpaRepository
 ) : PaymentClaimRepository {
     override fun save(entity: PaymentRequestEntity): PaymentRequestEntity {
-        val existingEntity = repository.findByOrderId(entity.orderId).firstOrNull()
+        val existingEntity =
+            repository.findByMerchantIdAndOrderId(
+                entity.merchantId,
+                entity.orderId
+            )
         if (existingEntity != null) {
             throw PaymentClaimException.ClaimAlreadyExistsException(entity.orderId)
         }
