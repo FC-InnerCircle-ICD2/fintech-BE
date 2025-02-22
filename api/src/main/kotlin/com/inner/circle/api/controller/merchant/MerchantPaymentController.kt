@@ -68,7 +68,7 @@ class MerchantPaymentController(
     @PostMapping("/confirm")
     fun confirmPayment(
         @AuthenticationPrincipal merchantUserDetails: MerchantUserDetails,
-        @RequestBody paymentApproveRequest: PaymentApproveRequest
+        @Valid @RequestBody paymentApproveRequest: PaymentApproveRequest
     ): PaymentResponse<PaymentApproveDto> {
         val merchantId = merchantUserDetails.getId()
 
