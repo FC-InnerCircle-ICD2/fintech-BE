@@ -47,6 +47,7 @@ internal class PaymentRepositoryImpl(
         }
 
         criteriaQuery.where(*predicates.toTypedArray())
+        criteriaQuery.orderBy(criteriaBuilder.asc(root.get<LocalDate>("createdAt")))
 
         val query = entityManager.createQuery(criteriaQuery)
         query.firstResult = page * limit

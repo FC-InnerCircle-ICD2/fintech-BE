@@ -53,17 +53,18 @@ internal class TransactionService(
                     }
                 }
 
-        return transactionMap.map { (paymentKey, transactions) ->
-            val payment = payments.find { it.paymentKey == paymentKey }!!
-            PaymentWithTransactionsDto(
-                paymentKey = payment.paymentKey,
-                cardNumber = payment.cardNumber,
-                accountId = payment.accountId,
-                transactions = transactions,
-                paymentType = PaymentType.of(payment.paymentType),
-                orderId = payment.orderId,
-                orderName = payment.orderName
-            )
+        return payments.mapNotNull { payment ->
+            transactionMap[payment.paymentKey]?.let { transactions ->
+                PaymentWithTransactionsDto(
+                    paymentKey = payment.paymentKey,
+                    cardNumber = payment.cardNumber,
+                    accountId = payment.accountId,
+                    transactions = transactions,
+                    paymentType = PaymentType.of(payment.paymentType),
+                    orderId = payment.orderId,
+                    orderName = payment.orderName
+                )
+            }
         }
     }
 
