@@ -6,8 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 interface MerchantJpaRepository : JpaRepository<MerchantEntity, Long> {
     fun existsByEmail(email: String): Boolean
 
-    fun findByEmailAndPassword(
-        email: String,
-        password: String
-    ): MerchantEntity?
+    fun findByEmail(email: String): MerchantEntity?
 }

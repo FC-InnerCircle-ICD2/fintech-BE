@@ -1,6 +1,5 @@
 package com.inner.circle.apibackoffice.security
 
-import com.inner.circle.apibackoffice.exception.CustomAuthenticationEntryPoint
 import com.inner.circle.corebackoffice.security.MerchantApiKeyProvider
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -12,8 +11,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 class SecurityConfig(
-    private val merchantApiKeyProvider: MerchantApiKeyProvider,
-    private val authenticationEntryPoint: CustomAuthenticationEntryPoint
+    private val merchantApiKeyProvider: MerchantApiKeyProvider
 ) {
     @Bean
     fun apiSecurityFilterChain(http: HttpSecurity): SecurityFilterChain =
@@ -24,6 +22,9 @@ class SecurityConfig(
             .httpBasic { it.disable() }
             .formLogin { it.disable() }
             .addFilterBefore(
+                AuthenticationExceptionHandlingFilter(),
+                UsernamePasswordAuthenticationFilter::class.java
+            ).addFilterBefore(
                 MerchantApiKeyAuthenticationFilter(
                     merchantApiKeyProvider
                 ),

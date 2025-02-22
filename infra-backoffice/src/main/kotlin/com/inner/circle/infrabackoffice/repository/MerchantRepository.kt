@@ -9,10 +9,7 @@ interface MerchantRepository {
 
     fun save(merchant: MerchantEntity): MerchantEntity
 
-    fun findByUsernameAndPassword(
-        email: String,
-        password: String
-    ): MerchantEntity
+    fun findByEmailOrNull(email: String): MerchantEntity?
 
     fun findByIdOrNull(id: Long): MerchantEntity?
 }
