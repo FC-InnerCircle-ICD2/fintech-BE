@@ -19,8 +19,9 @@ class MerchantApiKeyAuthenticationFilter(
     ) {
         // TODO : Security 로 옮겨야 한다. 임시 처리로 해놓음
         // Security 개선작업 시 옮겨야 함
-        if (request.requestURI == MERCHANT_LOGIN_PATH ||
-            request.requestURI == MERCHANT_SIGN_UP_PATH
+        if (request.requestURI == MERCHANT_SIGN_UP_PATH ||
+            request.requestURI == MERCHANT_SIGN_IN_PATH ||
+            request.requestURI == MERCHANT_API_KEY_GENERATE_PATH
         ) {
             filterChain.doFilter(request, response)
             return
@@ -41,7 +42,8 @@ class MerchantApiKeyAuthenticationFilter(
 
     companion object {
         private const val BEARER_PREFIX = "Bearer "
-        private const val MERCHANT_LOGIN_PATH = "/api/backoffice/v1/sign-in"
+        private const val MERCHANT_SIGN_IN_PATH = "/api/backoffice/v1/sign-in"
         private const val MERCHANT_SIGN_UP_PATH = "/api/backoffice/v1/sign-up"
+        private const val MERCHANT_API_KEY_GENERATE_PATH = "/api/backoffice/v1/keys"
     }
 }
