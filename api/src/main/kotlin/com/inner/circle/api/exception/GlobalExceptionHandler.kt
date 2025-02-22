@@ -94,7 +94,7 @@ class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
         val status = HttpStatus.BAD_REQUEST
         val errorResponse =
             PaymentResponse.fail(
-                PaymentError(status.toString(), ex.message ?: "Invalid request.")
+                PaymentError(status.toString(), "유효하지 않은 요청입니다.")
             )
         return ResponseEntity(errorResponse, status)
     }
