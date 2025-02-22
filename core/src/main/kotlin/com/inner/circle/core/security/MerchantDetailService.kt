@@ -11,7 +11,7 @@ class MerchantDetailService(
 ) : UserDetailsService {
     override fun loadUserByUsername(token: String): UserDetails {
         val merchant =
-            merchantHandlePort.findMerchantByKey(token)
+            merchantHandlePort.findMerchantByToken(token)
 
         val userDetails =
             MerchantUserDetails(

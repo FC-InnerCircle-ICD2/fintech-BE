@@ -21,6 +21,7 @@ dependencies {
     implementation(libs.awsSecretsManagerConfig)
     implementation(libs.h2)
     implementation(libs.bundles.hypersistence)
+    implementation(libs.guava)
     runtimeOnly(libs.postgresql)
     compileOnly(libs.bundles.kotlinLogging)
     compileOnly(libs.bundles.kotlinxCoroutines)

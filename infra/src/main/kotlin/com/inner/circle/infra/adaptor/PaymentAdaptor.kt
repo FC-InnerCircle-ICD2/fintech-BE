@@ -6,6 +6,7 @@ import com.inner.circle.infra.port.GetPaymentPort
 import com.inner.circle.infra.port.PaymentPort
 import com.inner.circle.infra.repository.PaymentRepository
 import com.inner.circle.infra.repository.entity.PaymentEntity
+import kotlinx.datetime.toJavaLocalDate
 import kotlinx.datetime.toKotlinLocalDateTime
 import org.springframework.stereotype.Component
 
@@ -38,6 +39,8 @@ internal class PaymentAdaptor(
         paymentRepository
             .findAllByAccountId(
                 accountId = request.accountId,
+                startDate = request.startDate?.toJavaLocalDate(),
+                endDate = request.endDate?.toJavaLocalDate(),
                 page = request.page,
                 limit = request.limit
             ).map { payment ->
@@ -67,8 +70,8 @@ internal class PaymentAdaptor(
                 ?: throw PaymentException.PaymentNotFoundException(
                     paymentId = "",
                     message =
-                        "Payment not found: " +
-                            "accountId ${request.accountId} paymentKey ${request.paymentKey}"
+                        "요청된 결제 정보를 찾을 수 없습니다. : " +
+                            "결제 고객[${request.accountId}], paymentKey[${request.paymentKey}]"
                 )
         return PaymentDto(
             id = requireNotNull(payment.id),

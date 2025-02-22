@@ -1,6 +1,8 @@
 package com.inner.circle.infra.adaptor.dto
 
+import com.google.common.hash.Hashing
 import com.inner.circle.infra.repository.entity.PaymentTokenEntity
+import java.nio.charset.StandardCharsets
 import java.time.LocalDateTime
 
 data class PaymentTokenDto(
@@ -14,7 +16,13 @@ data class PaymentTokenDto(
         PaymentTokenEntity(
             merchantId = merchantId,
             orderId = orderId,
-            generatedToken = generatedToken,
+            generatedToken =
+                Hashing
+                    .murmur3_128()
+                    .hashString(
+                        generatedToken,
+                        StandardCharsets.UTF_8
+                    ).toString(),
             signature = signature
         )
 }

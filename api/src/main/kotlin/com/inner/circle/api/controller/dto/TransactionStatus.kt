@@ -16,3 +16,10 @@ enum class TransactionStatus {
             }
     }
 }
+
+fun TransactionStatus.convertCoreTransactionStatus(): CoreTransactionStatus =
+    when (this) {
+        TransactionStatus.APPROVED -> CoreTransactionStatus.APPROVED
+        TransactionStatus.CANCELED -> CoreTransactionStatus.CANCELED
+        TransactionStatus.REFUNDED -> CoreTransactionStatus.REFUNDED
+    }

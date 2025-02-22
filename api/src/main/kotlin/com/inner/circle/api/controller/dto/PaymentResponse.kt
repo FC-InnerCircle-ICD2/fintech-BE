@@ -13,7 +13,7 @@ data class PaymentResponse<T> private constructor(
         fun <T> ok(data: T): PaymentResponse<T> =
             PaymentResponse(ok = true, data = data, error = null)
 
-        fun fail(error: PaymentError): PaymentResponse<Nothing> =
+        fun fail(error: PaymentError): PaymentResponse<Any> =
             PaymentResponse(ok = false, data = null, error = error)
     }
 }

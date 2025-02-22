@@ -19,13 +19,13 @@ class PaymentPaymentTokenHandleService(
         val orderId = paymentData.orderId
         val validateToken =
             jwtHandler.validateToken(
-                paymentData.generatedToken,
+                token,
                 paymentData.signature
             )
 
         if (!validateToken) {
             throw PaymentJwtException.TokenInvalidException(
-                "paymentToken invalid. (token = $token)"
+                "결제 토큰이 유효하지 않습니다. ($token)"
             )
         }
 
@@ -34,5 +34,13 @@ class PaymentPaymentTokenHandleService(
             orderId = orderId,
             generatedToken = token
         )
+    }
+
+    override fun checkPaymentStatus(
+        merchantId: String,
+        orderId: String
+    ): Boolean {
+        val checkPaymentStatus = paymentTokenHandlingPort.checkPaymentStatus(merchantId, orderId)
+        return checkPaymentStatus.isNotBlank()
     }
 }

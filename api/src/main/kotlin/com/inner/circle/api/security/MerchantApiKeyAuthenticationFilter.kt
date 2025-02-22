@@ -1,6 +1,5 @@
 package com.inner.circle.api.security
 
-import com.inner.circle.api.exception.CustomAuthenticationEntryPoint
 import com.inner.circle.core.security.MerchantApiKeyProvider
 import com.inner.circle.exception.UserAuthenticationException
 import jakarta.servlet.FilterChain
@@ -23,9 +22,7 @@ class MerchantApiKeyAuthenticationFilter(
         try {
             val authHeader =
                 request.getHeader(HttpHeaders.AUTHORIZATION)
-                    ?: throw UserAuthenticationException.UnauthorizedException(
-                        "Missing Authorization header"
-                    )
+                    ?: throw UserAuthenticationException.UnauthorizedException()
 
             val apiKey = resolveApiKey(authHeader)
 
@@ -33,13 +30,14 @@ class MerchantApiKeyAuthenticationFilter(
             SecurityContextHolder.getContext().authentication = authentication
 
             filterChain.doFilter(request, response)
-        } catch (ex: Exception) {
-            SecurityContextHolder.clearContext()
+        } catch (ex: UserAuthenticationException.UnauthorizedException) {
             authenticationEntryPoint.commence(
                 request,
                 response,
                 BadCredentialsException(ex.message)
             )
+        } finally {
+            SecurityContextHolder.clearContext()
         }
     }
 

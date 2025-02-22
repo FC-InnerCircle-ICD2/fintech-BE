@@ -1,5 +1,6 @@
 package com.inner.circle.infra.port
 
+import com.inner.circle.infra.adaptor.dto.TransactionDto
 import com.inner.circle.infra.repository.entity.TransactionStatus
 import java.math.BigDecimal
 import java.time.LocalDateTime
@@ -14,5 +15,5 @@ fun interface TransactionPort {
         val requestedAt: LocalDateTime
     )
 
-    fun save(request: Request)
+    fun save(request: Request): TransactionDto
 }

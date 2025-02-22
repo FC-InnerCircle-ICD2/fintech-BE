@@ -1,6 +1,5 @@
 package com.inner.circle.infra.adaptor
 
-import com.inner.circle.exception.AuthenticateException
 import com.inner.circle.exception.PaymentException
 import com.inner.circle.exception.UserAuthenticationException
 import com.inner.circle.infra.adaptor.dto.ConfirmPaymentInfraDto
@@ -18,9 +17,7 @@ internal class ConfirmPaymentAdaptor(
     override fun getCardNoAndPayInfo(request: ConfirmPaymentPort.Request): ConfirmPaymentInfraDto {
         val accountId =
             request.accountId
-                ?: throw UserAuthenticationException.UserNotFoundException(
-                    "user not found in card find."
-                )
+                ?: throw UserAuthenticationException.UserNotFoundException()
         val orderId = request.orderId
         val merchantId = request.merchantId
         val paymentRequest =
@@ -33,10 +30,7 @@ internal class ConfirmPaymentAdaptor(
             userCardRepository.findByAccountIdAndIsRepresentative(
                 accountId,
                 true
-            )
-                ?: throw AuthenticateException.CardNotFoundException(
-                    "user card not found. (order_id : $orderId)"
-                )
+            ) ?: throw PaymentException.CardNotFoundException()
 
         return ConfirmPaymentInfraDto(
             orderId = paymentRequest.orderId,

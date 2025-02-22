@@ -22,6 +22,8 @@ internal class TransactionService(
                 .findAllByAccountId(
                     GetPaymentPort.FindAllByAccountIdRequest(
                         accountId = request.accountId,
+                        startDate = request.startDate,
+                        endDate = request.endDate,
                         page = request.page,
                         limit = request.limit
                     )
@@ -42,17 +44,26 @@ internal class TransactionService(
                         updatedAt = transaction.updatedAt
                     )
                 }.groupBy { it.paymentKey }
+                .mapValues { entry ->
+                    entry.value.sortedByDescending { it.createdAt }
+                }.let {
+                    it.takeIf { request.status == null } ?: it.filterValues { transactions ->
+                        transactions.any { transaction -> transaction.status == request.status }
+                    }
+                }
 
-        return payments.map { payment ->
-            PaymentWithTransactionsDto(
-                paymentKey = payment.paymentKey,
-                cardNumber = payment.cardNumber,
-                accountId = payment.accountId,
-                transactions = transactionMap[payment.paymentKey].orEmpty(),
-                paymentType = PaymentType.of(payment.paymentType),
-                orderId = payment.orderId,
-                orderName = payment.orderName
-            )
+        return payments.mapNotNull { payment ->
+            transactionMap[payment.paymentKey]?.let { transactions ->
+                PaymentWithTransactionsDto(
+                    paymentKey = payment.paymentKey,
+                    cardNumber = payment.cardNumber,
+                    accountId = payment.accountId,
+                    transactions = transactions,
+                    paymentType = PaymentType.of(payment.paymentType),
+                    orderId = payment.orderId,
+                    orderName = payment.orderName
+                )
+            }
         }
     }
 

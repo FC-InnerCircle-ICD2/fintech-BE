@@ -40,7 +40,7 @@ internal class ConfirmPaymentService(
 
         // 어댑터로 이동 예정
         if (!(cardValidateMap["isValid"] as Boolean)) {
-            throw AuthenticateException.CardAuthFailException()
+            throw AuthenticateException.CardAuthFailException(request.cardNumber)
         }
 
         if (request.orderStatus != PaymentProcessStatus.READY) {
@@ -103,11 +103,14 @@ internal class ConfirmPaymentService(
                 amount = paymentInfo.amount,
                 requestTime = paymentInfo.requestTime,
                 cardNumber =
-                    paymentInfo.cardNumber ?: throw AuthenticateException.CardNotFoundException(),
+                    paymentInfo.cardNumber
+                        ?: throw AuthenticateException.CardInformationNotFoundException(),
                 expirationPeriod =
                     paymentInfo.expirationPeriod
-                        ?: throw AuthenticateException.CardNotFoundException(),
-                cvc = paymentInfo.cvc ?: throw AuthenticateException.CardNotFoundException()
+                        ?: throw AuthenticateException.CardInformationNotFoundException(),
+                cvc =
+                    paymentInfo.cvc
+                        ?: throw AuthenticateException.CardInformationNotFoundException()
             )
         )
     }

@@ -2,6 +2,7 @@ package com.inner.circle.api.config
 
 import com.inner.circle.api.interceptor.AuthCheckInterceptor
 import org.springframework.context.annotation.Configuration
+import org.springframework.web.servlet.config.annotation.CorsRegistry
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
@@ -14,5 +15,14 @@ class WebConfig(
             .addInterceptor(authCheckInterceptor)
             .addPathPatterns("/api/v1/p/user") // payment - user에서만 우선 동작하도록 수정
             .excludePathPatterns("/swagger-ui/**", "/v3/api-docs/**")
+    }
+
+    override fun addCorsMappings(registry: CorsRegistry) {
+        registry
+            .addMapping("/**")
+            .allowedOriginPatterns("*")
+            .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+            .allowedHeaders("*")
+        // .allowCredentials(true)
     }
 }

@@ -11,8 +11,8 @@ class MerchantFinderAdaptor(
 ) : MerchantFinderPort {
     override fun existsByEmail(email: String): Boolean = merchantRepository.existsByEmail(email)
 
-    override fun findByUsernameAndPassword(
-        email: String,
-        password: String
-    ): MerchantEntity = merchantRepository.findByUsernameAndPassword(email, password)
+    override fun findByEmailOrNull(email: String): MerchantEntity? =
+        merchantRepository.findByEmailOrNull(email)
+
+    override fun findByIdOrNull(id: Long): MerchantEntity? = merchantRepository.findByIdOrNull(id)
 }

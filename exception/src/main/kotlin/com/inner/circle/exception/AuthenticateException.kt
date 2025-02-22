@@ -6,13 +6,15 @@ sealed class AuthenticateException(
     override val cause: Throwable? = null
 ) : AppException(status, message, cause) {
     data class CardAuthFailException(
-        override val message: String = "This card cannot be authenticated.",
+        val cardNumber: String?,
+        override val message: String =
+            "카드 ${if (cardNumber.isNullOrBlank()) "" else "($cardNumber)"} 인증 과정에서 오류가 발생했습니다.",
         override val cause: Throwable? = null
     ) : PaymentException(HttpStatus.BAD_REQUEST, message, cause)
 
-    data class CardNotFoundException(
+    data class CardInformationNotFoundException(
         override val message: String =
-            "Simple payment is not possible because card information does not exist.",
+            "결제 처리에 필요한 카드 정보가 확인되지 않습니다.",
         override val cause: Throwable? = null
     ) : PaymentException(HttpStatus.BAD_REQUEST, message, cause)
 }

@@ -16,11 +16,19 @@ internal class UserCardRepositoryImpl(
             isRepresentative
         )
 
-    override fun save(userCardEntity: UserCardEntity): UserCardEntity? =
+    override fun save(userCardEntity: UserCardEntity): UserCardEntity =
         userCardJpaRepository.save(userCardEntity)
 
-    override fun findAll(): List<UserCardEntity> = userCardJpaRepository.findAll()
+    override fun findAll(): List<UserCardEntity> =
+        userCardJpaRepository.findAllByOrderByAccountIdAscIdAsc()
 
     override fun findByAccountId(accountId: Long): List<UserCardEntity> =
-        userCardJpaRepository.findByAccountId(accountId)
+        userCardJpaRepository.findByAccountIdOrderByIdAsc(accountId)
+
+    override fun findById(id: Long): UserCardEntity = userCardJpaRepository.findById(id)
+
+    override fun deleteById(id: Long) = userCardJpaRepository.deleteById(id)
+
+    override fun saveAll(userCardEntityList: List<UserCardEntity>): List<UserCardEntity> =
+        userCardJpaRepository.saveAll(userCardEntityList)
 }

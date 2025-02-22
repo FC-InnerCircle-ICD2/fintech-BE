@@ -54,4 +54,55 @@ internal class UserCardService(
                 )
             }.toList()
     }
+
+    override fun updateRepresentativeCard(
+        accountId: Long,
+        id: Long
+    ): List<UserCardDto> {
+        // 유저 카드 목록 전체 조회
+        val infraUserCardDtoList =
+            userCardPort.findByAccountId(accountId)
+
+        // 대표 카드 변경
+        val result =
+            userCardPort.saveAll(
+                infraUserCardDtoList.map { infraUserCardDto ->
+                    infraUserCardDto.copy(
+                        isRepresentative = (id == infraUserCardDto.id)
+                    )
+                }
+            )
+
+        return result
+            .map { userCardDto ->
+                UserCardDto(
+                    id = userCardDto.id,
+                    accountId = userCardDto.accountId,
+                    isRepresentative = userCardDto.isRepresentative,
+                    cardNumber = userCardDto.cardNumber,
+                    expirationPeriod = userCardDto.expirationPeriod,
+                    cvc = userCardDto.cvc
+                )
+            }.toList()
+    }
+
+    override fun deleteById(
+        accountId: Long,
+        id: Long
+    ): UserCardDto {
+        val infraUserCardDto =
+            userCardPort.deleteById(
+                accountId,
+                id
+            )
+
+        return UserCardDto(
+            id = id,
+            accountId = infraUserCardDto.accountId,
+            isRepresentative = infraUserCardDto.isRepresentative,
+            cardNumber = infraUserCardDto.cardNumber,
+            expirationPeriod = infraUserCardDto.expirationPeriod,
+            cvc = infraUserCardDto.cvc
+        )
+    }
 }

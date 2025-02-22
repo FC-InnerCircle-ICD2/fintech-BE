@@ -15,8 +15,6 @@ data class MerchantEntity(
     val email: String,
     @Column(nullable = false)
     val password: String,
-    @Column(unique = true)
-    val token: String,
     @Column(nullable = false)
     val name: String
 ) : BaseEntity()

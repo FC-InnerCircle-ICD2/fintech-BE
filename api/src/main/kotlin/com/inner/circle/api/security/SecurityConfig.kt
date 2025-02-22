@@ -1,6 +1,5 @@
 package com.inner.circle.api.security
 
-import com.inner.circle.api.exception.CustomAuthenticationEntryPoint
 import com.inner.circle.core.security.AccountValidationProvider
 import com.inner.circle.core.security.MerchantApiKeyProvider
 import org.springframework.context.annotation.Bean
@@ -18,7 +17,7 @@ class SecurityConfig(
     private val accountValidationProvider: AccountValidationProvider
 ) {
     @Bean
-    fun apiSecurityFilterChain(http: HttpSecurity): SecurityFilterChain {
+    fun apiSecurityFilterChain(http: HttpSecurity): SecurityFilterChain =
         http
             .securityMatcher("/api/v1/p/merchant/**")
             .csrf { it.disable() }
@@ -30,13 +29,12 @@ class SecurityConfig(
                     .hasAuthority("ROLE_MERCHANT")
             }.addFilterBefore(
                 MerchantApiKeyAuthenticationFilter(
-                    merchantApiKeyProvider,
-                    authenticationEntryPoint
+                    provider = merchantApiKeyProvider,
+                    authenticationEntryPoint = authenticationEntryPoint
                 ),
                 UsernamePasswordAuthenticationFilter::class.java
             ).formLogin { it.disable() }
-        return http.build()
-    }
+            .build()
 
     @Bean
     fun userSecurityFilterChain(http: HttpSecurity): SecurityFilterChain =
@@ -47,7 +45,10 @@ class SecurityConfig(
             .httpBasic { it.disable() }
             .formLogin { it.disable() }
             .addFilterBefore(
-                UserApiAuthenticationFilter(accountValidationProvider = accountValidationProvider),
+                UserApiAuthenticationFilter(
+                    provider = accountValidationProvider,
+                    authenticationEntryPoint = authenticationEntryPoint
+                ),
                 UsernamePasswordAuthenticationFilter::class.java
             ).build()
 }

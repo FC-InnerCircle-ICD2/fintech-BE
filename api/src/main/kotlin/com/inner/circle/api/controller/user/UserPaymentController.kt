@@ -10,26 +10,37 @@ import com.inner.circle.api.controller.dto.ConfirmPaymentDto
 import com.inner.circle.api.controller.dto.PaymentResponse
 import com.inner.circle.api.controller.dto.PaymentWithTransactionsDto
 import com.inner.circle.api.controller.dto.PaymentsWithTransactionsDto
+import com.inner.circle.api.controller.dto.TransactionStatus
 import com.inner.circle.api.controller.dto.UserCardDto
+import com.inner.circle.api.controller.dto.convertCoreTransactionStatus
 import com.inner.circle.api.controller.request.CancelPaymentRequest
 import com.inner.circle.api.controller.request.ConfirmPaymentRequest
 import com.inner.circle.api.controller.request.ConfirmSimplePaymentRequest
+import com.inner.circle.api.controller.request.RefundAllPaymentRequest
+import com.inner.circle.api.controller.request.RefundPaymentRequest
 import com.inner.circle.api.controller.request.UserCardRequest
 import com.inner.circle.core.security.AccountDetails
 import com.inner.circle.core.service.dto.ConfirmPaymentCoreDto
+import com.inner.circle.core.service.dto.TransactionDto
 import com.inner.circle.core.usecase.CancelPaymentUseCase
 import com.inner.circle.core.usecase.ConfirmPaymentUseCase
 import com.inner.circle.core.usecase.ConfirmSimplePaymentUseCase
 import com.inner.circle.core.usecase.GetPaymentWithTransactionsUseCase
 import com.inner.circle.core.usecase.PaymentTokenHandlingUseCase
+import com.inner.circle.core.usecase.RefundPaymentUseCase
 import com.inner.circle.core.usecase.UserCardUseCase
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
+import java.time.LocalDate
+import kotlinx.datetime.toKotlinLocalDate
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -45,7 +56,8 @@ class UserPaymentController(
     private val userCardUseCase: UserCardUseCase,
     private val cancelPaymentUseCase: CancelPaymentUseCase,
     private val statusChangedMessageSender: PaymentStatusChangedMessageSender,
-    private val getPaymentWithTransactionsUseCase: GetPaymentWithTransactionsUseCase
+    private val getPaymentWithTransactionsUseCase: GetPaymentWithTransactionsUseCase,
+    private val refundPaymentUseCase: RefundPaymentUseCase
 ) {
     private val logger: Logger = LoggerFactory.getLogger(UserPaymentController::class.java)
 
@@ -223,7 +235,7 @@ class UserPaymentController(
             )
         return PaymentResponse.ok(
             UserCardDto(
-                id = result.id,
+                id = result.id.toString(),
                 accountId = result.accountId,
                 isRepresentative = result.isRepresentative,
                 cardNumber = result.cardNumber,
@@ -243,7 +255,7 @@ class UserPaymentController(
             coreUserCardDtoList
                 .map { coreUserCardDto ->
                     UserCardDto(
-                        id = coreUserCardDto.id,
+                        id = coreUserCardDto.id.toString(),
                         accountId = coreUserCardDto.accountId,
                         isRepresentative = coreUserCardDto.isRepresentative,
                         cardNumber = coreUserCardDto.cardNumber,
@@ -254,17 +266,74 @@ class UserPaymentController(
         )
     }
 
+    @Operation(summary = "유저 카드 삭제")
+    @DeleteMapping("/cards/{cardId}")
+    fun deleteCard(
+        @AuthenticationPrincipal account: AccountDetails,
+        @PathVariable("cardId") cardId: Long
+    ): PaymentResponse<UserCardDto> {
+        val result =
+            userCardUseCase.deleteById(
+                accountId = account.id,
+                id = cardId
+            )
+        return PaymentResponse.ok(
+            UserCardDto(
+                id = result.id.toString(),
+                accountId = result.accountId,
+                isRepresentative = result.isRepresentative,
+                cardNumber = result.cardNumber,
+                expirationPeriod = result.expirationPeriod,
+                cvc = result.cvc
+            )
+        )
+    }
+
+    @Operation(summary = "유저 대표 카드 변경")
+    @PatchMapping("/cards/{cardId}")
+    fun updateRepresentativeCard(
+        @AuthenticationPrincipal account: AccountDetails,
+        @PathVariable("cardId") cardId: Long
+    ): PaymentResponse<List<UserCardDto>> {
+        val result =
+            userCardUseCase.updateRepresentativeCard(
+                accountId = account.id,
+                id = cardId
+            )
+        return PaymentResponse.ok(
+            result
+                .map { userCardDto ->
+                    UserCardDto(
+                        id = userCardDto.id.toString(),
+                        accountId = userCardDto.accountId,
+                        isRepresentative = userCardDto.isRepresentative,
+                        cardNumber = userCardDto.cardNumber,
+                        expirationPeriod = userCardDto.expirationPeriod,
+                        cvc = userCardDto.cvc
+                    )
+                }.toList()
+        )
+    }
+
     @Operation(summary = "Payment, Transactions 조회")
     @GetMapping("/payments")
     fun getPayments(
         @AuthenticationPrincipal account: AccountDetails,
+        @Parameter(example = "2025-02-15")
+        @RequestParam("startDate") startDate: LocalDate?,
+        @Parameter(example = "2025-02-19")
+        @RequestParam("endDate") endDate: LocalDate?,
+        @RequestParam("status") status: TransactionStatus?,
         @RequestParam("page", defaultValue = "0") page: Int,
-        @RequestParam("limit", defaultValue = "20") limit: Int
+        @RequestParam("limit", defaultValue = "10") limit: Int
     ): PaymentResponse<PaymentsWithTransactionsDto> {
         val request =
             GetPaymentWithTransactionsUseCase.FindAllByAccountIdRequest(
                 accountId = account.id,
                 page = page,
+                startDate = startDate?.toKotlinLocalDate(),
+                endDate = endDate?.toKotlinLocalDate(),
+                status = status?.convertCoreTransactionStatus(),
                 limit = limit
             )
 
@@ -297,6 +366,59 @@ class UserPaymentController(
             PaymentWithTransactionsDto.of(
                 getPaymentWithTransactionsUseCase
                     .findByPaymentKey(request)
+            )
+        )
+    }
+
+    @Operation(summary = "전액 환불")
+    @PostMapping("/payments/refund/all")
+    fun refundAll(
+        @AuthenticationPrincipal account: AccountDetails,
+        @RequestBody request: RefundAllPaymentRequest
+    ): PaymentResponse<TransactionDto> {
+        val result =
+            refundPaymentUseCase.refundAll(
+                accountId = account.id,
+                paymentKey = request.paymentKey
+            )
+
+        return PaymentResponse.ok(
+            TransactionDto(
+                id = result.id,
+                paymentKey = result.paymentKey,
+                amount = result.amount,
+                status = result.status,
+                reason = result.reason,
+                requestedAt = result.requestedAt,
+                createdAt = result.createdAt,
+                updatedAt = result.createdAt
+            )
+        )
+    }
+
+    @Operation(summary = "부분 환불")
+    @PostMapping("/payments/refund")
+    fun refundPartial(
+        @AuthenticationPrincipal account: AccountDetails,
+        @RequestBody request: RefundPaymentRequest
+    ): PaymentResponse<TransactionDto> {
+        val result =
+            refundPaymentUseCase.refundPartial(
+                accountId = account.id,
+                paymentKey = request.paymentKey,
+                amount = request.amount
+            )
+
+        return PaymentResponse.ok(
+            TransactionDto(
+                id = result.id,
+                paymentKey = result.paymentKey,
+                amount = result.amount,
+                status = result.status,
+                reason = result.reason,
+                requestedAt = result.requestedAt,
+                createdAt = result.createdAt,
+                updatedAt = result.createdAt
             )
         )
     }

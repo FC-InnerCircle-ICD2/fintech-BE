@@ -1,45 +1,83 @@
 package com.inner.circle.apibackoffice.controller
 
-import com.inner.circle.apibackoffice.controller.dto.PaymentDto
-import com.inner.circle.apibackoffice.controller.dto.TransactionDto
-import com.inner.circle.apibackoffice.controller.dto.TransactionsDto
-import com.inner.circle.apibackoffice.exception.BackofficeResponse
-import com.inner.circle.corebackoffice.usecase.GetPaymentUseCase
-import com.inner.circle.corebackoffice.usecase.GetTransactionUseCase
+import com.inner.circle.apibackoffice.config.SwaggerConfig
+import com.inner.circle.apibackoffice.controller.dto.BackofficeResponse
+import com.inner.circle.apibackoffice.controller.dto.PaymentWithTransactionsDto
+import com.inner.circle.apibackoffice.controller.dto.PaymentsWithTransactionsDto
+import com.inner.circle.apibackoffice.controller.dto.TransactionStatus
+import com.inner.circle.apibackoffice.controller.dto.convertCoreTransactionStatus
+import com.inner.circle.corebackoffice.security.MerchantUserDetails
+import com.inner.circle.corebackoffice.usecase.GetPaymentWithTransactionsUseCase
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
+import java.time.LocalDate
+import kotlinx.datetime.toKotlinLocalDate
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestParam
 
 @Tag(name = "Payment", description = "Payment API")
 @BackofficeV1Api
+@SecurityRequirement(name = SwaggerConfig.BEARER_AUTH)
 class PaymentController(
-    private val getPaymentUseCase: GetPaymentUseCase,
-    private val getTransactionUseCase: GetTransactionUseCase
+    private val getPaymentWithTransactionsUseCase: GetPaymentWithTransactionsUseCase
 ) {
-    @Operation(summary = "Payment 조회")
-    @GetMapping("/payments/{paymentKey}")
-    fun getPayment(
-        @PathVariable("paymentKey") paymentKey: String
-    ): BackofficeResponse<PaymentDto> {
-        val request = GetPaymentUseCase.Request(paymentKey)
+    @Operation(summary = "Payment, Transactions 조회")
+    @GetMapping("/payments")
+    fun getPayments(
+        @AuthenticationPrincipal merchant: MerchantUserDetails,
+        @RequestParam("paymentKey") paymentKey: String?,
+        @RequestParam("status") status: TransactionStatus?,
+        @Parameter(example = "2025-02-15")
+        @RequestParam("startDate") startDate: LocalDate?,
+        @Parameter(example = "2025-02-19")
+        @RequestParam("endDate") endDate: LocalDate?,
+        @RequestParam("page", defaultValue = "0") page: Int,
+        @RequestParam("limit", defaultValue = "20") limit: Int
+    ): BackofficeResponse<PaymentsWithTransactionsDto> {
+        val request =
+            GetPaymentWithTransactionsUseCase.FindAllByMerchantIdRequest(
+                merchantId = merchant.getId(),
+                paymentKey = paymentKey,
+                status = status?.convertCoreTransactionStatus(),
+                startDate = startDate?.toKotlinLocalDate(),
+                endDate = endDate?.toKotlinLocalDate(),
+                page = page,
+                limit = limit
+            )
+
         return BackofficeResponse.ok(
-            PaymentDto.of(getPaymentUseCase.getPaymentByPaymentKey(request))
+            PaymentsWithTransactionsDto(
+                payments =
+                    getPaymentWithTransactionsUseCase
+                        .findAllByMerchantId(request)
+                        .map { paymentWithTransactionsDto ->
+                            PaymentWithTransactionsDto.of(
+                                paymentWithTransactionsDto
+                            )
+                        }.toList()
+            )
         )
     }
 
     @Operation(summary = "Payment Key를 이용한 Transactions 조회")
     @GetMapping("/payments/{paymentKey}/transactions")
-    fun getTransactions(
+    fun getTransactionsByPaymentKey(
+        @AuthenticationPrincipal merchant: MerchantUserDetails,
         @PathVariable("paymentKey") paymentKey: String
-    ): BackofficeResponse<TransactionsDto> {
-        val request = GetTransactionUseCase.Request(paymentKey)
+    ): BackofficeResponse<PaymentWithTransactionsDto> {
+        val request =
+            GetPaymentWithTransactionsUseCase.FindByPaymentKeyRequest(
+                merchantId = merchant.getId(),
+                paymentKey = paymentKey
+            )
         return BackofficeResponse.ok(
-            TransactionsDto(
-                getTransactionUseCase
-                    .getTransactionsByPaymentKey(request)
-                    .map { transaction -> TransactionDto.of(transaction) }
-                    .toList()
+            PaymentWithTransactionsDto.of(
+                getPaymentWithTransactionsUseCase
+                    .findByPaymentKey(request)
             )
         )
     }

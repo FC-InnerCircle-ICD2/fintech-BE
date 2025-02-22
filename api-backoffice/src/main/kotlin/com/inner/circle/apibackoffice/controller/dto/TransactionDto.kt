@@ -3,28 +3,27 @@ package com.inner.circle.apibackoffice.controller.dto
 import java.math.BigDecimal
 import java.time.LocalDateTime
 import kotlinx.datetime.toJavaLocalDateTime
+import com.inner.circle.corebackoffice.service.dto.TransactionDto as CoreTransactionDto
 
 data class TransactionDto(
-    val id: Long,
+    val id: String,
     val paymentKey: String,
     val amount: BigDecimal,
     val status: TransactionStatus,
     val reason: String?,
-    val createdAt: LocalDateTime,
-    val updatedAt: LocalDateTime
+    val requestedAt: LocalDateTime,
+    val completedAt: LocalDateTime
 ) {
     companion object {
-        fun of(
-            transaction: com.inner.circle.corebackoffice.service.dto.TransactionDto
-        ): TransactionDto =
+        fun of(transaction: CoreTransactionDto): TransactionDto =
             TransactionDto(
-                id = transaction.id,
+                id = transaction.id.toString(),
                 paymentKey = transaction.paymentKey,
                 amount = transaction.amount,
                 status = TransactionStatus.of(transaction.status),
                 reason = transaction.reason,
-                createdAt = transaction.createdAt.toJavaLocalDateTime(),
-                updatedAt = transaction.updatedAt.toJavaLocalDateTime()
+                requestedAt = transaction.requestedAt.toJavaLocalDateTime(),
+                completedAt = transaction.createdAt.toJavaLocalDateTime()
             )
     }
 }

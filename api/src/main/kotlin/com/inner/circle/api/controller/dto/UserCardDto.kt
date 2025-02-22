@@ -1,7 +1,7 @@
 package com.inner.circle.api.controller.dto
 
 data class UserCardDto(
-    val id: Long?,
+    val id: String?,
     val accountId: Long,
     val isRepresentative: Boolean,
     val cardNumber: String,
