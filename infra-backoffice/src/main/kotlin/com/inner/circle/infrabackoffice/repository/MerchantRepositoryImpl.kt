@@ -21,15 +21,8 @@ internal class MerchantRepositoryImpl(
     override fun save(merchant: MerchantEntity): MerchantEntity =
         merchantJpaRepository.save(merchant)
 
-    override fun findByUsernameAndPassword(
-        email: String,
-        password: String
-    ): MerchantEntity =
-        merchantJpaRepository.findByEmailAndPassword(email, password)
-            ?: throw PaymentException.MerchantNotFoundException(
-                merchantId = 0,
-                message = "Invalid email or password"
-            )
+    override fun findByEmailOrNull(email: String): MerchantEntity? =
+        merchantJpaRepository.findByEmail(email)
 
     override fun findByIdOrNull(id: Long): MerchantEntity? =
         merchantJpaRepository.findByIdOrNull(id)
