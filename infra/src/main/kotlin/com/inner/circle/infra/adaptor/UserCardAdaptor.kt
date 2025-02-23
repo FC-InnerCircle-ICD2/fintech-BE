@@ -30,7 +30,8 @@ internal class UserCardAdaptor(
                     isRepresentative = false,
                     cardNumber = userCardEntity.cardNumber,
                     expirationPeriod = userCardEntity.expirationPeriod,
-                    cvc = userCardEntity.cvc
+                    cvc = userCardEntity.cvc,
+                    cardCompany = userCardEntity.cardCompany
                 )
             )
         }
@@ -49,7 +50,8 @@ internal class UserCardAdaptor(
                     isRepresentative = isRepresentative,
                     cardNumber = request.cardNumber,
                     expirationPeriod = request.expirationPeriod,
-                    cvc = request.cvc
+                    cvc = request.cvc,
+                    cardCompany = request.cardCompany
                 )
             )
 
@@ -59,7 +61,8 @@ internal class UserCardAdaptor(
             isRepresentative = result.isRepresentative,
             cardNumber = result.cardNumber,
             expirationPeriod = result.expirationPeriod,
-            cvc = result.cvc
+            cvc = result.cvc,
+            cardCompany = result.cardCompany
         )
     }
 
@@ -73,7 +76,8 @@ internal class UserCardAdaptor(
                     isRepresentative = userCardEntity.isRepresentative,
                     cardNumber = userCardEntity.cardNumber,
                     expirationPeriod = userCardEntity.expirationPeriod,
-                    cvc = userCardEntity.cvc
+                    cvc = userCardEntity.cvc,
+                    cardCompany = userCardEntity.cardCompany
                 )
             }.toList()
     }
@@ -88,7 +92,8 @@ internal class UserCardAdaptor(
                     isRepresentative = userCardEntity.isRepresentative,
                     cardNumber = userCardEntity.cardNumber,
                     expirationPeriod = userCardEntity.expirationPeriod,
-                    cvc = userCardEntity.cvc
+                    cvc = userCardEntity.cvc,
+                    cardCompany = userCardEntity.cardCompany
                 )
             }.toList()
     }
@@ -101,7 +106,8 @@ internal class UserCardAdaptor(
             isRepresentative = userCardEntity.isRepresentative,
             cardNumber = userCardEntity.cardNumber,
             expirationPeriod = userCardEntity.expirationPeriod,
-            cvc = userCardEntity.cvc
+            cvc = userCardEntity.cvc,
+            cardCompany = userCardEntity.cardCompany
         )
     }
 
@@ -124,7 +130,8 @@ internal class UserCardAdaptor(
                     isRepresentative = true,
                     cardNumber = userCardDtoList[0].cardNumber,
                     expirationPeriod = userCardDtoList[0].expirationPeriod,
-                    cvc = userCardDtoList[0].cvc
+                    cvc = userCardDtoList[0].cvc,
+                    cardCompany = userCardDtoList[0].cardCompany
                 )
             )
         }
@@ -135,7 +142,8 @@ internal class UserCardAdaptor(
             isRepresentative = userCardEntity.isRepresentative,
             cardNumber = userCardEntity.cardNumber,
             expirationPeriod = userCardEntity.expirationPeriod,
-            cvc = userCardEntity.cvc
+            cvc = userCardEntity.cvc,
+            cardCompany = userCardEntity.cardCompany
         )
     }
 
@@ -155,7 +163,8 @@ internal class UserCardAdaptor(
             isRepresentative = userCardEntity.isRepresentative,
             cardNumber = userCardEntity.cardNumber,
             expirationPeriod = userCardEntity.expirationPeriod,
-            cvc = userCardEntity.cvc
+            cvc = userCardEntity.cvc,
+            cardCompany = userCardEntity.cardCompany
         )
     }
 
@@ -170,7 +179,8 @@ internal class UserCardAdaptor(
                         isRepresentative = userCardDto.isRepresentative,
                         cardNumber = userCardDto.cardNumber,
                         expirationPeriod = userCardDto.expirationPeriod,
-                        cvc = userCardDto.cvc
+                        cvc = userCardDto.cvc,
+                        cardCompany = userCardDto.cardCompany
                     )
                 }.toList()
         )

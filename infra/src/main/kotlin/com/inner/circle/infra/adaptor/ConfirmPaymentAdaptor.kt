@@ -44,7 +44,8 @@ internal class ConfirmPaymentAdaptor(
             requestTime = paymentRequest.requestTime,
             cardNumber = userCard.cardNumber,
             expirationPeriod = userCard.expirationPeriod,
-            cvc = userCard.cvc
+            cvc = userCard.cvc,
+            cardCompany = userCard.cardCompany
         )
     }
 }

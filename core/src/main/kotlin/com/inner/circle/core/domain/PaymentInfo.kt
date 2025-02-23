@@ -16,5 +16,6 @@ data class PaymentInfo(
     val cardNumber: String,
     val expirationPeriod: String,
     val cvc: String,
+    val cardCompany: String,
     val merchantName: String
 )

@@ -6,5 +6,6 @@ data class UserCardDto(
     val isRepresentative: Boolean,
     val cardNumber: String,
     val expirationPeriod: String,
-    val cvc: String
+    val cvc: String,
+    val cardCompany: String
 )

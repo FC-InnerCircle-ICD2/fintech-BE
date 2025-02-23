@@ -153,7 +153,8 @@ class MerchantPaymentController(
                         isRepresentative = coreUserCardDto.isRepresentative,
                         cardNumber = coreUserCardDto.cardNumber,
                         expirationPeriod = coreUserCardDto.expirationPeriod,
-                        cvc = coreUserCardDto.cvc
+                        cvc = coreUserCardDto.cvc,
+                        cardCompany = coreUserCardDto.cardCompany
                     )
                 }.toList()
         )

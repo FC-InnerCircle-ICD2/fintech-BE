@@ -15,5 +15,6 @@ data class ConfirmPaymentInfraDto(
     val cardNumber: String?,
     val expirationPeriod: String?,
     val cvc: String?,
+    val cardCompany: String?,
     val merchantName: String
 )
