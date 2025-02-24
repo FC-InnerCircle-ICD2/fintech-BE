@@ -60,19 +60,20 @@ internal class UserCardAdaptor(
         }
 
         try {
-            val result = repository.save(
-                UserCardEntity(
-                    id = request.id,
-                    accountId = request.accountId,
-                    isRepresentative = isRepresentative,
-                    cardNumber = request.cardNumber,
-                    expirationPeriod = request.expirationPeriod,
-                    cvc = request.cvc,
-                    cardCompany = request.cardCompany
+            val result =
+                repository.save(
+                    UserCardEntity(
+                        id = request.id,
+                        accountId = request.accountId,
+                        isRepresentative = isRepresentative,
+                        cardNumber = request.cardNumber,
+                        expirationPeriod = request.expirationPeriod,
+                        cvc = request.cvc,
+                        cardCompany = request.cardCompany
+                    )
                 )
-            )
 
-            //val result = repository.findByCardNumber(request.cardNumber)
+            // val result = repository.findByCardNumber(request.cardNumber)
 
             return UserCardDto(
                 id = result.id,
