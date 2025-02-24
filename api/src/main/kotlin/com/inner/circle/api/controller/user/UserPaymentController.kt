@@ -34,6 +34,7 @@ import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import java.time.LocalDate
+import kotlin.toString
 import kotlinx.datetime.toKotlinLocalDate
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -238,7 +239,7 @@ class UserPaymentController(
         return PaymentResponse.ok(
             UserCardDto(
                 id = result.id.toString(),
-                accountId = result.accountId,
+                accountId = result.accountId.toString(),
                 isRepresentative = result.isRepresentative,
                 cardNumber = result.cardNumber,
                 expirationPeriod = result.expirationPeriod,
@@ -259,7 +260,7 @@ class UserPaymentController(
                 .map { coreUserCardDto ->
                     UserCardDto(
                         id = coreUserCardDto.id.toString(),
-                        accountId = coreUserCardDto.accountId,
+                        accountId = coreUserCardDto.accountId.toString(),
                         isRepresentative = coreUserCardDto.isRepresentative,
                         cardNumber = coreUserCardDto.cardNumber,
                         expirationPeriod = coreUserCardDto.expirationPeriod,
@@ -284,7 +285,7 @@ class UserPaymentController(
         return PaymentResponse.ok(
             UserCardDto(
                 id = result.id.toString(),
-                accountId = result.accountId,
+                accountId = result.accountId.toString(),
                 isRepresentative = result.isRepresentative,
                 cardNumber = result.cardNumber,
                 expirationPeriod = result.expirationPeriod,
@@ -310,7 +311,7 @@ class UserPaymentController(
                 .map { userCardDto ->
                     UserCardDto(
                         id = userCardDto.id.toString(),
-                        accountId = userCardDto.accountId,
+                        accountId = userCardDto.accountId.toString(),
                         isRepresentative = userCardDto.isRepresentative,
                         cardNumber = userCardDto.cardNumber,
                         expirationPeriod = userCardDto.expirationPeriod,

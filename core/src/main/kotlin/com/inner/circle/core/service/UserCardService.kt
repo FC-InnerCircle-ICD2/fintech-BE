@@ -24,7 +24,15 @@ internal class UserCardService(
                     cardCompany = userCard.cardCompany
                 )
             )
-        return userCard
+        return UserCardDto(
+            id = infraUserCardDto.id,
+            accountId = infraUserCardDto.accountId,
+            isRepresentative = infraUserCardDto.isRepresentative,
+            cardNumber = infraUserCardDto.cardNumber,
+            expirationPeriod = infraUserCardDto.expirationPeriod,
+            cvc = infraUserCardDto.cvc,
+            cardCompany = infraUserCardDto.cardCompany
+        )
     }
 
     override fun findByAccountId(accountId: Long): List<UserCardDto> {

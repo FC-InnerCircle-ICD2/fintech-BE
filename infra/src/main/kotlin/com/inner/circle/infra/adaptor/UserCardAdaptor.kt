@@ -72,6 +72,7 @@ internal class UserCardAdaptor(
                         cardCompany = request.cardCompany
                     )
                 )
+
             return UserCardDto(
                 id = result.id,
                 accountId = result.accountId,
