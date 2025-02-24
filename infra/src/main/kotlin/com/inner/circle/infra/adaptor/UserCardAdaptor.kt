@@ -1,6 +1,7 @@
 package com.inner.circle.infra.adaptor
 
 import com.inner.circle.exception.PaymentException
+import com.inner.circle.exception.UserCardException
 import com.inner.circle.infra.adaptor.dto.UserCardDto
 import com.inner.circle.infra.port.UserCardPort
 import com.inner.circle.infra.repository.UserCardRepository
@@ -41,29 +42,41 @@ internal class UserCardAdaptor(
         if (!request.isRepresentative && userCardEntity == null) {
             isRepresentative = true
         }
+        
+        // 카드 형식 확인
+        val standardCardFormat = Regex("^\\d{4}-\\d{4}-\\d{4}-\\d{4}$") // 일반 카드: xxxx-xxxx-xxxx-xxxx
+        val amexCardFormat = Regex("^\\d{4}-\\d{6}-\\d{5}$") // AMEX: xxxx-xxxxxx-xxxxx
 
-        val result =
-            repository.save(
-                UserCardEntity(
-                    id = request.id,
-                    accountId = request.accountId,
-                    isRepresentative = isRepresentative,
-                    cardNumber = request.cardNumber,
-                    expirationPeriod = request.expirationPeriod,
-                    cvc = request.cvc,
-                    cardCompany = request.cardCompany
+        if(!(standardCardFormat.matches(request.cardNumber)
+            || amexCardFormat.matches(request.cardNumber))){
+            throw UserCardException.BadCardNumberException(request.cardNumber)
+        }
+
+        try{
+            val result =
+                repository.save(
+                    UserCardEntity(
+                        id = request.id,
+                        accountId = request.accountId,
+                        isRepresentative = isRepresentative,
+                        cardNumber = request.cardNumber,
+                        expirationPeriod = request.expirationPeriod,
+                        cvc = request.cvc,
+                        cardCompany = request.cardCompany
+                    )
                 )
+            return UserCardDto(
+                id = result.id,
+                accountId = result.accountId,
+                isRepresentative = result.isRepresentative,
+                cardNumber = result.cardNumber,
+                expirationPeriod = result.expirationPeriod,
+                cvc = result.cvc,
+                cardCompany = result.cardCompany
             )
-
-        return UserCardDto(
-            id = result.id,
-            accountId = result.accountId,
-            isRepresentative = result.isRepresentative,
-            cardNumber = result.cardNumber,
-            expirationPeriod = result.expirationPeriod,
-            cvc = result.cvc,
-            cardCompany = result.cardCompany
-        )
+        } catch (e: Exception){
+            throw UserCardException.AlreadyRegisterCardException(request.cardNumber)
+        }
     }
 
     override fun findByAccountId(accountId: Long): List<UserCardDto> {
