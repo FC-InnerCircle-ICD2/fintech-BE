@@ -43,9 +43,13 @@ internal class UserCardAdaptor(
             isRepresentative = true
         }
 
-        // 카드 형식 확인
-        val standardCardFormat = Regex("^\\d{4}-\\d{4}-\\d{4}-\\d{4}$") // 일반 카드: xxxx-xxxx-xxxx-xxxx
-        val amexCardFormat = Regex("^\\d{4}-\\d{6}-\\d{5}$") // AMEX: xxxx-xxxxxx-xxxxx
+        /*
+        카드 형식 확인
+        일반 카드: xxxx-xxxx-xxxx-xxxx
+        AMEX: xxxx-xxxxxx-xxxxx
+        */
+        val standardCardFormat = Regex("^\\d{4}-\\d{4}-\\d{4}-\\d{4}$")
+        val amexCardFormat = Regex("^\\d{4}-\\d{6}-\\d{5}$")
 
         if (!(
                 standardCardFormat.matches(request.cardNumber) ||
