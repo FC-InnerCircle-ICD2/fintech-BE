@@ -88,4 +88,11 @@ sealed class PaymentException(
         override val message: String = "환불 금액이 $amount 를 초과할 수 없습니다. (요청 : $paymentKey)",
         override val cause: Throwable? = null
     ) : PaymentException(HttpStatus.BAD_REQUEST, message, cause)
+
+    data class BadRefundAmountException(
+        val paymentKey: String,
+        val amount: BigDecimal,
+        override val message: String = "환불 금액은 양수여야 합니다. (요청 : $paymentKey, $amount)",
+        override val cause: Throwable? = null
+    ) : PaymentException(HttpStatus.BAD_REQUEST, message, cause)
 }
