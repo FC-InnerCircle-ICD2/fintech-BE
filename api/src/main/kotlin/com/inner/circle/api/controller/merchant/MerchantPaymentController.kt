@@ -50,7 +50,7 @@ class MerchantPaymentController(
             PaymentClaimUseCase.ClaimRequest(
                 amount = request.amount,
                 orderId = request.orderId,
-                orderName = request.orderId
+                orderName = request.orderName
             )
 
         val response = claimUseCase.createPayment(claimRequest, merchantId, merchantName)
