@@ -149,7 +149,7 @@ class MerchantPaymentController(
                 .map { coreUserCardDto ->
                     UserCardDto(
                         id = coreUserCardDto.id.toString(),
-                        accountId = coreUserCardDto.accountId,
+                        accountId = coreUserCardDto.accountId.toString(),
                         isRepresentative = coreUserCardDto.isRepresentative,
                         cardNumber = coreUserCardDto.cardNumber,
                         expirationPeriod = coreUserCardDto.expirationPeriod,
