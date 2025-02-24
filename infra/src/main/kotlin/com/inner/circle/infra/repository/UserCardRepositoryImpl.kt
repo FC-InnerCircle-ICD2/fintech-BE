@@ -31,4 +31,7 @@ internal class UserCardRepositoryImpl(
 
     override fun saveAll(userCardEntityList: List<UserCardEntity>): List<UserCardEntity> =
         userCardJpaRepository.saveAll(userCardEntityList)
+
+    override fun findByCardNumber(cardNumber: String): UserCardEntity =
+        userCardJpaRepository.findByCardNumber(cardNumber)
 }

@@ -16,4 +16,6 @@ interface UserCardJpaRepository : JpaRepository<UserCardEntity, String> {
     fun findById(id: Long): UserCardEntity
 
     fun deleteById(id: Long)
+
+    fun findByCardNumber(cardNumber: String): UserCardEntity
 }
