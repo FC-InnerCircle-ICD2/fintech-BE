@@ -19,6 +19,4 @@ interface UserCardRepository {
     fun deleteById(id: Long)
 
     fun saveAll(userCardEntityList: List<UserCardEntity>): List<UserCardEntity>
-
-    fun findByCardNumber(cardNumber: String): UserCardEntity
 }

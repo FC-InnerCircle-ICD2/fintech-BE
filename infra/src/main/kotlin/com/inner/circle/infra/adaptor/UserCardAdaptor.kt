@@ -73,8 +73,6 @@ internal class UserCardAdaptor(
                     )
                 )
 
-            // val result = repository.findByCardNumber(request.cardNumber)
-
             return UserCardDto(
                 id = result.id,
                 accountId = result.accountId,
