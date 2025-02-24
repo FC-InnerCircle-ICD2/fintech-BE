@@ -67,7 +67,7 @@ internal class UserCardAdaptor(
     }
 
     override fun findByAccountId(accountId: Long): List<UserCardDto> {
-        val userCardEntityList = repository.findByAccountId(accountId)
+        val userCardEntityList = repository.findByAccountId(accountId) ?: emptyList()
         return userCardEntityList
             .map { userCardEntity ->
                 UserCardDto(
@@ -123,17 +123,19 @@ internal class UserCardAdaptor(
         // 해당 카드가 대표 카드인 경우 id가 가장 작은 카드를 대표카드로 설정
         if (userCardEntity.isRepresentative) {
             val userCardDtoList = repository.findByAccountId(accountId)
-            repository.save(
-                UserCardEntity(
-                    id = userCardDtoList[0].id,
-                    accountId = accountId,
-                    isRepresentative = true,
-                    cardNumber = userCardDtoList[0].cardNumber,
-                    expirationPeriod = userCardDtoList[0].expirationPeriod,
-                    cvc = userCardDtoList[0].cvc,
-                    cardCompany = userCardDtoList[0].cardCompany
+            if (!userCardDtoList.isNullOrEmpty()) { // null 또는 빈 리스트 체크
+                repository.save(
+                    UserCardEntity(
+                        id = userCardDtoList[0].id,
+                        accountId = accountId,
+                        isRepresentative = true,
+                        cardNumber = userCardDtoList[0].cardNumber,
+                        expirationPeriod = userCardDtoList[0].expirationPeriod,
+                        cvc = userCardDtoList[0].cvc,
+                        cardCompany = userCardDtoList[0].cardCompany
+                    )
                 )
-            )
+            }
         }
 
         return UserCardDto(
