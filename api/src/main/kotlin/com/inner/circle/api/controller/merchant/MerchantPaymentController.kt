@@ -50,7 +50,7 @@ class MerchantPaymentController(
             PaymentClaimUseCase.ClaimRequest(
                 amount = request.amount,
                 orderId = request.orderId,
-                orderName = request.orderId
+                orderName = request.orderName
             )
 
         val response = claimUseCase.createPayment(claimRequest, merchantId, merchantName)
@@ -149,11 +149,12 @@ class MerchantPaymentController(
                 .map { coreUserCardDto ->
                     UserCardDto(
                         id = coreUserCardDto.id.toString(),
-                        accountId = coreUserCardDto.accountId,
+                        accountId = coreUserCardDto.accountId.toString(),
                         isRepresentative = coreUserCardDto.isRepresentative,
                         cardNumber = coreUserCardDto.cardNumber,
                         expirationPeriod = coreUserCardDto.expirationPeriod,
-                        cvc = coreUserCardDto.cvc
+                        cvc = coreUserCardDto.cvc,
+                        cardCompany = coreUserCardDto.cardCompany
                     )
                 }.toList()
         )

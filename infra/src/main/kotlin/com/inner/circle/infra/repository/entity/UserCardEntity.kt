@@ -22,5 +22,7 @@ data class UserCardEntity(
     @Column(nullable = false)
     val expirationPeriod: String,
     @Column(nullable = false)
-    val cvc: String
+    val cvc: String,
+    @Column(nullable = false)
+    val cardCompany: String
 ) : BaseEntity()

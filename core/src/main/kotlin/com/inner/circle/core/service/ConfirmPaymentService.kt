@@ -34,7 +34,8 @@ internal class ConfirmPaymentService(
                 mapOf(
                     "cardNumber" to request.cardNumber,
                     "expiryDate" to request.expirationPeriod,
-                    "cvc" to request.cvc
+                    "cvc" to request.cvc,
+                    "cardCompany" to request.cardCompany
                 )
             )
 
@@ -91,6 +92,12 @@ internal class ConfirmPaymentService(
                 )
             )
 
+        if (paymentInfo.cardNumber.isNullOrBlank() ||
+            paymentInfo.cvc.isNullOrBlank()
+        ) {
+            throw PaymentException.CardNotFoundException()
+        }
+
         return authPayment(
             PaymentInfoDto(
                 orderId = request.orderId,
@@ -110,6 +117,9 @@ internal class ConfirmPaymentService(
                         ?: throw AuthenticateException.CardInformationNotFoundException(),
                 cvc =
                     paymentInfo.cvc
+                        ?: throw AuthenticateException.CardInformationNotFoundException(),
+                cardCompany =
+                    paymentInfo.cardCompany
                         ?: throw AuthenticateException.CardInformationNotFoundException()
             )
         )
@@ -138,7 +148,8 @@ internal class ConfirmPaymentService(
                 requestTime = paymentInfo.requestTime,
                 cardNumber = request.cardNumber,
                 expirationPeriod = request.expirationPeriod,
-                cvc = request.cvc
+                cvc = request.cvc,
+                cardCompany = request.cardCompany
             )
         )
     }

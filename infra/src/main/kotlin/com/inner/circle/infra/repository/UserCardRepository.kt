@@ -8,7 +8,7 @@ interface UserCardRepository {
         isRepresentative: Boolean
     ): UserCardEntity?
 
-    fun findByAccountId(accountId: Long): List<UserCardEntity>
+    fun findByAccountId(accountId: Long): List<UserCardEntity>?
 
     fun findAll(): List<UserCardEntity>
 

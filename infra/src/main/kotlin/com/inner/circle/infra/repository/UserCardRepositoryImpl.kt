@@ -22,7 +22,7 @@ internal class UserCardRepositoryImpl(
     override fun findAll(): List<UserCardEntity> =
         userCardJpaRepository.findAllByOrderByAccountIdAscIdAsc()
 
-    override fun findByAccountId(accountId: Long): List<UserCardEntity> =
+    override fun findByAccountId(accountId: Long): List<UserCardEntity>? =
         userCardJpaRepository.findByAccountIdOrderByIdAsc(accountId)
 
     override fun findById(id: Long): UserCardEntity = userCardJpaRepository.findById(id)

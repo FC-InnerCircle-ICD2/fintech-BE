@@ -17,6 +17,7 @@ data class PaymentInfoDto(
     val cardNumber: String,
     val expirationPeriod: String,
     val cvc: String,
+    val cardCompany: String,
     val merchantName: String
 ) {
     companion object {
@@ -33,7 +34,8 @@ data class PaymentInfoDto(
                 requestTime = paymentInfo.requestTime,
                 cardNumber = paymentInfo.cardNumber,
                 expirationPeriod = paymentInfo.expirationPeriod,
-                cvc = paymentInfo.cvc
+                cvc = paymentInfo.cvc,
+                cardCompany = paymentInfo.cardCompany
             )
     }
 }

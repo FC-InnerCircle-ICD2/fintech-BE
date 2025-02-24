@@ -102,6 +102,13 @@ internal class RefundPaymentService(
             )
         }
 
+        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw PaymentException.BadRefundAmountException(
+                paymentKey,
+                amount
+            )
+        }
+
         val infraUserCardDto =
             transactionPort.save(
                 TransactionPort.Request(

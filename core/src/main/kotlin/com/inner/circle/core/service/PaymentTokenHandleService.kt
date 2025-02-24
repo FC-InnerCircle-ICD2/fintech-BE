@@ -7,7 +7,7 @@ import com.inner.circle.infra.port.PaymentTokenHandlingPort
 import org.springframework.stereotype.Service
 
 @Service
-class PaymentPaymentTokenHandleService(
+class PaymentTokenHandleService(
     private val paymentTokenHandlingPort: PaymentTokenHandlingPort,
     private val jwtHandler: JwtHandler
 ) : PaymentTokenHandlingUseCase {

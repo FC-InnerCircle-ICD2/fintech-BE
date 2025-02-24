@@ -36,7 +36,7 @@ internal class ConfirmPaymentAdaptor(
             orderId = paymentRequest.orderId,
             orderName = paymentRequest.orderName,
             orderStatus = PaymentProcessStatus.valueOf(paymentRequest.orderStatus.name),
-            accountId = paymentRequest.accountId,
+            accountId = accountId,
             merchantId = paymentRequest.merchantId,
             merchantName = paymentRequest.merchantName,
             paymentKey = paymentRequest.paymentKey,
@@ -44,7 +44,8 @@ internal class ConfirmPaymentAdaptor(
             requestTime = paymentRequest.requestTime,
             cardNumber = userCard.cardNumber,
             expirationPeriod = userCard.expirationPeriod,
-            cvc = userCard.cvc
+            cvc = userCard.cvc,
+            cardCompany = userCard.cardCompany
         )
     }
 }

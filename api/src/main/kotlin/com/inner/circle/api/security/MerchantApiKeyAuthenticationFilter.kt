@@ -30,7 +30,7 @@ class MerchantApiKeyAuthenticationFilter(
             SecurityContextHolder.getContext().authentication = authentication
 
             filterChain.doFilter(request, response)
-        } catch (ex: UserAuthenticationException.UnauthorizedException) {
+        } catch (ex: Exception) {
             authenticationEntryPoint.commence(
                 request,
                 response,

@@ -2,6 +2,7 @@ package com.inner.circle.core.service
 
 import com.inner.circle.core.service.dto.UserCardDto
 import com.inner.circle.core.usecase.UserCardUseCase
+import com.inner.circle.exception.UserCardException
 import com.inner.circle.infra.port.UserCardPort
 import org.springframework.stereotype.Service
 import com.inner.circle.infra.adaptor.dto.UserCardDto as InfraUserCardDto
@@ -19,10 +20,19 @@ internal class UserCardService(
                     isRepresentative = userCard.isRepresentative,
                     cardNumber = userCard.cardNumber,
                     expirationPeriod = userCard.expirationPeriod,
-                    cvc = userCard.cvc
+                    cvc = userCard.cvc,
+                    cardCompany = userCard.cardCompany
                 )
             )
-        return userCard
+        return UserCardDto(
+            id = infraUserCardDto.id,
+            accountId = infraUserCardDto.accountId,
+            isRepresentative = infraUserCardDto.isRepresentative,
+            cardNumber = infraUserCardDto.cardNumber,
+            expirationPeriod = infraUserCardDto.expirationPeriod,
+            cvc = infraUserCardDto.cvc,
+            cardCompany = infraUserCardDto.cardCompany
+        )
     }
 
     override fun findByAccountId(accountId: Long): List<UserCardDto> {
@@ -35,7 +45,8 @@ internal class UserCardService(
                     isRepresentative = infraUserCardDto.isRepresentative,
                     cardNumber = infraUserCardDto.cardNumber,
                     expirationPeriod = infraUserCardDto.expirationPeriod,
-                    cvc = infraUserCardDto.cvc
+                    cvc = infraUserCardDto.cvc,
+                    cardCompany = infraUserCardDto.cardCompany
                 )
             }.toList()
     }
@@ -50,7 +61,8 @@ internal class UserCardService(
                     isRepresentative = infraUserCardDto.isRepresentative,
                     cardNumber = infraUserCardDto.cardNumber,
                     expirationPeriod = infraUserCardDto.expirationPeriod,
-                    cvc = infraUserCardDto.cvc
+                    cvc = infraUserCardDto.cvc,
+                    cardCompany = infraUserCardDto.cardCompany
                 )
             }.toList()
     }
@@ -62,6 +74,11 @@ internal class UserCardService(
         // 유저 카드 목록 전체 조회
         val infraUserCardDtoList =
             userCardPort.findByAccountId(accountId)
+
+        // id가 존재하지 않으면 예외 처리
+        if (infraUserCardDtoList.none { it.id == id }) {
+            throw UserCardException.CardNotFoundException(id) // 해당 id에 대한 예외 처리
+        }
 
         // 대표 카드 변경
         val result =
@@ -81,7 +98,8 @@ internal class UserCardService(
                     isRepresentative = userCardDto.isRepresentative,
                     cardNumber = userCardDto.cardNumber,
                     expirationPeriod = userCardDto.expirationPeriod,
-                    cvc = userCardDto.cvc
+                    cvc = userCardDto.cvc,
+                    cardCompany = userCardDto.cardCompany
                 )
             }.toList()
     }
@@ -102,7 +120,8 @@ internal class UserCardService(
             isRepresentative = infraUserCardDto.isRepresentative,
             cardNumber = infraUserCardDto.cardNumber,
             expirationPeriod = infraUserCardDto.expirationPeriod,
-            cvc = infraUserCardDto.cvc
+            cvc = infraUserCardDto.cvc,
+            cardCompany = infraUserCardDto.cardCompany
         )
     }
 }
