@@ -60,7 +60,7 @@ internal class UserCardAdaptor(
         }
 
         try {
-            repository.save(
+            val result = repository.save(
                 UserCardEntity(
                     id = request.id,
                     accountId = request.accountId,
@@ -72,7 +72,7 @@ internal class UserCardAdaptor(
                 )
             )
 
-            val result = repository.findByCardNumber(request.cardNumber)
+            //val result = repository.findByCardNumber(request.cardNumber)
 
             return UserCardDto(
                 id = result.id,
