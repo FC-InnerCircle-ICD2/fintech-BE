@@ -69,7 +69,7 @@ internal class UserCardService(
 
         // id가 존재하지 않으면 예외 처리
         if (infraUserCardDtoList.none { it.id == id }) {
-            throw UserCardException.CardNotFoundException(id)  // 해당 id에 대한 예외 처리
+            throw UserCardException.CardNotFoundException(id) // 해당 id에 대한 예외 처리
         }
 
         // 대표 카드 변경

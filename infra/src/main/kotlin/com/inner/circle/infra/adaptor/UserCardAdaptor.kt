@@ -42,17 +42,20 @@ internal class UserCardAdaptor(
         if (!request.isRepresentative && userCardEntity == null) {
             isRepresentative = true
         }
-        
+
         // 카드 형식 확인
         val standardCardFormat = Regex("^\\d{4}-\\d{4}-\\d{4}-\\d{4}$") // 일반 카드: xxxx-xxxx-xxxx-xxxx
         val amexCardFormat = Regex("^\\d{4}-\\d{6}-\\d{5}$") // AMEX: xxxx-xxxxxx-xxxxx
 
-        if(!(standardCardFormat.matches(request.cardNumber)
-            || amexCardFormat.matches(request.cardNumber))){
+        if (!(
+                standardCardFormat.matches(request.cardNumber) ||
+                    amexCardFormat.matches(request.cardNumber)
+            )
+        ) {
             throw UserCardException.BadCardNumberException(request.cardNumber)
         }
 
-        try{
+        try {
             val result =
                 repository.save(
                     UserCardEntity(
@@ -74,7 +77,7 @@ internal class UserCardAdaptor(
                 cvc = result.cvc,
                 cardCompany = result.cardCompany
             )
-        } catch (e: Exception){
+        } catch (e: Exception) {
             throw UserCardException.AlreadyRegisterCardException(request.cardNumber)
         }
     }
