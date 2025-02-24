@@ -2,6 +2,7 @@ package com.inner.circle.infra.http
 
 import com.google.gson.Gson
 import com.inner.circle.exception.CardCompanyException
+import com.inner.circle.exception.PaymentException
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
@@ -56,12 +57,12 @@ class HttpClient {
                     )
                 }
             } catch (e: Exception) {
-                throw Exception()
+                throw PaymentException.CardAuthFailException()
             }
         }
     }
 
-    interface ApiService {
+    fun interface ApiService {
         @POST
         fun sendPostRequest(
             @Url url: String,

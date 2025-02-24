@@ -59,6 +59,11 @@ sealed class PaymentException(
         override val cause: Throwable? = null
     ) : PaymentException(HttpStatus.PAYMENT_METHOD_NOT_FOUND, message, cause)
 
+    data class CardAuthFailException(
+        override val message: String = "결제수단이 승인되지 못했습니다.",
+        override val cause: Throwable? = null
+    ) : PaymentException(HttpStatus.PAYMENT_METHOD_NOT_VERIFIED, message, cause)
+
     data class InvalidOrderStatusException(
         val orderStatus: String,
         override val message: String = "주문 상태 ($orderStatus)에서는 처리될 수 없는 요청입니다.",

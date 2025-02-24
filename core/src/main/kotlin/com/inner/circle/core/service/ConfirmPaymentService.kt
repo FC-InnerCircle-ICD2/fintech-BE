@@ -91,6 +91,12 @@ internal class ConfirmPaymentService(
                 )
             )
 
+        if (paymentInfo.cardNumber.isNullOrBlank() ||
+            paymentInfo.cvc.isNullOrBlank()
+        ) {
+            throw PaymentException.CardNotFoundException()
+        }
+
         return authPayment(
             PaymentInfoDto(
                 orderId = request.orderId,
