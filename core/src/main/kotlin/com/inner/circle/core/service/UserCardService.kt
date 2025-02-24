@@ -19,7 +19,8 @@ internal class UserCardService(
                     isRepresentative = userCard.isRepresentative,
                     cardNumber = userCard.cardNumber,
                     expirationPeriod = userCard.expirationPeriod,
-                    cvc = userCard.cvc
+                    cvc = userCard.cvc,
+                    cardCompany = userCard.cardCompany
                 )
             )
         return userCard
@@ -35,7 +36,8 @@ internal class UserCardService(
                     isRepresentative = infraUserCardDto.isRepresentative,
                     cardNumber = infraUserCardDto.cardNumber,
                     expirationPeriod = infraUserCardDto.expirationPeriod,
-                    cvc = infraUserCardDto.cvc
+                    cvc = infraUserCardDto.cvc,
+                    cardCompany = infraUserCardDto.cardCompany
                 )
             }.toList()
     }
@@ -50,7 +52,8 @@ internal class UserCardService(
                     isRepresentative = infraUserCardDto.isRepresentative,
                     cardNumber = infraUserCardDto.cardNumber,
                     expirationPeriod = infraUserCardDto.expirationPeriod,
-                    cvc = infraUserCardDto.cvc
+                    cvc = infraUserCardDto.cvc,
+                    cardCompany = infraUserCardDto.cardCompany
                 )
             }.toList()
     }
@@ -81,7 +84,8 @@ internal class UserCardService(
                     isRepresentative = userCardDto.isRepresentative,
                     cardNumber = userCardDto.cardNumber,
                     expirationPeriod = userCardDto.expirationPeriod,
-                    cvc = userCardDto.cvc
+                    cvc = userCardDto.cvc,
+                    cardCompany = userCardDto.cardCompany
                 )
             }.toList()
     }
@@ -102,7 +106,8 @@ internal class UserCardService(
             isRepresentative = infraUserCardDto.isRepresentative,
             cardNumber = infraUserCardDto.cardNumber,
             expirationPeriod = infraUserCardDto.expirationPeriod,
-            cvc = infraUserCardDto.cvc
+            cvc = infraUserCardDto.cvc,
+            cardCompany = infraUserCardDto.cardCompany
         )
     }
 }

@@ -124,7 +124,8 @@ class UserPaymentController(
                             merchantId = confirmPaymentRequest.merchantId,
                             cardNumber = confirmPaymentRequest.cardNumber,
                             expirationPeriod = confirmPaymentRequest.expirationPeriod,
-                            cvc = confirmPaymentRequest.cvc
+                            cvc = confirmPaymentRequest.cvc,
+                            cardCompany = confirmPaymentRequest.cardCompany
                         )
                     )
                 )
@@ -230,7 +231,8 @@ class UserPaymentController(
                     isRepresentative = request.isRepresentative,
                     cardNumber = request.cardNumber,
                     expirationPeriod = request.expirationPeriod,
-                    cvc = request.cvc
+                    cvc = request.cvc,
+                    cardCompany = request.cardCompany
                 )
             )
         return PaymentResponse.ok(
@@ -240,7 +242,8 @@ class UserPaymentController(
                 isRepresentative = result.isRepresentative,
                 cardNumber = result.cardNumber,
                 expirationPeriod = result.expirationPeriod,
-                cvc = result.cvc
+                cvc = result.cvc,
+                cardCompany = request.cardCompany
             )
         )
     }
@@ -260,7 +263,8 @@ class UserPaymentController(
                         isRepresentative = coreUserCardDto.isRepresentative,
                         cardNumber = coreUserCardDto.cardNumber,
                         expirationPeriod = coreUserCardDto.expirationPeriod,
-                        cvc = coreUserCardDto.cvc
+                        cvc = coreUserCardDto.cvc,
+                        cardCompany = coreUserCardDto.cardCompany
                     )
                 }.toList()
         )
@@ -284,7 +288,8 @@ class UserPaymentController(
                 isRepresentative = result.isRepresentative,
                 cardNumber = result.cardNumber,
                 expirationPeriod = result.expirationPeriod,
-                cvc = result.cvc
+                cvc = result.cvc,
+                cardCompany = result.cardCompany
             )
         )
     }
@@ -309,7 +314,8 @@ class UserPaymentController(
                         isRepresentative = userCardDto.isRepresentative,
                         cardNumber = userCardDto.cardNumber,
                         expirationPeriod = userCardDto.expirationPeriod,
-                        cvc = userCardDto.cvc
+                        cvc = userCardDto.cvc,
+                        cardCompany = userCardDto.cardCompany
                     )
                 }.toList()
         )

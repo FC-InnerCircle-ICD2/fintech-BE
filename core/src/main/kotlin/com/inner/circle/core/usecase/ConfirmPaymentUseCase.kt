@@ -8,7 +8,8 @@ interface ConfirmPaymentUseCase : ConfirmSimplePaymentUseCase {
         val merchantId: Long,
         val cardNumber: String,
         val expirationPeriod: String,
-        val cvc: String
+        val cvc: String,
+        val cardCompany: String
     )
 
     fun confirmPayment(request: Request): ConfirmPaymentCoreDto
