@@ -21,7 +21,7 @@ class SecurityConfig(
         http
             .securityMatcher("/api/v1/p/merchant/**")
             .csrf { it.disable() }
-            .cors{}
+            .cors {}
             .httpBasic { it.disable() }
             .authorizeHttpRequests { authorizeRequests ->
                 authorizeRequests
