@@ -90,7 +90,7 @@ class PaymentController(
 
     @Operation(summary = "결제 취소")
     @PostMapping("/payments/{paymentKey}/cancel")
-    fun refundPartial(
+    fun cancel(
         @AuthenticationPrincipal merchant: MerchantUserDetails,
         @PathVariable("paymentKey") paymentKey: String,
         @RequestBody request: CancelPaymentRequest

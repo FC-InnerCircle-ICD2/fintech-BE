@@ -2,7 +2,7 @@ package com.inner.circle.core.service
 
 import com.inner.circle.core.domain.PaymentProcessStatus
 import com.inner.circle.core.service.dto.CancelPaymentDto
-import com.inner.circle.core.usecase.CancelPaymentUseCase
+import com.inner.circle.core.usecase.CancelPaymentRequestUseCase
 import com.inner.circle.infra.port.ConfirmPaymentPort
 import com.inner.circle.infra.port.SavePaymentRequestPort
 import com.inner.circle.infra.repository.entity.PaymentType
@@ -10,11 +10,11 @@ import org.springframework.stereotype.Service
 import com.inner.circle.infra.adaptor.dto.PaymentProcessStatus as InfraPaymentProcessStatus
 
 @Service
-internal class CancelPaymentService(
+internal class CancelPaymentRequestService(
     private val confirmPaymentPort: ConfirmPaymentPort,
     private val savePaymentRequestPort: SavePaymentRequestPort
-) : CancelPaymentUseCase {
-    override fun cancelPayment(request: CancelPaymentUseCase.Request): CancelPaymentDto {
+) : CancelPaymentRequestUseCase {
+    override fun cancel(request: CancelPaymentRequestUseCase.Request): CancelPaymentDto {
         val paymentInfo =
             confirmPaymentPort.getCardNoAndPayInfo(
                 ConfirmPaymentPort.Request(

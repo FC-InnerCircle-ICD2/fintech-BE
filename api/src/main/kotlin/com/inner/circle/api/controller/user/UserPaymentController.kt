@@ -22,7 +22,7 @@ import com.inner.circle.api.controller.request.UserCardRequest
 import com.inner.circle.core.security.AccountDetails
 import com.inner.circle.core.service.dto.ConfirmPaymentCoreDto
 import com.inner.circle.core.service.dto.TransactionDto
-import com.inner.circle.core.usecase.CancelPaymentUseCase
+import com.inner.circle.core.usecase.CancelPaymentRequestUseCase
 import com.inner.circle.core.usecase.ConfirmPaymentUseCase
 import com.inner.circle.core.usecase.ConfirmSimplePaymentUseCase
 import com.inner.circle.core.usecase.GetPaymentWithTransactionsUseCase
@@ -34,7 +34,6 @@ import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import java.time.LocalDate
-import kotlin.toString
 import kotlinx.datetime.toKotlinLocalDate
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -55,7 +54,7 @@ class UserPaymentController(
     private val paymentTokenHandlingUseCase: PaymentTokenHandlingUseCase,
     private val confirmPaymentUseCase: ConfirmPaymentUseCase,
     private val userCardUseCase: UserCardUseCase,
-    private val cancelPaymentUseCase: CancelPaymentUseCase,
+    private val cancelPaymentRequestUseCase: CancelPaymentRequestUseCase,
     private val statusChangedMessageSender: PaymentStatusChangedMessageSender,
     private val getPaymentWithTransactionsUseCase: GetPaymentWithTransactionsUseCase,
     private val refundPaymentUseCase: RefundPaymentUseCase
@@ -140,9 +139,9 @@ class UserPaymentController(
         return response
     }
 
-    @Operation(summary = "결제 취소")
-    @PostMapping("/cancel")
-    fun cancelPaymentConfirmWithOrderId(
+    @Operation(summary = "결제 요청 취소")
+    @PostMapping("/request/cancel")
+    fun cancelPaymentRequest(
         @AuthenticationPrincipal account: AccountDetails,
         @RequestBody cancelPaymentRequest: CancelPaymentRequest
     ): PaymentResponse<CancelPaymentDto> {
@@ -161,8 +160,8 @@ class UserPaymentController(
         )
 
         val cancelResult =
-            cancelPaymentUseCase.cancelPayment(
-                CancelPaymentUseCase.Request(
+            cancelPaymentRequestUseCase.cancel(
+                CancelPaymentRequestUseCase.Request(
                     orderId = orderId,
                     merchantId = merchantId,
                     accountId = accountId
@@ -238,7 +237,7 @@ class UserPaymentController(
             )
         return PaymentResponse.ok(
             UserCardDto(
-                id = result.id.toString(),
+                id = result.id?.toString(),
                 accountId = result.accountId.toString(),
                 isRepresentative = result.isRepresentative,
                 cardNumber = result.cardNumber,
@@ -259,7 +258,7 @@ class UserPaymentController(
             coreUserCardDtoList
                 .map { coreUserCardDto ->
                     UserCardDto(
-                        id = coreUserCardDto.id.toString(),
+                        id = coreUserCardDto.id?.toString(),
                         accountId = coreUserCardDto.accountId.toString(),
                         isRepresentative = coreUserCardDto.isRepresentative,
                         cardNumber = coreUserCardDto.cardNumber,
@@ -284,7 +283,7 @@ class UserPaymentController(
             )
         return PaymentResponse.ok(
             UserCardDto(
-                id = result.id.toString(),
+                id = result.id?.toString(),
                 accountId = result.accountId.toString(),
                 isRepresentative = result.isRepresentative,
                 cardNumber = result.cardNumber,
@@ -310,7 +309,7 @@ class UserPaymentController(
             result
                 .map { userCardDto ->
                     UserCardDto(
-                        id = userCardDto.id.toString(),
+                        id = userCardDto.id?.toString(),
                         accountId = userCardDto.accountId.toString(),
                         isRepresentative = userCardDto.isRepresentative,
                         cardNumber = userCardDto.cardNumber,
