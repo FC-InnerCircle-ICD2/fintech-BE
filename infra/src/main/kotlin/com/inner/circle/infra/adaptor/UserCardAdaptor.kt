@@ -8,6 +8,7 @@ import com.inner.circle.infra.repository.UserCardRepository
 import com.inner.circle.infra.repository.entity.UserCardEntity
 import jakarta.transaction.Transactional
 import kotlin.Long
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.stereotype.Component
 
 @Component
@@ -82,7 +83,7 @@ internal class UserCardAdaptor(
                 cvc = result.cvc,
                 cardCompany = result.cardCompany
             )
-        } catch (e: Exception) {
+        } catch (e: DataIntegrityViolationException) {
             throw UserCardException.AlreadyRegisterCardException(request.cardNumber)
         }
     }

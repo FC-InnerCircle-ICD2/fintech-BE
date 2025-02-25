@@ -13,9 +13,13 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.POST
 import retrofit2.http.Url
+import java.io.IOException
+import org.slf4j.LoggerFactory
 
 class HttpClient {
     companion object {
+        private const val MAX_RETRIES = 2 // 최대 재시도 횟수
+
         fun sendPostRequest(
             baseUrl: String,
             endpoint: String,
@@ -40,25 +44,36 @@ class HttpClient {
             // 동적으로 URL을 받아서 POST 요청 보내기
             val call: Call<ResponseBody> = apiService.sendPostRequest(endpoint, body)
 
-            try {
-                val response: Response<ResponseBody> = call.execute()
+            var attempt = 0
 
-                if (response.isSuccessful) {
-                    // 응답 본문을 동적으로 파싱하여 바로 반환
-                    val responseBody = response.body()?.string()
-                    responseBody?.let {
-                        // JSON 응답을 Map으로 파싱
-                        return Gson().fromJson(it, Map::class.java) as Map<String, Any>
-                    } ?: throw NullPointerException("Response body is null")
-                } else {
+            val log = LoggerFactory.getLogger(HttpClient::class.java)
+
+            while (attempt <= MAX_RETRIES) {
+                try {
+                    val response: Response<ResponseBody> = call.clone().execute()
+
+                    if (response.isSuccessful) {
+                        // 응답 본문을 동적으로 파싱하여 바로 반환
+                        val responseBody = response.body()?.string()
+                        responseBody?.let {
+                            // JSON 응답을 Map으로 파싱
+                            return Gson().fromJson(it, Map::class.java) as Map<String, Any>
+                        } ?: throw NullPointerException("Response body is null")
+                    }
                     throw CardCompanyException.ConnenctException(
                         code = response.code(),
                         msg = response.message()
                     )
+                } catch (e: IOException) {
+                    if (attempt == MAX_RETRIES) {
+                        log.info("[ERROR] 네트워크 요청 실패 (최대 재시도 횟수 초과): ${e.message}")
+                        throw PaymentException.CardAuthFailException()
+                    }
+                    log.info("[WARN] 네트워크 요청 실패, 재시도 중... (시도 횟수: ${attempt + 1})")
                 }
-            } catch (e: Exception) {
-                throw PaymentException.CardAuthFailException()
+                attempt++
             }
+            throw PaymentException.CardAuthFailException()
         }
     }
 
