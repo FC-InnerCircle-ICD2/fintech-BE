@@ -3,9 +3,11 @@ package com.inner.circle.infra.http
 import com.google.gson.Gson
 import com.inner.circle.exception.CardCompanyException
 import com.inner.circle.exception.PaymentException
+import java.io.IOException
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
+import org.slf4j.LoggerFactory
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -13,8 +15,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.POST
 import retrofit2.http.Url
-import java.io.IOException
-import org.slf4j.LoggerFactory
 
 class HttpClient {
     companion object {
