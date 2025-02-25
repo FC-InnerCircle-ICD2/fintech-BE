@@ -12,7 +12,7 @@ internal class UserCardService(
     private val userCardPort: UserCardPort
 ) : UserCardUseCase {
     override fun save(userCard: UserCardDto): UserCardDto {
-        try{
+        try {
             val infraUserCardDto =
                 userCardPort.save(
                     InfraUserCardDto(
