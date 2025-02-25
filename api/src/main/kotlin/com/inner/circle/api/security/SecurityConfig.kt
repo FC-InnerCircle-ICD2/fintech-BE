@@ -22,7 +22,6 @@ class SecurityConfig(
             .securityMatcher("/api/v1/p/merchant/**")
             .csrf { it.disable() }
             .httpBasic { it.disable() }
-            .cors { }
             .authorizeHttpRequests { authorizeRequests ->
                 authorizeRequests
                     .anyRequest()
@@ -41,7 +40,6 @@ class SecurityConfig(
         http
             .securityMatcher("/api/v1/p/user/**")
             .csrf { it.disable() }
-            .cors { }
             .httpBasic { it.disable() }
             .formLogin { it.disable() }
             .addFilterBefore(
