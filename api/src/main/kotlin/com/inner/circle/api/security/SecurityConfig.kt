@@ -8,9 +8,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
-import org.springframework.web.cors.CorsConfiguration
-import org.springframework.web.cors.CorsConfigurationSource
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
 @Configuration
 @EnableWebSecurity
@@ -25,7 +22,6 @@ class SecurityConfig(
             .securityMatcher("/api/v1/p/merchant/**")
             .csrf { it.disable() }
             .httpBasic { it.disable() }
-            .cors { it.configurationSource(corsConfigurationSource()) }
             .authorizeHttpRequests { authorizeRequests ->
                 authorizeRequests
                     .anyRequest()
@@ -44,7 +40,6 @@ class SecurityConfig(
         http
             .securityMatcher("/api/v1/p/user/**")
             .csrf { it.disable() }
-            .cors { it.configurationSource(corsConfigurationSource()) }
             .httpBasic { it.disable() }
             .formLogin { it.disable() }
             .addFilterBefore(
@@ -54,16 +49,4 @@ class SecurityConfig(
                 ),
                 UsernamePasswordAuthenticationFilter::class.java
             ).build()
-
-    @Bean
-    fun corsConfigurationSource(): CorsConfigurationSource {
-        val configuration = CorsConfiguration()
-        configuration.allowedOrigins = listOf("*")
-        configuration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS")
-        configuration.allowedHeaders = listOf("authorization", "content-type")
-
-        val source = UrlBasedCorsConfigurationSource()
-        source.registerCorsConfiguration("/**", configuration)
-        return source
-    }
 }
