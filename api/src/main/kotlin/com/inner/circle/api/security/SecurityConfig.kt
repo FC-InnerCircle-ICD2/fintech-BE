@@ -11,6 +11,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.CorsConfigurationSource
+import org.springframework.web.cors.CorsUtils
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
 @Configuration
 @EnableWebSecurity
@@ -48,6 +53,16 @@ class SecurityConfig(
             .cors { it.configurationSource(corsConfigurationSource()) }
             .httpBasic { it.disable() }
             .formLogin { it.disable() }
+            .authorizeHttpRequests {
+                it
+                    .requestMatchers(
+                        CorsUtils::isPreFlightRequest,
+                        AntPathRequestMatcher("/api/v1/p/user/sign-in"),
+                        AntPathRequestMatcher("/api/v1/p/user/sign-up")
+                    ).permitAll()
+                    .anyRequest()
+                    .authenticated()
+            }
             .addFilterBefore(
                 UserApiAuthenticationFilter(
                     provider = accountValidationProvider,
