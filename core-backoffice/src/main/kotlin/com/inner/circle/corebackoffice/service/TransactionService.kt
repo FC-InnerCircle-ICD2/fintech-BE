@@ -2,12 +2,16 @@ package com.inner.circle.corebackoffice.service
 
 import com.inner.circle.corebackoffice.domain.PaymentType
 import com.inner.circle.corebackoffice.domain.TransactionStatus
+import com.inner.circle.corebackoffice.domain.convertInfraTransactionStatus
 import com.inner.circle.corebackoffice.service.dto.PaymentWithTransactionsDto
 import com.inner.circle.corebackoffice.service.dto.TransactionDto
+import com.inner.circle.corebackoffice.usecase.CancelPaymentUseCase
 import com.inner.circle.corebackoffice.usecase.GetPaymentWithTransactionsUseCase
 import com.inner.circle.exception.BackofficeException
+import com.inner.circle.exception.PaymentException
 import com.inner.circle.infrabackoffice.port.GetPaymentPort
 import com.inner.circle.infrabackoffice.port.GetTransactionPort
+import com.inner.circle.infrabackoffice.port.SaveTransactionPort
 import java.time.format.DateTimeFormatter
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toJavaLocalDate
@@ -17,8 +21,10 @@ import org.springframework.stereotype.Service
 @Service
 internal class TransactionService(
     private val getPaymentPort: GetPaymentPort,
-    private val getTransactionPort: GetTransactionPort
-) : GetPaymentWithTransactionsUseCase {
+    private val getTransactionPort: GetTransactionPort,
+    private val saveTransactionPort: SaveTransactionPort
+) : GetPaymentWithTransactionsUseCase,
+    CancelPaymentUseCase {
     override fun findAllByMerchantId(
         request: GetPaymentWithTransactionsUseCase.FindAllByMerchantIdRequest
     ): List<PaymentWithTransactionsDto> {
@@ -113,6 +119,45 @@ internal class TransactionService(
             orderId = payment.orderId,
             orderName = payment.orderName
         )
+    }
+
+    override fun cancel(request: CancelPaymentUseCase.CancelPaymentRequest): TransactionDto {
+        val payment =
+            getPaymentPort.findByMerchantIdAndPaymentKey(
+                GetPaymentPort.FindByPaymentKeyRequest(
+                    merchantId = request.merchantId,
+                    paymentKey = request.paymentKey
+                )
+            )
+
+        val transactions =
+            getTransactionPort.findAllByPaymentKey(
+                GetTransactionPort.Request(
+                    paymentKey = payment.paymentKey
+                )
+            )
+        require(transactions.isNotEmpty()) {
+            throw PaymentException.PaymentKeyNotFoundException(request.paymentKey)
+        }
+
+        val refundableAmount = transactions.sumOf { it.amount }
+        require(request.amount <= refundableAmount) {
+            throw PaymentException.ExceedRefundAmountException(request.paymentKey, refundableAmount)
+        }
+
+        val transaction =
+            saveTransactionPort.save(
+                SaveTransactionPort.Request(
+                    id = null,
+                    paymentKey = request.paymentKey,
+                    amount = -request.amount,
+                    status = TransactionStatus.CANCELED.convertInfraTransactionStatus(),
+                    reason = null,
+                    requestedAt = transactions.first().requestedAt
+                )
+            )
+
+        return TransactionDto.of(transaction)
     }
 
     private fun validateDate(
