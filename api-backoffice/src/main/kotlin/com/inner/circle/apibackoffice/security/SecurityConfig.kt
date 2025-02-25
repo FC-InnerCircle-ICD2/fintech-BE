@@ -23,7 +23,7 @@ class SecurityConfig(
         http
             .securityMatcher("/api/backoffice/v1/**")
             .csrf { it.disable() }
-            .cors {}
+            .cors { it.configurationSource(corsConfigurationSource()) }
             .httpBasic { it.disable() }
             .formLogin { it.disable() }
             .authorizeHttpRequests {
