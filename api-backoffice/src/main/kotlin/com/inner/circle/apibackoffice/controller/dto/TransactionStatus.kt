@@ -8,13 +8,11 @@ enum class TransactionStatus {
     REFUNDED;
 
     companion object {
-        fun of(
-            transactionStatus: com.inner.circle.corebackoffice.domain.TransactionStatus
-        ): TransactionStatus =
+        fun of(transactionStatus: CoreTransactionStatus): TransactionStatus =
             when (transactionStatus) {
-                com.inner.circle.corebackoffice.domain.TransactionStatus.APPROVED -> APPROVED
-                com.inner.circle.corebackoffice.domain.TransactionStatus.CANCELED -> CANCELED
-                com.inner.circle.corebackoffice.domain.TransactionStatus.REFUNDED -> REFUNDED
+                CoreTransactionStatus.APPROVED -> APPROVED
+                CoreTransactionStatus.CANCELED -> CANCELED
+                CoreTransactionStatus.REFUNDED -> REFUNDED
             }
     }
 }

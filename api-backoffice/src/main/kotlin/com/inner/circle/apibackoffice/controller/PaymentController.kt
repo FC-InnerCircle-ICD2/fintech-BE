@@ -4,9 +4,12 @@ import com.inner.circle.apibackoffice.config.SwaggerConfig
 import com.inner.circle.apibackoffice.controller.dto.BackofficeResponse
 import com.inner.circle.apibackoffice.controller.dto.PaymentWithTransactionsDto
 import com.inner.circle.apibackoffice.controller.dto.PaymentsWithTransactionsDto
+import com.inner.circle.apibackoffice.controller.dto.TransactionDto
 import com.inner.circle.apibackoffice.controller.dto.TransactionStatus
 import com.inner.circle.apibackoffice.controller.dto.convertCoreTransactionStatus
+import com.inner.circle.apibackoffice.controller.request.CancelPaymentRequest
 import com.inner.circle.corebackoffice.security.MerchantUserDetails
+import com.inner.circle.corebackoffice.usecase.CancelPaymentUseCase
 import com.inner.circle.corebackoffice.usecase.GetPaymentWithTransactionsUseCase
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
@@ -17,13 +20,16 @@ import kotlinx.datetime.toKotlinLocalDate
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestParam
 
 @Tag(name = "Payment", description = "Payment API")
 @BackofficeV1Api
 @SecurityRequirement(name = SwaggerConfig.BEARER_AUTH)
 class PaymentController(
-    private val getPaymentWithTransactionsUseCase: GetPaymentWithTransactionsUseCase
+    private val getPaymentWithTransactionsUseCase: GetPaymentWithTransactionsUseCase,
+    private val cancelPaymentUseCase: CancelPaymentUseCase
 ) {
     @Operation(summary = "Payment, Transactions 조회")
     @GetMapping("/payments")
@@ -80,5 +86,23 @@ class PaymentController(
                     .findByPaymentKey(request)
             )
         )
+    }
+
+    @Operation(summary = "결제 취소")
+    @PostMapping("/payments/{paymentKey}/cancel")
+    fun refundPartial(
+        @AuthenticationPrincipal merchant: MerchantUserDetails,
+        @PathVariable("paymentKey") paymentKey: String,
+        @RequestBody request: CancelPaymentRequest
+    ): BackofficeResponse<TransactionDto> {
+        val transaction =
+            cancelPaymentUseCase.cancel(
+                CancelPaymentUseCase.CancelPaymentRequest(
+                    merchantId = merchant.getId(),
+                    paymentKey = paymentKey,
+                    amount = request.amount
+                )
+            )
+        return BackofficeResponse.ok(TransactionDto.of(transaction))
     }
 }
