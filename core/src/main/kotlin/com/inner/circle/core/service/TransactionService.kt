@@ -5,8 +5,13 @@ import com.inner.circle.core.domain.TransactionStatus
 import com.inner.circle.core.service.dto.PaymentWithTransactionsDto
 import com.inner.circle.core.service.dto.TransactionDto
 import com.inner.circle.core.usecase.GetPaymentWithTransactionsUseCase
+import com.inner.circle.exception.PaymentException
 import com.inner.circle.infra.port.GetPaymentPort
 import com.inner.circle.infra.port.GetTransactionPort
+import java.time.format.DateTimeFormatter
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.toJavaLocalDate
+import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.stereotype.Service
 
 @Service
@@ -17,6 +22,7 @@ internal class TransactionService(
     override fun findAllByAccountId(
         request: GetPaymentWithTransactionsUseCase.FindAllByAccountIdRequest
     ): List<PaymentWithTransactionsDto> {
+        validateDate(request.startDate, request.endDate)
         val payments =
             getPaymentPort
                 .findAllByAccountId(
@@ -106,5 +112,36 @@ internal class TransactionService(
             orderId = payment.orderId,
             orderName = payment.orderName
         )
+    }
+
+    private fun validateDate(
+        startDate: LocalDate?,
+        endDate: LocalDate?
+    ) {
+        startDate?.let { start ->
+            endDate?.let { end ->
+                val locale = LocaleContextHolder.getLocale()
+                val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", locale)
+                val currentDate =
+                    java.time.LocalDate
+                        .now()
+                        .format(formatter)
+                        .let { java.time.LocalDate.parse(it, formatter) }
+                require(start <= end) {
+                    throw PaymentException.InvalidParameterRequestException(
+                        parameterName = null,
+                        message = "endDate는 startDate 보다 빠를 수 없습니다."
+                    )
+                }
+                require(
+                    end.toJavaLocalDate() <= currentDate
+                ) {
+                    throw PaymentException.InvalidParameterRequestException(
+                        parameterName = null,
+                        message = "endDate는 현재 날짜보다 미래일 수 없습니다."
+                    )
+                }
+            }
+        }
     }
 }

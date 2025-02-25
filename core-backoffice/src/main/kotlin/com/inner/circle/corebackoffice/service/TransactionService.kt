@@ -7,10 +7,15 @@ import com.inner.circle.corebackoffice.service.dto.PaymentWithTransactionsDto
 import com.inner.circle.corebackoffice.service.dto.TransactionDto
 import com.inner.circle.corebackoffice.usecase.CancelPaymentUseCase
 import com.inner.circle.corebackoffice.usecase.GetPaymentWithTransactionsUseCase
+import com.inner.circle.exception.BackofficeException
 import com.inner.circle.exception.PaymentException
 import com.inner.circle.infrabackoffice.port.GetPaymentPort
 import com.inner.circle.infrabackoffice.port.GetTransactionPort
 import com.inner.circle.infrabackoffice.port.SaveTransactionPort
+import java.time.format.DateTimeFormatter
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.toJavaLocalDate
+import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.stereotype.Service
 
 @Service
@@ -23,6 +28,7 @@ internal class TransactionService(
     override fun findAllByMerchantId(
         request: GetPaymentWithTransactionsUseCase.FindAllByMerchantIdRequest
     ): List<PaymentWithTransactionsDto> {
+        validateDate(request.startDate, request.endDate)
         val payments =
             getPaymentPort
                 .findAllByMerchantId(
@@ -152,5 +158,36 @@ internal class TransactionService(
             )
 
         return TransactionDto.of(transaction)
+    }
+
+    private fun validateDate(
+        startDate: LocalDate?,
+        endDate: LocalDate?
+    ) {
+        startDate?.let { start ->
+            endDate?.let { end ->
+                val locale = LocaleContextHolder.getLocale()
+                val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", locale)
+                val currentDate =
+                    java.time.LocalDate
+                        .now()
+                        .format(formatter)
+                        .let { java.time.LocalDate.parse(it, formatter) }
+                require(start <= end) {
+                    throw BackofficeException.InvalidParameterRequestException(
+                        parameterName = null,
+                        message = "endDate는 startDate 보다 빠를 수 없습니다."
+                    )
+                }
+                require(
+                    end.toJavaLocalDate() <= currentDate
+                ) {
+                    throw BackofficeException.InvalidParameterRequestException(
+                        parameterName = null,
+                        message = "endDate는 현재 날짜보다 미래일 수 없습니다."
+                    )
+                }
+            }
+        }
     }
 }
