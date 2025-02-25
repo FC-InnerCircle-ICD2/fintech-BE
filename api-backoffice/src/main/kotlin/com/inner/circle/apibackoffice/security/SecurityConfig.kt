@@ -7,6 +7,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.CorsConfigurationSource
+import org.springframework.web.cors.CorsUtils
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
@@ -24,7 +29,16 @@ class SecurityConfig(
             .cors { it.configurationSource(corsConfigurationSource()) }
             .httpBasic { it.disable() }
             .formLogin { it.disable() }
-            .addFilterBefore(
+            .authorizeHttpRequests {
+                it
+                    .requestMatchers(
+                        CorsUtils::isPreFlightRequest,
+                        AntPathRequestMatcher("/api/backoffice/v1/sign-in"),
+                        AntPathRequestMatcher("/api/backoffice/v1/sign-up")
+                    ).permitAll()
+                    .anyRequest()
+                    .authenticated()
+            }.addFilterBefore(
                 AuthenticationExceptionHandlingFilter(),
                 UsernamePasswordAuthenticationFilter::class.java
             ).addFilterBefore(
