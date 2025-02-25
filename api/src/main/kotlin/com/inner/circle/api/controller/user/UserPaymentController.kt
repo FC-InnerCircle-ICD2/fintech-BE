@@ -140,7 +140,7 @@ class UserPaymentController(
     }
 
     @Operation(summary = "결제 요청 취소")
-    @PostMapping("request/cancel")
+    @PostMapping("/request/cancel")
     fun cancelPaymentRequest(
         @AuthenticationPrincipal account: AccountDetails,
         @RequestBody cancelPaymentRequest: CancelPaymentRequest
