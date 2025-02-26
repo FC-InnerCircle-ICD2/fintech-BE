@@ -52,9 +52,9 @@ internal class UserCardAdaptor(
         val amexCardFormat = Regex("^\\d{4}-\\d{6}-\\d{5}$")
 
         if (!(
-                    standardCardFormat.matches(request.cardNumber) ||
-                            amexCardFormat.matches(request.cardNumber)
-                    )
+                standardCardFormat.matches(request.cardNumber) ||
+                    amexCardFormat.matches(request.cardNumber)
+            )
         ) {
             throw UserCardException.BadCardNumberException(request.cardNumber)
         }
