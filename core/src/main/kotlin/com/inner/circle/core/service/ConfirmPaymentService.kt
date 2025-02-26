@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service
 internal class ConfirmPaymentService(
     private val confirmPaymentPort: ConfirmPaymentPort,
     private val savePaymentRequestPort: SavePaymentRequestPort,
+    private val httpClient: HttpClient,
     @Value("\${card.url.base-url}") private var baseUrl: String,
     @Value("\${card.url.validate-end-point}") private var endPoint: String
 ) : ConfirmPaymentUseCase {
@@ -28,7 +29,7 @@ internal class ConfirmPaymentService(
 
     private fun authPayment(request: PaymentInfoDto): ConfirmPaymentCoreDto {
         val cardValidateMap: Map<String, Any> =
-            HttpClient.sendPostRequest(
+            httpClient.sendPostRequest(
                 baseUrl,
                 endPoint,
                 mapOf(
