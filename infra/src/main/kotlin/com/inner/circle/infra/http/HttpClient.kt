@@ -21,63 +21,65 @@ import retrofit2.http.Url
 
 @Component
 class HttpClient {
-    private val log = LoggerFactory.getLogger(HttpClient::class.java)
-    private val gson = Gson()
+    companion object {
+        private val log = LoggerFactory.getLogger(HttpClient::class.java)
+        private val gson = Gson()
 
-    @Retryable(
-        value = [IOException::class],
-        maxAttempts = 3,
-        backoff = Backoff(delay = 1000)
-    )
-    fun sendPostRequest(
-        baseUrl: String,
-        endpoint: String,
-        params: Map<String, Any>
-    ): Map<String, Any> {
-        val retrofit =
-            Retrofit
-                .Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-
-        val jsonParams = gson.toJson(params)
-        val mediaType = MediaType.parse("application/json; charset=utf-8")
-        val body = RequestBody.create(mediaType, jsonParams)
-
-        val apiService = retrofit.create(ApiService::class.java)
-        val call: Call<ResponseBody> = apiService.sendPostRequest(endpoint, body)
-
-        return executeCall(call)
-    }
-
-    private fun executeCall(call: Call<ResponseBody>): Map<String, Any> {
-        try {
-            val response: Response<ResponseBody> = call.execute()
-
-            if (response.isSuccessful) {
-                // 응답 본문을 동적으로 파싱하여 바로 반환
-                val responseBody = response.body()?.string()
-                responseBody?.let {
-                    // JSON 응답을 Map으로 파싱
-                    return gson.fromJson(it, Map::class.java) as Map<String, Any>
-                } ?: throw NullPointerException("Response body is null")
-            }
-            throw CardCompanyException.ConnenctException(
-                code = response.code(),
-                msg = response.message()
-            )
-        } catch (e: IOException) {
-            log.error("[ERROR] 네트워크 요청 실패: ${e.message}")
-            throw PaymentException.CardAuthFailException()
-        }
-    }
-
-    fun interface ApiService {
-        @POST
+        @Retryable(
+            value = [IOException::class],
+            maxAttempts = 3,
+            backoff = Backoff(delay = 1000)
+        )
         fun sendPostRequest(
-            @Url url: String,
-            @Body body: RequestBody
-        ): Call<ResponseBody>
+            baseUrl: String,
+            endpoint: String,
+            params: Map<String, Any>
+        ): Map<String, Any> {
+            val retrofit =
+                Retrofit
+                    .Builder()
+                    .baseUrl(baseUrl)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
+
+            val jsonParams = gson.toJson(params)
+            val mediaType = MediaType.parse("application/json; charset=utf-8")
+            val body = RequestBody.create(mediaType, jsonParams)
+
+            val apiService = retrofit.create(ApiService::class.java)
+            val call: Call<ResponseBody> = apiService.sendPostRequest(endpoint, body)
+
+            return executeCall(call)
+        }
+
+        private fun executeCall(call: Call<ResponseBody>): Map<String, Any> {
+            try {
+                val response: Response<ResponseBody> = call.execute()
+
+                if (response.isSuccessful) {
+                    // 응답 본문을 동적으로 파싱하여 바로 반환
+                    val responseBody = response.body()?.string()
+                    responseBody?.let {
+                        // JSON 응답을 Map으로 파싱
+                        return gson.fromJson(it, Map::class.java) as Map<String, Any>
+                    } ?: throw NullPointerException("Response body is null")
+                }
+                throw CardCompanyException.ConnenctException(
+                    code = response.code(),
+                    msg = response.message()
+                )
+            } catch (e: IOException) {
+                log.error("[ERROR] 네트워크 요청 실패: ${e.message}")
+                throw PaymentException.CardAuthFailException()
+            }
+        }
+
+        fun interface ApiService {
+            @POST
+            fun sendPostRequest(
+                @Url url: String,
+                @Body body: RequestBody
+            ): Call<ResponseBody>
+        }
     }
 }
