@@ -4,15 +4,13 @@ import com.inner.circle.infrabackoffice.repository.entity.TransactionStatus as I
 
 enum class TransactionStatus {
     APPROVED,
-    CANCELED,
-    REFUNDED;
+    CANCELED;
 
     companion object {
         fun of(transactionStatus: InfraTransactionStatus): TransactionStatus =
             when (transactionStatus) {
                 InfraTransactionStatus.APPROVED -> APPROVED
                 InfraTransactionStatus.CANCELED -> CANCELED
-                InfraTransactionStatus.REFUNDED -> REFUNDED
             }
     }
 }
@@ -21,5 +19,4 @@ fun TransactionStatus.convertInfraTransactionStatus(): InfraTransactionStatus =
     when (this) {
         TransactionStatus.APPROVED -> InfraTransactionStatus.APPROVED
         TransactionStatus.CANCELED -> InfraTransactionStatus.CANCELED
-        TransactionStatus.REFUNDED -> InfraTransactionStatus.REFUNDED
     }
