@@ -141,9 +141,12 @@ internal class TransactionService(
             throw PaymentException.PaymentKeyNotFoundException(request.paymentKey)
         }
 
-        val refundableAmount = transactions.sumOf { it.amount }
-        require(request.amount <= refundableAmount) {
-            throw PaymentException.ExceedRefundAmountException(request.paymentKey, refundableAmount)
+        val cancelableAmount = transactions.sumOf { it.amount }
+        require(request.amount <= cancelableAmount) {
+            throw BackofficeException.ExceedCancelAmountException(
+                paymentKey = request.paymentKey,
+                amount = cancelableAmount
+            )
         }
 
         val transaction =

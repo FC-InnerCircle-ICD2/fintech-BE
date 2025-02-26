@@ -10,29 +10,29 @@ import com.inner.circle.api.controller.dto.ConfirmPaymentDto
 import com.inner.circle.api.controller.dto.PaymentResponse
 import com.inner.circle.api.controller.dto.PaymentWithTransactionsDto
 import com.inner.circle.api.controller.dto.PaymentsWithTransactionsDto
+import com.inner.circle.api.controller.dto.TransactionDto
 import com.inner.circle.api.controller.dto.TransactionStatus
 import com.inner.circle.api.controller.dto.UserCardDto
 import com.inner.circle.api.controller.dto.convertCoreTransactionStatus
+import com.inner.circle.api.controller.request.CancelPaymentProcessRequest
 import com.inner.circle.api.controller.request.CancelPaymentRequest
 import com.inner.circle.api.controller.request.ConfirmPaymentRequest
 import com.inner.circle.api.controller.request.ConfirmSimplePaymentRequest
-import com.inner.circle.api.controller.request.RefundAllPaymentRequest
-import com.inner.circle.api.controller.request.RefundPaymentRequest
 import com.inner.circle.api.controller.request.UserCardRequest
 import com.inner.circle.core.security.AccountDetails
 import com.inner.circle.core.service.dto.ConfirmPaymentCoreDto
-import com.inner.circle.core.service.dto.TransactionDto
 import com.inner.circle.core.usecase.CancelPaymentRequestUseCase
+import com.inner.circle.core.usecase.CancelPaymentUseCase
 import com.inner.circle.core.usecase.ConfirmPaymentUseCase
 import com.inner.circle.core.usecase.ConfirmSimplePaymentUseCase
 import com.inner.circle.core.usecase.GetPaymentWithTransactionsUseCase
 import com.inner.circle.core.usecase.PaymentTokenHandlingUseCase
-import com.inner.circle.core.usecase.RefundPaymentUseCase
 import com.inner.circle.core.usecase.UserCardUseCase
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
+import jakarta.validation.Valid
 import java.time.LocalDate
 import kotlinx.datetime.toKotlinLocalDate
 import org.slf4j.Logger
@@ -57,7 +57,7 @@ class UserPaymentController(
     private val cancelPaymentRequestUseCase: CancelPaymentRequestUseCase,
     private val statusChangedMessageSender: PaymentStatusChangedMessageSender,
     private val getPaymentWithTransactionsUseCase: GetPaymentWithTransactionsUseCase,
-    private val refundPaymentUseCase: RefundPaymentUseCase
+    private val cancelPaymentUseCase: CancelPaymentUseCase
 ) {
     private val logger: Logger = LoggerFactory.getLogger(UserPaymentController::class.java)
 
@@ -143,12 +143,12 @@ class UserPaymentController(
     @PostMapping("/request/cancel")
     fun cancelPaymentRequest(
         @AuthenticationPrincipal account: AccountDetails,
-        @RequestBody cancelPaymentRequest: CancelPaymentRequest
+        @RequestBody cancelPaymentProcessRequest: CancelPaymentProcessRequest
     ): PaymentResponse<CancelPaymentDto> {
         val accountId = account.id
         val foundPaymentToken =
             paymentTokenHandlingUseCase.findPaymentToken(
-                cancelPaymentRequest.token
+                cancelPaymentProcessRequest.token
             )
         val orderId = foundPaymentToken.orderId
         val merchantId = foundPaymentToken.merchantId
@@ -376,56 +376,22 @@ class UserPaymentController(
         )
     }
 
-    @Operation(summary = "전액 환불")
-    @PostMapping("/payments/refund/all")
-    fun refundAll(
+    @Operation(summary = "결제 취소")
+    @PostMapping("/payments/{paymentKey}/cancel")
+    fun cancelPayment(
         @AuthenticationPrincipal account: AccountDetails,
-        @RequestBody request: RefundAllPaymentRequest
+        @PathVariable("paymentKey") paymentKey: String,
+        @Valid @RequestBody request: CancelPaymentRequest
     ): PaymentResponse<TransactionDto> {
-        val result =
-            refundPaymentUseCase.refundAll(
-                accountId = account.id,
-                paymentKey = request.paymentKey
+        val transaction =
+            cancelPaymentUseCase.cancel(
+                CancelPaymentUseCase.CancelPaymentRequest(
+                    accountId = account.id,
+                    paymentKey = paymentKey,
+                    amount = request.amount
+                )
             )
 
-        return PaymentResponse.ok(
-            TransactionDto(
-                id = result.id,
-                paymentKey = result.paymentKey,
-                amount = result.amount,
-                status = result.status,
-                reason = result.reason,
-                requestedAt = result.requestedAt,
-                createdAt = result.createdAt,
-                updatedAt = result.createdAt
-            )
-        )
-    }
-
-    @Operation(summary = "부분 환불")
-    @PostMapping("/payments/refund")
-    fun refundPartial(
-        @AuthenticationPrincipal account: AccountDetails,
-        @RequestBody request: RefundPaymentRequest
-    ): PaymentResponse<TransactionDto> {
-        val result =
-            refundPaymentUseCase.refundPartial(
-                accountId = account.id,
-                paymentKey = request.paymentKey,
-                amount = request.amount
-            )
-
-        return PaymentResponse.ok(
-            TransactionDto(
-                id = result.id,
-                paymentKey = result.paymentKey,
-                amount = result.amount,
-                status = result.status,
-                reason = result.reason,
-                requestedAt = result.requestedAt,
-                createdAt = result.createdAt,
-                updatedAt = result.createdAt
-            )
-        )
+        return PaymentResponse.ok(TransactionDto.of(transaction))
     }
 }

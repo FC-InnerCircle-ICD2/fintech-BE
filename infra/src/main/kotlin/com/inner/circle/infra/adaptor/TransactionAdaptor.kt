@@ -3,7 +3,7 @@ package com.inner.circle.infra.adaptor
 import com.inner.circle.exception.PaymentException
 import com.inner.circle.infra.adaptor.dto.TransactionDto
 import com.inner.circle.infra.port.GetTransactionPort
-import com.inner.circle.infra.port.TransactionPort
+import com.inner.circle.infra.port.SaveTransactionPort
 import com.inner.circle.infra.repository.TransactionRepository
 import com.inner.circle.infra.repository.entity.TransactionEntity
 import kotlinx.datetime.toKotlinLocalDateTime
@@ -12,9 +12,9 @@ import org.springframework.stereotype.Component
 @Component
 internal class TransactionAdaptor(
     private val transactionRepository: TransactionRepository
-) : TransactionPort,
+) : SaveTransactionPort,
     GetTransactionPort {
-    override fun save(request: TransactionPort.Request): TransactionDto {
+    override fun save(request: SaveTransactionPort.Request): TransactionDto {
         val result =
             transactionRepository.save(
                 TransactionEntity(
