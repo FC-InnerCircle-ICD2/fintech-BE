@@ -60,7 +60,7 @@ sealed class PaymentException(
     ) : PaymentException(HttpStatus.PAYMENT_METHOD_NOT_FOUND, message, cause)
 
     data class CardAuthFailException(
-        override val message: String = "결제수단이 승인되지 못했습니다.",
+        override val message: String = "네트워크 이슈로 결제수단이 승인되지 못했습니다.",
         override val cause: Throwable? = null
     ) : PaymentException(HttpStatus.PAYMENT_METHOD_NOT_VERIFIED, message, cause)
 
