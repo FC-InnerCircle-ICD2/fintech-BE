@@ -5,7 +5,7 @@ import com.inner.circle.infra.repository.entity.TransactionStatus
 import java.math.BigDecimal
 import java.time.LocalDateTime
 
-fun interface TransactionPort {
+fun interface SaveTransactionPort {
     data class Request(
         val id: Long?,
         val paymentKey: String,
