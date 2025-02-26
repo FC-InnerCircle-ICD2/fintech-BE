@@ -65,9 +65,11 @@ class HttpClient {
                 val responseBody = response.body()?.string()
                 responseBody?.let {
                     // JSON 응답을 Map으로 파싱
-                    val responseMap = gson.fromJson<Map<String, Any>>(
-                        it, object : TypeToken<Map<String, Any>>() {}.type
-                    )
+                    val responseMap =
+                        gson.fromJson<Map<String, Any>>(
+                            it,
+                            object : TypeToken<Map<String, Any>>() {}.type
+                        )
                     return responseMap
                 } ?: throw NullPointerException("Response body is null")
             }
