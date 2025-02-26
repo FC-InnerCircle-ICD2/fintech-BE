@@ -1,5 +1,6 @@
 package com.inner.circle.infra.http
 
+import com.google.common.reflect.TypeToken
 import com.google.gson.Gson
 import com.inner.circle.exception.CardCompanyException
 import com.inner.circle.exception.PaymentException
@@ -64,7 +65,10 @@ class HttpClient {
                 val responseBody = response.body()?.string()
                 responseBody?.let {
                     // JSON 응답을 Map으로 파싱
-                    return gson.fromJson(it, Map::class.java) as Map<String, Any>
+                    val responseMap = gson.fromJson<Map<String, Any>>(
+                        it, object : TypeToken<Map<String, Any>>() {}.type
+                    )
+                    return responseMap
                 } ?: throw NullPointerException("Response body is null")
             }
             throw CardCompanyException.ConnenctException(
