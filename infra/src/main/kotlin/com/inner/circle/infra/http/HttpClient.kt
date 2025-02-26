@@ -72,7 +72,7 @@ class HttpClient {
                 msg = response.message()
             )
         } catch (e: IOException) {
-            log.error("[ERROR] 네트워크 요청 실패: ${e.message}")
+            log.info("[ERROR] 네트워크 요청 실패: ${e.message}")
             throw e
         }
     }
