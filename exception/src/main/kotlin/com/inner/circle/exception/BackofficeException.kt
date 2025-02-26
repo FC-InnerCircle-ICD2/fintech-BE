@@ -14,4 +14,10 @@ sealed class BackofficeException(
         override val message: String = "이미 가입된 회원입니다.",
         override val cause: Throwable? = null
     ) : BackofficeException(HttpStatus.NOT_FOUND, message, cause)
+
+    data class InvalidParameterRequestException(
+        val parameterName: String?,
+        override val message: String = "$parameterName 파라미터 입력이 올바르지 않습니다.",
+        override val cause: Throwable? = null
+    ) : BackofficeException(HttpStatus.BAD_REQUEST, message, cause)
 }

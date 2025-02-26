@@ -22,7 +22,6 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 
@@ -97,28 +96,6 @@ class MerchantPaymentController(
         return PaymentResponse.ok(
             data
         )
-    }
-
-    @Operation(summary = "결제 취소 - orderId")
-    @PostMapping("/orders/{orderId}/cancel")
-    fun cancelPaymentConfirmWithOrderId(
-        @AuthenticationPrincipal merchantUserDetails: MerchantUserDetails,
-        @PathVariable("orderId") orderId: String
-    ): PaymentResponse<String> {
-        val response = PaymentResponse.ok("결제가 취소되었습니다.")
-
-        return response
-    }
-
-    @Operation(summary = "결제 취소 - paymentKey")
-    @PostMapping("/orders/{paymentKey}/cancel")
-    fun cancelPaymentConfirmWithPaymentKey(
-        @AuthenticationPrincipal merchantUserDetails: MerchantUserDetails,
-        @PathVariable("paymentKey") paymentKey: String
-    ): PaymentResponse<String> {
-        val response = PaymentResponse.ok("결제가 취소되었습니다.")
-
-        return response
     }
 
     private fun sendStatusChangedMessage(
