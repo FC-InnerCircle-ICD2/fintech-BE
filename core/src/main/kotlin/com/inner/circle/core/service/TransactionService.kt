@@ -8,7 +8,8 @@ import com.inner.circle.core.usecase.GetPaymentWithTransactionsUseCase
 import com.inner.circle.exception.PaymentException
 import com.inner.circle.infra.port.GetPaymentPort
 import com.inner.circle.infra.port.GetTransactionPort
-import java.time.format.DateTimeFormatter
+import java.time.ZoneId
+import java.util.Locale
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toJavaLocalDate
 import org.springframework.context.i18n.LocaleContextHolder
@@ -121,12 +122,8 @@ internal class TransactionService(
         startDate?.let { start ->
             endDate?.let { end ->
                 val locale = LocaleContextHolder.getLocale()
-                val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", locale)
-                val currentDate =
-                    java.time.LocalDate
-                        .now()
-                        .format(formatter)
-                        .let { java.time.LocalDate.parse(it, formatter) }
+                val zoneId = getZoneIdForLocale(locale)
+                val currentDate = java.time.LocalDate.now(zoneId)
                 require(start <= end) {
                     throw PaymentException.InvalidParameterRequestException(
                         parameterName = null,
@@ -138,10 +135,20 @@ internal class TransactionService(
                 ) {
                     throw PaymentException.InvalidParameterRequestException(
                         parameterName = null,
-                        message = "endDate는 현재 날짜보다 미래일 수 없습니다."
+                        message = "endDate($end)는 현재($currentDate) 보다 미래일 수 없습니다."
                     )
                 }
             }
         }
     }
+
+    fun getZoneIdForLocale(locale: Locale): ZoneId =
+        when (locale.country) {
+            "KR" -> ZoneId.of("Asia/Seoul")
+            "US" -> ZoneId.of("America/New_York")
+            "JP" -> ZoneId.of("Asia/Tokyo")
+            "CN" -> ZoneId.of("Asia/Shanghai")
+            "DE" -> ZoneId.of("Europe/Berlin")
+            else -> ZoneId.of("UTC")
+        }
 }
