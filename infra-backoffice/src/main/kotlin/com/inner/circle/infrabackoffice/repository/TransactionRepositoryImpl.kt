@@ -12,4 +12,7 @@ internal class TransactionRepositoryImpl(
 
     override fun findAllByPaymentKey(paymentKey: String): List<TransactionEntity> =
         transactionJpaRepository.findAllByPaymentKey(paymentKey = paymentKey)
+
+    override fun save(transaction: TransactionEntity): TransactionEntity =
+        transactionJpaRepository.save(transaction)
 }

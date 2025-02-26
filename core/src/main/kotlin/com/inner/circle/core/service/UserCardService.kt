@@ -12,27 +12,31 @@ internal class UserCardService(
     private val userCardPort: UserCardPort
 ) : UserCardUseCase {
     override fun save(userCard: UserCardDto): UserCardDto {
-        val infraUserCardDto =
-            userCardPort.save(
-                InfraUserCardDto(
-                    id = null,
-                    accountId = userCard.accountId,
-                    isRepresentative = userCard.isRepresentative,
-                    cardNumber = userCard.cardNumber,
-                    expirationPeriod = userCard.expirationPeriod,
-                    cvc = userCard.cvc,
-                    cardCompany = userCard.cardCompany
+        try {
+            val infraUserCardDto =
+                userCardPort.save(
+                    InfraUserCardDto(
+                        id = null,
+                        accountId = userCard.accountId,
+                        isRepresentative = userCard.isRepresentative,
+                        cardNumber = userCard.cardNumber,
+                        expirationPeriod = userCard.expirationPeriod,
+                        cvc = userCard.cvc,
+                        cardCompany = userCard.cardCompany
+                    )
                 )
+            return UserCardDto(
+                id = infraUserCardDto.id,
+                accountId = infraUserCardDto.accountId,
+                isRepresentative = infraUserCardDto.isRepresentative,
+                cardNumber = infraUserCardDto.cardNumber,
+                expirationPeriod = infraUserCardDto.expirationPeriod,
+                cvc = infraUserCardDto.cvc,
+                cardCompany = infraUserCardDto.cardCompany
             )
-        return UserCardDto(
-            id = infraUserCardDto.id,
-            accountId = infraUserCardDto.accountId,
-            isRepresentative = infraUserCardDto.isRepresentative,
-            cardNumber = infraUserCardDto.cardNumber,
-            expirationPeriod = infraUserCardDto.expirationPeriod,
-            cvc = infraUserCardDto.cvc,
-            cardCompany = infraUserCardDto.cardCompany
-        )
+        } catch (e: Exception) {
+            throw UserCardException.AlreadyRegisterCardException(userCard.cardNumber)
+        }
     }
 
     override fun findByAccountId(accountId: Long): List<UserCardDto> {

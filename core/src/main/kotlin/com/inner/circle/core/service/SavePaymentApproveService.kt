@@ -23,6 +23,7 @@ internal class SavePaymentApproveService(
     private val paymentRequestPort: PaymentRequestPort,
     private val transactionPort: TransactionPort,
     private val savePaymentRequestPort: SavePaymentRequestPort,
+    private val httpClient: HttpClient,
     @Value("\${card.url.base-url}") private var baseUrl: String,
     @Value("\${card.url.approve-end-point}") private var endPoint: String
 ) : SavePaymentApproveUseCase {
@@ -63,7 +64,7 @@ internal class SavePaymentApproveService(
                 }
 
                 val cardApproveMap: Map<String, Any> =
-                    HttpClient.sendPostRequest(
+                    httpClient.sendPostRequest(
                         baseUrl,
                         endPoint,
                         mapOf(

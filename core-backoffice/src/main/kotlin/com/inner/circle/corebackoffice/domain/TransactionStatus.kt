@@ -1,21 +1,25 @@
 package com.inner.circle.corebackoffice.domain
 
+import com.inner.circle.infrabackoffice.repository.entity.TransactionStatus as InfraTransactionStatus
+
 enum class TransactionStatus {
     APPROVED,
     CANCELED,
     REFUNDED;
 
     companion object {
-        fun of(
-            transactionStatus: com.inner.circle.infrabackoffice.repository.entity.TransactionStatus
-        ): TransactionStatus =
+        fun of(transactionStatus: InfraTransactionStatus): TransactionStatus =
             when (transactionStatus) {
-                com.inner.circle.infrabackoffice.repository.entity
-                    .TransactionStatus.APPROVED -> APPROVED
-                com.inner.circle.infrabackoffice.repository.entity
-                    .TransactionStatus.CANCELED -> CANCELED
-                com.inner.circle.infrabackoffice.repository.entity
-                    .TransactionStatus.REFUNDED -> REFUNDED
+                InfraTransactionStatus.APPROVED -> APPROVED
+                InfraTransactionStatus.CANCELED -> CANCELED
+                InfraTransactionStatus.REFUNDED -> REFUNDED
             }
     }
 }
+
+fun TransactionStatus.convertInfraTransactionStatus(): InfraTransactionStatus =
+    when (this) {
+        TransactionStatus.APPROVED -> InfraTransactionStatus.APPROVED
+        TransactionStatus.CANCELED -> InfraTransactionStatus.CANCELED
+        TransactionStatus.REFUNDED -> InfraTransactionStatus.REFUNDED
+    }

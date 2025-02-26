@@ -5,8 +5,14 @@ import com.inner.circle.core.domain.TransactionStatus
 import com.inner.circle.core.service.dto.PaymentWithTransactionsDto
 import com.inner.circle.core.service.dto.TransactionDto
 import com.inner.circle.core.usecase.GetPaymentWithTransactionsUseCase
+import com.inner.circle.exception.PaymentException
 import com.inner.circle.infra.port.GetPaymentPort
 import com.inner.circle.infra.port.GetTransactionPort
+import java.time.ZoneId
+import java.util.Locale
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.toJavaLocalDate
+import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.stereotype.Service
 
 @Service
@@ -17,6 +23,7 @@ internal class TransactionService(
     override fun findAllByAccountId(
         request: GetPaymentWithTransactionsUseCase.FindAllByAccountIdRequest
     ): List<PaymentWithTransactionsDto> {
+        validateDate(request.startDate, request.endDate)
         val payments =
             getPaymentPort
                 .findAllByAccountId(
@@ -107,4 +114,41 @@ internal class TransactionService(
             orderName = payment.orderName
         )
     }
+
+    private fun validateDate(
+        startDate: LocalDate?,
+        endDate: LocalDate?
+    ) {
+        startDate?.let { start ->
+            endDate?.let { end ->
+                val locale = LocaleContextHolder.getLocale()
+                val zoneId = getZoneIdForLocale(locale)
+                val currentDate = java.time.LocalDate.now(zoneId)
+                require(start <= end) {
+                    throw PaymentException.InvalidParameterRequestException(
+                        parameterName = null,
+                        message = "endDate는 startDate 보다 빠를 수 없습니다."
+                    )
+                }
+                require(
+                    end.toJavaLocalDate() <= currentDate
+                ) {
+                    throw PaymentException.InvalidParameterRequestException(
+                        parameterName = null,
+                        message = "endDate($end)는 현재($currentDate) 보다 미래일 수 없습니다."
+                    )
+                }
+            }
+        }
+    }
+
+    fun getZoneIdForLocale(locale: Locale): ZoneId =
+        when (locale.country) {
+            "KR" -> ZoneId.of("Asia/Seoul")
+            "US" -> ZoneId.of("America/New_York")
+            "JP" -> ZoneId.of("Asia/Tokyo")
+            "CN" -> ZoneId.of("Asia/Shanghai")
+            "DE" -> ZoneId.of("Europe/Berlin")
+            else -> ZoneId.of("UTC")
+        }
 }

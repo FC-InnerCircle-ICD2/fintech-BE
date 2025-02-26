@@ -60,7 +60,7 @@ sealed class PaymentException(
     ) : PaymentException(HttpStatus.PAYMENT_METHOD_NOT_FOUND, message, cause)
 
     data class CardAuthFailException(
-        override val message: String = "결제수단이 승인되지 못했습니다.",
+        override val message: String = "네트워크 이슈로 결제수단이 승인되지 못했습니다.",
         override val cause: Throwable? = null
     ) : PaymentException(HttpStatus.PAYMENT_METHOD_NOT_VERIFIED, message, cause)
 
@@ -93,6 +93,12 @@ sealed class PaymentException(
         val paymentKey: String,
         val amount: BigDecimal,
         override val message: String = "환불 금액은 양수여야 합니다. (요청 : $paymentKey, $amount)",
+        override val cause: Throwable? = null
+    ) : PaymentException(HttpStatus.BAD_REQUEST, message, cause)
+
+    data class InvalidParameterRequestException(
+        val parameterName: String?,
+        override val message: String = "$parameterName 파라미터 입력이 올바르지 않습니다.",
         override val cause: Throwable? = null
     ) : PaymentException(HttpStatus.BAD_REQUEST, message, cause)
 }

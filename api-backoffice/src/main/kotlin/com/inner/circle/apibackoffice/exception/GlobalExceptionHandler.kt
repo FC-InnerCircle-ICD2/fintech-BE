@@ -76,8 +76,9 @@ class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
         headers: HttpHeaders,
         status: HttpStatusCode,
         request: WebRequest
-    ): ResponseEntity<Any>? =
-        ResponseEntity.badRequest().body(
+    ): ResponseEntity<Any>? {
+        errorLogger.error("MethodArgumentNotValidException (type = {})", ex::class.simpleName, ex)
+        return ResponseEntity.badRequest().body(
             BackofficeResponse.fail(
                 error =
                     BackofficeError(
@@ -89,6 +90,7 @@ class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
                     )
             )
         )
+    }
 
     override fun handleHttpRequestMethodNotSupported(
         ex: HttpRequestMethodNotSupportedException,
@@ -96,7 +98,7 @@ class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
         status: HttpStatusCode,
         request: WebRequest
     ): ResponseEntity<Any>? {
-        errorLogger.error(
+        errorLogger.info(
             "HttpRequestMethodNotSupportedException (type = {})",
             ex::class.simpleName,
             ex
@@ -160,7 +162,7 @@ class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
         status: HttpStatusCode,
         request: WebRequest
     ): ResponseEntity<Any>? {
-        errorLogger.error("NoResourceFoundException (type = {})", ex::class.simpleName, ex)
+        errorLogger.info("NoResourceFoundException (type = {})", ex::class.simpleName, ex)
         val errorResponse =
             BackofficeResponse.fail(
                 BackofficeError(
@@ -177,7 +179,7 @@ class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
         status: HttpStatusCode,
         request: WebRequest
     ): ResponseEntity<Any>? {
-        errorLogger.error("httpMediaTypeNotAcceptable (type = {})", ex::class.simpleName, ex)
+        errorLogger.info("httpMediaTypeNotAcceptable (type = {})", ex::class.simpleName, ex)
         val errorResponse =
             BackofficeResponse.fail(
                 BackofficeError(

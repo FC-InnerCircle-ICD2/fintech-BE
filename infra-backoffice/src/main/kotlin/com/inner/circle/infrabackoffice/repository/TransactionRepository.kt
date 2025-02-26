@@ -6,4 +6,6 @@ interface TransactionRepository {
     fun findAllByPaymentKeyIn(paymentKeys: List<String>): List<TransactionEntity>
 
     fun findAllByPaymentKey(paymentKey: String): List<TransactionEntity>
+
+    fun save(transaction: TransactionEntity): TransactionEntity
 }
