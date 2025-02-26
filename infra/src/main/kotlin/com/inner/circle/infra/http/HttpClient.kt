@@ -3,6 +3,7 @@ package com.inner.circle.infra.http
 import com.google.gson.Gson
 import com.inner.circle.exception.CardCompanyException
 import com.inner.circle.exception.PaymentException
+import java.io.IOException
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
@@ -17,7 +18,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.POST
 import retrofit2.http.Url
-import java.io.IOException
 
 @Component
 class HttpClient {
@@ -34,10 +34,12 @@ class HttpClient {
         endpoint: String,
         params: Map<String, Any>
     ): Map<String, Any> {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(baseUrl)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+        val retrofit =
+            Retrofit
+                .Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
 
         val jsonParams = gson.toJson(params)
         val mediaType = MediaType.parse("application/json; charset=utf-8")
