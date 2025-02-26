@@ -59,32 +59,28 @@ internal class UserCardAdaptor(
             throw UserCardException.BadCardNumberException(request.cardNumber)
         }
 
-        try {
-            val result =
-                repository.save(
-                    UserCardEntity(
-                        id = request.id,
-                        accountId = request.accountId,
-                        isRepresentative = isRepresentative,
-                        cardNumber = request.cardNumber,
-                        expirationPeriod = request.expirationPeriod,
-                        cvc = request.cvc,
-                        cardCompany = request.cardCompany
-                    )
+        val result =
+            repository.save(
+                UserCardEntity(
+                    id = request.id,
+                    accountId = request.accountId,
+                    isRepresentative = isRepresentative,
+                    cardNumber = request.cardNumber,
+                    expirationPeriod = request.expirationPeriod,
+                    cvc = request.cvc,
+                    cardCompany = request.cardCompany
                 )
-
-            return UserCardDto(
-                id = result.id,
-                accountId = result.accountId,
-                isRepresentative = result.isRepresentative,
-                cardNumber = result.cardNumber,
-                expirationPeriod = result.expirationPeriod,
-                cvc = result.cvc,
-                cardCompany = result.cardCompany
             )
-        } catch (e: Exception) {
-            throw UserCardException.AlreadyRegisterCardException(request.cardNumber)
-        }
+
+        return UserCardDto(
+            id = result.id,
+            accountId = result.accountId,
+            isRepresentative = result.isRepresentative,
+            cardNumber = result.cardNumber,
+            expirationPeriod = result.expirationPeriod,
+            cvc = result.cvc,
+            cardCompany = result.cardCompany
+        )
     }
 
     override fun findByAccountId(accountId: Long): List<UserCardDto> {
