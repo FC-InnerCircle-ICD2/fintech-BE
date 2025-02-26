@@ -55,10 +55,9 @@ class HttpClient {
 
     fun executeCall(call: Call<ResponseBody>): Map<String, Any> {
         attempt++
-        log.info("재시도 횟수 : ${attempt}")
+        log.info("재시도 횟수 : $attempt")
         try {
             val response: Response<ResponseBody> = call.execute()
-
 
             if (response.isSuccessful) {
                 // 응답 본문을 동적으로 파싱하여 바로 반환
@@ -79,7 +78,12 @@ class HttpClient {
     }
 
     @Recover
-    fun recover(e: IOException, baseUrl: String, endpoint: String, params: Map<String, Any>): Map<String, Any> {
+    fun recover(
+        e: IOException,
+        baseUrl: String,
+        endpoint: String,
+        params: Map<String, Any>
+    ): Map<String, Any> {
         log.error("최대 재시도 횟수 초과. 요청을 다시 시도했지만 실패했습니다.")
         attempt = 0
         throw PaymentException.CardAuthFailException()
