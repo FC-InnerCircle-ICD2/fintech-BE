@@ -1,7 +1,8 @@
-package com.inner.circle.apibackoffice.exception
+package com.inner.circle.apibackoffice.security
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.inner.circle.apibackoffice.controller.dto.BackofficeResponse
+import com.inner.circle.apibackoffice.exception.BackofficeError
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpStatus
@@ -11,7 +12,9 @@ import org.springframework.stereotype.Component
 
 @Component
 class CustomAuthenticationEntryPoint : AuthenticationEntryPoint {
-    private val mapper = ObjectMapper()
+    companion object {
+        private val OBJECT_MAPPER = ObjectMapper()
+    }
 
     override fun commence(
         request: HttpServletRequest,
@@ -26,7 +29,7 @@ class CustomAuthenticationEntryPoint : AuthenticationEntryPoint {
                 )
             )
 
-        val result = mapper.writeValueAsString(error)
+        val result = OBJECT_MAPPER.writeValueAsString(error)
 
         response.status = HttpServletResponse.SC_UNAUTHORIZED
         response.contentType = "application/json;charset=UTF-8"

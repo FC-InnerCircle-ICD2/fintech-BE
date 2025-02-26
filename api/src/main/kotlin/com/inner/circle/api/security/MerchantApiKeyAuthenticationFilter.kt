@@ -31,13 +31,12 @@ class MerchantApiKeyAuthenticationFilter(
 
             filterChain.doFilter(request, response)
         } catch (ex: Exception) {
+            SecurityContextHolder.clearContext()
             authenticationEntryPoint.commence(
                 request,
                 response,
                 BadCredentialsException(ex.message)
             )
-        } finally {
-            SecurityContextHolder.clearContext()
         }
     }
 
