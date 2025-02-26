@@ -8,8 +8,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
+import org.springframework.web.cors.CorsUtils
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
 @Configuration
@@ -24,20 +26,23 @@ class SecurityConfig(
         http
             .securityMatcher("/api/v1/p/merchant/**")
             .csrf { it.disable() }
-            .httpBasic { it.disable() }
             .cors { it.configurationSource(corsConfigurationSource()) }
-            .authorizeHttpRequests { authorizeRequests ->
-                authorizeRequests
+            .httpBasic { it.disable() }
+            .formLogin { it.disable() }
+            .authorizeHttpRequests {
+                it
+                    .requestMatchers(
+                        CorsUtils::isPreFlightRequest
+                    ).permitAll()
                     .anyRequest()
-                    .hasAuthority("ROLE_MERCHANT")
+                    .authenticated()
             }.addFilterBefore(
                 MerchantApiKeyAuthenticationFilter(
                     provider = merchantApiKeyProvider,
                     authenticationEntryPoint = authenticationEntryPoint
                 ),
                 UsernamePasswordAuthenticationFilter::class.java
-            ).formLogin { it.disable() }
-            .build()
+            ).build()
 
     @Bean
     fun userSecurityFilterChain(http: HttpSecurity): SecurityFilterChain =
@@ -47,7 +52,16 @@ class SecurityConfig(
             .cors { it.configurationSource(corsConfigurationSource()) }
             .httpBasic { it.disable() }
             .formLogin { it.disable() }
-            .addFilterBefore(
+            .authorizeHttpRequests {
+                it
+                    .requestMatchers(
+                        CorsUtils::isPreFlightRequest,
+                        AntPathRequestMatcher("/api/v1/p/user/sign-in"),
+                        AntPathRequestMatcher("/api/v1/p/user/sign-up")
+                    ).permitAll()
+                    .anyRequest()
+                    .authenticated()
+            }.addFilterBefore(
                 UserApiAuthenticationFilter(
                     provider = accountValidationProvider,
                     authenticationEntryPoint = authenticationEntryPoint
@@ -58,9 +72,11 @@ class SecurityConfig(
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {
         val configuration = CorsConfiguration()
-        configuration.allowedOrigins = listOf("*")
+        configuration.allowedOriginPatterns = listOf("*")
         configuration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
-        configuration.allowedHeaders = listOf("authorization", "content-type")
+        configuration.allowedHeaders = listOf("*")
+        configuration.exposedHeaders = listOf("*")
+        configuration.allowCredentials = true
 
         val source = UrlBasedCorsConfigurationSource()
         source.registerCorsConfiguration("/**", configuration)

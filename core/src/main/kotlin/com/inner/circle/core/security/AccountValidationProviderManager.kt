@@ -5,10 +5,10 @@ import com.inner.circle.exception.UserAuthenticationException
 import com.inner.circle.infra.port.AccountFinderPort
 import com.inner.circle.infra.repository.entity.AccountEntity
 import io.jsonwebtoken.Claims
-import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.stereotype.Service
 
 @Service
@@ -32,7 +32,8 @@ class AccountValidationProviderManager(
 
                 UsernamePasswordAuthenticationToken(
                     accountInfo,
-                    null
+                    null,
+                    mutableListOf(SimpleGrantedAuthority("ROLE_USER"))
                 )
             } ?: throw UserAuthenticationException.UnauthorizedException()
 
@@ -45,8 +46,4 @@ class AccountValidationProviderManager(
 
     private fun Claims.getAccountIdFromClaims() =
         (this["data"] as Map<*, *>)["id"].toString().toLong()
-
-    companion object {
-        private val logger = LoggerFactory.getLogger(AccountValidationProviderManager::class.java)
-    }
 }

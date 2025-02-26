@@ -14,10 +14,8 @@ class MerchantApiKeyProviderImpl(
         val authentication =
             UsernamePasswordAuthenticationToken(
                 userDetails,
-                "",
-                listOf(
-                    SimpleGrantedAuthority("ROLE_MERCHANT")
-                )
+                null,
+                mutableListOf(SimpleGrantedAuthority("ROLE_MERCHANT"))
             )
         return authentication
     }
