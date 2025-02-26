@@ -32,6 +32,7 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
+import jakarta.validation.Valid
 import java.time.LocalDate
 import kotlinx.datetime.toKotlinLocalDate
 import org.slf4j.Logger
@@ -380,7 +381,7 @@ class UserPaymentController(
     fun cancelPayment(
         @AuthenticationPrincipal account: AccountDetails,
         @PathVariable("paymentKey") paymentKey: String,
-        @RequestBody request: CancelPaymentRequest
+        @Valid @RequestBody request: CancelPaymentRequest
     ): PaymentResponse<TransactionDto> {
         val transaction =
             cancelPaymentUseCase.cancel(
