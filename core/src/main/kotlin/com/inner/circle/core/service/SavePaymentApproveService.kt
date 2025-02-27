@@ -12,7 +12,7 @@ import com.inner.circle.infra.http.HttpClient
 import com.inner.circle.infra.port.PaymentPort
 import com.inner.circle.infra.port.PaymentRequestPort
 import com.inner.circle.infra.port.SavePaymentRequestPort
-import com.inner.circle.infra.port.TransactionPort
+import com.inner.circle.infra.port.SaveTransactionPort
 import com.inner.circle.infra.repository.entity.TransactionStatus
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
@@ -21,8 +21,9 @@ import org.springframework.stereotype.Service
 internal class SavePaymentApproveService(
     private val paymentPort: PaymentPort,
     private val paymentRequestPort: PaymentRequestPort,
-    private val transactionPort: TransactionPort,
+    private val saveTransactionPort: SaveTransactionPort,
     private val savePaymentRequestPort: SavePaymentRequestPort,
+    private val httpClient: HttpClient,
     @Value("\${card.url.base-url}") private var baseUrl: String,
     @Value("\${card.url.approve-end-point}") private var endPoint: String
 ) : SavePaymentApproveUseCase {
@@ -63,7 +64,7 @@ internal class SavePaymentApproveService(
                 }
 
                 val cardApproveMap: Map<String, Any> =
-                    HttpClient.sendPostRequest(
+                    httpClient.sendPostRequest(
                         baseUrl,
                         endPoint,
                         mapOf(
@@ -91,8 +92,8 @@ internal class SavePaymentApproveService(
                                 orderName = paymentRequest.orderName
                             )
                         ).let {
-                            transactionPort.save(
-                                TransactionPort.Request(
+                            saveTransactionPort.save(
+                                SaveTransactionPort.Request(
                                     id = null,
                                     paymentKey =
                                         paymentRequest.paymentKey

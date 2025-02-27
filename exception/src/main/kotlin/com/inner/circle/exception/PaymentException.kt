@@ -13,12 +13,6 @@ sealed class PaymentException(
         override val cause: Throwable? = null
     ) : PaymentException(HttpStatus.NOT_FOUND, message, cause)
 
-    data class AccountNotFoundException(
-        val accountId: Long?,
-        override val message: String = "계정을 찾을 수 없습니다.",
-        override val cause: Throwable? = null
-    ) : PaymentException(HttpStatus.NOT_FOUND, message, cause)
-
     data class PaymentNotFoundException(
         val paymentId: String,
         override val message: String = "요청된 결제 정보를 찾을 수 없습니다.",
@@ -60,7 +54,7 @@ sealed class PaymentException(
     ) : PaymentException(HttpStatus.PAYMENT_METHOD_NOT_FOUND, message, cause)
 
     data class CardAuthFailException(
-        override val message: String = "결제수단이 승인되지 못했습니다.",
+        override val message: String = "네트워크 이슈로 결제수단이 승인되지 못했습니다.",
         override val cause: Throwable? = null
     ) : PaymentException(HttpStatus.PAYMENT_METHOD_NOT_VERIFIED, message, cause)
 
@@ -76,23 +70,17 @@ sealed class PaymentException(
         override val cause: Throwable? = null
     ) : PaymentException(HttpStatus.NOT_FOUND, message, cause)
 
-    data class AlreadyRefundException(
+    data class ExceedCancelAmountException(
         val paymentKey: String,
-        override val message: String = "요청하신 결제 ($paymentKey)는 이미 전액 환불되었습니다",
+        val amount: BigDecimal,
+        override val message: String = "취소 금액이 $amount 를 초과할 수 없습니다. (요청 : $paymentKey)",
         override val cause: Throwable? = null
     ) : PaymentException(HttpStatus.BAD_REQUEST, message, cause)
 
-    data class ExceedRefundAmountException(
+    data class BadCancelAmountException(
         val paymentKey: String,
         val amount: BigDecimal,
-        override val message: String = "환불 금액이 $amount 를 초과할 수 없습니다. (요청 : $paymentKey)",
-        override val cause: Throwable? = null
-    ) : PaymentException(HttpStatus.BAD_REQUEST, message, cause)
-
-    data class BadRefundAmountException(
-        val paymentKey: String,
-        val amount: BigDecimal,
-        override val message: String = "환불 금액은 양수여야 합니다. (요청 : $paymentKey, $amount)",
+        override val message: String = "취소 금액은 양수여야 합니다. (요청 : $paymentKey, $amount)",
         override val cause: Throwable? = null
     ) : PaymentException(HttpStatus.BAD_REQUEST, message, cause)
 

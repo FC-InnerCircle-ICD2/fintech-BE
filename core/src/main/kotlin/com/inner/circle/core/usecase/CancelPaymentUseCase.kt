@@ -1,18 +1,18 @@
-package com.inner.circle.corebackoffice.usecase
+package com.inner.circle.core.usecase
 
-import com.inner.circle.corebackoffice.service.dto.TransactionDto
-import com.inner.circle.exception.BackofficeException
+import com.inner.circle.core.service.dto.TransactionDto
+import com.inner.circle.exception.PaymentException
 import java.math.BigDecimal
 
-fun interface CancelPaymentUseCase {
+interface CancelPaymentUseCase {
     data class CancelPaymentRequest(
-        val merchantId: Long,
+        val accountId: Long,
         val paymentKey: String,
         val amount: BigDecimal
     ) {
         init {
             require(amount > BigDecimal.ZERO) {
-                throw BackofficeException.BadCancelAmountException(
+                throw PaymentException.BadCancelAmountException(
                     paymentKey = paymentKey,
                     amount = amount
                 )
