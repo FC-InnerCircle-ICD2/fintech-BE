@@ -22,6 +22,11 @@
             </filter>
         </appender>
 
+        <turboFilter class="ch.qos.logback.classic.turbo.TimeBasedTriggeringPolicy">
+            <timeInterval>60 seconds</timeInterval>
+            <loggerName>com.zaxxer.hikari</loggerName>
+        </turboFilter>
+
         <logger name="com.zaxxer.hikari" level="WARN"/>
         <logger name="org.apache" level="WARN"/>
         <logger name="com.inner.circle.api" level="WARN"/>
