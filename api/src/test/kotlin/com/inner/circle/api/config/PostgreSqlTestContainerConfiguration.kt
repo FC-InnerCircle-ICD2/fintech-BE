@@ -112,7 +112,7 @@ class PostgreSqlTestContainerConfiguration :
                 val jsonObject = jsonArray.getJSONObject(0)
                 val networkSettings = jsonObject.getJSONObject("NetworkSettings")
                 val ports = networkSettings.getJSONObject("Ports")
-                val portBindings = ports.getJSONArray("5433/tcp")
+                val portBindings = ports.getJSONArray("5432/tcp")
                 if (portBindings.length() > 0) {
                     val hostPort = portBindings.getJSONObject(0).getString("HostPort")
                     val envVars = jsonObject.getJSONObject("Config").getJSONArray("Env")
