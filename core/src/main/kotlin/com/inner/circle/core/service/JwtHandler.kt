@@ -49,7 +49,7 @@ class JwtHandler(
         }.onFailure { exception ->
             when (exception) {
                 is io.jsonwebtoken.ExpiredJwtException -> {
-                    logger.error("Token validation error: Token has expired", exception)
+                    logger.info("Token validation error: Token has expired", exception)
                     throw PaymentJwtException.TokenExpiredException(cause = exception)
                 }
 
@@ -103,7 +103,7 @@ class JwtHandler(
         } catch (e: Exception) {
             when (e) {
                 is io.jsonwebtoken.ExpiredJwtException -> {
-                    logger.error("Token validation error: Token has expired", e)
+                    logger.info("Token validation error: Token has expired", e)
                     throw PaymentJwtException.TokenExpiredException(cause = e)
                 }
 
