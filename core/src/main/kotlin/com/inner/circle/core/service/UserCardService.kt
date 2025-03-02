@@ -2,6 +2,7 @@ package com.inner.circle.core.service
 
 import com.inner.circle.core.service.dto.UserCardDto
 import com.inner.circle.core.usecase.UserCardUseCase
+import com.inner.circle.exception.AuthenticateException
 import com.inner.circle.exception.UserCardException
 import com.inner.circle.infra.http.HttpClient
 import com.inner.circle.infra.port.UserCardPort
@@ -28,6 +29,11 @@ internal class UserCardService(
                     "cardCompany" to userCard.cardCompany
                 )
             )
+
+        // 어댑터로 이동 예정
+        if (!(cardValidateMap["isValid"] as Boolean)) {
+            throw AuthenticateException.CardAuthFailException(userCard.cardNumber)
+        }
 
         try {
             val infraUserCardDto =
