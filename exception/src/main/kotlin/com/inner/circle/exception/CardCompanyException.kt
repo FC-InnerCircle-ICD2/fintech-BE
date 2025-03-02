@@ -17,8 +17,8 @@ sealed class CardCompanyException(
         override val message: String = msg,
         override val cause: Throwable? = null
     ) : CardCompanyException(
-        status = HttpStatus.fromCode(code) ?: HttpStatus.INTERNAL_SERVER_ERROR, // 여기서 정확한 상태 코드 설정
-        message = message,
-        cause = cause
-    )
+            status = HttpStatus.fromCode(code) ?: HttpStatus.INTERNAL_SERVER_ERROR,
+            message = message,
+            cause = cause
+        )
 }

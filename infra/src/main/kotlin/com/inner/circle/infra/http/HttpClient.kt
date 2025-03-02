@@ -75,13 +75,17 @@ class HttpClient {
             }
 
             val errorBody = response.errorBody()?.string()?.takeIf { it.isNotBlank() }
-            val errorResponse = errorBody?.let {
-                try {
-                    gson.fromJson<Map<String, Any>>(it, object : TypeToken<Map<String, Any>>() {}.type)
-                } catch (e: Exception) {
-                    mapOf("message" to "Unknown error")
-                }
-            } ?: mapOf("message" to "Unknown error")
+            val errorResponse =
+                errorBody?.let {
+                    try {
+                        gson.fromJson<Map<String, Any>>(
+                            it,
+                            object : TypeToken<Map<String, Any>>() {}.type
+                        )
+                    } catch (e: Exception) {
+                        mapOf("message" to "Unknown error")
+                    }
+                } ?: mapOf("message" to "Unknown error")
             val errorCode = response.code()
             val errorMessage = (errorResponse["message"] ?: "Unknown error").toString()
 
