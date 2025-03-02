@@ -3,15 +3,32 @@ package com.inner.circle.core.service
 import com.inner.circle.core.service.dto.UserCardDto
 import com.inner.circle.core.usecase.UserCardUseCase
 import com.inner.circle.exception.UserCardException
+import com.inner.circle.infra.http.HttpClient
 import com.inner.circle.infra.port.UserCardPort
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import com.inner.circle.infra.adaptor.dto.UserCardDto as InfraUserCardDto
 
 @Service
 internal class UserCardService(
-    private val userCardPort: UserCardPort
+    private val userCardPort: UserCardPort,
+    private val httpClient: HttpClient,
+    @Value("\${card.url.base-url}") private var baseUrl: String,
+    @Value("\${card.url.validate-end-point}") private var endPoint: String
 ) : UserCardUseCase {
     override fun save(userCard: UserCardDto): UserCardDto {
+        val cardValidateMap: Map<String, Any> =
+            httpClient.sendPostRequest(
+                baseUrl,
+                endPoint,
+                mapOf(
+                    "cardNumber" to userCard.cardNumber,
+                    "expiryDate" to userCard.expirationPeriod,
+                    "cvc" to userCard.cvc,
+                    "cardCompany" to userCard.cardCompany
+                )
+            )
+
         try {
             val infraUserCardDto =
                 userCardPort.save(
