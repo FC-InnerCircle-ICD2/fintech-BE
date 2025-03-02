@@ -11,10 +11,14 @@ sealed class CardCompanyException(
         override val cause: Throwable? = null
     ) : CardCompanyException(HttpStatus.CARD_NOT_APPROVED, message, cause)
 
-    data class ConnenctException(
-        val code: Int?,
-        val msg: String?,
-        override val message: String = "Connection failed. code: $code, msg: $msg",
+    data class ConnectException(
+        val code: Int,
+        val msg: String,
+        override val message: String = msg,
         override val cause: Throwable? = null
-    ) : CardCompanyException(HttpStatus.CARD_COMPANY_CONNECT_FAIL, message, cause)
+    ) : CardCompanyException(
+        status = HttpStatus.fromCode(code) ?: HttpStatus.INTERNAL_SERVER_ERROR, // 여기서 정확한 상태 코드 설정
+        message = message,
+        cause = cause
+    )
 }
