@@ -1,18 +1,28 @@
 package com.inner.circle.api.custom
 
-import ch.qos.logback.classic.spi.ILoggingEvent
-import ch.qos.logback.core.filter.Filter
+import ch.qos.logback.classic.Level
+import ch.qos.logback.classic.Logger
+import ch.qos.logback.classic.turbo.TurboFilter
 import ch.qos.logback.core.spi.FilterReply
+import org.slf4j.Marker
 
-class TimeBasedDuplicateMessageFilter : Filter<ILoggingEvent>() {
+class TimeBasedDuplicateMessageFilter : TurboFilter() {
     companion object {
         private const val TIME_INTERVAL = 60000L // 60초
     }
 
     private val messageTimestamps = mutableMapOf<String, Long>()
 
-    override fun decide(event: ILoggingEvent): FilterReply {
-        val message = event.formattedMessage
+
+    override fun decide(
+        marker: Marker?,
+        logger: Logger?,
+        level: Level?,
+        format: String?,
+        params: Array<out Any>?,
+        t: Throwable?
+    ): FilterReply {
+        val message = format ?: return FilterReply.NEUTRAL
         val currentTime = System.currentTimeMillis()
 
         // 메시지가 이미 기록된 적이 있는 경우
