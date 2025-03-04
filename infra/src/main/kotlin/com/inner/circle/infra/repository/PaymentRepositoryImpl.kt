@@ -33,6 +33,7 @@ internal class PaymentRepositoryImpl(
         val root: Root<PaymentEntity> = criteriaQuery.from(PaymentEntity::class.java)
 
         val predicates: MutableList<Predicate> = mutableListOf()
+        predicates.add(criteriaBuilder.equal(root.get<Long>("accountId"), accountId))
 
         startDate?.let {
             val startOfDay = it.atStartOfDay()
