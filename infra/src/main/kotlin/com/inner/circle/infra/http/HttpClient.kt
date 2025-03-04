@@ -73,9 +73,25 @@ class HttpClient {
                     return responseMap
                 } ?: throw NullPointerException("Response body is null")
             }
-            throw CardCompanyException.ConnenctException(
-                code = response.code(),
-                msg = response.message()
+
+            val errorBody = response.errorBody()?.string()?.takeIf { it.isNotBlank() }
+            val errorResponse =
+                errorBody?.let {
+                    try {
+                        gson.fromJson<Map<String, Any>>(
+                            it,
+                            object : TypeToken<Map<String, Any>>() {}.type
+                        )
+                    } catch (e: Exception) {
+                        mapOf("message" to "Unknown error")
+                    }
+                } ?: mapOf("message" to "Unknown error")
+            val errorCode = response.code()
+            val errorMessage = (errorResponse["message"] ?: "Unknown error").toString()
+
+            throw CardCompanyException.ConnectException(
+                code = errorCode,
+                msg = errorMessage
             )
         } catch (e: IOException) {
             log.info("[ERROR] 네트워크 요청 실패: ${e.message}")
@@ -93,6 +109,20 @@ class HttpClient {
         log.error("최대 재시도 횟수 초과. 요청을 다시 시도했지만 실패했습니다.")
         attempt = 0
         throw PaymentException.CardAuthFailException()
+    }
+
+    @Recover
+    fun recover(
+        e: CardCompanyException.ConnectException,
+        baseUrl: String,
+        endpoint: String,
+        params: Map<String, Any>
+    ): Map<String, Any> {
+        attempt = 0
+        throw CardCompanyException.ConnectException(
+            code = e.code,
+            msg = e.message
+        )
     }
 
     fun interface ApiService {
