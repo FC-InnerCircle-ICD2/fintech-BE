@@ -22,10 +22,6 @@
             </filter>
         </appender>
 
-        <turboFilter class="com.inner.circle.api.custom.TimeBasedDuplicateMessageFilter">
-            <loggerName>com.zaxxer.hikari</loggerName>
-        </turboFilter>
-
         <logger name="com.zaxxer.hikari" level="WARN"/>
         <logger name="org.apache" level="WARN"/>
         <logger name="com.inner.circle.api" level="WARN"/>
