@@ -24,6 +24,8 @@ springDependencyManagement = "1.1.7"
 # hypersistence
 hypersistence-utils = "3.9.0"
 hypersistence-tsid = "2.1.3"
+# promethus
+registryPrometheus = "1.14.1"
 
 [libraries]
 # kotlin
@@ -64,6 +66,9 @@ springBootTestContainers = { module = "org.springframework.boot:spring-boot-test
 springBootValidation = { module = "org.springframework.boot:spring-boot-starter-validation", version.ref = "springBoot"}
 springBootDataJpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa", version.ref = "springBoot" }
 springBootDataRedis = { module = "org.springframework.boot:spring-boot-starter-data-redis", version.ref = "springBoot" }
+springBootActuator = { module = "org.springframework.boot:spring-boot-starter-actuator", version.ref = "springBoot" }
+# promethus
+promethus = { module = "io.micrometer:micrometer-registry-prometheus", version.ref = "registryPrometheus"}
 # testContainers
 postgresqlTestContainer = { module = "org.testcontainers:postgresql", version = "1.20.0" }
 # swagger
