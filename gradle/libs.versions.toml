@@ -45,6 +45,7 @@ kotlinxCoroutinesSlf4j = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-sl
 kotlinLogging = { module = "io.github.oshai:kotlin-logging-jvm", version.ref = "kotlinLogging" }
 slf4jApi = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 logbackClassic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
+logbackCore = { module = "ch.qos.logback:logback-core", version.ref = "logback" }
 # linter
 kotlinterGradlePlugin = { module = "org.jmailen.kotlinter:org.jmailen.kotlinter.gradle.plugin", version.ref = "kotlinter" }
 # test
@@ -92,7 +93,7 @@ kotlinxCoroutines = ["kotlinxCoroutinesCore"]
 kotlinxSerialization = ["kotlinxSerializationJson"]
 kotlinTest = ["kotestRunnerJunit5", "kotestExtensionsJunit5", "kotestAssertionsCore", "mockk"]
 kotlinTestSpring = ["kotestExtensionsSpring", "springMockk"]
-kotlinLogging = ["kotlinLogging", "slf4jApi", "logbackClassic", "kotlinxCoroutinesSlf4j"]
+kotlinLogging = ["kotlinLogging", "slf4jApi", "logbackClassic", "kotlinxCoroutinesSlf4j", "logbackCore"]
 springBoot = ["springBootWeb", "springBootTest"]
 springBootValidation = [ "springBootValidation" ]
 testContainer = ["springBootTestContainers", "postgresqlTestContainer"]
