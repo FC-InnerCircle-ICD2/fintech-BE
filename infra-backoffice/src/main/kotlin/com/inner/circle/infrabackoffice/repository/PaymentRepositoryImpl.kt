@@ -31,6 +31,7 @@ internal class PaymentRepositoryImpl(
         val root: Root<PaymentEntity> = criteriaQuery.from(PaymentEntity::class.java)
 
         val predicates: MutableList<Predicate> = mutableListOf()
+        predicates.add(criteriaBuilder.equal(root.get<Long>("merchantId"), merchantId))
 
         paymentKey?.let {
             predicates.add(criteriaBuilder.equal(root.get<String>("paymentKey"), it))
