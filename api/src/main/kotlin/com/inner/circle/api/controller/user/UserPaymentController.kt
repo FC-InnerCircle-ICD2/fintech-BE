@@ -10,19 +10,16 @@ import com.inner.circle.api.controller.dto.ConfirmPaymentDto
 import com.inner.circle.api.controller.dto.PaymentResponse
 import com.inner.circle.api.controller.dto.PaymentWithTransactionsDto
 import com.inner.circle.api.controller.dto.PaymentsWithTransactionsDto
-import com.inner.circle.api.controller.dto.TransactionDto
 import com.inner.circle.api.controller.dto.TransactionStatus
 import com.inner.circle.api.controller.dto.UserCardDto
 import com.inner.circle.api.controller.dto.convertCoreTransactionStatus
 import com.inner.circle.api.controller.request.CancelPaymentProcessRequest
-import com.inner.circle.api.controller.request.CancelPaymentRequest
 import com.inner.circle.api.controller.request.ConfirmPaymentRequest
 import com.inner.circle.api.controller.request.ConfirmSimplePaymentRequest
 import com.inner.circle.api.controller.request.UserCardRequest
 import com.inner.circle.core.security.AccountDetails
 import com.inner.circle.core.service.dto.ConfirmPaymentCoreDto
 import com.inner.circle.core.usecase.CancelPaymentRequestUseCase
-import com.inner.circle.core.usecase.CancelPaymentUseCase
 import com.inner.circle.core.usecase.ConfirmPaymentUseCase
 import com.inner.circle.core.usecase.ConfirmSimplePaymentUseCase
 import com.inner.circle.core.usecase.GetPaymentWithTransactionsUseCase
@@ -32,7 +29,6 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
-import jakarta.validation.Valid
 import java.time.LocalDate
 import kotlinx.datetime.toKotlinLocalDate
 import org.slf4j.Logger
@@ -56,8 +52,7 @@ class UserPaymentController(
     private val userCardUseCase: UserCardUseCase,
     private val cancelPaymentRequestUseCase: CancelPaymentRequestUseCase,
     private val statusChangedMessageSender: PaymentStatusChangedMessageSender,
-    private val getPaymentWithTransactionsUseCase: GetPaymentWithTransactionsUseCase,
-    private val cancelPaymentUseCase: CancelPaymentUseCase
+    private val getPaymentWithTransactionsUseCase: GetPaymentWithTransactionsUseCase
 ) {
     private val logger: Logger = LoggerFactory.getLogger(UserPaymentController::class.java)
 
@@ -374,24 +369,5 @@ class UserPaymentController(
                     .findByPaymentKey(request)
             )
         )
-    }
-
-    @Operation(summary = "결제 취소")
-    @PostMapping("/payments/{paymentKey}/cancel")
-    fun cancelPayment(
-        @AuthenticationPrincipal account: AccountDetails,
-        @PathVariable("paymentKey") paymentKey: String,
-        @Valid @RequestBody request: CancelPaymentRequest
-    ): PaymentResponse<TransactionDto> {
-        val transaction =
-            cancelPaymentUseCase.cancel(
-                CancelPaymentUseCase.CancelPaymentRequest(
-                    accountId = account.id,
-                    paymentKey = paymentKey,
-                    amount = request.amount
-                )
-            )
-
-        return PaymentResponse.ok(TransactionDto.of(transaction))
     }
 }

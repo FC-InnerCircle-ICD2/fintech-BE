@@ -84,9 +84,9 @@ internal class TransactionService(
         request: GetPaymentWithTransactionsUseCase.FindByPaymentKeyRequest
     ): PaymentWithTransactionsDto {
         val payment =
-            getPaymentPort.findByAccountIdAndPaymentKey(
+            getPaymentPort.findByMerchantIdAndPaymentKey(
                 GetPaymentPort.FindByPaymentKeyRequest(
-                    accountId = request.accountId,
+                    merchantId = request.accountId,
                     paymentKey = request.paymentKey
                 )
             )
@@ -123,9 +123,9 @@ internal class TransactionService(
 
     override fun cancel(request: CancelPaymentUseCase.CancelPaymentRequest): TransactionDto {
         val payment =
-            getPaymentPort.findByAccountIdAndPaymentKey(
+            getPaymentPort.findByMerchantIdAndPaymentKey(
                 GetPaymentPort.FindByPaymentKeyRequest(
-                    accountId = request.accountId,
+                    merchantId = request.merchantId,
                     paymentKey = request.paymentKey
                 )
             )
