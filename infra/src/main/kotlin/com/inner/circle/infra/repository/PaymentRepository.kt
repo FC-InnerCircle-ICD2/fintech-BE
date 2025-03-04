@@ -14,8 +14,8 @@ interface PaymentRepository {
         limit: Int
     ): List<PaymentEntity>
 
-    fun findByAccountIdAndPaymentKey(
-        accountId: Long,
+    fun findByMerchantIdAndPaymentKey(
+        merchantId: Long,
         paymentKey: String
     ): PaymentEntity?
 }

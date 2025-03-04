@@ -55,12 +55,12 @@ internal class PaymentRepositoryImpl(
         return query.resultList
     }
 
-    override fun findByAccountIdAndPaymentKey(
-        accountId: Long,
+    override fun findByMerchantIdAndPaymentKey(
+        merchantId: Long,
         paymentKey: String
     ): PaymentEntity? =
-        paymentJpaRepository.findByAccountIdAndPaymentKey(
-            accountId = accountId,
+        paymentJpaRepository.findByMerchantIdAndPaymentKey(
+            merchantId = merchantId,
             paymentKey = paymentKey
         )
 }

@@ -13,11 +13,11 @@ interface GetPaymentPort {
     )
 
     data class FindByPaymentKeyRequest(
-        val accountId: Long,
+        val merchantId: Long,
         val paymentKey: String
     )
 
     fun findAllByAccountId(request: FindAllByAccountIdRequest): List<PaymentDto>
 
-    fun findByAccountIdAndPaymentKey(request: FindByPaymentKeyRequest): PaymentDto
+    fun findByMerchantIdAndPaymentKey(request: FindByPaymentKeyRequest): PaymentDto
 }

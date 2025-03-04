@@ -59,19 +59,17 @@ internal class PaymentAdaptor(
                 )
             }
 
-    override fun findByAccountIdAndPaymentKey(
+    override fun findByMerchantIdAndPaymentKey(
         request: GetPaymentPort.FindByPaymentKeyRequest
     ): PaymentDto {
         val payment =
-            paymentRepository.findByAccountIdAndPaymentKey(
-                accountId = request.accountId,
+            paymentRepository.findByMerchantIdAndPaymentKey(
+                merchantId = request.merchantId,
                 paymentKey = request.paymentKey
             )
                 ?: throw PaymentException.PaymentNotFoundException(
                     paymentId = "",
-                    message =
-                        "요청된 결제 정보를 찾을 수 없습니다. : " +
-                            "결제 고객[${request.accountId}], paymentKey[${request.paymentKey}]"
+                    message = "요청된 결제 정보를 찾을 수 없습니다. : paymentKey[${request.paymentKey}]"
                 )
         return PaymentDto(
             id = requireNotNull(payment.id),

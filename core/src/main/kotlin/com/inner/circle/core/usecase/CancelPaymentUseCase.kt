@@ -4,9 +4,9 @@ import com.inner.circle.core.service.dto.TransactionDto
 import com.inner.circle.exception.PaymentException
 import java.math.BigDecimal
 
-interface CancelPaymentUseCase {
+fun interface CancelPaymentUseCase {
     data class CancelPaymentRequest(
-        val accountId: Long,
+        val merchantId: Long,
         val paymentKey: String,
         val amount: BigDecimal
     ) {
