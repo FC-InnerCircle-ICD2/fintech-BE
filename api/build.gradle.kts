@@ -21,6 +21,8 @@ dependencies {
     implementation(libs.logbackDiscordAppender)
     implementation(libs.retrofit)
     implementation(libs.okhttp)
+    implementation(libs.springBootActuator)
+    implementation(libs.promethus)
     testImplementation(libs.bundles.testContainer)
     testImplementation(libs.bundles.kotlinTest)
     testImplementation(libs.bundles.kotlinTestSpring)
