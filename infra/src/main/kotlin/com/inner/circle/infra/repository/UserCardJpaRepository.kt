@@ -9,9 +9,9 @@ interface UserCardJpaRepository : JpaRepository<UserCardEntity, String> {
         isRepresentative: Boolean
     ): UserCardEntity?
 
-    fun findByAccountIdOrderByIdAsc(accountId: Long): List<UserCardEntity>
+    fun findByAccountIdOrderByIdDesc(accountId: Long): List<UserCardEntity>
 
-    fun findAllByOrderByAccountIdAscIdAsc(): List<UserCardEntity>
+    fun findAllByOrderByAccountIdAscIdDesc(): List<UserCardEntity>
 
     fun findById(id: Long): UserCardEntity
 
