@@ -18,7 +18,7 @@ internal class PaymentRepositoryImpl(
     override fun save(paymentEntity: PaymentEntity): PaymentEntity? =
         paymentJpaRepository.saveAndFlush(paymentEntity)
 
-    override fun findAllByAccountId(
+    override fun findAllByAccountIdOrderByCreatedAtDesc(
         accountId: Long,
         startDate: LocalDate?,
         endDate: LocalDate?,
@@ -46,7 +46,7 @@ internal class PaymentRepositoryImpl(
         }
 
         criteriaQuery.where(*predicates.toTypedArray())
-        criteriaQuery.orderBy(criteriaBuilder.asc(root.get<LocalDate>("createdAt")))
+        criteriaQuery.orderBy(criteriaBuilder.desc(root.get<LocalDate>("createdAt")))
 
         val query = entityManager.createQuery(criteriaQuery)
         query.firstResult = page * limit

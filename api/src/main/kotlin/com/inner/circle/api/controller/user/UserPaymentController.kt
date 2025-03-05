@@ -29,11 +29,14 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
+import jakarta.validation.constraints.Max
+import jakarta.validation.constraints.Min
 import java.time.LocalDate
 import kotlinx.datetime.toKotlinLocalDate
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
@@ -43,6 +46,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestParam
 import com.inner.circle.core.service.dto.UserCardDto as CoreUserCardDto
 
+@Validated
 @Tag(name = "Payments - User", description = "결제 고객(App) 결제 관련 API")
 @PaymentForUserV1Api
 @SecurityRequirement(name = SwaggerConfig.BEARER_AUTH)
@@ -325,8 +329,8 @@ class UserPaymentController(
         @Parameter(example = "2025-02-19")
         @RequestParam("endDate") endDate: LocalDate?,
         @RequestParam("status") status: TransactionStatus?,
-        @RequestParam("page", defaultValue = "0") page: Int,
-        @RequestParam("limit", defaultValue = "10") limit: Int
+        @RequestParam("page", defaultValue = "0") @Min(0) page: Int,
+        @RequestParam("limit", defaultValue = "10") @Min(1) @Max(20) limit: Int
     ): PaymentResponse<PaymentsWithTransactionsDto> {
         val request =
             GetPaymentWithTransactionsUseCase.FindAllByAccountIdRequest(

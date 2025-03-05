@@ -41,7 +41,7 @@ internal class TransactionAdaptor(
 
     override fun findAllByPaymentKeyIn(paymentKeys: List<String>): List<TransactionDto> =
         transactionRepository
-            .findAllByPaymentKeyIn(paymentKeys)
+            .findAllByPaymentKeyInOrderByCreatedAtDesc(paymentKeys)
             .map { transaction ->
                 TransactionDto(
                     id = requireNotNull(transaction.id),
@@ -57,7 +57,7 @@ internal class TransactionAdaptor(
 
     override fun findAllByPaymentKey(request: GetTransactionPort.Request): List<TransactionDto> =
         transactionRepository
-            .findAllByPaymentKey(request.paymentKey)
+            .findAllByPaymentKeyOrderByCreatedAtDesc(request.paymentKey)
             .map { transaction ->
                 TransactionDto(
                     id = requireNotNull(transaction.id),

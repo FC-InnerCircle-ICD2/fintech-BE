@@ -13,7 +13,7 @@ data class BackofficeResponse<T> private constructor(
         fun <T> ok(data: T): BackofficeResponse<T> =
             BackofficeResponse(ok = true, data = data, error = null)
 
-        fun fail(error: BackofficeError): BackofficeResponse<Nothing> =
+        fun fail(error: BackofficeError): BackofficeResponse<Any> =
             BackofficeResponse(ok = false, data = null, error = error)
     }
 }

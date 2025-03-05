@@ -6,6 +6,7 @@ import com.inner.circle.exception.AppException
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
+import jakarta.validation.ConstraintViolationException
 import javax.security.sasl.AuthenticationException
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpHeaders
@@ -81,20 +82,24 @@ class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
         )
     }
 
-    @ExceptionHandler(IllegalArgumentException::class)
+    @ExceptionHandler(IllegalArgumentException::class, ConstraintViolationException::class)
     @ApiResponse(
         responseCode = "400",
         description = "Invalid request",
         content = [Content(schema = Schema(implementation = PaymentResponse::class))]
     )
-    fun handleIllegalArgumentException(
-        ex: IllegalArgumentException
-    ): ResponseEntity<PaymentResponse<Any>> {
-        errorLogger.error("IllegalArgumentException (type = {})", ex::class.simpleName, ex)
+    fun handleIllegalArgumentException(ex: Exception): ResponseEntity<PaymentResponse<Any>> {
+        errorLogger.error("(type = {})", ex::class.simpleName, ex)
+        val errorMessage =
+            if (ex is ConstraintViolationException) {
+                "유효하지 않은 요청입니다. ${ex.message.orEmpty()}".trimEnd()
+            } else {
+                "유효하지 않은 요청입니다."
+            }
         val status = HttpStatus.BAD_REQUEST
         val errorResponse =
             PaymentResponse.fail(
-                PaymentError(status.toString(), "유효하지 않은 요청입니다.")
+                PaymentError(status.toString(), errorMessage)
             )
         return ResponseEntity(errorResponse, status)
     }

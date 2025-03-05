@@ -6,7 +6,7 @@ import java.time.LocalDate
 interface PaymentRepository {
     fun save(paymentEntity: PaymentEntity): PaymentEntity?
 
-    fun findAllByAccountId(
+    fun findAllByAccountIdOrderByCreatedAtDesc(
         accountId: Long,
         startDate: LocalDate?,
         endDate: LocalDate?,
