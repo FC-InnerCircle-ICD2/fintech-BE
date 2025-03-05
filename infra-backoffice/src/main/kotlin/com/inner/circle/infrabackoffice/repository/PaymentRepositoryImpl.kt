@@ -15,7 +15,7 @@ internal class PaymentRepositoryImpl(
     private val entityManager: EntityManager,
     private val paymentJpaRepository: PaymentJpaRepository
 ) : PaymentRepository {
-    override fun findAllByMerchantId(
+    override fun findAllByMerchantIdOrderByCreatedAtDesc(
         merchantId: Long,
         paymentKey: String?,
         startDate: LocalDate?,
@@ -48,7 +48,7 @@ internal class PaymentRepositoryImpl(
         }
 
         criteriaQuery.where(*predicates.toTypedArray())
-        criteriaQuery.orderBy(criteriaBuilder.asc(root.get<LocalDate>("createdAt")))
+        criteriaQuery.orderBy(criteriaBuilder.desc(root.get<LocalDate>("createdAt")))
 
         val query = entityManager.createQuery(criteriaQuery)
         query.firstResult = page * limit

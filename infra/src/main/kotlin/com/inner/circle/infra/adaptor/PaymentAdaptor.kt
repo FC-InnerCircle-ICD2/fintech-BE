@@ -37,7 +37,7 @@ internal class PaymentAdaptor(
         request: GetPaymentPort.FindAllByAccountIdRequest
     ): List<PaymentDto> =
         paymentRepository
-            .findAllByAccountId(
+            .findAllByAccountIdOrderByCreatedAtDesc(
                 accountId = request.accountId,
                 startDate = request.startDate?.toJavaLocalDate(),
                 endDate = request.endDate?.toJavaLocalDate(),

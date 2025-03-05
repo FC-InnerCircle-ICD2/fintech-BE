@@ -6,6 +6,7 @@ import com.inner.circle.exception.AppException
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
+import jakarta.validation.ConstraintViolationException
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -42,7 +43,7 @@ class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
         description = "Unexpected error",
         content = [Content(schema = Schema(implementation = BackofficeResponse::class))]
     )
-    fun handleException(ex: Exception): ResponseEntity<BackofficeResponse<Nothing>> {
+    fun handleException(ex: Exception): ResponseEntity<BackofficeResponse<Any>> {
         errorLogger.error("An unexpected error occurred", ex)
         val status = HttpStatus.INTERNAL_SERVER_ERROR
         val errorResponse =
@@ -52,21 +53,24 @@ class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
         return ResponseEntity(errorResponse, status)
     }
 
-    @ExceptionHandler(IllegalArgumentException::class)
+    @ExceptionHandler(IllegalArgumentException::class, ConstraintViolationException::class)
     @ApiResponse(
         responseCode = "400",
         description = "Invalid request",
         content = [Content(schema = Schema(implementation = BackofficeResponse::class))]
     )
-    fun handleIllegalArgumentException(
-        ex: IllegalArgumentException
-    ): ResponseEntity<BackofficeResponse<Nothing>> {
-        errorLogger.error("IllegalArgumentException (type = {})", ex::class.simpleName, ex)
-
+    fun handleIllegalArgumentException(ex: Exception): ResponseEntity<BackofficeResponse<Any>> {
+        errorLogger.error("(type = {})", ex::class.simpleName, ex)
+        val errorMessage =
+            if (ex is ConstraintViolationException) {
+                "유효하지 않은 요청입니다. ${ex.message.orEmpty()}".trimEnd()
+            } else {
+                "유효하지 않은 요청입니다."
+            }
         val status = HttpStatus.BAD_REQUEST
         val errorResponse =
             BackofficeResponse.fail(
-                BackofficeError(status.toString(), "Invalid request")
+                BackofficeError(status.toString(), errorMessage)
             )
         return ResponseEntity(errorResponse, status)
     }

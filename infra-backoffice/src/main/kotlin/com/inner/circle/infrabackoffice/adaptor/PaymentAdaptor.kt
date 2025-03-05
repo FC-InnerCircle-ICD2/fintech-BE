@@ -15,7 +15,7 @@ internal class PaymentAdaptor(
         request: GetPaymentPort.FindAllByMerchantIdRequest
     ): List<PaymentDto> =
         paymentRepository
-            .findAllByMerchantId(
+            .findAllByMerchantIdOrderByCreatedAtDesc(
                 merchantId = request.merchantId,
                 paymentKey = request.paymentKey,
                 startDate = request.startDate?.toJavaLocalDate(),

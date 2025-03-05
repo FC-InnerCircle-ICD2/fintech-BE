@@ -5,7 +5,9 @@ import com.inner.circle.infra.repository.entity.TransactionEntity
 interface TransactionRepository {
     fun save(transactionEntity: TransactionEntity): TransactionEntity
 
-    fun findAllByPaymentKeyIn(paymentKeys: List<String>): List<TransactionEntity>
+    fun findAllByPaymentKeyInOrderByCreatedAtDesc(
+        paymentKeys: List<String>
+    ): List<TransactionEntity>
 
-    fun findAllByPaymentKey(paymentKey: String): List<TransactionEntity>
+    fun findAllByPaymentKeyOrderByCreatedAtDesc(paymentKey: String): List<TransactionEntity>
 }
