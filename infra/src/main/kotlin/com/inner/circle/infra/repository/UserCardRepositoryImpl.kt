@@ -20,10 +20,10 @@ internal class UserCardRepositoryImpl(
         userCardJpaRepository.save(userCardEntity)
 
     override fun findAll(): List<UserCardEntity> =
-        userCardJpaRepository.findAllByOrderByAccountIdAscIdAsc()
+        userCardJpaRepository.findAllByOrderByAccountIdAscIdDesc()
 
     override fun findByAccountId(accountId: Long): List<UserCardEntity>? =
-        userCardJpaRepository.findByAccountIdOrderByIdAsc(accountId)
+        userCardJpaRepository.findByAccountIdOrderByIdDesc(accountId)
 
     override fun findById(id: Long): UserCardEntity = userCardJpaRepository.findById(id)
 
