@@ -33,7 +33,7 @@ class SseConnectionPool : ConnectionPool<String, SseConnection> {
     }
 
     override fun onCompletionCallback(session: SseConnection) {
-        log.info("call back connection pool completion : {}", session)
+        log.error("call back connection pool completion: {}, uniqueKey: {}", session, session.uniqueKey)
         connectionPool.remove(session.uniqueKey)
     }
 }
