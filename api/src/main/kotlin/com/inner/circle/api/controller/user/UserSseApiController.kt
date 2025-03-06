@@ -41,7 +41,7 @@ class UserSseApiController(
         if (!checkPaymentStatus) {
             val sseEmitter = SseEmitter()
             sseEmitter.send("already end of process.")
-            sseEmitter.complete()
+//            sseEmitter.complete()
             return sseEmitter
         }
 
