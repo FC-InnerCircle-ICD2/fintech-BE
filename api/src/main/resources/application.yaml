@@ -7,8 +7,14 @@ spring:
   jackson:
     deserialization:
       use-big-decimal-for-floats: true
+  mvc:
+    async:
+      request-timeout: 600000
 
 server:
+  servlet:
+    session:
+      timeout: 10m
   port: 8080
 card:
   url:
