@@ -9,7 +9,7 @@ spring:
       use-big-decimal-for-floats: true
   mvc:
     async:
-      request-timeout: 600000
+      request-timeout: 180000
 
 server:
   servlet:

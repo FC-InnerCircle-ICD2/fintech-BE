@@ -20,7 +20,7 @@ spring:
       on-profile: local
   mvc:
     async:
-      request-timeout: 600000
+      request-timeout: 180000
 
 swagger:
   server-url: http://localhost:10001
@@ -32,7 +32,7 @@ spring:
       on-profile: dev
   mvc:
     async:
-      request-timeout: 600000
+      request-timeout: 180000
 
 swagger:
   server-url: https://payment.pay-200.com
