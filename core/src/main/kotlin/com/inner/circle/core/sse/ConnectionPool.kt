@@ -8,5 +8,5 @@ interface ConnectionPool<T, R> {
 
     fun getSessions(uniqueKey: T): List<R>
 
-    fun onCompletionCallback(session: R)
+    fun removeSessions(uniqueKey: T)
 }

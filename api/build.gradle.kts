@@ -23,6 +23,7 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.springBootActuator)
     implementation(libs.promethus)
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1")
     testImplementation(libs.bundles.testContainer)
     testImplementation(libs.bundles.kotlinTest)
     testImplementation(libs.bundles.kotlinTestSpring)
