@@ -1,6 +1,5 @@
 package com.inner.circle.api.application
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.inner.circle.api.application.dto.PaymentStatusChangedResponse
 import com.inner.circle.api.application.dto.PaymentStatusChangedSsePaymentRequest
 import com.inner.circle.api.application.dto.PaymentStatusEventType
@@ -12,8 +11,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class PaymentStatusChangedMessageSender(
-    private val sseConnectionPool: SseConnectionPool,
-    private val objectMapper: ObjectMapper
+    private val sseConnectionPool: SseConnectionPool
 ) {
     companion object {
         private val log = LoggerFactory.getLogger(PaymentStatusChangedMessageSender::class.java)
@@ -77,5 +75,13 @@ class PaymentStatusChangedMessageSender(
             log.error("get sse session failed", e)
             throw SseException.ConnectionNotFoundException(merchantId.toString(), orderId)
         }
+    }
+
+    fun removeSessions(
+        merchantId: Long,
+        orderId: String
+    ) {
+        val uniqueKey = merchantId.toString() + "_" + orderId
+        sseConnectionPool.removeSessions(uniqueKey)
     }
 }

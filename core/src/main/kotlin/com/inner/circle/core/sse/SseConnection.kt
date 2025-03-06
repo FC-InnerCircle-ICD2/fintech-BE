@@ -12,11 +12,6 @@ data class SseConnection(
     val sseEmitter: SseEmitter = SseEmitter(600 * 1000L)
 
     init {
-        // on completion
-        sseEmitter.onCompletion {
-            connectionPool.onCompletionCallback(this)
-        }
-
         // on timeout
         sseEmitter.onTimeout {
             sseEmitter.complete()
@@ -49,20 +44,6 @@ data class SseConnection(
                 SseEmitter
                     .event()
                     .name(eventName)
-                    .data(json)
-
-            sseEmitter.send(event)
-        } catch (e: IOException) {
-            sseEmitter.completeWithError(e)
-        }
-    }
-
-    fun sendMessage(data: Any) {
-        try {
-            val json = objectMapper.writeValueAsString(data)
-            val event =
-                SseEmitter
-                    .event()
                     .data(json)
 
             sseEmitter.send(event)

@@ -21,6 +21,10 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -40,6 +44,7 @@ class MerchantPaymentController(
     private val cancelPaymentUseCase: CancelPaymentUseCase
 ) {
     private val logger: Logger = LoggerFactory.getLogger(MerchantPaymentController::class.java)
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     @Operation(summary = "결제 요청")
     @PostMapping
@@ -97,6 +102,11 @@ class MerchantPaymentController(
             orderId = paymentApproveRequest.orderId,
             merchantId = merchantId
         )
+
+        coroutineScope.launch {
+            delay(10000L)
+            statusChangedMessageSender.removeSessions(merchantId, paymentApproveRequest.orderId)
+        }
 
         return PaymentResponse.ok(
             data

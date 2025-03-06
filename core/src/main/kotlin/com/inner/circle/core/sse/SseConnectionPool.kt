@@ -32,8 +32,8 @@ class SseConnectionPool : ConnectionPool<String, SseConnection> {
         return Collections.unmodifiableList(sseConnections)
     }
 
-    override fun onCompletionCallback(session: SseConnection) {
-        log.error("call back connection pool completion: {}, uniqueKey: {}", session, session.uniqueKey)
-        connectionPool.remove(session.uniqueKey)
+    override fun removeSessions(uniqueKey: String) {
+        log.error("SseConnectionPool.removeSessions: $uniqueKey")
+        connectionPool.remove(uniqueKey)
     }
 }
