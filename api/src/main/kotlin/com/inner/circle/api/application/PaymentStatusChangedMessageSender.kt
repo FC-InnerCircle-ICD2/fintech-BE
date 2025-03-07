@@ -23,7 +23,7 @@ class PaymentStatusChangedMessageSender(
         val eventType = ssePaymentRequest.eventType
 
         try {
-            val uniqueKey = merchantId.toString() + "_" + orderId
+            val uniqueKey = createUniqueKey(merchantId, orderId)
             val session =
                 sseConnectionPool.getSessions(
                     uniqueKey
@@ -50,12 +50,12 @@ class PaymentStatusChangedMessageSender(
         statusEventType: PaymentStatusEventType,
         authResult: ConfirmPaymentCoreDto
     ) {
-        val merchantId = authResult.merchantId
+        val merchantId = authResult.merchantId.toString()
         val orderId = authResult.orderId
         val eventType = statusEventType.getEventType()
 
         try {
-            val uniqueKey = merchantId.toString() + "_" + orderId
+            val uniqueKey = createUniqueKey(merchantId, orderId)
             val session =
                 sseConnectionPool.getSessions(
                     uniqueKey
@@ -77,12 +77,29 @@ class PaymentStatusChangedMessageSender(
         }
     }
 
-    fun removeSessions(
-        merchantId: Long,
+    fun removeMerchantSession(
+        merchantId: String,
         orderId: String
     ) {
-        val uniqueKey = merchantId.toString() + "_" + orderId
-        sseConnectionPool.removeSessions(uniqueKey)
+        val uniqueKey = createUniqueKey(merchantId, orderId)
+        sseConnectionPool.removeSession(uniqueKey, merchantId)
+        log.warn("remove merchantId sse session. (uniqueKey: $uniqueKey)")
+    }
+
+    fun removeAllSessions(
+        merchantId: String,
+        orderId: String
+    ) {
+        val uniqueKey = createUniqueKey(merchantId, orderId)
+        sseConnectionPool.removeAllSessions(uniqueKey)
         log.error("remove sse session. (uniqueKey: $uniqueKey)")
+    }
+
+    private fun createUniqueKey(
+        merchantId: String,
+        orderId: String
+    ): String {
+        val uniqueKey = merchantId + "_" + orderId
+        return uniqueKey
     }
 }

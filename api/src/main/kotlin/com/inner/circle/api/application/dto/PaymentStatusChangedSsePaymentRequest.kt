@@ -4,5 +4,5 @@ data class PaymentStatusChangedSsePaymentRequest(
     val eventType: String,
     val status: String,
     val orderId: String,
-    val merchantId: Long
+    val merchantId: String
 )

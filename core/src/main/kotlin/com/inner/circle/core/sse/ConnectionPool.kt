@@ -8,5 +8,10 @@ interface ConnectionPool<T, R> {
 
     fun getSessions(uniqueKey: T): List<R>
 
-    fun removeSessions(uniqueKey: T)
+    fun removeSession(
+        uniqueKey: T,
+        connectionKey: String
+    )
+
+    fun removeAllSessions(uniqueKey: T)
 }

@@ -32,7 +32,21 @@ class SseConnectionPool : ConnectionPool<String, SseConnection> {
         return Collections.unmodifiableList(sseConnections)
     }
 
-    override fun removeSessions(uniqueKey: String) {
+    override fun removeSession(
+        uniqueKey: String,
+        connectionKey: String
+    ) {
+        val sseConnections = connectionPool[uniqueKey]
+        if (!sseConnections.isNullOrEmpty()) {
+            connectionPool[uniqueKey] =
+                sseConnections
+                    .stream()
+                    .filter { connection -> connection.connectionKey != connectionKey }
+                    .toList()
+        }
+    }
+
+    override fun removeAllSessions(uniqueKey: String) {
         log.error("SseConnectionPool.removeSessions: $uniqueKey")
         connectionPool.remove(uniqueKey)
     }
