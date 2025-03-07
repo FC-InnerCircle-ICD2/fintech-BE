@@ -104,7 +104,7 @@ class MerchantPaymentController(
         )
 
         coroutineScope.launch {
-            delay(10000L)
+            delay(60000L)
             statusChangedMessageSender.removeSessions(merchantId, paymentApproveRequest.orderId)
         }
 
