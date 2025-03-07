@@ -5,7 +5,7 @@ import java.io.IOException
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter
 
 data class SseConnection(
-    val uniqueKey: String,
+    val connectionKey: String,
     private val connectionPool: ConnectionPool<String, SseConnection>,
     private val objectMapper: ObjectMapper
 ) {
@@ -23,12 +23,12 @@ data class SseConnection(
 
     companion object {
         fun connect(
-            uniqueKey: String,
+            connectionKey: String,
             connectionPool: ConnectionPool<String, SseConnection>,
             objectMapper: ObjectMapper
         ): SseConnection =
             SseConnection(
-                uniqueKey = uniqueKey,
+                connectionKey = connectionKey,
                 connectionPool = connectionPool,
                 objectMapper = objectMapper
             )

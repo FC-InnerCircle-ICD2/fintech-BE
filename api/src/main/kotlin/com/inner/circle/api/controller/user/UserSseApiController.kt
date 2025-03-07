@@ -3,12 +3,14 @@ package com.inner.circle.api.controller.user
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.inner.circle.api.config.SwaggerConfig
 import com.inner.circle.api.controller.PaymentForUserV1Api
+import com.inner.circle.core.security.AccountDetails
 import com.inner.circle.core.sse.SseConnectionPool
 import com.inner.circle.core.usecase.PaymentTokenHandlingUseCase
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.slf4j.LoggerFactory
 import org.springframework.http.MediaType
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter
@@ -25,14 +27,16 @@ class UserSseApiController(
 
     @GetMapping(path = ["/sse/connect"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
     fun connect(
+        @AuthenticationPrincipal account: AccountDetails,
         @RequestParam merchantId: String,
         @RequestParam orderId: String
     ): ResponseBodyEmitter {
 //        val checkPaymentStatus = paymentTokenHandlingUseCase.checkPaymentStatus(merchantId, orderId)
         val uniqueKey = "${merchantId}_$orderId"
+        val connectionKey = account.id.toString()
         val sseConnection =
             com.inner.circle.core.sse.SseConnection.connect(
-                uniqueKey,
+                connectionKey,
                 sseConnectionPool,
                 objectMapper
             )
@@ -45,7 +49,7 @@ class UserSseApiController(
 //        }
 
         log.error("SSE user ({}) connected.", uniqueKey)
-        sseConnectionPool.addSession(sseConnection.uniqueKey, sseConnection)
+        sseConnectionPool.addSession(uniqueKey, sseConnection)
 
         return sseConnection.sseEmitter
     }
