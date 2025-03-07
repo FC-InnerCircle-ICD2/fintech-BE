@@ -30,18 +30,15 @@ class PaymentTokenMemoryRepository(
         val tokenString = paymentToken.generatedToken
         val ttl = Duration.between(LocalDateTime.now(), expiresAt)
 
-        redisTemplate.opsForHash<String, String>().put(tokenString, "token", tokenString)
-        redisTemplate.opsForHash<String, String>().put(
-            tokenString,
-            "merchantId",
-            paymentToken.merchantId.toString()
-        )
-        redisTemplate.opsForHash<String, String>().put(tokenString, "orderId", paymentToken.orderId)
-        redisTemplate.opsForHash<String, String>().put(
-            tokenString,
-            "signature",
-            paymentToken.signature
-        )
+        val tokenData =
+            mapOf(
+                "token" to tokenString,
+                "merchantId" to paymentToken.merchantId.toString(),
+                "orderId" to paymentToken.orderId,
+                "signature" to paymentToken.signature
+            )
+
+        redisTemplate.opsForHash<String, String>().putAll(tokenString, tokenData)
         redisTemplate.expire(tokenString, ttl)
 
         return paymentToken
