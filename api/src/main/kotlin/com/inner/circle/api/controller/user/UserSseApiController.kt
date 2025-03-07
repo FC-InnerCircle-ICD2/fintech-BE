@@ -12,7 +12,6 @@ import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter
 
 @Tag(name = "SSE - user", description = "결제 고객(App) SSE API")
 @PaymentForUserV1Api
@@ -29,7 +28,7 @@ class UserSseApiController(
         @RequestParam merchantId: String,
         @RequestParam orderId: String
     ): ResponseBodyEmitter {
-        val checkPaymentStatus = paymentTokenHandlingUseCase.checkPaymentStatus(merchantId, orderId)
+//        val checkPaymentStatus = paymentTokenHandlingUseCase.checkPaymentStatus(merchantId, orderId)
         val uniqueKey = "${merchantId}_$orderId"
         val sseConnection =
             com.inner.circle.core.sse.SseConnection.connect(
@@ -38,14 +37,14 @@ class UserSseApiController(
                 objectMapper
             )
 
-        if (!checkPaymentStatus) {
-            val sseEmitter = SseEmitter()
-            sseEmitter.send("already end of process.")
+//        if (!checkPaymentStatus) {
+//            val sseEmitter = SseEmitter()
+//            sseEmitter.send("already end of process.")
 //            sseEmitter.complete()
-            return sseEmitter
-        }
+//            return sseEmitter
+//        }
 
-        log.info("SSE user ({}) connected.", uniqueKey)
+        log.error("SSE user ({}) connected.", uniqueKey)
         sseConnectionPool.addSession(sseConnection.uniqueKey, sseConnection)
 
         return sseConnection.sseEmitter

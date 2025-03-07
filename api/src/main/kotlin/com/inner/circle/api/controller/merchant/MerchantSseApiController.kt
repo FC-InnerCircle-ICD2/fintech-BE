@@ -39,7 +39,7 @@ class MerchantSseApiController(
                 objectMapper
             )
 
-        log.info("SSE merchant ({}) connected.", merchantId + "_" + orderId)
+        log.error("SSE merchant ({}) connected.", merchantId + "_" + orderId)
         sseConnectionPool.addSession(sseConnection.uniqueKey, sseConnection)
 
         return sseConnection.sseEmitter
