@@ -34,7 +34,7 @@ class PaymentStatusChangedMessageSender(
                 sseConnection.sendMessage(eventType, eventData)
             }
 
-            log.info(
+            log.error(
                 "sse message send. (merchantId: {}, orderId: {}, eventType: {})",
                 merchantId,
                 orderId,
@@ -65,7 +65,7 @@ class PaymentStatusChangedMessageSender(
                 sseConnection.sendMessage(eventType, authResult)
             }
 
-            log.info(
+            log.error(
                 "sse message send. (merchantId: {}, orderId: {}, eventType: {})",
                 merchantId,
                 orderId,
@@ -83,5 +83,6 @@ class PaymentStatusChangedMessageSender(
     ) {
         val uniqueKey = merchantId.toString() + "_" + orderId
         sseConnectionPool.removeSessions(uniqueKey)
+        log.error("remove sse session. (uniqueKey: $uniqueKey)")
     }
 }
