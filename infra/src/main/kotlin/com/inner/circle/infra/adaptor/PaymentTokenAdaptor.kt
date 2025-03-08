@@ -30,5 +30,5 @@ class PaymentTokenAdaptor(
     override fun checkPaymentStatus(
         merchantId: String,
         orderId: String
-    ): String = paymentTokenRepository.checkPaymentInProgress(merchantId, orderId).orEmpty()
+    ): String = paymentTokenRepository.getPaymentStatus(merchantId, orderId).orEmpty()
 }

@@ -51,9 +51,11 @@ class PaymentClaimAdaptor(
         val savedPaymentRequest = paymentClaimRepository.save(paymentRequest)
         // token entity 저장
         paymentTokenRepository.savePaymentToken(tokenEntity, expiredAt)
-        paymentTokenRepository.savePaymentInProgress(
+        paymentTokenRepository.savePaymentStatus(
             tokenEntity.merchantId.toString(),
             tokenEntity.orderId,
+            // TODO: SSE 상태를 내려주면서 상태를 캐싱하여 조회에 활용하는 방향으로..
+            "temp",
             expiredAt
         )
 

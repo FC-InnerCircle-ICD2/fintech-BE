@@ -12,14 +12,15 @@ interface PaymentTokenRepository {
 
     fun removePaymentDataByToken(token: String)
 
-    fun checkPaymentInProgress(
+    fun getPaymentStatus(
         merchantId: String,
         orderId: String
     ): String?
 
-    fun savePaymentInProgress(
+    fun savePaymentStatus(
         merchantId: String,
         orderId: String,
+        status: String,
         expiresAt: LocalDateTime
     )
 }

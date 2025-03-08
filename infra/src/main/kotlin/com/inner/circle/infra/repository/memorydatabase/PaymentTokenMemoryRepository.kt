@@ -56,21 +56,27 @@ class PaymentTokenMemoryRepository(
         }
     }
 
-    override fun savePaymentInProgress(
+    override fun savePaymentStatus(
         merchantId: String,
         orderId: String,
+        status: String,
         expiresAt: LocalDateTime
     ) {
-        val key = "$merchantId:$orderId"
+        val key = generateKey(merchantId, orderId)
         val ttl = Duration.between(LocalDateTime.now(), expiresAt)
-        redisTemplate.opsForValue().set(key, "paymentInProcess", ttl)
+        redisTemplate.opsForValue()[key, status] = ttl
     }
 
-    override fun checkPaymentInProgress(
+    override fun getPaymentStatus(
         merchantId: String,
         orderId: String
     ): String? {
-        val key = "$merchantId:$orderId"
+        val key = generateKey(merchantId, orderId)
         return redisTemplate.opsForValue()[key].orEmpty()
     }
+
+    fun generateKey(
+        merchantId: String,
+        orderId: String
+    ): String = "$merchantId:$orderId"
 }

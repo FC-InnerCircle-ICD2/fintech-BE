@@ -1,11 +1,9 @@
 package com.inner.circle.api.controller.merchant
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.inner.circle.api.config.SwaggerConfig
 import com.inner.circle.api.controller.PaymentForMerchantV1Api
 import com.inner.circle.core.security.MerchantUserDetails
-import com.inner.circle.core.sse.SseConnectionPool
-import com.inner.circle.core.usecase.PaymentTokenHandlingUseCase
+import com.inner.circle.core.usecase.SseConnectionUseCase
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.slf4j.LoggerFactory
@@ -19,9 +17,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter
 @PaymentForMerchantV1Api
 @SecurityRequirement(name = SwaggerConfig.BASIC_AUTH)
 class MerchantSseApiController(
-    private val sseConnectionPool: SseConnectionPool,
-    private val objectMapper: ObjectMapper,
-    private val paymentTokenHandlingUseCase: PaymentTokenHandlingUseCase
+    private val sseConnectionUseCase: SseConnectionUseCase
 ) {
     private val log = LoggerFactory.getLogger(MerchantSseApiController::class.java)
 
@@ -30,19 +26,13 @@ class MerchantSseApiController(
         @AuthenticationPrincipal merchantUserDetails: MerchantUserDetails,
         @RequestParam orderId: String
     ): ResponseBodyEmitter {
-        val merchantId = merchantUserDetails.getId().toString()
-        val uniqueKey = merchantId + "_" + orderId
-        val connectionKey = merchantId
+        val uniqueKey = "${merchantUserDetails.getId()}_$orderId"
         val sseConnection =
-            com.inner.circle.core.sse.SseConnection.connect(
-                connectionKey,
-                sseConnectionPool,
-                objectMapper
+            sseConnectionUseCase.connect(
+                SseConnectionUseCase.ConnectRequest(uniqueKey = uniqueKey, userType = "merchant")
             )
 
-        log.error("SSE merchant ({}) connected.", uniqueKey)
-        sseConnectionPool.addSession(uniqueKey, sseConnection)
-
+        log.error("SSE merchant (${sseConnection.uniqueKey}) connected.")
         return sseConnection.sseEmitter
     }
 }
