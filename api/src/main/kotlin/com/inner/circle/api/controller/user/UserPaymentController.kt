@@ -196,7 +196,7 @@ class UserPaymentController(
                     eventType = status.getEventType(),
                     status = status.name,
                     orderId = orderId,
-                    merchantId = merchantId.toString()
+                    merchantId = merchantId
                 )
             )
         } catch (e: Exception) {

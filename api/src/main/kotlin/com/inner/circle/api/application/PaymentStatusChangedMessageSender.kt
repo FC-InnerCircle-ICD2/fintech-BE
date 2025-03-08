@@ -18,12 +18,12 @@ class PaymentStatusChangedMessageSender(
     }
 
     fun sendProcessChangedMessage(ssePaymentRequest: PaymentStatusChangedSsePaymentRequest) {
-        val merchantId = ssePaymentRequest.merchantId
+        val merchantId = ssePaymentRequest.merchantId.toString()
         val orderId = ssePaymentRequest.orderId
         val eventType = ssePaymentRequest.eventType
 
         try {
-            val uniqueKey = "${merchantId}_$orderId"
+            val uniqueKey = createUniqueKey(merchantId, orderId)
             sseConnectionUseCase.sendMessage(
                 SseConnectionUseCase.SendMessageRequest(
                     uniqueKey = uniqueKey,
@@ -48,12 +48,12 @@ class PaymentStatusChangedMessageSender(
         statusEventType: PaymentStatusEventType,
         authResult: ConfirmPaymentCoreDto
     ) {
-        val merchantId = authResult.merchantId
+        val merchantId = authResult.merchantId.toString()
         val orderId = authResult.orderId
         val eventType = statusEventType.getEventType()
 
         try {
-            val uniqueKey = "${merchantId}_$orderId"
+            val uniqueKey = createUniqueKey(merchantId, orderId)
             sseConnectionUseCase.sendMessage(
                 SseConnectionUseCase.SendMessageRequest(
                     uniqueKey = uniqueKey,
@@ -81,5 +81,13 @@ class PaymentStatusChangedMessageSender(
         val uniqueKey = "${merchantId}_$orderId"
         sseConnectionUseCase.close(uniqueKey = uniqueKey)
         log.error("remove sse session. (uniqueKey: $uniqueKey)")
+    }
+
+    private fun createUniqueKey(
+        merchantId: String,
+        orderId: String
+    ): String {
+        val uniqueKey = "${merchantId}_$orderId"
+        return uniqueKey
     }
 }

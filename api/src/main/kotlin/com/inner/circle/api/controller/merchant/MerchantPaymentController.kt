@@ -104,20 +104,8 @@ class MerchantPaymentController(
         )
 
         coroutineScope.launch {
-            val targetMerchantId = merchantId.toString()
-            val targetOrderId = paymentApproveRequest.orderId
-            try {
-                delay(60000L)
-                statusChangedMessageSender.removeMerchantSession(targetMerchantId, targetOrderId)
-                delay(60000L)
-                statusChangedMessageSender.removeAllSessions(targetMerchantId, targetOrderId)
-            } catch (e: Exception) {
-                logger.error(
-                    "Error while payment sse session on complete. (orderId : {}",
-                    targetOrderId,
-                    e
-                )
-            }
+            delay(120000L)
+            statusChangedMessageSender.removeSessions(merchantId, paymentApproveRequest.orderId)
         }
 
         return PaymentResponse.ok(
@@ -155,7 +143,7 @@ class MerchantPaymentController(
                     eventType = status.getEventType(),
                     status = status.name,
                     orderId = orderId,
-                    merchantId = merchantId.toString()
+                    merchantId = merchantId
                 )
             )
         } catch (e: Exception) {
