@@ -3,12 +3,18 @@ spring:
     name: api
   profiles:
     active: local
-    include: infra, openapi, core
+    include: infra, openapi, core, metric
   jackson:
     deserialization:
       use-big-decimal-for-floats: true
+  mvc:
+    async:
+      request-timeout: 180000
 
 server:
+  servlet:
+    session:
+      timeout: 10m
   port: 8080
 card:
   url:

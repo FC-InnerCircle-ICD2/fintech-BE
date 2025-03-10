@@ -7,10 +7,13 @@ import com.inner.circle.api.config.SwaggerConfig
 import com.inner.circle.api.controller.PaymentForMerchantV1Api
 import com.inner.circle.api.controller.dto.PaymentApproveDto
 import com.inner.circle.api.controller.dto.PaymentResponse
+import com.inner.circle.api.controller.dto.TransactionDto
 import com.inner.circle.api.controller.dto.UserCardDto
+import com.inner.circle.api.controller.request.CancelPaymentRequest
 import com.inner.circle.api.controller.request.PaymentApproveRequest
 import com.inner.circle.api.controller.request.PaymentClaimRequest
 import com.inner.circle.core.security.MerchantUserDetails
+import com.inner.circle.core.usecase.CancelPaymentUseCase
 import com.inner.circle.core.usecase.PaymentClaimUseCase
 import com.inner.circle.core.usecase.SavePaymentApproveUseCase
 import com.inner.circle.core.usecase.UserCardUseCase
@@ -18,10 +21,15 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 
@@ -32,9 +40,11 @@ class MerchantPaymentController(
     private val claimUseCase: PaymentClaimUseCase,
     private val savePaymentApproveService: SavePaymentApproveUseCase,
     private val userCardUseCase: UserCardUseCase,
-    private val statusChangedMessageSender: PaymentStatusChangedMessageSender
+    private val statusChangedMessageSender: PaymentStatusChangedMessageSender,
+    private val cancelPaymentUseCase: CancelPaymentUseCase
 ) {
     private val logger: Logger = LoggerFactory.getLogger(MerchantPaymentController::class.java)
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     @Operation(summary = "결제 요청")
     @PostMapping
@@ -93,9 +103,45 @@ class MerchantPaymentController(
             merchantId = merchantId
         )
 
+        coroutineScope.launch {
+            val targetMerchantId = merchantId.toString()
+            val targetOrderId = paymentApproveRequest.orderId
+            try {
+                delay(60000L)
+                statusChangedMessageSender.removeMerchantSession(targetMerchantId, targetOrderId)
+                delay(60000L)
+                statusChangedMessageSender.removeAllSessions(targetMerchantId, targetOrderId)
+            } catch (e: Exception) {
+                logger.error(
+                    "Error while payment sse session on complete. (orderId : {}",
+                    targetOrderId,
+                    e
+                )
+            }
+        }
+
         return PaymentResponse.ok(
             data
         )
+    }
+
+    @Operation(summary = "결제 취소")
+    @PostMapping("/payments/{paymentKey}/cancel")
+    fun cancelPayment(
+        @AuthenticationPrincipal merchantUserDetails: MerchantUserDetails,
+        @PathVariable("paymentKey") paymentKey: String,
+        @Valid @RequestBody request: CancelPaymentRequest
+    ): PaymentResponse<TransactionDto> {
+        val transaction =
+            cancelPaymentUseCase.cancel(
+                CancelPaymentUseCase.CancelPaymentRequest(
+                    merchantId = merchantUserDetails.getId(),
+                    paymentKey = paymentKey,
+                    amount = request.amount
+                )
+            )
+
+        return PaymentResponse.ok(TransactionDto.of(transaction))
     }
 
     private fun sendStatusChangedMessage(
@@ -109,7 +155,7 @@ class MerchantPaymentController(
                     eventType = status.getEventType(),
                     status = status.name,
                     orderId = orderId,
-                    merchantId = merchantId
+                    merchantId = merchantId.toString()
                 )
             )
         } catch (e: Exception) {

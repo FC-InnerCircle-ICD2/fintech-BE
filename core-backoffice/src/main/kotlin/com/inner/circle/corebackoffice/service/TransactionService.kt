@@ -58,9 +58,7 @@ internal class TransactionService(
                         updatedAt = transaction.updatedAt
                     )
                 }.groupBy { it.paymentKey }
-                .mapValues { entry ->
-                    entry.value.sortedByDescending { it.createdAt }
-                }.let {
+                .let {
                     it.takeIf { request.status == null } ?: it.filterValues { transactions ->
                         transactions.any { transaction -> transaction.status == request.status }
                     }

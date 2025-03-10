@@ -18,7 +18,7 @@ internal class PaymentRepositoryImpl(
     override fun save(paymentEntity: PaymentEntity): PaymentEntity? =
         paymentJpaRepository.saveAndFlush(paymentEntity)
 
-    override fun findAllByAccountId(
+    override fun findAllByAccountIdOrderByCreatedAtDesc(
         accountId: Long,
         startDate: LocalDate?,
         endDate: LocalDate?,
@@ -33,6 +33,7 @@ internal class PaymentRepositoryImpl(
         val root: Root<PaymentEntity> = criteriaQuery.from(PaymentEntity::class.java)
 
         val predicates: MutableList<Predicate> = mutableListOf()
+        predicates.add(criteriaBuilder.equal(root.get<Long>("accountId"), accountId))
 
         startDate?.let {
             val startOfDay = it.atStartOfDay()
@@ -45,7 +46,7 @@ internal class PaymentRepositoryImpl(
         }
 
         criteriaQuery.where(*predicates.toTypedArray())
-        criteriaQuery.orderBy(criteriaBuilder.asc(root.get<LocalDate>("createdAt")))
+        criteriaQuery.orderBy(criteriaBuilder.desc(root.get<LocalDate>("createdAt")))
 
         val query = entityManager.createQuery(criteriaQuery)
         query.firstResult = page * limit
@@ -54,12 +55,12 @@ internal class PaymentRepositoryImpl(
         return query.resultList
     }
 
-    override fun findByAccountIdAndPaymentKey(
-        accountId: Long,
+    override fun findByMerchantIdAndPaymentKey(
+        merchantId: Long,
         paymentKey: String
     ): PaymentEntity? =
-        paymentJpaRepository.findByAccountIdAndPaymentKey(
-            accountId = accountId,
+        paymentJpaRepository.findByMerchantIdAndPaymentKey(
+            merchantId = merchantId,
             paymentKey = paymentKey
         )
 }

@@ -5,18 +5,13 @@ import java.io.IOException
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter
 
 data class SseConnection(
-    val uniqueKey: String,
+    val connectionKey: String,
     private val connectionPool: ConnectionPool<String, SseConnection>,
     private val objectMapper: ObjectMapper
 ) {
     val sseEmitter: SseEmitter = SseEmitter(600 * 1000L)
 
     init {
-        // on completion
-        sseEmitter.onCompletion {
-            connectionPool.onCompletionCallback(this)
-        }
-
         // on timeout
         sseEmitter.onTimeout {
             sseEmitter.complete()
@@ -28,14 +23,14 @@ data class SseConnection(
 
     companion object {
         fun connect(
-            uniqueKey: String,
+            connectionKey: String,
             connectionPool: ConnectionPool<String, SseConnection>,
             objectMapper: ObjectMapper
         ): SseConnection =
             SseConnection(
-                uniqueKey,
-                connectionPool,
-                objectMapper
+                connectionKey = connectionKey,
+                connectionPool = connectionPool,
+                objectMapper = objectMapper
             )
     }
 
@@ -49,20 +44,6 @@ data class SseConnection(
                 SseEmitter
                     .event()
                     .name(eventName)
-                    .data(json)
-
-            sseEmitter.send(event)
-        } catch (e: IOException) {
-            sseEmitter.completeWithError(e)
-        }
-    }
-
-    fun sendMessage(data: Any) {
-        try {
-            val json = objectMapper.writeValueAsString(data)
-            val event =
-                SseEmitter
-                    .event()
                     .data(json)
 
             sseEmitter.send(event)

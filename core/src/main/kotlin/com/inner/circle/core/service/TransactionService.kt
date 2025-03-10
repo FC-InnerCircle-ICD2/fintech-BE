@@ -57,9 +57,7 @@ internal class TransactionService(
                         updatedAt = transaction.updatedAt
                     )
                 }.groupBy { it.paymentKey }
-                .mapValues { entry ->
-                    entry.value.sortedByDescending { it.createdAt }
-                }.let {
+                .let {
                     it.takeIf { request.status == null } ?: it.filterValues { transactions ->
                         transactions.any { transaction -> transaction.status == request.status }
                     }
@@ -84,9 +82,9 @@ internal class TransactionService(
         request: GetPaymentWithTransactionsUseCase.FindByPaymentKeyRequest
     ): PaymentWithTransactionsDto {
         val payment =
-            getPaymentPort.findByAccountIdAndPaymentKey(
+            getPaymentPort.findByMerchantIdAndPaymentKey(
                 GetPaymentPort.FindByPaymentKeyRequest(
-                    accountId = request.accountId,
+                    merchantId = request.accountId,
                     paymentKey = request.paymentKey
                 )
             )
@@ -123,9 +121,9 @@ internal class TransactionService(
 
     override fun cancel(request: CancelPaymentUseCase.CancelPaymentRequest): TransactionDto {
         val payment =
-            getPaymentPort.findByAccountIdAndPaymentKey(
+            getPaymentPort.findByMerchantIdAndPaymentKey(
                 GetPaymentPort.FindByPaymentKeyRequest(
-                    accountId = request.accountId,
+                    merchantId = request.merchantId,
                     paymentKey = request.paymentKey
                 )
             )

@@ -4,7 +4,7 @@ import com.inner.circle.infrabackoffice.repository.entity.PaymentEntity
 import java.time.LocalDate
 
 interface PaymentRepository {
-    fun findAllByMerchantId(
+    fun findAllByMerchantIdOrderByCreatedAtDesc(
         merchantId: Long,
         paymentKey: String?,
         startDate: LocalDate?,

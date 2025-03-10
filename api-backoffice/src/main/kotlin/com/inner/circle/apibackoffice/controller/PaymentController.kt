@@ -16,15 +16,19 @@ import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
+import jakarta.validation.constraints.Max
+import jakarta.validation.constraints.Min
 import java.time.LocalDate
 import kotlinx.datetime.toKotlinLocalDate
 import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestParam
 
+@Validated
 @Tag(name = "Payment", description = "Payment API")
 @BackofficeV1Api
 @SecurityRequirement(name = SwaggerConfig.BEARER_AUTH)
@@ -42,8 +46,8 @@ class PaymentController(
         @RequestParam("startDate") startDate: LocalDate?,
         @Parameter(example = "2025-02-19")
         @RequestParam("endDate") endDate: LocalDate?,
-        @RequestParam("page", defaultValue = "0") page: Int,
-        @RequestParam("limit", defaultValue = "20") limit: Int
+        @RequestParam("page", defaultValue = "0") @Min(0) page: Int,
+        @RequestParam("limit", defaultValue = "10") @Min(1) @Max(20) limit: Int
     ): BackofficeResponse<PaymentsWithTransactionsDto> {
         val request =
             GetPaymentWithTransactionsUseCase.FindAllByMerchantIdRequest(

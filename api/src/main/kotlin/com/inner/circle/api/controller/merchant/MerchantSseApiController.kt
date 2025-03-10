@@ -31,16 +31,17 @@ class MerchantSseApiController(
         @RequestParam orderId: String
     ): ResponseBodyEmitter {
         val merchantId = merchantUserDetails.getId().toString()
-
+        val uniqueKey = merchantId + "_" + orderId
+        val connectionKey = merchantId
         val sseConnection =
             com.inner.circle.core.sse.SseConnection.connect(
-                merchantId + "_" + orderId,
+                connectionKey,
                 sseConnectionPool,
                 objectMapper
             )
 
-        log.info("SSE merchant ({}) connected.", merchantId + "_" + orderId)
-        sseConnectionPool.addSession(sseConnection.uniqueKey, sseConnection)
+        log.error("SSE merchant ({}) connected.", uniqueKey)
+        sseConnectionPool.addSession(uniqueKey, sseConnection)
 
         return sseConnection.sseEmitter
     }

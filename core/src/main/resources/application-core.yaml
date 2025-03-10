@@ -1,2 +1,12 @@
 jwt:
   secret: 0123456789abcdef0123456789abcdef0123456789abcdef
+server:
+  servlet:
+    session:
+      timeout: 10m
+  http2:
+    enabled: true
+spring:
+  mvc:
+    async:
+      request-timeout: 180000
