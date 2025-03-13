@@ -1,12 +1,19 @@
 # 온라인 결제 게이트웨이(PG; Payment Gateway) 서비스
 ------------------------------------------------------------
 # Process
+![image](https://github.com/user-attachments/assets/255f6549-92f8-4608-8349-b876f028d819)
 
 ### Payment Flow
+![image](https://github.com/user-attachments/assets/70407b00-4f69-4743-b928-bdf6967796c0)
 
 ### Api
+![image](https://github.com/user-attachments/assets/e422aafd-5deb-4710-a147-d4b17c3831b5)
 
 ### SSE Flow
+![image](https://github.com/user-attachments/assets/feeb51f4-6f23-430a-af45-918826b15fef)
+
+# WiKi URL
+- https://github.com/FC-InnerCircle-ICD2/fintech-BE/wiki
 
 # How to run SDK & App
 
@@ -121,9 +128,15 @@
 - AWS ECS나 Kubernetes(EKS) 같은 관리형 서비스를 활용
 
 # DB
+![image](https://github.com/user-attachments/assets/6e4625c3-0e78-47b3-9688-c5061c2c02e3)
 
 # preview
-
 ### app
+![image](https://github.com/user-attachments/assets/4291ade4-e218-4cb4-b542-3243d604605c)
 
 ### BackOffice
+![image](https://github.com/user-attachments/assets/a050c528-88bc-4a77-a989-9ed469692c93)
+<br>
+![image](https://github.com/user-attachments/assets/8acce6ab-4f1c-4acd-8e76-ad25ccf8ad18)
+
+
